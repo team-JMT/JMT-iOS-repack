@@ -12,6 +12,6 @@ class SocialLocinViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-       
+        print("테스트")
     }
 }
