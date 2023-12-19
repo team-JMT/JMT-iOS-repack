@@ -7,5 +7,5 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let workspace = Workspace(name: "Projects",
+let workspace = Workspace(name: "JMT-iOS",
                           projects: Module.allCases.map(\.path))
