@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Social Login View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="SocialLoginViewController" id="Y6W-OH-hqX" customClass="SocialLoginViewController" customModule="App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="소셜로그인 첫 화면" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2CI-Qr-dXr">
+                                <rect key="frame" x="133" y="415.66666666666669" width="127" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QeI-Lu-iUT">
+                                <rect key="frame" x="0.0" y="783" width="393" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="다음"/>
+                                <connections>
+                                    <action selector="didTabNextButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="FDB-W4-R1t"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="2CI-Qr-dXr" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="L61-2C-CPm"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="QeI-Lu-iUT" secondAttribute="trailing" id="NP5-E9-gc3"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="QeI-Lu-iUT" secondAttribute="bottom" id="h5p-K5-n8K"/>
+                            <constraint firstItem="2CI-Qr-dXr" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="iO5-8x-rLc"/>
+                            <constraint firstItem="QeI-Lu-iUT" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="pHQ-GA-ByD"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="113.74045801526717" y="-27.464788732394368"/>
+        </scene>
+        <!--Nickname View Controller-->
+        <scene sceneID="FI0-2t-ufz">
+            <objects>
+                <viewController storyboardIdentifier="NicknameViewController" id="8e4-dQ-eIB" customClass="NicknameViewController" customModule="App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Jwy-BF-sj1">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m5f-QS-NQ6">
+                                <rect key="frame" x="0.0" y="783" width="393" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <connections>
+                                    <action selector="didTabNextButton:" destination="8e4-dQ-eIB" eventType="touchUpInside" id="UvI-Op-Kyh"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="kOL-dN-NsK"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="kOL-dN-NsK" firstAttribute="bottom" secondItem="m5f-QS-NQ6" secondAttribute="bottom" id="52L-3t-PHP"/>
+                            <constraint firstItem="m5f-QS-NQ6" firstAttribute="leading" secondItem="kOL-dN-NsK" secondAttribute="leading" id="KAe-rG-77R"/>
+                            <constraint firstItem="kOL-dN-NsK" firstAttribute="trailing" secondItem="m5f-QS-NQ6" secondAttribute="trailing" id="hlj-MF-jFE"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oQu-jw-5ML" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="989" y="-27"/>
+        </scene>
+        <!--Profile Image View Controller-->
+        <scene sceneID="kRX-9r-5gB">
+            <objects>
+                <viewController storyboardIdentifier="ProfileImageViewController" id="aDi-3v-zGA" customClass="ProfileImageViewController" customModule="App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Fdd-tF-9yi">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pCR-Zq-aU3">
+                                <rect key="frame" x="0.0" y="783" width="393" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <connections>
+                                    <action selector="didTabNextButton:" destination="aDi-3v-zGA" eventType="touchUpInside" id="Ry5-HD-YrN"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Cow-li-8QL"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Cow-li-8QL" firstAttribute="bottom" secondItem="pCR-Zq-aU3" secondAttribute="bottom" id="IVj-iQ-tke"/>
+                            <constraint firstItem="Cow-li-8QL" firstAttribute="trailing" secondItem="pCR-Zq-aU3" secondAttribute="trailing" id="mMK-5l-Wle"/>
+                            <constraint firstItem="pCR-Zq-aU3" firstAttribute="leading" secondItem="Cow-li-8QL" secondAttribute="leading" id="osk-x5-zvd"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5Vd-dE-Hdm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1837" y="-27"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
