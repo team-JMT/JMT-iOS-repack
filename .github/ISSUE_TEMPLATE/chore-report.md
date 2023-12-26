@@ -1,9 +1,9 @@
 ---
 name: Chore Report
-about: 설정 및 기타 이슈에 관한 템플릿 입니다.
+about: 설정 및 기타 이슈 관련 템플릿 입니다.
 title: ''
-labels: ''
-assignees: KiWooPark
+labels: "⚙️ Chore"
+assignees: ''
 
 ---
 

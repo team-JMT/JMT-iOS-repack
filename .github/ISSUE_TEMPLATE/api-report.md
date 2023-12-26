@@ -1,8 +1,8 @@
 ---
 name: API Report
-about: Describe this issue template's purpose here.
+about: 서버 API 통신 관련 템플릿 입니다.
 title: ''
-labels: ''
+labels: "\U0001F4EC API"
 assignees: ''
 
 ---

@@ -1,8 +1,8 @@
 ---
 name: Feature Report
-about: Describe this issue template's purpose here.
+about: 기능 개발 관련 템플릿 입니다.
 title: ''
-labels: ''
+labels: "✨ Feature"
 assignees: ''
 
 ---
