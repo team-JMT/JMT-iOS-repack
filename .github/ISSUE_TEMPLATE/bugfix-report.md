@@ -2,7 +2,7 @@
 name: BugFix Report
 about: 버그 수정 관련 템플릿 입니다.
 title: ''
-labels: "\U0001F41B BugFix"
+labels: "\U0001F41B BugFix, \U0001F528 Refactor"
 assignees: ''
 
 ---
@@ -35,6 +35,6 @@ assignees: ''
 <br />
 
 ## 참고 자료 [선택]
--.  링크 
+-. 링크 
 <br />
 <br />
