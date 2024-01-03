@@ -31,14 +31,25 @@
                                     <action selector="didTabNextButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="FDB-W4-R1t"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Ud-wG-2U2">
+                                <rect key="frame" x="10" y="738" width="373" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="구글로그인"/>
+                                <connections>
+                                    <action selector="didTabGoogleLoginButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="emG-dd-ZW4"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="1Ud-wG-2U2" secondAttribute="trailing" constant="10" id="Auc-9w-TY4"/>
                             <constraint firstItem="2CI-Qr-dXr" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="L61-2C-CPm"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="QeI-Lu-iUT" secondAttribute="trailing" id="NP5-E9-gc3"/>
+                            <constraint firstItem="QeI-Lu-iUT" firstAttribute="top" secondItem="1Ud-wG-2U2" secondAttribute="bottom" constant="10" id="VxU-iJ-TIZ"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="QeI-Lu-iUT" secondAttribute="bottom" id="h5p-K5-n8K"/>
                             <constraint firstItem="2CI-Qr-dXr" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="iO5-8x-rLc"/>
+                            <constraint firstItem="1Ud-wG-2U2" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="10" id="lfC-ZF-rlR"/>
                             <constraint firstItem="QeI-Lu-iUT" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="pHQ-GA-ByD"/>
                         </constraints>
                     </view>
