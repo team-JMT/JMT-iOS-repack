@@ -6,13 +6,18 @@
 //
 
 import UIKit
+import GoogleSignIn
+import AuthenticationServices
 
 protocol SocialLoginCoordinator: Coordinator {
     func setNicknameCoordinator()
     func showNicknameViewController()
+    
+    func showGoogleLoginViewController(completion: @escaping (Result<String,NetworkError>) -> ())
+    func showAppleLoginViewController()
 }
 
-class DefaultSocialLoginCoordinator: SocialLoginCoordinator {
+class DefaultSocialLoginCoordinator: NSObject, SocialLoginCoordinator {
     
     weak var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
@@ -28,6 +33,9 @@ class DefaultSocialLoginCoordinator: SocialLoginCoordinator {
         self.parentCoordinator = parentCoordinator
         self.finishDelegate = finishDelegate
     }
+    
+    // 애플 로그인 콜백
+    var onAppleLoginSuccess: ((Result<String,NetworkError>) -> ())?
     
     func start() {
         let initialViewController = SocialLoginViewController.instantiateFromStoryboard(storyboardName: "Login") as SocialLoginViewController
@@ -51,6 +59,34 @@ class DefaultSocialLoginCoordinator: SocialLoginCoordinator {
         nicknameCoordinator.start()
     }
     
+    func showGoogleLoginViewController(completion: @escaping (Result<String, NetworkError>) -> ()) {
+        GIDSignIn.sharedInstance.signIn(withPresenting: navigationController!) { [weak self] signInResult, error in
+      
+            if let error = error {
+                completion(.failure(.googleLoginError))
+                return
+            }
+            
+            guard let idToken = signInResult?.user.idToken?.tokenString else {
+                completion(.failure(.idTokenError))
+                return
+            }
+            
+            completion(.success(idToken))
+        }
+    }
+    
+    func showAppleLoginViewController() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email] //유저로 부터 알 수 있는 정보들(name, email)
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }
+    
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil
         
@@ -70,4 +106,43 @@ extension DefaultSocialLoginCoordinator: CoordinatorFinishDelegate {
     }
 }
 
-
+extension DefaultSocialLoginCoordinator: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.navigationController!.view.window!
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        //로그인 성공
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            
+            let userIdentifier = appleIDCredential.user
+            let fullName = appleIDCredential.fullName
+            let email = appleIDCredential.email
+            
+            if  let authorizationCode = appleIDCredential.authorizationCode,
+                let identityToken = appleIDCredential.identityToken,
+                let authCodeString = String(data: authorizationCode, encoding: .utf8),
+                let identifyTokenString = String(data: identityToken, encoding: .utf8) {
+             
+                self.onAppleLoginSuccess?(.success(identifyTokenString))
+            }
+            
+        case let passwordCredential as ASPasswordCredential:
+            // Sign in using an existing iCloud Keychain credential.
+            let username = passwordCredential.user
+            let password = passwordCredential.password
+            
+            print("username: \(username)")
+            print("password: \(password)")
+            
+        default:
+            break
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        // 로그인 실패(유저의 취소도 포함)
+        print("login failed - \(error.localizedDescription)")
+    }
+}

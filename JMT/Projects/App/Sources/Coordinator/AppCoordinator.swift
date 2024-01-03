@@ -33,7 +33,6 @@ class DefaultAppCoordinator: AppCoordinator {
     
     func start() {
         // 로그인 분기처리
-        // 일단 소셜 로그인 진입으로 구현
         showSocialLoginViewController()
 //        showTabBarViewController()
         
