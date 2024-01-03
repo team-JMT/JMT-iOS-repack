@@ -15,6 +15,8 @@ import ProjectDescriptionHelpers
 //                          resources: .default)
 
 let project = Project.app(name: "App",
-                          dependencies: [.external(name: "Swinject"),.external(name: "SwinjectStoryboard")],
+                          dependencies: [.external(name: "Swinject"),
+                                         .external(name: "SwinjectStoryboard"),
+                                         .external(name: "Alamofire")],
                           resources: .default)
 

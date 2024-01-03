@@ -12,9 +12,11 @@ let dependencies = Dependencies(
     swiftPackageManager: SwiftPackageManagerDependencies([
         .remote(url: "https://github.com/Swinject/Swinject.git", requirement: .upToNextMajor(from: "2.8.0")),
         .remote(url: "https://github.com/Swinject/SwinjectStoryboard.git", requirement: .upToNextMajor(from: "2.2.0")),
+        .remote(url: "https://github.com/Alamofire/Alamofire.git", requirement: .upToNextMajor(from: "5.8.1"))
     ],
                                                          productTypes: ["Swinject": .framework,
-                                                                        "SwinjectStoryboard": .framework]),
+                                                                        "SwinjectStoryboard": .framework,
+                                                                        "Alamofire": .framework]),
     platforms: [.iOS]
 )
 
