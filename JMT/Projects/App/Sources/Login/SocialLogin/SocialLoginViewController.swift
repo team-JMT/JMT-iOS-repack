@@ -6,18 +6,23 @@
 //
 
 import UIKit
+import AuthenticationServices
 
 class SocialLoginViewController: UIViewController {
-
+    
     var viewModel: SocialLoginViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
     }
     
-    @IBAction func didTabNextButton(_ sender: Any) {
-        print("----", viewModel)
-        viewModel?.coordinator?.showNicknameViewController()
+    @IBAction func didTabGoogleLoginButton(_ sender: Any) {
+        viewModel?.startGoogleLogin()
+    }
+    
+    @IBAction func didTabAppleLoginButton(_ sender: Any) {
+        viewModel?.startAppleLogin()
     }
 }
+

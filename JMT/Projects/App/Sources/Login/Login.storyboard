@@ -18,28 +18,41 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="소셜로그인 첫 화면" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2CI-Qr-dXr">
-                                <rect key="frame" x="133" y="415.66666666666669" width="127" height="21"/>
+                                <rect key="frame" x="133.33333333333334" y="416" width="126.66666666666666" height="20.333333333333314"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QeI-Lu-iUT">
-                                <rect key="frame" x="0.0" y="783" width="393" height="35"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="다음"/>
-                                <connections>
-                                    <action selector="didTabNextButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="FDB-W4-R1t"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="22" translatesAutoresizingMaskIntoConstraints="NO" id="uyd-e0-91v">
+                                <rect key="frame" x="10" y="717.33333333333337" width="373" height="90.666666666666629"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q1m-Do-iPe">
+                                        <rect key="frame" x="135.66666666666666" y="0.0" width="102" height="34.333333333333336"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="애플 로그인"/>
+                                        <connections>
+                                            <action selector="didTabAppleLoginButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="sQ0-dl-Kd2"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Ud-wG-2U2">
+                                        <rect key="frame" x="137.66666666666666" y="56.333333333333258" width="97.666666666666657" height="34.333333333333343"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="구글로그인"/>
+                                        <connections>
+                                            <action selector="didTabGoogleLoginButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="emG-dd-ZW4"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="uyd-e0-91v" secondAttribute="trailing" constant="10" id="4HS-5B-Z6m"/>
                             <constraint firstItem="2CI-Qr-dXr" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="L61-2C-CPm"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="QeI-Lu-iUT" secondAttribute="trailing" id="NP5-E9-gc3"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="QeI-Lu-iUT" secondAttribute="bottom" id="h5p-K5-n8K"/>
+                            <constraint firstItem="uyd-e0-91v" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" constant="10" id="PIF-MJ-9DN"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="uyd-e0-91v" secondAttribute="bottom" constant="10" id="bjv-L8-Q0T"/>
                             <constraint firstItem="2CI-Qr-dXr" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="iO5-8x-rLc"/>
-                            <constraint firstItem="QeI-Lu-iUT" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="pHQ-GA-ByD"/>
                         </constraints>
                     </view>
                 </viewController>
