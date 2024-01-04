@@ -12,7 +12,3 @@ struct SocialLoginModel {
     let refreshToken: String
     let userLoginAction: String
 }
-
-
-
-

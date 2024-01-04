@@ -17,6 +17,9 @@ class SocialLoginViewModel {
                 SocialLoginAPI.googleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
                     case .success(let action):
+                        
+                        print(action)
+                        
                         switch action {
                         case "NICKNAME_PROCESS":
                             print("닉네임 설정")
