@@ -16,4 +16,5 @@ enum HTTPHeaderField: String {
 
 enum ContentType: String {
     case json = "Application/json"
+    case accept = "*/*"
 }

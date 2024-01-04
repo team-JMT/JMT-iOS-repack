@@ -68,23 +68,48 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m5f-QS-NQ6">
-                                <rect key="frame" x="0.0" y="783" width="393" height="35"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1wT-60-HsX">
+                                <rect key="frame" x="10" y="69" width="373" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
                                 <connections>
-                                    <action selector="didTabNextButton:" destination="8e4-dQ-eIB" eventType="touchUpInside" id="UvI-Op-Kyh"/>
+                                    <outlet property="delegate" destination="8e4-dQ-eIB" id="kga-WS-dB0"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MTG-sF-oKJ">
+                                <rect key="frame" x="10" y="773" width="373" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="다음"/>
+                                <connections>
+                                    <action selector="didTabNextButton:" destination="8e4-dQ-eIB" eventType="touchUpInside" id="iZi-TD-GUT"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o7J-iu-bo5">
+                                <rect key="frame" x="10" y="113" width="373" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kOL-dN-NsK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="kOL-dN-NsK" firstAttribute="bottom" secondItem="m5f-QS-NQ6" secondAttribute="bottom" id="52L-3t-PHP"/>
-                            <constraint firstItem="m5f-QS-NQ6" firstAttribute="leading" secondItem="kOL-dN-NsK" secondAttribute="leading" id="KAe-rG-77R"/>
-                            <constraint firstItem="kOL-dN-NsK" firstAttribute="trailing" secondItem="m5f-QS-NQ6" secondAttribute="trailing" id="hlj-MF-jFE"/>
+                            <constraint firstItem="1wT-60-HsX" firstAttribute="leading" secondItem="kOL-dN-NsK" secondAttribute="leading" constant="10" id="2gO-Ta-gKN"/>
+                            <constraint firstItem="kOL-dN-NsK" firstAttribute="trailing" secondItem="1wT-60-HsX" secondAttribute="trailing" constant="10" id="5ye-oT-by7"/>
+                            <constraint firstItem="kOL-dN-NsK" firstAttribute="trailing" secondItem="MTG-sF-oKJ" secondAttribute="trailing" constant="10" id="M7v-Ac-7pb"/>
+                            <constraint firstItem="o7J-iu-bo5" firstAttribute="leading" secondItem="kOL-dN-NsK" secondAttribute="leading" constant="10" id="aQf-hY-GiO"/>
+                            <constraint firstItem="o7J-iu-bo5" firstAttribute="top" secondItem="1wT-60-HsX" secondAttribute="bottom" constant="10" id="dDz-0v-Vod"/>
+                            <constraint firstItem="kOL-dN-NsK" firstAttribute="bottom" secondItem="MTG-sF-oKJ" secondAttribute="bottom" constant="10" id="h9P-6U-mK6"/>
+                            <constraint firstItem="1wT-60-HsX" firstAttribute="top" secondItem="kOL-dN-NsK" secondAttribute="top" constant="10" id="laX-dY-thd"/>
+                            <constraint firstItem="MTG-sF-oKJ" firstAttribute="leading" secondItem="kOL-dN-NsK" secondAttribute="leading" constant="10" id="mbD-8S-Msl"/>
+                            <constraint firstItem="kOL-dN-NsK" firstAttribute="trailing" secondItem="o7J-iu-bo5" secondAttribute="trailing" constant="10" id="tUt-ni-NqH"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="nextButton" destination="MTG-sF-oKJ" id="99Q-os-QZF"/>
+                        <outlet property="nicknameAvailabilityLabel" destination="o7J-iu-bo5" id="Wig-YB-Mo0"/>
+                        <outlet property="nicknameTextField" destination="1wT-60-HsX" id="qMx-xf-bM0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oQu-jw-5ML" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

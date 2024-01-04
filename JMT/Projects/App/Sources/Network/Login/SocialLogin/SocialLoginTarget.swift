@@ -38,4 +38,11 @@ extension SocialLoginTarget: TargetType {
         case .googleLogin(let request): return .body(request)
         }
     }
+    
+    var needsBearer: Bool {
+        switch self {
+        case .appleLogin: return false
+        case .googleLogin: return false
+        }
+    }
 }

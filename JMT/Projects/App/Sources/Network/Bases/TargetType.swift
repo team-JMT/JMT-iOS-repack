@@ -13,14 +13,22 @@ protocol TargetType: URLRequestConvertible {
     var method: HTTPMethod { get }
     var path: String { get }
     var parameters: RequestParams { get }
+    var needsBearer: Bool { get } // Bearer 토큰 필요 여부를 나타내는 속성
 }
 
 extension TargetType {
     func asURLRequest() throws -> URLRequest {
         let url = try baseURL.asURL()
         var urlRequest = try URLRequest(url: url.appendingPathComponent(path), method: method)
+        
         urlRequest.setValue(ContentType.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
         
+        if needsBearer {
+            if let accessToken = TokenUtils.getAccessToken() {
+                urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: HTTPHeaderField.authentication.rawValue)
+            }
+        }
+    
         switch parameters {
         case .qurey(let request):
             let params = request?.toDictionary() ?? [:]
@@ -28,8 +36,10 @@ extension TargetType {
             var components = URLComponents(string: url.appendingPathComponent(path).absoluteString)
             components?.queryItems = queryParams
             urlRequest.url = components?.url
+        
         case .body(let request):
             let params = request?.toDictionary() ?? [:]
+           
             urlRequest.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
         }
         return urlRequest
