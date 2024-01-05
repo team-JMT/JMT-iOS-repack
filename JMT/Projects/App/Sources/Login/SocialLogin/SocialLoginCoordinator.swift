@@ -13,6 +13,9 @@ protocol SocialLoginCoordinator: Coordinator {
     func setNicknameCoordinator()
     func showNicknameViewController()
     
+    func setProfileCoordinator()
+    func showProfileViewController()
+    
     func showGoogleLoginViewController(completion: @escaping (Result<String,NetworkError>) -> ())
     func showAppleLoginViewController()
 }
@@ -59,6 +62,23 @@ class DefaultSocialLoginCoordinator: NSObject, SocialLoginCoordinator {
         nicknameCoordinator.start()
     }
     
+    func setProfileCoordinator() {
+        let coordinator = DefaultProfileImageCoordinator(navigationController: navigationController,
+                                                         parentCoordinator: self,
+                                                         finishDelegate: self)
+        
+        childCoordinators.append(coordinator)
+    }
+    
+    func showProfileViewController() {
+        if getChildCoordinator(.profileImage) == nil {
+            setProfileCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.profileImage) as! ProfileImageCoordinator
+        coordinator.start()
+    }
+    
     func showGoogleLoginViewController(completion: @escaping (Result<String, NetworkError>) -> ()) {
         GIDSignIn.sharedInstance.signIn(withPresenting: navigationController!) { [weak self] signInResult, error in
       
@@ -93,6 +113,8 @@ class DefaultSocialLoginCoordinator: NSObject, SocialLoginCoordinator {
         switch type {
         case .nickname:
             childCoordinator = childCoordinators.first(where: { $0 is NicknameCoordinator })
+        case .profileImage:
+            childCoordinator = childCoordinators.first(where: { $0 is ProfileImageCoordinator })
         default:
             break
         }

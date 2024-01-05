@@ -16,6 +16,7 @@ class SocialLoginViewController: UIViewController {
         super.viewDidLoad()
         
     }
+  
     
     @IBAction func didTabGoogleLoginButton(_ sender: Any) {
         viewModel?.startGoogleLogin()

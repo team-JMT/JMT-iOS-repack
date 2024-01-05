@@ -27,6 +27,8 @@ class NicknameViewController: UIViewController {
         nextButton.isEnabled = false
         nicknameTextField.text = ""
         nicknameAvailabilityLabel.text = ""
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
         
     func bind() {

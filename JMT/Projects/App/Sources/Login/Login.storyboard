@@ -90,12 +90,20 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="닉네임 설정 화면" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iTM-pi-WH8">
+                                <rect key="frame" x="140.66666666666666" y="415.66666666666669" width="112" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kOL-dN-NsK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="1wT-60-HsX" firstAttribute="leading" secondItem="kOL-dN-NsK" secondAttribute="leading" constant="10" id="2gO-Ta-gKN"/>
                             <constraint firstItem="kOL-dN-NsK" firstAttribute="trailing" secondItem="1wT-60-HsX" secondAttribute="trailing" constant="10" id="5ye-oT-by7"/>
+                            <constraint firstItem="iTM-pi-WH8" firstAttribute="centerY" secondItem="Jwy-BF-sj1" secondAttribute="centerY" id="6Qe-hH-FUr"/>
+                            <constraint firstItem="iTM-pi-WH8" firstAttribute="centerX" secondItem="Jwy-BF-sj1" secondAttribute="centerX" id="HmD-ef-0WA"/>
                             <constraint firstItem="kOL-dN-NsK" firstAttribute="trailing" secondItem="MTG-sF-oKJ" secondAttribute="trailing" constant="10" id="M7v-Ac-7pb"/>
                             <constraint firstItem="o7J-iu-bo5" firstAttribute="leading" secondItem="kOL-dN-NsK" secondAttribute="leading" constant="10" id="aQf-hY-GiO"/>
                             <constraint firstItem="o7J-iu-bo5" firstAttribute="top" secondItem="1wT-60-HsX" secondAttribute="bottom" constant="10" id="dDz-0v-Vod"/>
@@ -131,13 +139,21 @@
                                     <action selector="didTabNextButton:" destination="aDi-3v-zGA" eventType="touchUpInside" id="Ry5-HD-YrN"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="프로필 이미지 설정 화면" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8eV-eo-l7b">
+                                <rect key="frame" x="116" y="415.66666666666669" width="161" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Cow-li-8QL"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Cow-li-8QL" firstAttribute="bottom" secondItem="pCR-Zq-aU3" secondAttribute="bottom" id="IVj-iQ-tke"/>
+                            <constraint firstItem="8eV-eo-l7b" firstAttribute="centerX" secondItem="Fdd-tF-9yi" secondAttribute="centerX" id="lE4-xv-UDf"/>
                             <constraint firstItem="Cow-li-8QL" firstAttribute="trailing" secondItem="pCR-Zq-aU3" secondAttribute="trailing" id="mMK-5l-Wle"/>
                             <constraint firstItem="pCR-Zq-aU3" firstAttribute="leading" secondItem="Cow-li-8QL" secondAttribute="leading" id="osk-x5-zvd"/>
+                            <constraint firstItem="8eV-eo-l7b" firstAttribute="centerY" secondItem="Fdd-tF-9yi" secondAttribute="centerY" id="ufP-ry-xnX"/>
                         </constraints>
                     </view>
                 </viewController>
