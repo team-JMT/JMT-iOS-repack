@@ -25,7 +25,6 @@ class SocialLoginViewModel {
                 SocialLoginAPI.googleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
                     case .success(let actionStr):
-                        
                         if let action = UserLoginAction(rawValue: actionStr) {
                             switch action {
                             case .SIGN_UP, .NICKNAME_PROCESS:
@@ -39,19 +38,18 @@ class SocialLoginViewModel {
 //                                let appCoordinator = self.coordinator?.getTopCoordinator()
 //                                appCoordinator?.showTabBarViewController()
                             }
+                        }
                     case .failure(let error):
                         print(error)
                     }
                 }
             case .failure(let error):
-                // 에러처리 어떻게 할지 정해야함
                 print(error)
             }
         })
     }
     
     func startAppleLogin() {
-        
         // 클로저 등록
         coordinator?.onAppleLoginSuccess = { [weak self] result in
             switch result {
@@ -81,7 +79,8 @@ class SocialLoginViewModel {
                 print(error)
             }
         }
-        
         coordinator?.showAppleLoginViewController()
     }
 }
+
+    
