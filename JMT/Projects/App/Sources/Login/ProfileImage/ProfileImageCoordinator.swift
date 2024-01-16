@@ -9,6 +9,7 @@ import UIKit
 
 protocol ProfileImageCoordinator: Coordinator {
     func showTabBarViewController()
+    func showImagePicker()
 }
 
 class DefaultProfileImageCoordinator: ProfileImageCoordinator {
@@ -37,11 +38,33 @@ class DefaultProfileImageCoordinator: ProfileImageCoordinator {
     func showTabBarViewController() {
         let appCoordinator = self.getTopCoordinator()
         
-
         let socialLoginCoordinator = appCoordinator.childCoordinators.first(where: { $0 is SocialLoginCoordinator })
         socialLoginCoordinator?.finish()
-    
+        
         appCoordinator.showTabBarViewController()
+    }
+    
+    func showImagePicker() {
+        
+        var config = PhotoKitConfiguration()
+        config.library.defaultMultipleSelection = false
+        config.library.numberOfItemsInRow = 3
+        
+        let picker = PhotoKitNavigationController(configuration: config)
+        
+        picker.didFinishCompletion = { image in
+        
+            self.handleImagePickerResult(image)
+            picker.dismiss(animated: true)
+        }
+
+        self.navigationController?.present(picker, animated: true)
+    }
+    
+    func handleImagePickerResult(_ image: UIImage?) {
+        if let profileImageViewController = self.navigationController?.topViewController as? ProfileImageViewController {
+            profileImageViewController.profileImageView.image = image
+        }
     }
 }
 

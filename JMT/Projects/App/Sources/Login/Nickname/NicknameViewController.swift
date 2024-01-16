@@ -11,12 +11,43 @@ class NicknameViewController: UIViewController {
 
     var viewModel: NicknameViewModel?
     
+    @IBOutlet weak var nicknameTextField: UITextField!
+    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var nicknameAvailabilityLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        bind()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        nextButton.isEnabled = false
+        nicknameTextField.text = ""
+        nicknameAvailabilityLabel.text = ""
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+        
+    func bind() {
+        viewModel?.onSuccess = { [weak self] state in
+            switch state {
+            case .updateNextButtonAndAvailabilityLabelText(let isEnabled, let text):
+                self?.nextButton.isEnabled = isEnabled
+                self?.nicknameAvailabilityLabel.text = text
+            }
+        }
     }
     
     @IBAction func didTabNextButton(_ sender: Any) {
-        viewModel?.coordinator?.showProfileViewController()
+        viewModel?.saveNickname(text: nicknameTextField.text ?? "")
+    }
+}
+
+extension NicknameViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        viewModel?.didChangeTextField(text: nicknameTextField.text ?? "")
     }
 }

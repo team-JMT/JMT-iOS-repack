@@ -34,7 +34,7 @@ class DefaultNicknameCoordinator: NicknameCoordinator {
         nicknameViewController.viewModel?.coordinator = self
         self.navigationController?.pushViewController(nicknameViewController, animated: true)
     }
-    
+
     func setProfileCoordinator() {
         let coordinator = DefaultProfileImageCoordinator(navigationController: navigationController,
                                                          parentCoordinator: self,

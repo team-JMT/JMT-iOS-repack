@@ -27,13 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         injector.assemble([SocialLoginDI(),
                            NicknameDI(),
-                           ProfileImageDI(),
-                           HomeDI(),
-                           SearchDI(),
-                           GroupDI(),
-                           MyPageDI()
-                          
-                          
+                           ProfileImageDI()
                           ])
         
         appCoordinator?.start()
