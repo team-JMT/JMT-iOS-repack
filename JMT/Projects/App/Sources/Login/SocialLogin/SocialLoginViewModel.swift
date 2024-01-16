@@ -26,16 +26,18 @@ class SocialLoginViewModel {
                     switch result {
                     case .success(let actionStr):
                         
-                        if let action = UserLoginAction(rawValue: "NICKNAME_PROCESS") {
+                        if let action = UserLoginAction(rawValue: actionStr) {
                             switch action {
                             case .SIGN_UP, .NICKNAME_PROCESS:
                                 self.coordinator?.showNicknameViewController()
                             case .PROFILE_IMAGE_PROCESS:
                                 self.coordinator?.showProfileViewController()
-//                                self.coordinator?.showNicknameViewController()
                             case .LOG_IN:
-                                let appCoordinator = self.coordinator?.getTopCoordinator()
-                                appCoordinator?.showTabBarViewController()
+                                
+                                self.coordinator?.showProfileViewController()
+                                
+//                                let appCoordinator = self.coordinator?.getTopCoordinator()
+//                                appCoordinator?.showTabBarViewController()
                             }
                         }
                     case .failure(let error):
@@ -55,15 +57,21 @@ class SocialLoginViewModel {
         coordinator?.onAppleLoginSuccess = { [weak self] result in
             switch result {
             case .success(let idToken):
+                
                 SocialLoginAPI.appleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
-                    case .success(let action):
-                        switch action {
-                        case "NICKNAME_PROCESS":
-                            print("닉네임 설정")
-                            self?.coordinator?.showNicknameViewController()
-                        default:
-                            print("예외")
+                    case .success(let actionStr):
+                        
+                        if let action = UserLoginAction(rawValue: actionStr) {
+                            switch action {
+                            case .SIGN_UP, .NICKNAME_PROCESS:
+                                self?.coordinator?.showNicknameViewController()
+                            case .PROFILE_IMAGE_PROCESS:
+                                self?.coordinator?.showProfileViewController()
+                            case .LOG_IN:
+                                let appCoordinator = self?.coordinator?.getTopCoordinator()
+                                appCoordinator?.showTabBarViewController()
+                            }
                         }
                     case .failure(let error):
                         print(error)

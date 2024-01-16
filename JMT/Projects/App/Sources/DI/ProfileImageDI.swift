@@ -15,9 +15,16 @@ struct ProfileImageDI: Assembly {
             return viewModel
         }
         
+        container.register(DefaultPhotoAuthService.self) { r in
+            let authService = DefaultPhotoAuthService()
+            return authService
+        }
+        
         container.storyboardInitCompleted(ProfileImageViewController.self) { r, c in
             let viewModel = r.resolve(ProfileImageViewModel.self)!
+            let authService = r.resolve(DefaultPhotoAuthService.self)!
             c.viewModel = viewModel
+            c.viewModel?.photoAuthService = authService
         }
     }
 }

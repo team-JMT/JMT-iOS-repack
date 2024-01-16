@@ -58,7 +58,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="113.74045801526717" y="-27.464788732394368"/>
+            <point key="canvasLocation" x="155" y="-813"/>
         </scene>
         <!--Nickname View Controller-->
         <scene sceneID="FI0-2t-ufz">
@@ -121,7 +121,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oQu-jw-5ML" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="989" y="-27"/>
+            <point key="canvasLocation" x="155" y="-27"/>
         </scene>
         <!--Profile Image View Controller-->
         <scene sceneID="kRX-9r-5gB">
@@ -132,7 +132,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pCR-Zq-aU3">
-                                <rect key="frame" x="0.0" y="783" width="393" height="35"/>
+                                <rect key="frame" x="0.0" y="783.66666666666663" width="393" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                 <connections>
@@ -140,26 +140,71 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="프로필 이미지 설정 화면" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8eV-eo-l7b">
-                                <rect key="frame" x="116" y="415.66666666666669" width="161" height="21"/>
+                                <rect key="frame" x="116.33333333333333" y="416" width="160.33333333333337" height="20.333333333333314"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ph4-Xu-EkM">
+                                <rect key="frame" x="159" y="371.66666666666669" width="75" height="34.333333333333314"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <connections>
+                                    <action selector="didTabProfileImageButton:" destination="aDi-3v-zGA" eventType="touchUpInside" id="0Ee-jU-ftR"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eQn-1K-Aqk">
+                                <rect key="frame" x="100" y="109" width="193" height="193"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="eQn-1K-Aqk" secondAttribute="height" id="5ep-4G-mhK"/>
+                                </constraints>
+                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="CTF-wx-gEB">
+                                <rect key="frame" x="146.66666666666666" y="446.33333333333331" width="100" height="142.33333333333331"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hXE-d2-Nxy">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="6u5-Wk-DDH"/>
+                                            <constraint firstAttribute="height" constant="100" id="Mm8-Qb-qzz"/>
+                                        </constraints>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="joe-pS-J1R">
+                                        <rect key="frame" x="12.333333333333343" y="108.00000000000006" width="75" height="34.333333333333343"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                        <connections>
+                                            <action selector="testButton:" destination="aDi-3v-zGA" eventType="touchUpInside" id="bSD-55-64H"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Cow-li-8QL"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Cow-li-8QL" firstAttribute="bottom" secondItem="pCR-Zq-aU3" secondAttribute="bottom" id="IVj-iQ-tke"/>
+                            <constraint firstItem="CTF-wx-gEB" firstAttribute="top" secondItem="8eV-eo-l7b" secondAttribute="bottom" constant="10" id="R8X-Nz-wap"/>
+                            <constraint firstItem="Cow-li-8QL" firstAttribute="trailing" secondItem="eQn-1K-Aqk" secondAttribute="trailing" constant="100" id="SAJ-8g-RsQ"/>
+                            <constraint firstItem="CTF-wx-gEB" firstAttribute="centerX" secondItem="Cow-li-8QL" secondAttribute="centerX" id="aUo-Jb-hlg"/>
                             <constraint firstItem="8eV-eo-l7b" firstAttribute="centerX" secondItem="Fdd-tF-9yi" secondAttribute="centerX" id="lE4-xv-UDf"/>
+                            <constraint firstItem="eQn-1K-Aqk" firstAttribute="leading" secondItem="Cow-li-8QL" secondAttribute="leading" constant="100" id="lPl-ZB-Ur8"/>
                             <constraint firstItem="Cow-li-8QL" firstAttribute="trailing" secondItem="pCR-Zq-aU3" secondAttribute="trailing" id="mMK-5l-Wle"/>
+                            <constraint firstItem="Ph4-Xu-EkM" firstAttribute="centerX" secondItem="Fdd-tF-9yi" secondAttribute="centerX" id="nzx-No-3uH"/>
                             <constraint firstItem="pCR-Zq-aU3" firstAttribute="leading" secondItem="Cow-li-8QL" secondAttribute="leading" id="osk-x5-zvd"/>
                             <constraint firstItem="8eV-eo-l7b" firstAttribute="centerY" secondItem="Fdd-tF-9yi" secondAttribute="centerY" id="ufP-ry-xnX"/>
+                            <constraint firstItem="eQn-1K-Aqk" firstAttribute="top" secondItem="Cow-li-8QL" secondAttribute="top" constant="50" id="wO3-Af-Bmq"/>
+                            <constraint firstItem="8eV-eo-l7b" firstAttribute="top" secondItem="Ph4-Xu-EkM" secondAttribute="bottom" constant="10" id="xgS-WL-nXL"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="profileImageView" destination="eQn-1K-Aqk" id="vEs-1B-9v1"/>
+                        <outlet property="testImageView" destination="hXE-d2-Nxy" id="Evi-jP-vy3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Vd-dE-Hdm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1837" y="-27"/>
+            <point key="canvasLocation" x="154.96183206106869" y="736.61971830985919"/>
         </scene>
     </scenes>
     <resources>

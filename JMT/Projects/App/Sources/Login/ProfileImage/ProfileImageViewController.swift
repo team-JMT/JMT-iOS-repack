@@ -11,10 +11,14 @@ class ProfileImageViewController: UIViewController {
 
     var viewModel: ProfileImageViewModel?
     
+    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var testImageView: UIImageView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-       
+        
+    
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -29,6 +33,38 @@ class ProfileImageViewController: UIViewController {
     }
     
     @IBAction func didTabNextButton(_ sender: Any) {
-        viewModel?.coordinator?.showTabBarViewController()
+        if let data = profileImageView.image?.pngData() {
+            
+            let token = TokenUtils.getAccessToken()!
+            let base64 = data.base64EncodedString()
+            
+            ProfileImageAPI.saveProfileImage(request: ProfileImageReqeust(token: token, imageStr: base64)) { response in
+                
+            }
+        }
+    }
+    
+    @IBAction func didTabProfileImageButton(_ sender: Any) {
+        viewModel?.photoAuthService?.requestAuthorization(completion: { [weak self] result in
+            guard let self else { return }
+            
+            switch result {
+            case .success:
+                viewModel?.coordinator?.showImagePicker()
+            case .failure:
+                return
+            }
+        })
+    }
+    
+    @IBAction func testButton(_ sender: Any) {
+        ProfileImageAPI.getLoginInfo { response in
+            switch response {
+            case .success(let data):
+                print(data)
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }

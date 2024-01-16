@@ -8,7 +8,9 @@
 import Foundation
 import Alamofire
 
+
 struct SocialLoginAPI {
+    
     static func googleLogin(request: SocialLoginRequest, completion: @escaping (Result<String,NetworkError>) -> ()) {
         AF.request(SocialLoginTarget.googleLogin(request))
             .validate(statusCode: 200..<500)
@@ -45,6 +47,6 @@ struct SocialLoginAPI {
                     print(error)
                 }
             }
-    
+        
     }
 }

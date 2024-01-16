@@ -10,5 +10,5 @@ import Foundation
 class ProfileImageViewModel {
     weak var coordinator: DefaultProfileImageCoordinator?
     
-    var test = "소셜 로그인"
+    var photoAuthService: DefaultPhotoAuthService?
 }

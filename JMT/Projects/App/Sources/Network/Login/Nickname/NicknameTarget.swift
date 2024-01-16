@@ -14,10 +14,6 @@ enum NicknameTarget {
 }
 
 extension NicknameTarget: TargetType {
-    var baseURL: String {
-        return NetworkConfiguration.baseUrl
-    }
-    
     var method: HTTPMethod {
         switch self {
         case .checkDuplicate: return .get
