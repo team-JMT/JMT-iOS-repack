@@ -16,6 +16,8 @@ class CropPhotoViewController: UIViewController {
     @IBOutlet weak var imageViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var nextButton: UIButton!
+    
     public var didFinishCropping: ((UIImage) -> Void)?
     
     private let pinchGR = UIPinchGestureRecognizer()
@@ -25,8 +27,7 @@ class CropPhotoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-    
+        
         imageView.image = originalImage
         containerView.clipsToBounds = true
         
@@ -41,6 +42,7 @@ class CropPhotoViewController: UIViewController {
         cropAreaView.addGestureRecognizer(panGR)
     
         setupImageView()
+        setupUI()
     }
     
     @IBAction func DoneButton(_ sender: Any) {
@@ -78,6 +80,11 @@ class CropPhotoViewController: UIViewController {
             imageViewWidthConstraint.constant = screenWidth
             imageViewHeightConstraint.constant = screenWidth
         }
+    }
+    
+    func setupUI() {
+        setCustomBackButton()
+        nextButton.layer.cornerRadius = 8
     }
 }
 

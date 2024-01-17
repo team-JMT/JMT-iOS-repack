@@ -32,11 +32,8 @@ class SocialLoginViewModel {
                             case .PROFILE_IMAGE_PROCESS:
                                 self.coordinator?.showProfileViewController()
                             case .LOG_IN:
-                                
-                                self.coordinator?.showProfileViewController()
-                                
-//                                let appCoordinator = self.coordinator?.getTopCoordinator()
-//                                appCoordinator?.showTabBarViewController()
+                                let appCoordinator = self.coordinator?.getTopCoordinator()
+                                appCoordinator?.showTabBarViewController()
                             }
                         }
                     case .failure(let error):
@@ -58,7 +55,6 @@ class SocialLoginViewModel {
                 SocialLoginAPI.appleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
                     case .success(let actionStr):
-                        
                         if let action = UserLoginAction(rawValue: actionStr) {
                             switch action {
                             case .SIGN_UP, .NICKNAME_PROCESS:

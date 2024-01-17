@@ -10,7 +10,7 @@ import Alamofire
 
 enum ProfileImageTarget {
     case saveProfileImage(ProfileImageReqeust)
-    case saveDefaultProfileImage(ProfileImageReqeust)
+    case saveDefaultProfileImage
     case getLoginInfo
 }
 
@@ -34,7 +34,7 @@ extension ProfileImageTarget: TargetType {
     var parameters: RequestParams {
         switch self {
         case .saveProfileImage(let request): return .body(request)
-        case .saveDefaultProfileImage(let request): return .body(request)
+        case .saveDefaultProfileImage: return .qurey(nil)
         case .getLoginInfo: return .qurey(nil)
         }
     }
