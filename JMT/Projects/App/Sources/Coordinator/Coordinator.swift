@@ -10,7 +10,7 @@ import UIKit
 enum CoordinatorType {
     case app, tabBar
     case socialLogin, nickname
-    case profileImage, album, cropPhoto
+    case profileImage, album, cropPhoto, profilePop
     case home
     case search
     case group

@@ -8,17 +8,27 @@
 import UIKit
 
 class ProfileImageViewController: UIViewController {
-
+    
     var viewModel: ProfileImageViewModel?
     
     @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var testImageView: UIImageView!
-    
+    @IBOutlet weak var nicknameLabel: UILabel!
+    @IBOutlet weak var doneButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    
+        viewModel?.onSuccess = { update in
+            switch update {
+            case .nicknameLabel:
+                self.nicknameLabel.text = self.viewModel?.nickname ?? ""
+            case .saveProfileImage:
+                self.viewModel?.coordinator?.showTabBarViewController()
+            }
+        }
+        
+        setupUI()
+        viewModel?.getUserInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -32,14 +42,19 @@ class ProfileImageViewController: UIViewController {
         }
     }
     
+    func setupUI() {
+        setCustomBackButton()
+        profileImageView.layer.cornerRadius = 154 / 2
+        doneButton.layer.cornerRadius = 8
+    }
+    
     @IBAction func didTabNextButton(_ sender: Any) {
-        if let data = profileImageView.image?.pngData() {
-            
-            let token = TokenUtils.getAccessToken()!
-            let base64 = data.base64EncodedString()
-            
-            ProfileImageAPI.saveProfileImage(request: ProfileImageReqeust(token: token, imageStr: base64)) { response in
-                
+        
+        if let isDefault = viewModel?.isDefaultProfileImage {
+            if isDefault {
+                viewModel?.saveDefaultProfileImage()
+            } else {
+                viewModel?.saveProfileImage(imageData: profileImageView.image?.pngData())
             }
         }
     }
@@ -47,24 +62,12 @@ class ProfileImageViewController: UIViewController {
     @IBAction func didTabProfileImageButton(_ sender: Any) {
         viewModel?.photoAuthService?.requestAuthorization(completion: { [weak self] result in
             guard let self else { return }
-            
             switch result {
             case .success:
-                viewModel?.coordinator?.showImagePicker()
+                viewModel?.coordinator?.showProfilePopupViewController()
             case .failure:
                 return
             }
         })
-    }
-    
-    @IBAction func testButton(_ sender: Any) {
-        ProfileImageAPI.getLoginInfo { response in
-            switch response {
-            case .success(let data):
-                print(data)
-            case .failure(let error):
-                print(error)
-            }
-        }
     }
 }

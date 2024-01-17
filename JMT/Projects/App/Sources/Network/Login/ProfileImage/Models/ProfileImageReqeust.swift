@@ -8,7 +8,6 @@
 import Foundation
 
 struct ProfileImageReqeust: Encodable {
-    let token: String
     let imageStr: String
 }
 

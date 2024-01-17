@@ -27,7 +27,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         injector.assemble([SocialLoginDI(),
                            NicknameDI(),
-                           ProfileImageDI()
+                           ProfileImageDI(),
+                           ProfilePopupDI()
                           ])
         
         appCoordinator?.start()
