@@ -22,8 +22,9 @@ class SocialLoginViewModel {
                         
                         switch action {
                         case "NICKNAME_PROCESS":
-                            print("닉네임 설정")
-                            self.coordinator?.showNicknameViewController()
+                            
+                            let appCoordinator = self.coordinator?.getTopCoordinator()
+                            appCoordinator?.showTabBarViewController()
                         default:
                             print("예외")
                         }
