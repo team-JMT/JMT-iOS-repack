@@ -34,19 +34,19 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
         
     }
     
-    func goToTestt() {
-        let storyboard = UIStoryboard(name: "MyPage", bundle: nil)
-
-             guard let mypageTestVC = storyboard.instantiateViewController(withIdentifier: "MyPageTestViewController") as? MyPageTestViewController else {
-             
-             print("MyPageTestViewController를 찾을 수 없습니다.")
-             
-             return
-             
-             }
-             self.navigationController?.pushViewController(mypageTestVC, animated: true)
-             print(1)
-    }
+//    func goToTestt() {
+//        let storyboard = UIStoryboard(name: "MyPage", bundle: nil)
+//
+//             guard let mypageTestVC = storyboard.instantiateViewController(withIdentifier: "MyPageTestViewController") as? MyPageTestViewController else {
+//             
+//             print("MyPageTestViewController를 찾을 수 없습니다.")
+//             
+//             return
+//             
+//             }
+//             self.navigationController?.pushViewController(mypageTestVC, animated: true)
+//             print(1)
+//    }
     
     
 }
