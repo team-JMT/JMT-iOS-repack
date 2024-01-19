@@ -10,10 +10,10 @@ import Foundation
 class MyPageViewModel {
     weak var coordinator: MyPageCoordinator?
     
-    func gotoNext() {
-        coordinator?.goToTestt()
-        print(100)
-    }
+//    func gotoNext() {
+//        coordinator?.goToTestt()
+//        print(100)
+//    }
     
     
     let test = "홈"

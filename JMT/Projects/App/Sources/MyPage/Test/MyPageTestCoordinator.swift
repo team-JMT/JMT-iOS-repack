@@ -14,11 +14,8 @@ protocol MyPageTestCoordinator: Coordinator {
     
 }
 
-class DefaultMyPageTestCoordinator: MyPageTestCoordinator, MyPageCoordinator {
-    func goToTestt() {
-        <#code#>
-    }
-    
+class DefaultMyPageTestCoordinator: MyPageTestCoordinator {
+   
     var parentCoordinator: Coordinator? = nil
     
     var childCoordinators: [Coordinator] = []
@@ -32,7 +29,7 @@ class DefaultMyPageTestCoordinator: MyPageTestCoordinator, MyPageCoordinator {
     }
     
     func start() {
-        let mypageViewController = MyPageTestViewController.instantiateFromStoryboard(storyboardName: "MyPage") as MyPageViewController
+        let mypageViewController = MyPageTestViewController.instantiateFromStoryboard(storyboardName: "MyPage") as MyPageTestViewController
         
         mypageViewController.viewModel?.coordinator = self
         self.navigationController?.pushViewController(mypageViewController, animated: true)

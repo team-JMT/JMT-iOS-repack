@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MyPageCoordinator: Coordinator {
-    func goToTestt()
+    //func goToTestt()
     
 }
 
