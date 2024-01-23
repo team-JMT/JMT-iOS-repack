@@ -18,7 +18,7 @@ extension UIViewController {
 
 // 네비게이션 컨트롤러 백버튼
 extension UIViewController {
-    func setCustomBackButton() {
+    func setCustomNavigationBarBackButton() {
         // 커스텀 백 버튼 생성
         let backButton = UIBarButtonItem(image: UIImage(named: "BackButton"), style: .plain, target: self, action: #selector(customBackAction))
         

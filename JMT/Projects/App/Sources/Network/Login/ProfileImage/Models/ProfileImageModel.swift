@@ -8,11 +8,5 @@
 import Foundation
 
 struct ProfileImageModel {
-    let message: String
-}
- 
-struct CurrntLoginInfoModel {
-    let id: Int
-    let nickname: String
-    let profileImg: String
+    let code: String
 }

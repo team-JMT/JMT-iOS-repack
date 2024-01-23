@@ -9,45 +9,35 @@ import Foundation
 import Alamofire
 
 struct ProfileImageAPI {
-    static func saveProfileImage(request: ProfileImageReqeust, completion: @escaping (Result<ProfileImageResponse,NetworkError>) -> ()) {
+    static func saveProfileImage(request: ProfileImageReqeust, completion: @escaping (Result<ProfileImageModel,NetworkError>) -> ()) {
     
         AF.upload(multipartFormData: { formData in
             if let imageData = Data(base64Encoded: request.imageStr) {
                 formData.append(imageData, withName: "profileImg", fileName: "profile.png", mimeType: "image/png")
             }
-        }, with: ProfileImageTarget.saveProfileImage(request)).responseDecodable(of: ProfileImageResponse.self) { response in
+        }, with: ProfileImageTarget.saveProfileImage(request), interceptor: DefaultRequestInterceptor())
+        .validate(statusCode: 200..<300)
+        .responseDecodable(of: ProfileImageResponse.self) { response in
             switch response.result {
             case .success(let response):
-                completion(.success(response))
+                print(response)
+                completion(.success(response.toDomain))
             case .failure(let error):
-                print(error)
+                print("saveProfileImage 실패!!", error)
             }
         }
     }
     
-    static func saveDefaultProfileImage(completion: @escaping (Result<ProfileImageResponse, NetworkError>) -> ()) {
-        AF.request(ProfileImageTarget.saveDefaultProfileImage)
-            .validate(statusCode: 200..<500)
+    static func saveDefaultProfileImage(completion: @escaping (Result<ProfileImageModel, NetworkError>) -> ()) {
+        AF.request(ProfileImageTarget.saveDefaultProfileImage, interceptor: DefaultRequestInterceptor())
+            .validate(statusCode: 200..<300)
             .responseDecodable(of: ProfileImageResponse.self, completionHandler: { response in
                 switch response.result {
                 case .success(let response):
-                    completion(.success(response))
+                    completion(.success(response.toDomain))
                 case .failure(let error):
-                    print(error)
+                    print("saveDefaultProfileImage 실패!!", error)
                 }
             })
-    }
-    
-    static func getLoginInfo(completion: @escaping (Result<CurrentLoginInfoData,NetworkError>) -> ()) {
-        
-        AF.request(ProfileImageTarget.getLoginInfo).validate(statusCode: 200..<500)
-            .responseDecodable(of: CurrentLoginInfoResponse<CurrentLoginInfoData>.self) { response in
-                switch response.result {
-                case .success(let response):
-                    completion(.success(response.data))
-                case .failure(let error):
-                    print(error)
-                }
-            }
     }
 }

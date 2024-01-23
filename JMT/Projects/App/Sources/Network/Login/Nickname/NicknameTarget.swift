@@ -34,11 +34,4 @@ extension NicknameTarget: TargetType {
         case .saveNickname(let request): return .body(request)
         }
     }
-    
-    var needsBearer: Bool {
-        switch self {
-        case .checkDuplicate: return false
-        case .saveNickname: return true
-        }
-    }
 }

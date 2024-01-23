@@ -19,7 +19,7 @@ class DefaultProfileImagePopupCoordinator: ProfileImagePopupCoordinator {
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController?
     var finishDelegate: CoordinatorFinishDelegate?
-    var type: CoordinatorType = .profilePop
+    var type: CoordinatorType = .profile
     
     init(navigationController: UINavigationController?,
          parentCoordinator: Coordinator,

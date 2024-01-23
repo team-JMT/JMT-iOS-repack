@@ -33,9 +33,11 @@ class DefaultAppCoordinator: AppCoordinator {
     
     func start() {
         // 로그인 분기처리
-        showSocialLoginViewController()
-//        showTabBarViewController()
-        
+        if DefaultKeychainService.shared.accessToken == nil {
+            showSocialLoginViewController()
+        } else {
+            showTabBarViewController()
+        }
     }
     
     func setSocialLoginCoordinator() {

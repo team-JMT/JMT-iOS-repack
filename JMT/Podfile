@@ -1,0 +1,17 @@
+# Uncomment the next line to define a global platform for your project
+
+platform :ios, '14.0'
+use_frameworks!
+inhibit_all_warnings!
+
+
+workspace 'JMT-iOS.xcworkspace'
+project 'Projects/App/JMTeng.xcodeproj'
+
+
+target 'JMTeng' do
+  project 'Projects/App/JMTeng.xcodeproj'
+  pod 'NMapsMap'
+  pod 'GoogleSignIn'
+
+end

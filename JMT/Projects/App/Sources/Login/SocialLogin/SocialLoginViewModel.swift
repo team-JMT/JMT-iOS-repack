@@ -67,15 +67,36 @@ class SocialLoginViewModel {
                             }
                         }
                     case .failure(let error):
-                        print(error)
+                        print("startAppleLogin - SocialLoginAPI.appleLogin 실패!!", error)
                     }
                 }
             case .failure(let error):
                 // 에러 처리
-                print(error)
+                print("startAppleLogin 실패!!", error)
             }
         }
         coordinator?.showAppleLoginViewController()
+    }
+    
+    func testLogin() {
+        SocialLoginAPI.testLogin { response in
+            switch response {
+            case .success(let actionStr):
+                if let action = UserLoginAction(rawValue: actionStr) {
+                    switch action {
+                    case .SIGN_UP, .NICKNAME_PROCESS:
+                        self.coordinator?.showNicknameViewController()
+                    case .PROFILE_IMAGE_PROCESS:
+                        self.coordinator?.showProfileViewController()
+                    case .LOG_IN:
+                        let appCoordinator = self.coordinator?.getTopCoordinator()
+                        appCoordinator?.showTabBarViewController()
+                    }
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
 
