@@ -7,6 +7,7 @@
 
 import UIKit
 import Swinject
+import NMapsMap
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
@@ -23,12 +24,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.rootViewController = navigationController
         self.window?.makeKeyAndVisible()
         
+        NMFAuthManager.shared().clientId = "4mc8nybxwl"
+        
         appCoordinator = DefaultAppCoordinator(navigationController: navigationController)
         
         injector.assemble([SocialLoginDI(),
                            NicknameDI(),
                            ProfileImageDI(),
-                           ProfilePopupDI()
+                           ProfilePopupDI(),
+                           HomeDI(), UserLocationDI(),
+                           SearchDI(),
+                           GroupDI(),
+                           MyPageDI(),
                           ])
         
         appCoordinator?.start()

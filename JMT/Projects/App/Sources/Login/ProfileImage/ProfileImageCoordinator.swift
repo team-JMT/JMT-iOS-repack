@@ -73,16 +73,15 @@ class DefaultProfileImageCoordinator: ProfileImageCoordinator {
     
     func setProfilePopupCoordinator() {
         let coordinator = DefaultProfileImagePopupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
-        
         childCoordinators.append(coordinator)
     }
     
     func showProfilePopupViewController() {
-        if getChildCoordinator(.profilePop) == nil {
+        if getChildCoordinator(.profile) == nil {
             setProfilePopupCoordinator()
         }
         
-        let coordinator = getChildCoordinator(.profilePop) as! ProfileImagePopupCoordinator
+        let coordinator = getChildCoordinator(.profile) as! ProfileImagePopupCoordinator
         coordinator.start()
     }
     
@@ -90,7 +89,7 @@ class DefaultProfileImageCoordinator: ProfileImageCoordinator {
         var childCoordinator: Coordinator? = nil
         
         switch type {
-        case .profilePop:
+        case .profile:
             childCoordinator = childCoordinators.first(where: { $0 is ProfileImagePopupCoordinator })
         default:
             break

@@ -47,6 +47,9 @@ class DefaultTabBarCoordinator: TabBarCoordinator {
         let tabNavigationController = UINavigationController()
         
         tabNavigationController.setNavigationBarHidden(true, animated: false)
+        
+        let attributes = [NSAttributedString.Key.font: UIFont(name: "Pretendard-Medium", size: 16)!]
+        tabNavigationController.navigationBar.titleTextAttributes = attributes
         tabNavigationController.tabBarItem = configureTabBarItem(of: page)
         
         self.setTabBarCoordinator(of: page, to: tabNavigationController)
@@ -59,7 +62,13 @@ class DefaultTabBarCoordinator: TabBarCoordinator {
         self.tabBarController.selectedIndex = TabBarPage.home.pageOrderNumber()
         self.tabBarController.view.backgroundColor = .white
         self.tabBarController.tabBar.backgroundColor = .white
-        self.tabBarController.tabBar.tintColor = .black
+        self.tabBarController.tabBar.tintColor = JMTengAsset.main500.color
+        self.tabBarController.tabBar.unselectedItemTintColor = JMTengAsset.gray300.color
+        
+        let lineView = UIView(frame: CGRect(x: 0, y: 0, width:  self.tabBarController.tabBar.frame.width, height: 1))
+        lineView.backgroundColor = JMTengAsset.gray100.color // 선의 색상 설정
+        lineView.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
+        self.tabBarController.tabBar.addSubview(lineView)
         
         if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
             
@@ -77,13 +86,13 @@ class DefaultTabBarCoordinator: TabBarCoordinator {
     private func configureTabBarItem(of page: TabBarPage) -> UITabBarItem {
         switch page {
         case .home:
-            return UITabBarItem(title: page.rawValue, image: UIImage(systemName: "xmark"), tag: page.pageOrderNumber())
+            return UITabBarItem(title: "둘러보기", image: UIImage(named: "HomeTab"), tag: page.pageOrderNumber())
         case .search:
-            return UITabBarItem(title: page.rawValue, image: UIImage(systemName: "xmark"), tag: page.pageOrderNumber())
+            return UITabBarItem(title: "검색", image: UIImage(named: "SearchTab"), tag: page.pageOrderNumber())
         case .group:
-            return UITabBarItem(title: page.rawValue, image: UIImage(systemName: "xmark"), tag: page.pageOrderNumber())
+            return UITabBarItem(title: "그룹", image: UIImage(named: "GroupTab"), tag: page.pageOrderNumber())
         case .mypage:
-            return UITabBarItem(title: page.rawValue, image: UIImage(systemName: "xmark"), tag: page.pageOrderNumber())
+            return UITabBarItem(title: "마이페이지", image: UIImage(named: "MyPageTab"), tag: page.pageOrderNumber())
         }
     }
     

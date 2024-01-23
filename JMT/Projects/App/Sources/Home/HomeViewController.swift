@@ -6,13 +6,16 @@
 //
 
 import UIKit
+import MapKit
+import NMapsMap
 
 class HomeViewController: UIViewController {
     
     var viewModel: HomeViewModel?
-    
+
     var isFolded: Bool = true
 
+    @IBOutlet weak var naverMapView: NMFNaverMapView!
     @IBOutlet weak var topContainerViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var groupNameButton: UIButton!
@@ -32,19 +35,36 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
+        naverMapView.showCompass = false
+        naverMapView.showScaleBar = false
+        naverMapView.showZoomControls = false
+
+//        NicknameAPI.saveNickname(request: NicknameRequest(nickname: "3333")) { response in
+//            switch response {
+//            case .success(let data):
+//                print(data)
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
+
+//        DefaultKeychainService.shared.accessToken = nil
     }
     
-    @IBAction func testButton(_ sender: Any) {
+    @IBAction func didTabGroupTitleButton(_ sender: Any) {
         isFolded.toggle()
         updateTopContainerView()
     }
     
     
     @IBAction func didTabAddressButton(_ sender: Any) {
-        
-        print("123123")
+        viewModel?.coordinator?.showUserLocationViewController(tag: 0)
     }
+    
+    @IBAction func didTabSearchGroupButton(_ sender: Any) {
+        viewModel?.coordinator?.showUserLocationViewController(tag: 1)
+    }
+    
     
     func updateTopContainerView() {
         

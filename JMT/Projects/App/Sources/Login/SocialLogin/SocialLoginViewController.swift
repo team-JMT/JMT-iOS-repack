@@ -33,7 +33,10 @@ class SocialLoginViewController: UIViewController {
     }
     
     @IBAction func didTabGoogleLoginButton(_ sender: Any) {
-        viewModel?.startGoogleLogin()
+//        viewModel?.startGoogleLogin()
+        viewModel?.testLogin()
+        
+
     }
     
     @IBAction func didTabAppleLoginButton(_ sender: Any) {

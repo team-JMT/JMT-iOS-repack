@@ -10,11 +10,12 @@ import UIKit
 enum CoordinatorType {
     case app, tabBar
     case socialLogin, nickname
-    case profileImage, album, cropPhoto, profilePop
-    case home
+    case profileImage, album, cropPhoto, profile
+    case home, userLocation
     case search
     case group
     case mypage
+    case buttonPopup
 }
 
 protocol Coordinator: AnyObject {

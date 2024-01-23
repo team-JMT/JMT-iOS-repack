@@ -20,13 +20,13 @@ class NicknameViewModel: NicknameModelProtocol {
     }
     
     weak var coordinator: DefaultNicknameCoordinator?
-    var textFieldCheckWorkItem: DispatchWorkItem?
+    var workItem: DispatchWorkItem?
     
     var onSuccess: ((UIUpdateState) -> ())?
     
     func didChangeTextField(text: String) {
         
-        textFieldCheckWorkItem?.cancel()
+        workItem?.cancel()
         
         let workItem = DispatchWorkItem {
             
@@ -47,7 +47,7 @@ class NicknameViewModel: NicknameModelProtocol {
             self.checkDuplicate(text: text)
         }
         
-        textFieldCheckWorkItem = workItem
+        self.workItem = workItem
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
     }
@@ -73,8 +73,13 @@ class NicknameViewModel: NicknameModelProtocol {
     func saveNickname(text: String) {
         NicknameAPI.saveNickname(request: NicknameRequest(nickname: text)) { response in
             switch response {
-            case .success(_):
-                self.coordinator?.showProfileViewController()
+            case .success(let code):
+                switch code {
+                case "UNAUTHORIZED":
+                    print("인증이 필요하므로 엑세스토큰 갱신 필요")
+                default:
+                    self.coordinator?.showProfileViewController()
+                }
             case .failure(let error):
                 print("2", error)
             }

@@ -7,6 +7,6 @@
 
 import Foundation
 
-class Utils {
+struct Utils {
     
 }

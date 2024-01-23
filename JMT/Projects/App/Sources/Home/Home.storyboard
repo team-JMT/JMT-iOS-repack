@@ -27,7 +27,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gz2-he-OL7">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gz2-he-OL7" customClass="NMFNaverMapView">
                                 <rect key="frame" x="0.0" y="59" width="393" height="710"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
@@ -37,7 +37,10 @@
                                     <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j5R-5A-nrA">
                                         <rect key="frame" x="353" y="4.6666666666666643" width="24" height="24"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="search"/>
+                                        <state key="normal" image="Search"/>
+                                        <connections>
+                                            <action selector="didTabSearchGroupButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="U0z-YS-vy9"/>
+                                        </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="s8S-or-9Ef">
                                         <rect key="frame" x="20" y="6" width="80.666666666666671" height="21"/>
@@ -58,7 +61,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="서울특별시 동대문구 전농동" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0GK-Im-NfU">
                                         <rect key="frame" x="20" y="22" width="152.33333333333334" height="17"/>
                                         <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
-                                        <nil key="textColor"/>
+                                        <color key="textColor" name="gray500"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -75,11 +78,11 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ynh-yN-KyR">
-                                <rect key="frame" x="159" y="409" width="75" height="34.333333333333314"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <rect key="frame" x="20" y="65" width="64" height="21"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <buttonConfiguration key="configuration" style="plain"/>
                                 <connections>
-                                    <action selector="testButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="rQx-wb-sLl"/>
+                                    <action selector="didTabGroupTitleButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="fQN-FK-wSW"/>
                                 </connections>
                             </button>
                             <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OgQ-Dq-Dlz">
@@ -104,25 +107,43 @@
                                     <action selector="didTabAddressButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="9dC-l4-40Q"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="naG-FK-9tT">
+                                <rect key="frame" x="345" y="99" width="36" height="36"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="RefreshMap"/>
+                                <state key="highlighted" image="RefreshMap"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mNB-eR-CD7">
+                                <rect key="frame" x="325" y="695" width="48" height="48"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="GroupPlus"/>
+                                <state key="highlighted" image="GroupPlus"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
-                        <color key="backgroundColor" systemColor="systemBrownColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Ynh-yN-KyR" firstAttribute="top" secondItem="4Sr-6A-HkD" secondAttribute="top" id="0xv-Rj-QMr"/>
                             <constraint firstItem="aYd-ik-Gei" firstAttribute="leading" secondItem="0GK-Im-NfU" secondAttribute="leading" id="29C-fm-48q"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="mNB-eR-CD7" secondAttribute="bottom" constant="26" id="2cy-tx-jSb"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="5oj-KE-prq"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="9Xb-xx-AQ3"/>
+                            <constraint firstItem="Ynh-yN-KyR" firstAttribute="bottom" secondItem="4Sr-6A-HkD" secondAttribute="bottom" id="C3c-lg-Cel"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="DUI-7T-Phm"/>
-                            <constraint firstItem="Ynh-yN-KyR" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="EWu-hv-BU3"/>
-                            <constraint firstItem="Ynh-yN-KyR" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="Ks3-2I-Otr"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="mNB-eR-CD7" secondAttribute="trailing" constant="20" id="DeL-mT-6Ha"/>
+                            <constraint firstItem="naG-FK-9tT" firstAttribute="top" secondItem="srQ-dG-9DL" secondAttribute="bottom" constant="8" id="Dhl-2g-6KP"/>
+                            <constraint firstItem="Ynh-yN-KyR" firstAttribute="leading" secondItem="4Sr-6A-HkD" secondAttribute="leading" id="IEy-Gp-GmV"/>
                             <constraint firstItem="OgQ-Dq-Dlz" firstAttribute="bottom" secondItem="s8S-or-9Ef" secondAttribute="bottom" constant="8" id="PS4-E0-SAV"/>
                             <constraint firstItem="OgQ-Dq-Dlz" firstAttribute="trailing" secondItem="s8S-or-9Ef" secondAttribute="trailing" id="PWW-aX-xMg"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="srQ-dG-9DL" secondAttribute="trailing" id="StH-40-Brx"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="naG-FK-9tT" secondAttribute="trailing" constant="12" id="T4q-97-84L"/>
                             <constraint firstItem="aYd-ik-Gei" firstAttribute="trailing" secondItem="0GK-Im-NfU" secondAttribute="trailing" id="ZOr-GE-HVr"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="Zl4-7T-l68"/>
                             <constraint firstItem="aYd-ik-Gei" firstAttribute="bottom" secondItem="0GK-Im-NfU" secondAttribute="bottom" id="aoK-cw-n3S"/>
                             <constraint firstItem="srQ-dG-9DL" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="kdQ-Tr-tc9"/>
                             <constraint firstItem="OgQ-Dq-Dlz" firstAttribute="leading" secondItem="s8S-or-9Ef" secondAttribute="leading" id="lyv-zK-Ekm"/>
                             <constraint firstItem="srQ-dG-9DL" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="veU-Or-gz9"/>
+                            <constraint firstItem="Ynh-yN-KyR" firstAttribute="trailing" secondItem="4Sr-6A-HkD" secondAttribute="trailing" id="xFS-ZY-nBZ"/>
                             <constraint firstItem="aYd-ik-Gei" firstAttribute="top" secondItem="0GK-Im-NfU" secondAttribute="top" id="yjA-Y8-DU8"/>
                         </constraints>
                     </view>
@@ -134,6 +155,7 @@
                         <outlet property="groupButtonBottom" destination="gWl-L0-Z5f" id="Evb-RS-3Cw"/>
                         <outlet property="groupButtonTop" destination="pXa-wT-eYD" id="EnG-td-I5Z"/>
                         <outlet property="groupNameButton" destination="4Sr-6A-HkD" id="rrA-Nm-Z29"/>
+                        <outlet property="naverMapView" destination="Gz2-he-OL7" id="UmZ-u2-ujW"/>
                         <outlet property="searchButton" destination="j5R-5A-nrA" id="o6S-kI-jhP"/>
                         <outlet property="topContainerViewHeight" destination="8Bc-j9-5CX" id="rZS-yB-cpE"/>
                         <outlet property="underLineView" destination="OgQ-Dq-Dlz" id="VRT-9V-6ow"/>
@@ -143,18 +165,38 @@
             </objects>
             <point key="canvasLocation" x="130.53435114503816" y="-34.507042253521128"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="aOi-wt-F9o">
+            <objects>
+                <viewController id="4uo-gk-HjZ" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="kKr-1P-w8x">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="ohM-zq-fKs"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="log-AM-A0E" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1146" y="-35"/>
+        </scene>
     </scenes>
     <resources>
         <image name="GorupArrow" width="10.666666984558105" height="9"/>
-        <image name="search" width="24" height="24"/>
+        <image name="GroupPlus" width="48" height="48"/>
+        <image name="RefreshMap" width="36" height="36"/>
+        <image name="Search" width="24" height="24"/>
         <namedColor name="gray300">
             <color red="0.71799999475479126" green="0.75700002908706665" blue="0.7839999794960022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="gray500">
+            <color red="0.49000000953674316" green="0.56499999761581421" blue="0.6119999885559082" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
-        <systemColor name="systemBrownColor">
-            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

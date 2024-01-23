@@ -15,21 +15,6 @@ struct ProfileImageResponse: Decodable {
 
 extension ProfileImageResponse {
     var toDomain: ProfileImageModel {
-        return ProfileImageModel(message: message)
+        return ProfileImageModel(code: code)
     }
 }
-
-
-struct CurrentLoginInfoResponse<T:Decodable>: Decodable {
-    let data: T
-    let message: String
-    let code: String
-}
-
-struct CurrentLoginInfoData: Decodable {
-    let id: Int
-    let email: String
-    let nickname: String
-    let profileImg: String
-}
-

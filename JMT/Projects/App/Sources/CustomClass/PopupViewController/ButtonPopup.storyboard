@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Pretendard-Bold.otf">
+            <string>Pretendard-Bold</string>
+        </array>
+        <array key="Pretendard-Medium.otf">
+            <string>Pretendard-Medium</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Button Popup View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="ButtonPopupViewController" id="Y6W-OH-hqX" customClass="ButtonPopupViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oFf-n1-Xs9">
+                                <rect key="frame" x="20" y="339.66666666666669" width="353" height="173.00000000000006"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="GWw-6K-EC4">
+                                        <rect key="frame" x="20" y="24" width="313" height="53"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hmd-aX-gqx">
+                                                <rect key="frame" x="130.66666666666666" y="0.0" width="51.666666666666657" height="24"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="20"/>
+                                                <color key="textColor" name="gray900"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ov6-Bu-mc2">
+                                                <rect key="frame" x="138.33333333333334" y="36" width="36.666666666666657" height="17"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
+                                                <color key="textColor" name="gray600"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="QGm-W3-QR6">
+                                        <rect key="frame" x="20" y="97" width="313" height="52"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u5L-0w-XgX">
+                                                <rect key="frame" x="0.0" y="0.0" width="150.66666666666666" height="52"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <inset key="contentEdgeInsets" minX="10" minY="16" maxX="10" maxY="16"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Cancel">
+                                                    <color key="titleColor" name="main500"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTabCancelButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="7w4-jQ-QHj"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xeD-Ow-qRs">
+                                                <rect key="frame" x="162.66666666666663" y="0.0" width="150.33333333333337" height="52"/>
+                                                <color key="backgroundColor" name="main500"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <inset key="contentEdgeInsets" minX="10" minY="16" maxX="10" maxY="16"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Done">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTabDoneButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="ooK-2f-Tc3"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="GWw-6K-EC4" secondAttribute="trailing" constant="20" id="Had-ka-YFO"/>
+                                    <constraint firstAttribute="bottom" secondItem="QGm-W3-QR6" secondAttribute="bottom" constant="24" id="N5h-5I-UK7"/>
+                                    <constraint firstItem="GWw-6K-EC4" firstAttribute="top" secondItem="oFf-n1-Xs9" secondAttribute="top" constant="24" id="N8u-gK-cgu"/>
+                                    <constraint firstAttribute="trailing" secondItem="QGm-W3-QR6" secondAttribute="trailing" constant="20" id="OJE-p2-KyD"/>
+                                    <constraint firstItem="QGm-W3-QR6" firstAttribute="top" secondItem="GWw-6K-EC4" secondAttribute="bottom" constant="20" id="TCf-Ad-pbd"/>
+                                    <constraint firstItem="GWw-6K-EC4" firstAttribute="leading" secondItem="oFf-n1-Xs9" secondAttribute="leading" constant="20" id="lhN-yq-Okv"/>
+                                    <constraint firstItem="QGm-W3-QR6" firstAttribute="leading" secondItem="oFf-n1-Xs9" secondAttribute="leading" constant="20" id="nea-Xe-1Ez"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" red="0.086000002920627594" green="0.10199999809265137" blue="0.11400000005960464" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="oFf-n1-Xs9" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="Mxt-zH-7As"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="oFf-n1-Xs9" secondAttribute="trailing" constant="20" id="mHd-7X-F4x"/>
+                            <constraint firstItem="oFf-n1-Xs9" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="nB8-Vb-hjp"/>
+                            <constraint firstItem="oFf-n1-Xs9" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="xWb-Md-kCf"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="cancelButton" destination="u5L-0w-XgX" id="SoE-qZ-PxK"/>
+                        <outlet property="containerView" destination="oFf-n1-Xs9" id="Up2-2e-e6V"/>
+                        <outlet property="doneButton" destination="xeD-Ow-qRs" id="7aP-dz-whr"/>
+                        <outlet property="subTitleLabel" destination="ov6-Bu-mc2" id="fgp-4u-YFW"/>
+                        <outlet property="titleLabel" destination="hmd-aX-gqx" id="X3e-I8-Nug"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="107.63358778625954" y="-27.464788732394368"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="gray600">
+            <color red="0.49000000953674316" green="0.56499999761581421" blue="0.6119999885559082" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="gray900">
+            <color red="0.086000002920627594" green="0.10199999809265137" blue="0.11400000005960464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="main500">
+            <color red="1" green="0.32499998807907104" blue="0.10199999809265137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

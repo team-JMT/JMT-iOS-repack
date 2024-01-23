@@ -23,15 +23,13 @@ class ProfileImageViewModel {
     var isDefaultProfileImage: Bool = false
     
     func getUserInfo() {
-        ProfileImageAPI.getLoginInfo { response in
+        UserInfoAPI.getLoginInfo { response in
             switch response {
             case .success(let info):
-                
-                print(info)
                 self.nickname = info.nickname
                 self.onSuccess?(.nicknameLabel)
             case .failure(let error):
-                print(error)
+                print("getUserInfo 실패!!", error)
                 self.onFailure?()
             }
         }
@@ -44,9 +42,16 @@ class ProfileImageViewModel {
             
             ProfileImageAPI.saveProfileImage(request: ProfileImageReqeust(imageStr: base64)) { response in
                 switch response {
-                case .success:
-                    self.onSuccess?(.saveProfileImage)
-                case .failure:
+                case .success(let response):
+                
+                    switch response.code {
+                    case "UNAUTHORIZED":
+                        print("인증이 필요하므로 엑세스토큰 갱신 필요")
+                    default:
+                        self.onSuccess?(.saveProfileImage)
+                    }
+                case .failure(let error):
+                    print("saveProfileImage - ProfileImageAPI.saveProfileImage 실패!!", error)
                     self.onFailure?()
                 }
             }
@@ -57,10 +62,15 @@ class ProfileImageViewModel {
         ProfileImageAPI.saveDefaultProfileImage { response in
             switch response {
             case .success(let response):
-                print(response)
-                self.onSuccess?(.saveProfileImage)
+                
+                switch response.code {
+                case "UNAUTHORIZED":
+                    print("인증이 필요하므로 엑세스토큰 갱신 필요")
+                default:
+                    self.onSuccess?(.saveProfileImage)
+                }
             case .failure(let error):
-                print(error)
+                print("saveDefaultProfileImage - 실패!!",error)
             }
         }
     }

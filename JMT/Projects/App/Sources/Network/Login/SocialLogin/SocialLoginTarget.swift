@@ -11,6 +11,7 @@ import Alamofire
 enum SocialLoginTarget {
     case appleLogin(SocialLoginRequest)
     case googleLogin(SocialLoginRequest)
+    case testLogin
 }
 
 extension SocialLoginTarget: TargetType {
@@ -18,6 +19,7 @@ extension SocialLoginTarget: TargetType {
         switch self {
         case .appleLogin: return .post
         case .googleLogin: return .post
+        case .testLogin: return .post
         }
     }
     
@@ -25,6 +27,7 @@ extension SocialLoginTarget: TargetType {
         switch self {
         case .appleLogin: return "/auth/apple"
         case .googleLogin: return "/auth/google"
+        case .testLogin: return "/auth/test"
         }
     }
     
@@ -32,13 +35,7 @@ extension SocialLoginTarget: TargetType {
         switch self {
         case .appleLogin(let request): return .body(request)
         case .googleLogin(let request): return .body(request)
-        }
-    }
-    
-    var needsBearer: Bool {
-        switch self {
-        case .appleLogin: return false
-        case .googleLogin: return false
+        case .testLogin: return .qurey(nil)
         }
     }
 }
