@@ -9,6 +9,10 @@ import UIKit
 
 protocol ProfileImageCoordinator: Coordinator {
     func showTabBarViewController()
+    func showImagePicker()
+    
+    func setProfilePopupCoordinator()
+    func showProfilePopupViewController()
 }
 
 class DefaultProfileImageCoordinator: ProfileImageCoordinator {
@@ -37,11 +41,62 @@ class DefaultProfileImageCoordinator: ProfileImageCoordinator {
     func showTabBarViewController() {
         let appCoordinator = self.getTopCoordinator()
         
-
         let socialLoginCoordinator = appCoordinator.childCoordinators.first(where: { $0 is SocialLoginCoordinator })
         socialLoginCoordinator?.finish()
-    
+        
         appCoordinator.showTabBarViewController()
+    }
+    
+    func showImagePicker() {
+        
+        var config = PhotoKitConfiguration()
+        config.library.defaultMultipleSelection = false
+        config.library.numberOfItemsInRow = 3
+        
+        let picker = PhotoKitNavigationController(configuration: config)
+        
+        picker.didFinishCompletion = { image in
+        
+            self.handleImagePickerResult(image, isDefault: false)
+            picker.dismiss(animated: true)
+        }
+
+        self.navigationController?.present(picker, animated: true)
+    }
+    
+    func handleImagePickerResult(_ image: UIImage?, isDefault: Bool) {
+        if let profileImageViewController = self.navigationController?.topViewController as? ProfileImageViewController {
+            profileImageViewController.profileImageView.image = image
+            profileImageViewController.viewModel?.isDefaultProfileImage = isDefault
+        }
+    }
+    
+    func setProfilePopupCoordinator() {
+        let coordinator = DefaultProfileImagePopupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        
+        childCoordinators.append(coordinator)
+    }
+    
+    func showProfilePopupViewController() {
+        if getChildCoordinator(.profilePop) == nil {
+            setProfilePopupCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.profilePop) as! ProfileImagePopupCoordinator
+        coordinator.start()
+    }
+    
+    func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
+        var childCoordinator: Coordinator? = nil
+        
+        switch type {
+        case .profilePop:
+            childCoordinator = childCoordinators.first(where: { $0 is ProfileImagePopupCoordinator })
+        default:
+            break
+        }
+    
+        return childCoordinator
     }
 }
 

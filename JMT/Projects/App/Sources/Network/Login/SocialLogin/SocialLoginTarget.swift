@@ -14,10 +14,6 @@ enum SocialLoginTarget {
 }
 
 extension SocialLoginTarget: TargetType {
-    var baseURL: String {
-        return NetworkConfiguration.baseUrl
-    }
-    
     var method: HTTPMethod {
         switch self {
         case .appleLogin: return .post
@@ -36,6 +32,13 @@ extension SocialLoginTarget: TargetType {
         switch self {
         case .appleLogin(let request): return .body(request)
         case .googleLogin(let request): return .body(request)
+        }
+    }
+    
+    var needsBearer: Bool {
+        switch self {
+        case .appleLogin: return false
+        case .googleLogin: return false
         }
     }
 }

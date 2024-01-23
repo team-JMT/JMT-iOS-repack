@@ -10,10 +10,25 @@ import AuthenticationServices
 
 class SocialLoginViewController: UIViewController {
     
+    @IBOutlet weak var appleLoginView: UIView!
+    @IBOutlet weak var googleLoginView: UIView!
+    
     var viewModel: SocialLoginViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        setupUI()
+        
+    }
+    
+    func setupUI() {
+        appleLoginView.layer.cornerRadius = 10
+        googleLoginView.layer.cornerRadius = 10
+        
+        googleLoginView.layer.borderColor = UIColor.gray100?.cgColor
+        googleLoginView.layer.borderWidth = 1.5
         
     }
     

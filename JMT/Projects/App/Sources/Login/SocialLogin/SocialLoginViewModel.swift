@@ -7,53 +7,64 @@
 
 import Foundation
 
+enum UserLoginAction: String {
+    case SIGN_UP = "SIGN_UP"
+    case NICKNAME_PROCESS = "NICKNAME_PROCESS"
+    case PROFILE_IMAGE_PROCESS = "PROFILE_IMAGE_PROCESS"
+    case LOG_IN = "LOG_IN"
+}
+
 class SocialLoginViewModel {
     weak var coordinator: DefaultSocialLoginCoordinator?
     
-    func startGoogleLogin() {
+   func startGoogleLogin() {
         coordinator?.showGoogleLoginViewController(completion: { result in
             switch result {
             case .success(let idToken):
+                
                 SocialLoginAPI.googleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
-                    case .success(let action):
-                        
-                        print(action)
-                        
-                        switch action {
-                        case "NICKNAME_PROCESS":
-                            
-                            let appCoordinator = self.coordinator?.getTopCoordinator()
-                            appCoordinator?.showTabBarViewController()
-                        default:
-                            print("예외")
+                    case .success(let actionStr):
+                        if let action = UserLoginAction(rawValue: actionStr) {
+                            switch action {
+                            case .SIGN_UP, .NICKNAME_PROCESS:
+                                self.coordinator?.showNicknameViewController()
+                            case .PROFILE_IMAGE_PROCESS:
+                                self.coordinator?.showProfileViewController()
+                            case .LOG_IN:
+                                let appCoordinator = self.coordinator?.getTopCoordinator()
+                                appCoordinator?.showTabBarViewController()
+                            }
                         }
                     case .failure(let error):
-                        print(error)
+                        print("startGoogleLogin - SocialLoginAPI.googleLogin 실패!!", error)
                     }
                 }
             case .failure(let error):
-                // 에러처리 어떻게 할지 정해야함
-                print(error)
+                print("startGoogleLogin 실패!!", error)
             }
         })
     }
-    
+  
     func startAppleLogin() {
-        
         // 클로저 등록
         coordinator?.onAppleLoginSuccess = { [weak self] result in
             switch result {
             case .success(let idToken):
+                
                 SocialLoginAPI.appleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
-                    case .success(let action):
-                        switch action {
-                        case "NICKNAME_PROCESS":
-                            print("닉네임 설정")
-                            self?.coordinator?.showNicknameViewController()
-                        default:
-                            print("예외")
+                    case .success(let actionStr):
+                        if let action = UserLoginAction(rawValue: actionStr) {
+                            switch action {
+                            case .SIGN_UP, .NICKNAME_PROCESS:
+                                self?.coordinator?.showNicknameViewController()
+                            case .PROFILE_IMAGE_PROCESS:
+                                self?.coordinator?.showProfileViewController()
+                            case .LOG_IN:
+                                let appCoordinator = self?.coordinator?.getTopCoordinator()
+                                appCoordinator?.showTabBarViewController()
+                            }
                         }
                     case .failure(let error):
                         print(error)
@@ -64,7 +75,8 @@ class SocialLoginViewModel {
                 print(error)
             }
         }
-        
         coordinator?.showAppleLoginViewController()
     }
 }
+
+    
