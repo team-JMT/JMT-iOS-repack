@@ -17,7 +17,7 @@ enum UserLoginAction: String {
 class SocialLoginViewModel {
     weak var coordinator: DefaultSocialLoginCoordinator?
     
-    func startGoogleLogin() {
+   func startGoogleLogin() {
         coordinator?.showGoogleLoginViewController(completion: { result in
             switch result {
             case .success(let idToken):
@@ -45,7 +45,7 @@ class SocialLoginViewModel {
             }
         })
     }
-    
+  
     func startAppleLogin() {
         // 클로저 등록
         coordinator?.onAppleLoginSuccess = { [weak self] result in
