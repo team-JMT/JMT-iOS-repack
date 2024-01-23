@@ -78,7 +78,6 @@ class SocialLoginViewModel {
         coordinator?.showAppleLoginViewController()
     }
     
-<<<<<<< Updated upstream
     func testLogin() {
         SocialLoginAPI.testLogin { response in
             switch response {
@@ -99,10 +98,5 @@ class SocialLoginViewModel {
             }
         }
     }
-=======
-    
-    
-    
->>>>>>> Stashed changes
 }
 
