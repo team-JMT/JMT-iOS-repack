@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "MagnifyingGlass.png",
+      "filename" : "MagnifyingGlass.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "MagnifyingGlass@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "MagnifyingGlass@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

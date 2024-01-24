@@ -8,29 +8,20 @@
 import UIKit
 import MapKit
 import NMapsMap
+import FloatingPanel
 
 class HomeViewController: UIViewController {
     
     var viewModel: HomeViewModel?
-
-    var isFolded: Bool = true
+    var fpc: FloatingPanelController!
+    var bottomSheetVC: HomeBottomSheetViewController!
 
     @IBOutlet weak var naverMapView: NMFNaverMapView!
-    @IBOutlet weak var topContainerViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var groupImageView: UIImageView!
     
     @IBOutlet weak var groupNameButton: UIButton!
-    @IBOutlet weak var groupButtonTop: NSLayoutConstraint!
-    @IBOutlet weak var groupButtonBottom: NSLayoutConstraint!
-    
-    @IBOutlet weak var underLineView: UIView!
-    
-    
-    @IBOutlet weak var addressLabel: UILabel!
-    @IBOutlet weak var addressLabelTop: NSLayoutConstraint!
-    
-    @IBOutlet weak var addressButton: UIButton!
-
-    @IBOutlet weak var searchButton: UIButton!
+ 
+    @IBOutlet weak var topContainerView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,57 +29,95 @@ class HomeViewController: UIViewController {
         naverMapView.showCompass = false
         naverMapView.showScaleBar = false
         naverMapView.showZoomControls = false
+        
+        setupView()
+        setTopViewShadow()
+    }
 
-//        NicknameAPI.saveNickname(request: NicknameRequest(nickname: "3333")) { response in
-//            switch response {
-//            case .success(let data):
-//                print(data)
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
+    func setupView() {
+        let storyboard = UIStoryboard(name: "HomeBottomSheet", bundle: nil)
+        guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
+    
+        fpc = FloatingPanelController(delegate: self)
+        fpc.setPanelStyle(radius: 24, isHidden: false)
+        fpc.set(contentViewController: vc)
+        fpc.addPanel(toParent: self)
+        fpc.layout = DefaultFloatingPanelLayout()
+        fpc.invalidateLayout()
+    }
+    
+    func setTopViewShadow() {
+        // 그림자 컬러
+        topContainerView.layer.shadowColor = JMTengAsset.gray400.color.cgColor
+        // 그림자 투명도
+        topContainerView.layer.shadowOpacity = 1
+        // 그림자 퍼짐 정도
+        topContainerView.layer.shadowRadius = 16
+        
+        // 그림자 경로 설정
+        let shadowPath = UIBezierPath()
+        let shadowHeight: CGFloat = 4.0 // 그림자 높이
 
-//        DefaultKeychainService.shared.accessToken = nil
+        // 그림자 경로를 뷰의 바텀에만 위치시키기
+        shadowPath.move(to: CGPoint(x: 0, y: topContainerView.bounds.maxY))
+        shadowPath.addLine(to: CGPoint(x: topContainerView.bounds.width, y: topContainerView.bounds.maxY))
+        shadowPath.addLine(to: CGPoint(x: topContainerView.bounds.width, y: topContainerView.bounds.maxY + shadowHeight))
+        shadowPath.addLine(to: CGPoint(x: 0, y: topContainerView.bounds.maxY + shadowHeight))
+        shadowPath.close()
+
+        topContainerView.layer.shadowPath = shadowPath.cgPath
+        
+        
+        self.view.bringSubviewToFront(topContainerView)
     }
-    
-    @IBAction func didTabGroupTitleButton(_ sender: Any) {
-        isFolded.toggle()
-        updateTopContainerView()
-    }
-    
-    
-    @IBAction func didTabAddressButton(_ sender: Any) {
-        viewModel?.coordinator?.showUserLocationViewController(tag: 0)
-    }
+
     
     @IBAction func didTabSearchGroupButton(_ sender: Any) {
         viewModel?.coordinator?.showUserLocationViewController(tag: 1)
     }
     
-    
-    func updateTopContainerView() {
-        
-        let font: UIFont = isFolded ? UIFont(name: "Pretendard-Bold", size: 14)! : UIFont(name: "Pretendard-Bold", size: 20)!
-        let topContainerHeight: CGFloat = isFolded ? 32 : 99
-        let groupButtonTop: CGFloat = isFolded ? 6 : 20
-        let groupButtonBottom: CGFloat = isFolded ? 5 : 49
-        let addressLabelTop: CGFloat = isFolded ? -5 : 16
-        let alpha: CGFloat = isFolded ? 0 : 1
-        
-        self.groupNameButton.titleLabel?.font = font
-        self.topContainerViewHeight.constant = topContainerHeight
-        self.groupButtonTop.constant = groupButtonTop
-        self.groupButtonBottom.constant = groupButtonBottom
-        self.addressLabelTop.constant = addressLabelTop
-        
-        UIView.animate(withDuration: 0.5) {
-            self.searchButton.alpha = alpha
-            self.underLineView.alpha = alpha
-            self.addressLabel.alpha = alpha
-            self.view.layoutIfNeeded()
-        } completion: { _ in
-            self.addressButton.isHidden = self.isFolded
+    @IBAction func testButton(_ sender: Any) {
+        fpc.move(to: .full, animated: true)
+    }
+}
+
+extension HomeViewController: FloatingPanelControllerDelegate {
+    func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
+        switch fpc.state {
+        case .full:
+            fpc.setPanelStyle(radius: 0, isHidden: true)
+        case .half:
+            fpc.setPanelStyle(radius: 24, isHidden: false)
+        case .tip:
+            print("tip")
+        default:
+            print("")
         }
     }
     
+    func floatingPanelDidMove(_ fpc: FloatingPanelController) {
+        if fpc.isAttracting == false || fpc.isAttracting == true {
+            if fpc.surfaceLocation.y < 65 + self.view.safeAreaInsets.top {
+                fpc.surfaceLocation.y = 65 + self.view.safeAreaInsets.top
+            }
+        }
+    }
+}
+
+extension FloatingPanelController {
+    func setPanelStyle(radius: CGFloat, isHidden: Bool) {
+        
+        let appearance = SurfaceAppearance()
+        appearance.cornerRadius = radius
+        appearance.backgroundColor = .clear
+        appearance.borderColor = .clear
+        appearance.borderWidth = 0
+        appearance.shadows = []
+
+        surfaceView.grabberHandle.isHidden = isHidden
+        surfaceView.grabberHandlePadding = 5.0
+        surfaceView.grabberHandleSize = CGSize(width: 40, height: 3)
+        
+        surfaceView.appearance = appearance
+    }
 }
