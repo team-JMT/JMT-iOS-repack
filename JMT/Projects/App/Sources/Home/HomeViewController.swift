@@ -23,6 +23,9 @@ class HomeViewController: UIViewController {
  
     @IBOutlet weak var topContainerView: UIView!
     
+    @IBOutlet weak var locationStackView: UIStackView!
+    @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,12 +41,15 @@ class HomeViewController: UIViewController {
         let storyboard = UIStoryboard(name: "HomeBottomSheet", bundle: nil)
         guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
     
+        vc.viewModel = self.viewModel
         fpc = FloatingPanelController(delegate: self)
         fpc.setPanelStyle(radius: 24, isHidden: false)
         fpc.set(contentViewController: vc)
         fpc.addPanel(toParent: self)
         fpc.layout = DefaultFloatingPanelLayout()
         fpc.invalidateLayout()
+        
+        updateLocationButtonBottomConstraint()
     }
     
     func setTopViewShadow() {
@@ -70,6 +76,19 @@ class HomeViewController: UIViewController {
         
         self.view.bringSubviewToFront(topContainerView)
     }
+    
+    func updateLocationButtonBottomConstraint() {
+        locationButtonBottom.isActive = false
+        
+        let newConstraint = NSLayoutConstraint(item: locationStackView!,
+                                               attribute: .bottom,
+                                               relatedBy: .equal,
+                                               toItem: fpc.surfaceView,
+                                               attribute: .top,
+                                               multiplier: 1.0,
+                                               constant: -15)
+        newConstraint.isActive = true
+    }
 
     
     @IBAction func didTabSearchGroupButton(_ sender: Any) {
@@ -86,10 +105,12 @@ extension HomeViewController: FloatingPanelControllerDelegate {
         switch fpc.state {
         case .full:
             fpc.setPanelStyle(radius: 0, isHidden: true)
+            locationStackView.isHidden = true
         case .half:
             fpc.setPanelStyle(radius: 24, isHidden: false)
+            locationStackView.isHidden = false
         case .tip:
-            print("tip")
+            locationStackView.isHidden = false
         default:
             print("")
         }

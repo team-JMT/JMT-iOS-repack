@@ -10,6 +10,7 @@ import UIKit
 protocol HomeCoordinator: Coordinator {
     func setUserLocationCoordinator()
     func showUserLocationViewController(tag: Int)
+    func test()
 }
 
 class DefaultHomeCoordinator: HomeCoordinator {
@@ -46,6 +47,13 @@ class DefaultHomeCoordinator: HomeCoordinator {
         coordinator.enterPoint = tag
         coordinator.start()
     }
+    
+    func test() {
+        let storyboard = UIStoryboard(name: "FilterBottomSheet", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "FilterBottomSheetViewController") as? FilterBottomSheetViewController else { return }
+        self.navigationController?.present(vc, animated: true)
+    }
+
     
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil

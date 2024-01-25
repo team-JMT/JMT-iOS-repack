@@ -89,12 +89,34 @@
                                     <action selector="testButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="y1J-DW-idD"/>
                                 </connections>
                             </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="bottom" spacing="13" translatesAutoresizingMaskIntoConstraints="NO" id="jEB-fM-TdX">
+                                <rect key="frame" x="250" y="702" width="132" height="86"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Bf-jH-8UY">
+                                        <rect key="frame" x="96" y="0.0" width="36" height="36"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="RefreshMap"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SWm-je-XpJ">
+                                        <rect key="frame" x="0.0" y="49" width="132" height="37"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="14"/>
+                                        <inset key="contentEdgeInsets" minX="16" minY="10" maxX="12" maxY="10"/>
+                                        <inset key="imageEdgeInsets" minX="-4" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" title="동대문구 전농동" image="LocationPin1">
+                                            <color key="titleColor" systemColor="labelColor"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="jEB-fM-TdX" secondAttribute="bottom" constant="30" id="5TB-hz-1Ev"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="5oj-KE-prq"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="top" secondItem="srQ-dG-9DL" secondAttribute="bottom" id="6OS-Np-uB9"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="jEB-fM-TdX" secondAttribute="trailing" constant="11" id="7hN-us-MFu"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="9Xb-xx-AQ3"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="srQ-dG-9DL" secondAttribute="trailing" id="StH-40-Brx"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="PMz-ib-zrF" secondAttribute="trailing" constant="10" id="Zb6-tj-bes"/>
@@ -107,6 +129,8 @@
                     <connections>
                         <outlet property="groupImageView" destination="jIS-Mw-Ls7" id="6Gj-Cs-gQe"/>
                         <outlet property="groupNameButton" destination="hi9-je-wVX" id="aRm-U5-xjk"/>
+                        <outlet property="locationButtonBottom" destination="5TB-hz-1Ev" id="3gr-Z9-apu"/>
+                        <outlet property="locationStackView" destination="jEB-fM-TdX" id="dU7-yG-9c6"/>
                         <outlet property="naverMapView" destination="Gz2-he-OL7" id="UmZ-u2-ujW"/>
                         <outlet property="topContainerView" destination="srQ-dG-9DL" id="g7O-KE-kCD"/>
                     </connections>
@@ -133,6 +157,7 @@
     </scenes>
     <resources>
         <image name="ArrowRight" width="18" height="18"/>
+        <image name="LocationPin1" width="16" height="17"/>
         <image name="RefreshMap" width="36" height="36"/>
         <image name="Search" width="24" height="24"/>
         <namedColor name="gray200">
@@ -141,6 +166,9 @@
         <namedColor name="gray900">
             <color red="0.086000002920627594" green="0.10199999809265137" blue="0.11400000005960464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
