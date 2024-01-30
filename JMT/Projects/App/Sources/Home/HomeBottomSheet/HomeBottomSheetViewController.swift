@@ -12,6 +12,8 @@ class HomeBottomSheetViewController: UIViewController {
     var viewModel: HomeViewModel?
     
     @IBOutlet weak var bottomSheetCollectionView: UICollectionView!
+    @IBOutlet weak var moveTopButton: UIButton!
+    @IBOutlet weak var addButton: UIButton!
     
     
     override func viewDidLoad() {
@@ -23,6 +25,8 @@ class HomeBottomSheetViewController: UIViewController {
         let header2 = UINib(nibName: "SecondHeaderView", bundle: nil)
         bottomSheetCollectionView.register(header2, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView2")
         
+        
+        setupUI()
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -96,6 +100,20 @@ class HomeBottomSheetViewController: UIViewController {
         
     }
     
+    func setupUI() {
+        moveTopButton.layer.cornerRadius = moveTopButton.frame.height / 2
+        addButton.layer.cornerRadius = addButton.frame.height / 2
+    }
+    
+    @IBAction func didTabMoveTopButton(_ sender: Any) {
+        
+    }
+    
+    @IBAction func didTabAddButton(_ sender: Any) {
+        
+    }
+    
+    
 }
 
 extension HomeBottomSheetViewController: UICollectionViewDelegate {
@@ -156,14 +174,17 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
 
 extension HomeBottomSheetViewController: SecondHeaderViewDelegate {
     func didTabFilter1Button() {
-        viewModel?.coordinator?.test()
+        viewModel?.filterType = 0
+        viewModel?.coordinator?.showFilterBottomSheetViewController()
     }
     
     func didTabFilter2Button() {
-        print("2222")
+        viewModel?.filterType = 1
+        viewModel?.coordinator?.showFilterBottomSheetViewController()
     }
     
     func didTabFilter3Button() {
-        print("3333")
+        viewModel?.filterType = 2
+        viewModel?.coordinator?.showFilterBottomSheetViewController()
     }
 }

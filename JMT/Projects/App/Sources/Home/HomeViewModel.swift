@@ -10,5 +10,5 @@ import Foundation
 class HomeViewModel {
     weak var coordinator: HomeCoordinator?
     
-    let test = "홈"
+    var filterType: Int = 0
 }

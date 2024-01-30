@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import FloatingPanel
 
 protocol HomeCoordinator: Coordinator {
     func setUserLocationCoordinator()
-    func showUserLocationViewController(tag: Int)
-    func test()
+    func showUserLocationViewController(endPoint: Int)
+    func setFilterBottomSheetCoordinator()
+    func showFilterBottomSheetViewController()
 }
 
 class DefaultHomeCoordinator: HomeCoordinator {
@@ -28,6 +30,7 @@ class DefaultHomeCoordinator: HomeCoordinator {
     func start() {
         let homeViewController = HomeViewController.instantiateFromStoryboard(storyboardName: "Home") as HomeViewController
         homeViewController.viewModel?.coordinator = self
+    
         self.navigationController?.pushViewController(homeViewController, animated: true)
     }
     
@@ -38,37 +41,44 @@ class DefaultHomeCoordinator: HomeCoordinator {
         childCoordinators.append(coordinator)
     }
     
-    func showUserLocationViewController(tag: Int) {
+    func showUserLocationViewController(endPoint: Int) {
         if getChildCoordinator(.userLocation) == nil {
             setUserLocationCoordinator()
         }
         
         let coordinator = getChildCoordinator(.userLocation) as! UserLocationCoordinator
-        coordinator.enterPoint = tag
+        coordinator.enterPoint = endPoint
         coordinator.start()
     }
     
-    func test() {
-        let storyboard = UIStoryboard(name: "FilterBottomSheet", bundle: nil)
-        guard let vc = storyboard.instantiateViewController(withIdentifier: "FilterBottomSheetViewController") as? FilterBottomSheetViewController else { return }
-        self.navigationController?.present(vc, animated: true)
+    func setFilterBottomSheetCoordinator() {
+        let coordinator = DefaultFilterBottomSheetCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
     }
-
     
+    func showFilterBottomSheetViewController() {
+        if getChildCoordinator(.filterBS) == nil {
+            setFilterBottomSheetCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.filterBS) as! FilterBottomSheetCoordinator
+        coordinator.start()
+    }
+  
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil
         
         switch type {
         case .userLocation:
             childCoordinator = childCoordinators.first(where: { $0 is UserLocationCoordinator })
+        case .filterBS:
+            childCoordinator = childCoordinators.first(where: { $0 is FilterBottomSheetCoordinator })
         default:
             break
         }
     
         return childCoordinator
     }
-    
-    
 }
 
 

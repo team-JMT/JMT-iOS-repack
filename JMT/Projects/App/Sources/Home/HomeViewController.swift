@@ -25,6 +25,7 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var locationStackView: UIStackView!
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +36,8 @@ class HomeViewController: UIViewController {
         
         setupView()
         setTopViewShadow()
+        
+        
     }
 
     func setupView() {
@@ -46,7 +49,7 @@ class HomeViewController: UIViewController {
         fpc.setPanelStyle(radius: 24, isHidden: false)
         fpc.set(contentViewController: vc)
         fpc.addPanel(toParent: self)
-        fpc.layout = DefaultFloatingPanelLayout()
+        fpc.layout = HomeBottomSheetFloatingPanelLayout()
         fpc.invalidateLayout()
         
         updateLocationButtonBottomConstraint()
@@ -92,11 +95,15 @@ class HomeViewController: UIViewController {
 
     
     @IBAction func didTabSearchGroupButton(_ sender: Any) {
-        viewModel?.coordinator?.showUserLocationViewController(tag: 1)
+        self.tabBarController?.selectedIndex = 1
     }
     
     @IBAction func testButton(_ sender: Any) {
         fpc.move(to: .full, animated: true)
+    }
+    
+    @IBAction func didTabChangeAddressButton(_ sender: Any) {
+        viewModel?.coordinator?.showUserLocationViewController(endPoint: 1)
     }
 }
 
@@ -106,11 +113,14 @@ extension HomeViewController: FloatingPanelControllerDelegate {
         case .full:
             fpc.setPanelStyle(radius: 0, isHidden: true)
             locationStackView.isHidden = true
+
         case .half:
             fpc.setPanelStyle(radius: 24, isHidden: false)
             locationStackView.isHidden = false
+
         case .tip:
             locationStackView.isHidden = false
+
         default:
             print("")
         }

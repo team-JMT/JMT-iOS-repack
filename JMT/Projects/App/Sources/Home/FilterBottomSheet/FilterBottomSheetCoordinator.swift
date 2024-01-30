@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import FloatingPanel
 
 protocol FilterBottomSheetCoordinator: Coordinator {
     
@@ -29,10 +30,16 @@ class DefaultFilterBottomSheetCoordinator: FilterBottomSheetCoordinator {
     }
     
     func start() {
-        let storyboard = UIStoryboard(name: "HomeBottomSheet", bundle: nil)
-        guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
+        let storyboard = UIStoryboard(name: "FilterBottomSheet", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "FilterBottomSheetViewController") as? FilterBottomSheetViewController else { return }
+        let fpc = FloatingPanelController()
+        vc.fpc = fpc
+        fpc.set(contentViewController: vc)
         
+        if let tvc = self.navigationController?.topViewController as? HomeViewController {
+            vc.viewModel = tvc.viewModel
+        }
         
-        
+        self.navigationController?.present(fpc, animated: true)
     }
 }

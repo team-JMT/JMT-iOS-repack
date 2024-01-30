@@ -106,6 +106,9 @@
                                         <state key="normal" title="동대문구 전농동" image="LocationPin1">
                                             <color key="titleColor" systemColor="labelColor"/>
                                         </state>
+                                        <connections>
+                                            <action selector="didTabChangeAddressButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="fWH-Ba-NbM"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
