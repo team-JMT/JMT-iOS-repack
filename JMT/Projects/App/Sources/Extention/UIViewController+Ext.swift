@@ -18,9 +18,16 @@ extension UIViewController {
 
 // 네비게이션 컨트롤러 백버튼
 extension UIViewController {
-    func setCustomNavigationBarBackButton() {
+    func setCustomNavigationBarBackButton(isSearchVC: Bool) {
+        
+        var backButton = UIBarButtonItem()
+        
         // 커스텀 백 버튼 생성
-        let backButton = UIBarButtonItem(image: UIImage(named: "BackButton"), style: .plain, target: self, action: #selector(customBackAction))
+        if isSearchVC {
+            backButton = UIBarButtonItem(image: UIImage(named: "BackButton"), style: .plain, target: self, action: #selector(goToHomeTab))
+        } else {
+            backButton = UIBarButtonItem(image: UIImage(named: "BackButton"), style: .plain, target: self, action: #selector(popViewController))
+        }
         
         backButton.tintColor = .black
         
@@ -28,11 +35,15 @@ extension UIViewController {
         // 네비게이션 아이템에 백 버튼 설정
         self.navigationItem.leftBarButtonItem = backButton
     }
-    
-    @objc private func customBackAction() {
+
+    @objc private func popViewController() {
         // 여기에 백 버튼이 눌렸을 때의 동작 구현
         // 예: 네비게이션 컨트롤러를 통해 이전 화면으로 돌아가기
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func goToHomeTab() {
+        self.tabBarController?.selectedIndex = 0
     }
 }
 

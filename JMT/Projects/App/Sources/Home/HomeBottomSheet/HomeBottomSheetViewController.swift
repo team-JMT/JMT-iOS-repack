@@ -20,9 +20,9 @@ class HomeBottomSheetViewController: UIViewController {
         super.viewDidLoad()
         
         bottomSheetCollectionView.collectionViewLayout = createLayout()
-        let header1 = UINib(nibName: "FirstHeaderView", bundle: nil)
+        let header1 = UINib(nibName: "HomeHeaderView", bundle: nil)
         bottomSheetCollectionView.register(header1, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView1")
-        let header2 = UINib(nibName: "SecondHeaderView", bundle: nil)
+        let header2 = UINib(nibName: "HomeFilterHeaderView", bundle: nil)
         bottomSheetCollectionView.register(header2, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView2")
         
         
@@ -37,7 +37,7 @@ class HomeBottomSheetViewController: UIViewController {
             case 1:
                 return self.createSecondColumnSection()
             default:
-                return self.createFirstColumnSection()
+                return nil
             }
         }
     }

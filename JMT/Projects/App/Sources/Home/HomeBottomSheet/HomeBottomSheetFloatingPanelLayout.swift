@@ -23,7 +23,7 @@ class HomeBottomSheetFloatingPanelLayout: FloatingPanelLayout {
         return [
             .full: FloatingPanelLayoutAnchor(absoluteInset: 65, edge: .top, referenceGuide: .safeArea),
             .half: FloatingPanelLayoutAnchor(fractionalInset: 0.35, edge: .bottom, referenceGuide: .superview),
-            .tip: FloatingPanelLayoutAnchor(absoluteInset: 0, edge: .bottom, referenceGuide: .safeArea)
+            .tip: FloatingPanelLayoutAnchor(absoluteInset: 18, edge: .bottom, referenceGuide: .safeArea)
         ]
     }
     

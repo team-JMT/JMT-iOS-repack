@@ -64,7 +64,7 @@ class UserLocationViewController: UIViewController {
     }
     
     func setupUI() {
-        setCustomNavigationBarBackButton()
+        setCustomNavigationBarBackButton(isSearchVC: false)
         self.navigationItem.title = "위치 변경"
         
         cancelButton.isHidden = true
