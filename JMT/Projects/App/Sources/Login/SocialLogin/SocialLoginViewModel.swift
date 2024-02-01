@@ -15,7 +15,7 @@ enum UserLoginAction: String {
 }
 
 class SocialLoginViewModel {
-    weak var coordinator: DefaultSocialLoginCoordinator?
+    weak var coordinator: SocialLoginCoordinator?
     
    func startGoogleLogin() {
         coordinator?.showGoogleLoginViewController(completion: { result in

@@ -8,7 +8,7 @@
 import Foundation
 
 class UserLocationViewModel {
-    weak var coordinator: DefaultUserLocationCoordinator?
+    weak var coordinator: UserLocationCoordinator?
     
     var onSuccess: (() -> ())?
     

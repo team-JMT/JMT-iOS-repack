@@ -15,6 +15,7 @@ let project = Project.app(name: "JMTeng",
                                          .external(name: "Kingfisher"),
                                          .external(name: "SnapKit"),
                                          .external(name: "Then"),
-                                         .external(name: "SwiftKeychainWrapper")],
+                                         .external(name: "SwiftKeychainWrapper"),
+                                         .external(name: "FloatingPanel")],
                           resources: .default)
 
