@@ -1,18 +1,18 @@
 //
-//  GrayBackgroundView.swift
+//  GrayBackgroundViewInset.swift
 //  JMTeng
 //
-//  Created by PKW on 2024/01/31.
+//  Created by PKW on 2024/02/03.
 //
 
 import UIKit
 import SnapKit
 import Then
 
-class GrayBackgroundView: UICollectionReusableView {
+class GrayBackgroundViewInset: UICollectionReusableView {
     
     private let grayBackgroundView = UIView().then {
-        $0.backgroundColor = .systemBackground 
+        $0.backgroundColor = .systemBackground
     }
     
     override init(frame: CGRect) {
@@ -23,7 +23,7 @@ class GrayBackgroundView: UICollectionReusableView {
         
         grayBackgroundView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(12)
         }
     }
 

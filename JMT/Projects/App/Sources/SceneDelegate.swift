@@ -29,13 +29,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         appCoordinator = DefaultAppCoordinator(navigationController: navigationController)
         
         injector.assemble([SocialLoginDI(),
+                           
                            NicknameDI(),
-                           ProfileImageDI(),
-                           ProfilePopupDI(),
-                           HomeDI(), UserLocationDI(),
-                           SearchDI(), TotalResultDI(), RestaurantResultDI(), GroupResultDI(),
+                           
+                           ProfileImageDI(), ProfilePopupDI(),
+                           
+                           HomeDI(), UserLocationDI(), RegistrationRestaurantDI(),
+                           
+                           SearchDI(), RestaurantDetailDI(),
+                           
                            GroupDI(),
+                           
                            MyPageDI(),
+                           
                           ])
         
         appCoordinator?.start()

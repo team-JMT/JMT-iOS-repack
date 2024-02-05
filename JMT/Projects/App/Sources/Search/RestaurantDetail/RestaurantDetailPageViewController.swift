@@ -1,27 +1,25 @@
 //
-//  SearchPageViewController.swift
+//  RestaurantDetailPageViewController.swift
 //  JMTeng
 //
-//  Created by PKW on 2024/01/30.
+//  Created by PKW on 2024/02/02.
 //
 
 import UIKit
-import Swinject
-import SwinjectStoryboard
 
-
-protocol SearchPageViewControllerDelegate: AnyObject {
+protocol RestaurantDetailPageViewControllerDelegate: AnyObject {
     func updateSegmentIndex(index: Int)
 }
 
-class SearchPageViewController: UIPageViewController {
+class RestaurantDetailPageViewController: UIPageViewController {
     
-    weak var searchPVDelegate: SearchPageViewControllerDelegate?
+    weak var pageViewDelegate: RestaurantDetailPageViewControllerDelegate?
     var vcArray: [UIViewController] = []
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         delegate = self
         dataSource = self
         
@@ -31,23 +29,23 @@ class SearchPageViewController: UIPageViewController {
     }
 }
 
-extension SearchPageViewController: UIPageViewControllerDelegate {
+extension RestaurantDetailPageViewController: UIPageViewControllerDelegate {
     
 }
 
-extension SearchPageViewController: UIPageViewControllerDataSource {
+extension RestaurantDetailPageViewController: UIPageViewControllerDataSource {
     
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         
         guard completed else { return }
         
         switch pageViewController.viewControllers?.first {
-        case is TotalResultViewController:
-            searchPVDelegate?.updateSegmentIndex(index: 0)
-        case is RestaurantResultViewController:
-            searchPVDelegate?.updateSegmentIndex(index: 1)
-        case is GroupResultViewController:
-            searchPVDelegate?.updateSegmentIndex(index: 2)
+        case is RestaurantDetailInfoViewController:
+            pageViewDelegate?.updateSegmentIndex(index: 0)
+        case is RestaurantDetailPhotoViewController:
+            pageViewDelegate?.updateSegmentIndex(index: 1)
+        case is RestaurantDetailReviewViewController:
+            pageViewDelegate?.updateSegmentIndex(index: 2)
         default:
             print("nil")
         }
@@ -80,4 +78,5 @@ extension SearchPageViewController: UIPageViewControllerDataSource {
     
         return vcArray[nextIndex]
     }
+    
 }

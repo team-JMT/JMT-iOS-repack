@@ -130,14 +130,14 @@
                                                         <constraint firstAttribute="height" constant="200" id="1WZ-o6-LPz"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="수제버거 맛집 노원점" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DQL-ac-lEK">
-                                                    <rect key="frame" x="0.0" y="252" width="315" height="19.333333333333371"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="수제버거 맛집 노원점" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DQL-ac-lEK">
+                                                    <rect key="frame" x="0.0" y="252.00000000000003" width="315" height="19.333333333333343"/>
                                                     <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
                                                     <color key="textColor" name="gray900"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="[필독] 버거 중독자만 모여라 일반인 강제 퇴출[필독] 버거 중독자만 모여라 일반인 강제 퇴출[필독] 버거 중독자만 모여라 일..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O1z-Dv-v0L">
-                                                    <rect key="frame" x="0.0" y="279.33333333333326" width="315" height="33.666666666666686"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="[필독] 버거 중독자만 모여라 일반인 강제 퇴출[필독] 버거 중독자만 모여라 일반인 강제 퇴출[필독] 버거 중독자만 모여라 일..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O1z-Dv-v0L">
+                                                    <rect key="frame" x="0.0" y="279.33333333333331" width="315" height="180.66666666666669"/>
                                                     <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                                                     <color key="textColor" name="gray500"/>
                                                     <nil key="highlightedColor"/>
@@ -191,10 +191,10 @@
                                                             </subviews>
                                                         </stackView>
                                                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S14-tl-Ttf">
-                                                            <rect key="frame" x="0.0" y="0.0" width="367.33333333333331" height="60"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="370.33333333333331" height="60"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ryp-mN-zD1">
-                                                                    <rect key="frame" x="16" y="16" width="335.33333333333331" height="28"/>
+                                                                    <rect key="frame" x="16" y="16" width="338.33333333333331" height="28"/>
                                                                     <subviews>
                                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="O7T-fV-VLR">
                                                                             <rect key="frame" x="0.0" y="0.0" width="111" height="20"/>

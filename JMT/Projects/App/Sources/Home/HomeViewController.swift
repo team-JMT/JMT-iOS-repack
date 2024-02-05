@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import MapKit
 import NMapsMap
 import FloatingPanel
 
@@ -36,8 +35,12 @@ class HomeViewController: UIViewController {
         
         setupView()
         setTopViewShadow()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
     func setupView() {

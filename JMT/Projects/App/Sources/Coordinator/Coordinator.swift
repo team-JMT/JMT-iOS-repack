@@ -12,7 +12,7 @@ enum CoordinatorType {
     case socialLogin, nickname
     case profileImage, album, cropPhoto, profile
     case home, userLocation, homeBS, filterBS
-    case search
+    case search, restaurantDetail, searchRestaurant, searchRestaurantMap, registrationRestaurantInfo, searchRestaurantMenuBS
     case group
     case mypage
     case buttonPopup

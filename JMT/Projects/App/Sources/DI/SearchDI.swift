@@ -19,11 +19,7 @@ struct SearchDI: Assembly {
             let viewModel = r.resolve(SearchViewModel.self)!
             c.viewModel = viewModel
         }
-    }
-}
-
-struct TotalResultDI: Assembly {
-    func assemble(container: Swinject.Container) {
+        
         container.register(TotalResultViewModel.self) { r in
             let viewModel = TotalResultViewModel()
             return viewModel
@@ -33,11 +29,7 @@ struct TotalResultDI: Assembly {
             let viewModel = r.resolve(TotalResultViewModel.self)!
             c.viewModel = viewModel
         }
-    }
-}
-
-struct RestaurantResultDI: Assembly {
-    func assemble(container: Swinject.Container) {
+        
         container.register(RestaurantResultViewModel.self) { r in
             let viewModel = RestaurantResultViewModel()
             return viewModel
@@ -47,11 +39,7 @@ struct RestaurantResultDI: Assembly {
             let viewModel = r.resolve(RestaurantResultViewModel.self)!
             c.viewModel = viewModel
         }
-    }
-}
-
-struct GroupResultDI: Assembly {
-    func assemble(container: Swinject.Container) {
+        
         container.register(GroupResultViewModel.self) { r in
             let viewModel = GroupResultViewModel()
             return viewModel
@@ -63,5 +51,6 @@ struct GroupResultDI: Assembly {
         }
     }
 }
+
 
 

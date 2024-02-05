@@ -11,8 +11,12 @@ import FloatingPanel
 protocol HomeCoordinator: Coordinator {
     func setUserLocationCoordinator()
     func showUserLocationViewController(endPoint: Int)
+    
     func setFilterBottomSheetCoordinator()
     func showFilterBottomSheetViewController()
+    
+    func setSearchRestaurantCoordinator()
+    func showSearchRestaurantViewController()
 }
 
 class DefaultHomeCoordinator: HomeCoordinator {
@@ -65,6 +69,20 @@ class DefaultHomeCoordinator: HomeCoordinator {
         coordinator.start()
     }
   
+    func setSearchRestaurantCoordinator() {
+        let coordinator = DefaultSearchRestaurantCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showSearchRestaurantViewController() {
+        if getChildCoordinator(.searchRestaurant) == nil {
+            setSearchRestaurantCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.searchRestaurant) as! SearchRestaurantCoordinator
+        coordinator.start()
+    }
+    
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil
         
@@ -73,6 +91,8 @@ class DefaultHomeCoordinator: HomeCoordinator {
             childCoordinator = childCoordinators.first(where: { $0 is UserLocationCoordinator })
         case .filterBS:
             childCoordinator = childCoordinators.first(where: { $0 is FilterBottomSheetCoordinator })
+        case .searchRestaurant:
+            childCoordinator = childCoordinators.first(where: { $0 is SearchRestaurantCoordinator })
         default:
             break
         }

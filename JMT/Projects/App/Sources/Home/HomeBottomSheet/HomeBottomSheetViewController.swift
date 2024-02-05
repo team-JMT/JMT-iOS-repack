@@ -110,10 +110,8 @@ class HomeBottomSheetViewController: UIViewController {
     }
     
     @IBAction func didTabAddButton(_ sender: Any) {
-        
+        viewModel?.coordinator?.showSearchRestaurantViewController()
     }
-    
-    
 }
 
 extension HomeBottomSheetViewController: UICollectionViewDelegate {
