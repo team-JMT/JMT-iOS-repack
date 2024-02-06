@@ -39,8 +39,6 @@ class FilterBottomSheetViewController: UIViewController {
         layout.tbHeight = filterTableView.contentSize.height
         
         fpc?.layout = layout
-        
-        print(viewModel?.filterType)
     }
     
     func setupUI() {

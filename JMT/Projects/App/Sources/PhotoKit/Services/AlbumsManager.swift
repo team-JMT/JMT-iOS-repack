@@ -114,7 +114,7 @@ class AlbumsManager: NSObject, PHPhotoLibraryChangeObserver {
             }
             
             photos = phAssets.map {
-                PhotoInfo(phAsset: $0, image: nil, selectedOrder: .none)
+                PhotoInfo(phAsset: $0, image: nil, localIdentifier: $0.localIdentifier, selectedOrder: .none)
             }
             
             completion()

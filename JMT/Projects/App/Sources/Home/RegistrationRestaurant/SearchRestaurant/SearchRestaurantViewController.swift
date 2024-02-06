@@ -26,10 +26,15 @@ class SearchRestaurantViewController: UIViewController {
         super.viewWillAppear(animated)
         
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
-    
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.tabBarController?.tabBar.isHidden = false
+    }
+
 //    @IBAction func didTabTest(_ sender: Any) {
 //        viewModel?.coordinator?.showSearchRestaurantMapViewController()
 //    }

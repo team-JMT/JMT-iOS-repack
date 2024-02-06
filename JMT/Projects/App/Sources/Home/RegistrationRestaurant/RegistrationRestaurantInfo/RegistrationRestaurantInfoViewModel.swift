@@ -10,5 +10,13 @@ import Foundation
 class RegistrationRestaurantInfoViewModel {
     weak var coordinator: RegistrationRestaurantInfoCoordinator?
     
-    var filterType: Int = 0
+    var didCompleted: (() -> Void)?
+    
+    var filterType: Int = 0 {
+        didSet {
+            didCompleted?()
+        }
+    }
+
+    var selectedImages: [PhotoInfo] = []
 }

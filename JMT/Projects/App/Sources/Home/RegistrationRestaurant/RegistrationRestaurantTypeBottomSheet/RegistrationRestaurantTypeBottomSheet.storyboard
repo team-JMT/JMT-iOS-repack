@@ -18,7 +18,7 @@
         <!--Registration Restaurant Type Bottom Sheet View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="RegistrationRestaurantTypeBottomSheetViewController" id="Y6W-OH-hqX" customClass="RegistrationRestaurantTypeBottomSheetViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RegistrationRestaurantTypeBottomSheetViewController" id="Y6W-OH-hqX" customClass="RegistrationRestaurantTypeBottomSheetViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -94,6 +94,7 @@
                     </view>
                     <connections>
                         <outlet property="bottomContainerView" destination="5wY-sE-IxA" id="qfY-Ld-MKz"/>
+                        <outlet property="typeTableView" destination="yhN-S5-tew" id="Cq7-QQ-an1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -105,7 +106,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="240" height="110"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sqQ-58-LfJ">
-                                    <rect key="frame" x="20" y="12" width="200" height="56"/>
+                                    <rect key="frame" x="20" y="15" width="200" height="56"/>
                                     <color key="backgroundColor" name="main500"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="56" id="aNa-rN-SeL"/>
@@ -118,7 +119,7 @@
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="sqQ-58-LfJ" secondAttribute="trailing" constant="20" id="JEA-UM-ECN"/>
-                                <constraint firstItem="sqQ-58-LfJ" firstAttribute="top" secondItem="5wY-sE-IxA" secondAttribute="top" constant="12" id="O1W-yn-bSI"/>
+                                <constraint firstItem="sqQ-58-LfJ" firstAttribute="top" secondItem="5wY-sE-IxA" secondAttribute="top" constant="15" id="O1W-yn-bSI"/>
                                 <constraint firstAttribute="height" constant="110" id="nMg-w3-1My"/>
                                 <constraint firstItem="sqQ-58-LfJ" firstAttribute="leading" secondItem="5wY-sE-IxA" secondAttribute="leading" constant="20" id="pdW-oX-Lzu"/>
                             </constraints>
@@ -128,6 +129,7 @@
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="5wY-sE-IxA" firstAttribute="leading" secondItem="TRS-Ij-2go" secondAttribute="leading" id="PUl-nV-5ma"/>
+                        <constraint firstAttribute="bottom" secondItem="5wY-sE-IxA" secondAttribute="bottom" id="V0K-w6-BPB"/>
                         <constraint firstItem="TRS-Ij-2go" firstAttribute="trailing" secondItem="5wY-sE-IxA" secondAttribute="trailing" id="nxm-yi-XYa"/>
                         <constraint firstItem="5wY-sE-IxA" firstAttribute="top" secondItem="cX6-eq-0uF" secondAttribute="top" id="txI-y5-7OW"/>
                     </constraints>

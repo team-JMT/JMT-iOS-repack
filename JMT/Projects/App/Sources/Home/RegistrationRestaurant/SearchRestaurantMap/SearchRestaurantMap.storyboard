@@ -28,11 +28,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WzG-ml-E3o" customClass="NMFNaverMapView">
-                                <rect key="frame" x="0.0" y="59" width="393" height="649"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="683"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="gfN-O5-sZe">
-                                <rect key="frame" x="0.0" y="708" width="393" height="110"/>
+                                <rect key="frame" x="0.0" y="742" width="393" height="110"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Qg-Px-ewd">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="110"/>
@@ -62,7 +62,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="PlT-kT-frs">
-                                <rect key="frame" x="20" y="488" width="353" height="196"/>
+                                <rect key="frame" x="20" y="522" width="353" height="196"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uVj-0Q-sdo">
                                         <rect key="frame" x="0.0" y="0.0" width="353" height="52"/>
@@ -98,19 +98,19 @@
                                         <rect key="frame" x="0.0" y="68" width="353" height="128"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IjP-YU-hDU">
-                                                <rect key="frame" x="20" y="19.999999999999996" width="313" height="42.666666666666657"/>
+                                                <rect key="frame" x="20" y="20.000000000000004" width="313" height="41.333333333333343"/>
                                                 <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bk7-ju-Oin">
-                                                <rect key="frame" x="20" y="66.666666666666629" width="313" height="18.666666666666671"/>
+                                                <rect key="frame" x="20" y="65.333333333333371" width="313" height="19.333333333333329"/>
                                                 <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aCh-NQ-fmD">
-                                                <rect key="frame" x="20" y="89.333333333333371" width="313" height="18.666666666666671"/>
+                                                <rect key="frame" x="20" y="88.666666666666629" width="313" height="19.333333333333329"/>
                                                 <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -145,7 +145,7 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="PlT-kT-frs" secondAttribute="trailing" constant="20" id="cSl-dh-USR"/>
                             <constraint firstItem="PlT-kT-frs" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="o8i-Gj-ltf"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="gfN-O5-sZe" secondAttribute="trailing" id="xMC-b6-YRe"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="gfN-O5-sZe" secondAttribute="bottom" id="xzH-Ug-7IU"/>
+                            <constraint firstAttribute="bottom" secondItem="gfN-O5-sZe" secondAttribute="bottom" id="xzH-Ug-7IU"/>
                         </constraints>
                     </view>
                     <connections>

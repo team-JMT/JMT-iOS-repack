@@ -10,14 +10,19 @@ import UIKit
 class PhotoCell: UICollectionViewCell {
     
     @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var photoCircleImageView: UIImageView!
     @IBOutlet weak var highlightedView: UIView!
     @IBOutlet weak var orderLabel: UILabel!
+    @IBOutlet weak var orderView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        
+        
         highlightedView.layer.borderWidth = 5.0
         highlightedView.layer.borderColor = UIColor.main600?.cgColor
+        orderView.layer.cornerRadius = 20 / 2
     }
     
     override func prepareForReuse() {

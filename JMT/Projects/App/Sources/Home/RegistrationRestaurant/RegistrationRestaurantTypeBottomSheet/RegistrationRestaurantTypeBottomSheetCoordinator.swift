@@ -9,11 +9,11 @@ import Foundation
 import UIKit
 import FloatingPanel
 
-protocol RegistrationRestaurantMenuBottomSheetCoordinator: Coordinator {
+protocol RegistrationRestaurantTypeBottomSheetCoordinator: Coordinator {
     
 }
 
-class DefaultRegistrationRestaurantMenuBottomSheetCoordinator: RegistrationRestaurantMenuBottomSheetCoordinator {
+class DefaultRegistrationRestaurantTypeBottomSheetCoordinator: RegistrationRestaurantTypeBottomSheetCoordinator {
     
     var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
@@ -30,13 +30,13 @@ class DefaultRegistrationRestaurantMenuBottomSheetCoordinator: RegistrationResta
     }
     
     func start() {
-        let storyboard = UIStoryboard(name: "RegistrationRestaurantMenuBottomSheet", bundle: nil)
-        guard let vc = storyboard.instantiateViewController(withIdentifier: "RegistrationRestaurantMenuBottomSheetViewController") as? RegistrationRestaurantMenuBottomSheetViewController else { return }
+        let storyboard = UIStoryboard(name: "RegistrationRestaurantTypeBottomSheet", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "RegistrationRestaurantTypeBottomSheetViewController") as? RegistrationRestaurantTypeBottomSheetViewController else { return }
         
         let fpc = FloatingPanelController()
         vc.fpc = fpc
         fpc.set(contentViewController: vc)
-
+        
         if let tvc = self.navigationController?.topViewController as? RegistrationRestaurantInfoViewController {
             vc.viewModel = tvc.viewModel
         }
@@ -57,7 +57,7 @@ class DefaultRegistrationRestaurantMenuBottomSheetCoordinator: RegistrationResta
 //    }
 }
 
-extension DefaultRegistrationRestaurantMenuBottomSheetCoordinator: CoordinatorFinishDelegate {
+extension DefaultRegistrationRestaurantTypeBottomSheetCoordinator: CoordinatorFinishDelegate {
     func coordinatorDidFinish(childCoordinator: Coordinator) {
         self.childCoordinators = self.childCoordinators.filter{ $0.type != childCoordinator.type }
     }

@@ -55,9 +55,9 @@ class DefaultProfileImageCoordinator: ProfileImageCoordinator {
         
         let picker = PhotoKitNavigationController(configuration: config)
         
-        picker.didFinishCompletion = { image in
+        picker.didFinishCompletion = { photo in
         
-            self.handleImagePickerResult(image, isDefault: false)
+            self.handleImagePickerResult(photo.first?.image, isDefault: false)
             picker.dismiss(animated: true)
         }
 

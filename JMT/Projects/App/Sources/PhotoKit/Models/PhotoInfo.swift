@@ -8,7 +8,7 @@
 import Photos
 import UIKit
 
-enum SelectionOrder {
+enum SelectionOrder: Equatable {
     case none
     case selected(Int)
 }
@@ -16,6 +16,7 @@ enum SelectionOrder {
 struct PhotoInfo {
     let phAsset: PHAsset
     var image: UIImage?
+    let localIdentifier: String
     let selectedOrder: SelectionOrder
 }
 

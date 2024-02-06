@@ -45,7 +45,7 @@ class ButtonPopupViewController: UIViewController {
     
     func setupUI() {
         containerView.layer.cornerRadius = 20
-        
+
         cancelButton.layer.cornerRadius = 8
         cancelButton.layer.borderWidth = 1
         cancelButton.layer.borderColor = JMTengAsset.main500.color.cgColor
@@ -53,6 +53,14 @@ class ButtonPopupViewController: UIViewController {
         doneButton.layer.cornerRadius = 8
         
         setupTextLabel()
+       
+        switch popupType {
+        case .location:
+            return
+        case .none:
+            return
+        }
+        
     }
     
     func setupTextLabel() {
