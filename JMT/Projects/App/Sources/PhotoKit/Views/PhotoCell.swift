@@ -17,9 +17,7 @@ class PhotoCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        
-        
+    
         highlightedView.layer.borderWidth = 5.0
         highlightedView.layer.borderColor = UIColor.main600?.cgColor
         orderView.layer.cornerRadius = 20 / 2

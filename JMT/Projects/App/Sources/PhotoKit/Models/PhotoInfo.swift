@@ -17,6 +17,8 @@ struct PhotoInfo {
     let phAsset: PHAsset
     var image: UIImage?
     let localIdentifier: String
-    let selectedOrder: SelectionOrder
+    var albumIndex: Int
+    var selectedIndex: Int
+    var selectedOrder: SelectionOrder
 }
 
