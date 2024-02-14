@@ -10,17 +10,21 @@ import Foundation
 class UserLocationViewModel {
     weak var coordinator: UserLocationCoordinator?
     
-    var onSuccess: (() -> ())?
-    
     var recentLocations = [String]()
     var resultLocations = [SearchLocationModel]()
     
-    var isSearch = false
-
     var enterPoint: Int = 0
+    
+    var isSearch = false
+    
     var currentPage: Int = 1
+    var isFetching = false
+    var isEnd = false
+    
 
     var workItem: DispatchWorkItem?
+    
+    var onSuccess: (() -> ())?
     
     func didChangeTextField(text: String) {
         
@@ -31,18 +35,48 @@ class UserLocationViewModel {
             if text.isEmpty {
                 self.isSearch = false
                 self.resultLocations.removeAll()
+                self.getRecentLocations()
                 self.onSuccess?()
             } else {
                 self.isSearch = true
-                self.recentLocations.append(text)
+                self.saveRecentLocation(text: text)
                 self.resultLocations.removeAll()
-                self.getSearchLocations(text: text)
+                //self.getSearchLocations(text: text)
+                self.fetchSearchLocations(text: text)
             }
         }
         
         self.workItem = workItem
         
         DispatchQueue.main.asyncAfter(deadline:  .now() + 0.5 , execute: workItem)
+    }
+    
+    func fetchSearchLocations(text: String) {
+        print(currentPage)
+        
+        guard !isFetching, !isEnd else { return }
+        
+        isSearch = true
+        isFetching = true
+        
+        SearchLocationAPI.getSearchLocations(request: SearchLocationRequest(query: text, page: currentPage)) { response in
+            switch response {
+            case .success(let locations):
+                
+                self.isFetching = false
+                self.resultLocations.append(contentsOf: locations)
+                self.onSuccess?()
+                
+                self.currentPage += 1
+                
+                if locations.isEmpty {
+                    self.isEnd = true
+                }
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
     
     func getSearchLocations(text: String) {
@@ -61,19 +95,30 @@ class UserLocationViewModel {
         }
     }
     
+    func saveRecentLocation(text: String) {
+        DefaultUserDefaultService.saveSearchKeyword(text)
+    }
+    
     func getRecentLocations() {
         isSearch = false
-        recentLocations = ["동대문","1","2","3","4","5","6"]
+        recentLocations = DefaultUserDefaultService.getRecentSearchKeywords()
         onSuccess?()
     }
     
-    func deleteRecentLocation(index: IndexPath) {
-        recentLocations.remove(at: index.row)
+    func deleteRecentLocation(_ row: Int) {
+        
+        let keywoard = recentLocations[row]
+        
+        recentLocations.remove(at: row)
+        
+        DefaultUserDefaultService.deleteSearchKeyword(keywoard)
+        
         onSuccess?()
     }
     
     func deleteAllRecentLocation() {
         recentLocations.removeAll()
+        DefaultUserDefaultService.removeAllSearchKeywords()
         onSuccess?()
     }
 }

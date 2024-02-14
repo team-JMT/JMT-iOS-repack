@@ -60,7 +60,7 @@ class DefaultUserLocationCoordinator: UserLocationCoordinator {
     }
     
     func showConvertUserLocationViewController(with data: SearchLocationModel?) {
-        if getChildCoordinator(.buttonPopup) == nil {
+        if getChildCoordinator(.convertUserLocation) == nil {
             setConvertUserLocationCoordinator()
         }
         

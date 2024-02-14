@@ -32,9 +32,6 @@ class ConvertUserLocationViewController: UIViewController {
         let marker = NMFMarker()
         marker.position = NMGLatLng(lat: viewModel?.locationData?.y ?? 0.0, lng: viewModel?.locationData?.x ?? 0.0)
         marker.mapView = naverMapView.mapView
-        
-        print(viewModel?.locationData)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

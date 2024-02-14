@@ -81,14 +81,6 @@
                                     <constraint firstAttribute="trailing" secondItem="gkf-SV-VfF" secondAttribute="trailing" constant="20" id="u6Z-DU-fms"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PMz-ib-zrF">
-                                <rect key="frame" x="347" y="134" width="36" height="36"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="RefreshMap"/>
-                                <connections>
-                                    <action selector="testButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="y1J-DW-idD"/>
-                                </connections>
-                            </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="bottom" spacing="13" translatesAutoresizingMaskIntoConstraints="NO" id="jEB-fM-TdX">
                                 <rect key="frame" x="298" y="702" width="84" height="86"/>
                                 <subviews>
@@ -125,9 +117,7 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="jEB-fM-TdX" secondAttribute="trailing" constant="11" id="7hN-us-MFu"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="9Xb-xx-AQ3"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="srQ-dG-9DL" secondAttribute="trailing" id="StH-40-Brx"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="PMz-ib-zrF" secondAttribute="trailing" constant="10" id="Zb6-tj-bes"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="Zl4-7T-l68"/>
-                            <constraint firstItem="PMz-ib-zrF" firstAttribute="top" secondItem="srQ-dG-9DL" secondAttribute="bottom" constant="10" id="hVH-AG-tfl"/>
                             <constraint firstItem="srQ-dG-9DL" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="kdQ-Tr-tc9"/>
                             <constraint firstItem="srQ-dG-9DL" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="veU-Or-gz9"/>
                         </constraints>

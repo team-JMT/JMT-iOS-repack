@@ -37,9 +37,6 @@ class HomeViewController: UIViewController {
         }
         
         viewModel?.onUpdateCurrentLocation = { lat, lon in
-            
-            print(lat,lon)
-            
             self.viewModel?.getCurrentLocationAddress(lat: String(lat), lon: String(lon), completed: { address in
                 
                 self.locationButton.setTitle(address, for: .normal)
@@ -61,7 +58,8 @@ class HomeViewController: UIViewController {
         let visibleRegion = naverMapView.mapView.projection.latlngBounds(fromViewBounds: naverMapView.frame)
         print(visibleRegion)
         
-        setupView()
+        setupBottomSheetView()
+        setupUI()
         setTopViewShadow()
     }
     
@@ -71,7 +69,7 @@ class HomeViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
-    func setupView() {
+    func setupBottomSheetView() {
         let storyboard = UIStoryboard(name: "HomeBottomSheet", bundle: nil)
         guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
     
@@ -84,6 +82,10 @@ class HomeViewController: UIViewController {
         fpc.invalidateLayout()
         
         updateLocationButtonBottomConstraint()
+    }
+    
+    func setupUI() {
+        locationButton.layer.cornerRadius = 8
     }
     
     func setTopViewShadow() {
@@ -127,10 +129,6 @@ class HomeViewController: UIViewController {
     
     @IBAction func didTabSearchGroupButton(_ sender: Any) {
         self.tabBarController?.selectedIndex = 1
-    }
-    
-    @IBAction func testButton(_ sender: Any) {
-        fpc.move(to: .full, animated: true)
     }
     
     @IBAction func didTabRefreshButton(_ sender: Any) {

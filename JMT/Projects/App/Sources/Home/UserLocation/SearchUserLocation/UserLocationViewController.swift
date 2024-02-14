@@ -34,6 +34,8 @@ class UserLocationViewController: UIViewController {
             
             self.addressListTableView.reloadData()
         }
+        
+        viewModel?.getRecentLocations()
     }
 
     
@@ -54,6 +56,7 @@ class UserLocationViewController: UIViewController {
     }
     
     @IBAction func didTabTextFieldCancelButton(_ sender: Any) {
+        viewModel?.isSearch = false
         addressTextField.text = ""
         addressTextField.resignFirstResponder()
     }
@@ -98,6 +101,7 @@ extension UserLocationViewController: UITableViewDelegate {
             if viewModel?.isSearch == false {
                 let text = cell.addressNameLabel.text ?? ""
                 addressTextField.text = text
+                cancelButton.isHidden = false
                 viewModel?.didChangeTextField(text: text)
             } else {
                 viewModel?.coordinator?.showConvertUserLocationViewController(with: viewModel?.resultLocations[indexPath.row])
@@ -114,7 +118,7 @@ extension UserLocationViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "addressCell", for: indexPath) as? AddressTitleCell else { return UITableViewCell() }
         if viewModel?.isSearch == false {
-            cell.addressNameLabel.text = viewModel?.recentLocations[indexPath.row]
+            cell.addressNameLabel.text = viewModel?.recentLocations[indexPath.row] ?? ""
             cell.indexPath = indexPath
             cell.delegate = self
             return cell
@@ -123,6 +127,20 @@ extension UserLocationViewController: UITableViewDataSource {
             cell.deleteButton.isHidden = true
             return cell
         }
+    }
+}
+
+extension UserLocationViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        
+        if indexPaths.contains(where: isLoadingCell) {
+            viewModel?.fetchSearchLocations(text: addressTextField.text ?? "")
+        }
+    }
+    
+    // 지정된 인덱스 패스가 로딩 셀인지 확인하는 메소드
+    func isLoadingCell(for indexPath: IndexPath) -> Bool {
+        return indexPath.row >= (viewModel?.resultLocations.count ?? 0) - 1
     }
 }
 
@@ -146,7 +164,7 @@ extension UserLocationViewController: UITextFieldDelegate {
 
 extension UserLocationViewController: AddressTitleCellDelegate {
     func didTapDeleteButton(at indexPath: IndexPath) {
-        viewModel?.deleteRecentLocation(index: indexPath)
+        viewModel?.deleteRecentLocation(indexPath.row)
     }
 }
 
