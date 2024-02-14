@@ -16,6 +16,8 @@ class GroupViewController: UIViewController, WKUIDelegate {
     @IBOutlet weak var webView: WKWebView!
     
     override func loadView() {
+        
+        
            let webConfiguration = WKWebViewConfiguration()
            webView = WKWebView(frame: .zero, configuration: webConfiguration)
            webView.uiDelegate = self

@@ -10,6 +10,8 @@ import UIKit
 class MyPageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource
     
  {
+   //
+    weak var coordinator: MyPageCoordinator?
     
     var viewModel: MyPageViewModel?
     
@@ -29,7 +31,7 @@ class MyPageViewController: UIViewController, UITableViewDelegate, UITableViewDa
         MypageMainTableView.delegate = self
         MypageMainTableView.dataSource = self
 
-        updateDataSource(segmentIndex: MyPageSegment.selectedSegmentIndex)
+      //  updateDataSource(segmentIndex: MyPageSegment.selectedSegmentIndex)
         
         
         self.MyPageSegment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: .normal)
@@ -41,39 +43,73 @@ class MyPageViewController: UIViewController, UITableViewDelegate, UITableViewDa
               for: .selected
             )
             self.MyPageSegment.selectedSegmentIndex = 0
+        
+        
+        navigationItems()
+        
+        viewModel = MyPageViewModel()
+
+                // 로그인 상태 체크
+        viewModel?.checkLoginStatus()
+        
+        viewModel?.fetchTokens()
+        
     }
     
+    
+    
+    //bell 아이콘
+    private func navigationItems() {
+        let rightImage1 = UIImage(named: "Bell")
+        let rightButton1 = UIButton(type: .custom)
+        rightButton1.setImage(rightImage1, for: .normal)
+        rightButton1.addTarget(self, action: #selector(yourSelector1), for: .touchUpInside)
+        
+      
+        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: rightButton1)]
+        
+ }
+    
+  
+    @objc func yourSelector1() {
+
+    }
+
+    
+    
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
-            updateDataSource(segmentIndex: sender.selectedSegmentIndex)
+     //   updateDataSource(segmentIndex: sender.selectedSegmentIndex)
         MypageMainTableView.reloadData()
         
+        coordinator?.goToDetailView(for: sender.selectedSegmentIndex)
+
         }
     
     
 
     
-    func updateDataSource(segmentIndex: Int) {
-           if segmentIndex == 0 {
-               dataSource = [
-                DummyDataType(image: "image1", labelText: "레스토랑 1"),
-                DummyDataType(image: "image1", labelText: "레스토랑 2"),
-                DummyDataType(image: "image1", labelText: "레스토랑 3"),
-                DummyDataType(image: "image1", labelText: "레스토랑 3"),
-               ]
-           } else if segmentIndex == 1 {
-               dataSource = [
-                DummyDataType(image: "image1", labelText: " 4"),
-                DummyDataType(image: "image1", labelText: "레스토랑 5"),
-                DummyDataType(image: "image1", labelText: "레스토랑 6"),
-               ]
-           } else if segmentIndex == 2 {
-               dataSource = [
-                DummyDataType(image: "image1", labelText: " 5"),
-                DummyDataType(image: "image1", labelText: "레스토랑 5"),
-                DummyDataType(image: "image1", labelText: "레스토랑 6"),
-               ]
-           }
-       }
+//    func updateDataSource(segmentIndex: Int) {
+//           if segmentIndex == 0 {
+//               dataSource = [
+//                DummyDataType(image: "image1", labelText: "레스토랑 1"),
+//                DummyDataType(image: "image1", labelText: "레스토랑 2"),
+//                DummyDataType(image: "image1", labelText: "레스토랑 3"),
+//                DummyDataType(image: "image1", labelText: "레스토랑 3"),
+//               ]
+//           } else if segmentIndex == 1 {
+//               dataSource = [
+//                DummyDataType(image: "image1", labelText: " 4"),
+//                DummyDataType(image: "image1", labelText: "레스토랑 5"),
+//                DummyDataType(image: "image1", labelText: "레스토랑 6"),
+//               ]
+//           } else if segmentIndex == 2 {
+//               dataSource = [
+//                DummyDataType(image: "image1", labelText: " 5"),
+//                DummyDataType(image: "image1", labelText: "레스토랑 5"),
+//                DummyDataType(image: "image1", labelText: "레스토랑 6"),
+//               ]
+//           }
+//       }
 
      
         // 테이블 뷰 데이터 소스 및 델리게이트 메서드

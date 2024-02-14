@@ -8,6 +8,8 @@
 import UIKit
 
 protocol MyPageCoordinator: Coordinator {
+    func goToDetailView(for segmentIndex: Int)
+
     //func goToTestt()
     
 }
@@ -33,20 +35,18 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
         
         
     }
-    
-//    func goToTestt() {
-//        let storyboard = UIStoryboard(name: "MyPage", bundle: nil)
-//
-//             guard let mypageTestVC = storyboard.instantiateViewController(withIdentifier: "MyPageTestViewController") as? MyPageTestViewController else {
-//             
-//             print("MyPageTestViewController를 찾을 수 없습니다.")
-//             
-//             return
-//             
-//             }
-//             self.navigationController?.pushViewController(mypageTestVC, animated: true)
-//             print(1)
-//    }
-    
-    
+
+    // 세그먼트 인덱스에 따라 다른 뷰 컨트롤러를 푸시.
+    func goToDetailView(for segmentIndex: Int) {
+            switch segmentIndex {
+            case 0:
+                print("1111")
+            case 1:
+                print("12123")
+            case 2:
+                print("13124321")
+            default: 
+                break
+            }
+        }
 }
