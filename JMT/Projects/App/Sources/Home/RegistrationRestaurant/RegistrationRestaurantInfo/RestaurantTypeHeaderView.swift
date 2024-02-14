@@ -14,10 +14,9 @@ protocol RestaurantTypeHeaderViewDelegate {
 class RestaurantTypeHeaderView: UICollectionReusableView {
         
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var headerStackView: UIStackView!
     @IBOutlet weak var restaurantTypeImageView: UIImageView!
-    
     @IBOutlet weak var restaurantTypeLabel: UILabel!
-    
     @IBOutlet weak var restaurantCheckImageView: UIImageView!
     
     var delegate: RestaurantTypeHeaderViewDelegate?
@@ -38,5 +37,15 @@ class RestaurantTypeHeaderView: UICollectionReusableView {
     
     @IBAction func didTabChangeTypeButton(_ sender: Any) {
         delegate?.didTabChangeTypeButton()
+    }
+    
+    func updateTypeLabel(text: String) {
+        restaurantTypeLabel.text = text
+    }
+    
+    func updateTypeHeaderView() {
+        headerStackView.spacing = 8
+        restaurantTypeImageView.isHidden = false
+        restaurantCheckImageView.image = JMTengAsset.restaurantTypeCheck.image
     }
 }

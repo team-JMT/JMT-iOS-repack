@@ -7,8 +7,10 @@
 
 import UIKit
 
-class RegistrationRestaurantInfoViewController: UIViewController {
+class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent {
 
+    var transformView: UIView { return self.view }
+    
     var viewModel: RegistrationRestaurantInfoViewModel?
     
     @IBOutlet weak var settingInfoCollectionView: UICollectionView!
@@ -18,12 +20,93 @@ class RegistrationRestaurantInfoViewController: UIViewController {
 
         self.navigationItem.title = "맛집 이름은 여기에"
         settingInfoCollectionView.collectionViewLayout = createLayout()
+        settingInfoCollectionView.keyboardDismissMode = .onDrag
         
         let typeheaderView = UINib(nibName: "RestaurantTypeHeaderView", bundle: nil)
         settingInfoCollectionView.register(typeheaderView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "typeHeaderView")
+        
+        setCustomNavigationBarBackButton(isSearchVC: false)
 
-        viewModel?.didCompleted = {
+        viewModel?.didCompletedFilterType = {
+            self.updateSection(section: 0)
+        }
+        
+        viewModel?.didCompletedTags = { bool in
             
+            if let cell = self.settingInfoCollectionView.cellForItem(at: IndexPath(row: 0, section: 3)) as? RecommendedMenuCell {
+                
+                if bool {
+                    cell.tagTextField.text = ""
+                    self.updateSection(section: 4)
+                } else {
+                    cell.tagTextField.text = ""
+                }
+            }
+        }
+        
+        viewModel?.didCompletedDeleteTag = {
+            self.updateSection(section: 4)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setupKeyboardEvent(keyboardWillShow: { noti in
+            
+            guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+            
+            if let currentResponder = UIResponder.currentResponder {
+                switch currentResponder {
+                case let textField as UITextField:
+                    switch textField.tag {
+                    case 0:
+                        self.settingInfoCollectionView.moveToScroll(section: 2, row: 0, margin: 100)
+                    case 1:
+                        // Y축으로 키보드의 상단 위치
+                        let keyboardTopY = keyboardFrame.cgRectValue.origin.y
+                        // 현재 선택한 텍스트 필드의 Frame 값
+                        let convertedTextFieldFrame = self.settingInfoCollectionView.convert(textField.frame,
+                                                                   from: textField.superview)
+                        // Y축으로 현재 텍스트 필드의 하단 위치
+                        let textFieldBottomY = convertedTextFieldFrame.origin.y + convertedTextFieldFrame.size.height
+                        
+                        // Y축으로 텍스트필드 하단 위치가 키보드 상단 위치보다 클 때
+                        if textFieldBottomY > keyboardTopY {
+                            let newFrame = keyboardFrame.cgRectValue.height - 110
+                            let insets = UIEdgeInsets(top: 0, left: 0, bottom: newFrame, right: 0)
+                            self.settingInfoCollectionView.contentInset = insets
+                            self.settingInfoCollectionView.moveToScroll(section: 3, row: 0, margin: 100)
+                        }
+                    default:
+                        print("default")
+                    }
+                case let textView as UITextView:
+                    switch textView.tag {
+                    case 0:
+                        self.settingInfoCollectionView.moveToScroll(section: 1, row: 0, margin: 100)
+                    default:
+                        print("default")
+                    }
+                default:
+                    break // 다른 타입의 응답자인 경우 처리하지 않음
+                }
+            }
+        }, keyboardWillHide: { noti in
+            let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            self.settingInfoCollectionView.contentInset = insets
+        })
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        removeKeyboardObserver()
+    }
+    
+    func updateSection(section: Int) {
+        UIView.performWithoutAnimation {
+            self.settingInfoCollectionView.reloadSections(IndexSet(integer: section))
         }
     }
     
@@ -40,7 +123,6 @@ class RegistrationRestaurantInfoViewController: UIViewController {
                 return self.createRecommendedMenuColumnSection()
             case 4:
                 return self.createTagColumnSection()
-                
             default:
                 return nil
             }
@@ -181,7 +263,12 @@ class RegistrationRestaurantInfoViewController: UIViewController {
     }
     
     @IBAction func didTabRegistrationButton(_ sender: Any) {
-        viewModel?.coordinator?.showRegistrationRestaurantTypeBottomSheetViewController()
+        print(viewModel?.filterType)
+        print(viewModel?.selectedImages)
+        print(viewModel?.commentString)
+        print(viewModel?.isDrinking)
+        print(viewModel?.drinkingComment)
+        print(viewModel?.tags)
     }
 }
 
@@ -200,7 +287,7 @@ extension RegistrationRestaurantInfoViewController: UICollectionViewDataSource {
         case 3:
             return 1
         case 4:
-            return 6
+            return viewModel?.tags.count ?? 0
         default:
             return 0
         }
@@ -213,6 +300,7 @@ extension RegistrationRestaurantInfoViewController: UICollectionViewDataSource {
             switch indexPath.row {
             case 0:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cameraCell", for: indexPath) as? InfoCameraCell else { return UICollectionViewCell() }
+                cell.photoCountLabel.text = "\(viewModel?.selectedImages.count ?? 0)/10"
                 return cell
             default:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? InfoPhotoCell else { return UICollectionViewCell() }
@@ -222,15 +310,21 @@ extension RegistrationRestaurantInfoViewController: UICollectionViewDataSource {
             }
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "commentCell", for: indexPath) as? InfoCommentCell else { return UICollectionViewCell() }
+            cell.delegate = self
             return cell
         case 2:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "drinkingCheckCell", for: indexPath) as? DrinkingCheckCell else { return UICollectionViewCell() }
+            cell.delegate = self
             return cell
         case 3:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "recommendedMenuCell", for: indexPath) as? RecommendedMenuCell else { return UICollectionViewCell() }
+            cell.delegate = self
             return cell
         case 4:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tagCell", for: indexPath) as? RecommendedMenuTagCell else { return UICollectionViewCell() }
+            cell.delegate = self
+            cell.configData(text: viewModel?.tags[indexPath.row])
+            cell.deleteButton.tag = indexPath.row
             return cell
         default:
             return UICollectionViewCell()
@@ -248,6 +342,12 @@ extension RegistrationRestaurantInfoViewController: UICollectionViewDelegate {
             case 0:
                 guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "typeHeaderView", for: indexPath) as? RestaurantTypeHeaderView else { return UICollectionReusableView() }
                 header.delegate = self
+                
+                if viewModel?.isSelectedFilterType != false {
+                    header.updateTypeLabel(text: viewModel?.typeNames[viewModel?.filterType ?? 0] ?? "")
+                    header.updateTypeHeaderView()
+                }
+                
                 return header
             default:
                 return UICollectionReusableView()
@@ -256,7 +356,6 @@ extension RegistrationRestaurantInfoViewController: UICollectionViewDelegate {
             return UICollectionReusableView()
         }
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
@@ -269,15 +368,11 @@ extension RegistrationRestaurantInfoViewController: UICollectionViewDelegate {
                     print(cell.deleteButton.tag)
                 }
             }
-        case 2:
-            print("2")
-            
         default:
             return
         }
     }
 }
-
 
 extension RegistrationRestaurantInfoViewController: RestaurantTypeHeaderViewDelegate {
     func didTabChangeTypeButton() {
@@ -286,6 +381,8 @@ extension RegistrationRestaurantInfoViewController: RestaurantTypeHeaderViewDele
 }
  
 extension RegistrationRestaurantInfoViewController: InfoPhotoCellDelegate {
+    
+    // 일단 사용 안함 
     func didTabDeleteButton(in cell: UICollectionViewCell) {
         guard let indexPath = settingInfoCollectionView.indexPath(for: cell) else { return  }
         
@@ -294,5 +391,33 @@ extension RegistrationRestaurantInfoViewController: InfoPhotoCellDelegate {
         settingInfoCollectionView.performBatchUpdates {
             settingInfoCollectionView.deleteItems(at: [indexPath])
         }
+    }
+}
+
+extension RegistrationRestaurantInfoViewController: InfoCommentCellDelegate {
+    func updateInfoComment(text: String) {
+        viewModel?.updateCommentString(text: text)
+    }
+}
+
+extension RegistrationRestaurantInfoViewController: DrinkingCheckCellDelegate {
+    func didTabCheckButton(isSelected: Bool) {
+        viewModel?.updateIsDrinking(isDrinking: isSelected)
+    }
+
+    func updateDrinkingComment(text: String) {
+        viewModel?.updateDrinkingComment(text: text)
+    }
+}
+
+extension RegistrationRestaurantInfoViewController: RecommendedMenuCellDelegate {
+    func updateTag(text: String) {
+        viewModel?.updateTags(tag: text)
+    }
+}
+
+extension RegistrationRestaurantInfoViewController: RecommendedMenuTagCellDelegate {
+    func didTabDeleteButton(index: Int) {
+        viewModel?.deleteTags(index: index)
     }
 }

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Map view configurations" minToolsVersion="14.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Pretendard-Bold.otf">
+            <string>Pretendard-Bold</string>
+        </array>
+        <array key="Pretendard-Medium.otf">
+            <string>Pretendard-Medium</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Convert User Location View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="ConvertUserLocationViewController" id="Y6W-OH-hqX" customClass="ConvertUserLocationViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bno-Ce-tvU" customClass="NMFNaverMapView">
+                                <rect key="frame" x="0.0" y="59" width="393" height="683"/>
+                                <standardMapConfiguration key="preferredConfiguration"/>
+                            </mapView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1jn-Rb-SEc">
+                                <rect key="frame" x="0.0" y="742" width="393" height="110"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bHT-aq-bBv">
+                                        <rect key="frame" x="20" y="15" width="353" height="52"/>
+                                        <color key="backgroundColor" name="main500"/>
+                                        <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                        <inset key="contentEdgeInsets" minX="10" minY="16" maxX="10" maxY="16"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="이 장소로 위치 변경"/>
+                                        <connections>
+                                            <action selector="didTabDoneButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="gUa-zP-hP5"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="bHT-aq-bBv" secondAttribute="trailing" constant="20" id="JpE-HV-L4O"/>
+                                    <constraint firstAttribute="bottom" secondItem="bHT-aq-bBv" secondAttribute="bottom" constant="43" id="QzB-fo-bCJ"/>
+                                    <constraint firstAttribute="height" constant="110" id="n91-ek-Osj"/>
+                                    <constraint firstItem="bHT-aq-bBv" firstAttribute="top" secondItem="1jn-Rb-SEc" secondAttribute="top" constant="15" id="oPm-VU-q9t"/>
+                                    <constraint firstItem="bHT-aq-bBv" firstAttribute="leading" secondItem="1jn-Rb-SEc" secondAttribute="leading" constant="20" id="tw6-I3-aZp"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qQJ-zm-AjN">
+                                <rect key="frame" x="20" y="630.66666666666663" width="353" height="95.333333333333371"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="NHl-FD-VYB">
+                                        <rect key="frame" x="20" y="24.000000000000004" width="313" height="47.333333333333343"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="weB-Dy-gpN">
+                                                <rect key="frame" x="0.0" y="0.0" width="313" height="24"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="20"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FSY-GL-ktN">
+                                                <rect key="frame" x="0.0" y="28" width="313" height="19.333333333333329"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="NHl-FD-VYB" firstAttribute="leading" secondItem="qQJ-zm-AjN" secondAttribute="leading" constant="20" id="9vd-9N-cVb"/>
+                                    <constraint firstAttribute="bottom" secondItem="NHl-FD-VYB" secondAttribute="bottom" constant="24" id="K7Y-8f-c0A"/>
+                                    <constraint firstAttribute="trailing" secondItem="NHl-FD-VYB" secondAttribute="trailing" constant="20" id="m7Q-Di-e2E"/>
+                                    <constraint firstItem="NHl-FD-VYB" firstAttribute="top" secondItem="qQJ-zm-AjN" secondAttribute="top" constant="24" id="oHw-lu-04L"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="1jn-Rb-SEc" secondAttribute="bottom" id="HOU-FU-PXT"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="qQJ-zm-AjN" secondAttribute="trailing" constant="20" id="Kh8-j6-W1D"/>
+                            <constraint firstItem="1jn-Rb-SEc" firstAttribute="top" secondItem="bno-Ce-tvU" secondAttribute="bottom" id="Kkp-mY-1HS"/>
+                            <constraint firstItem="bno-Ce-tvU" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="KzS-hv-NKw"/>
+                            <constraint firstItem="bno-Ce-tvU" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="Wsf-R8-Fb6"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="bno-Ce-tvU" secondAttribute="trailing" id="cKl-Sg-wCb"/>
+                            <constraint firstItem="1jn-Rb-SEc" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="l4k-t0-O3y"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="1jn-Rb-SEc" secondAttribute="trailing" id="pQU-Rb-Pil"/>
+                            <constraint firstItem="qQJ-zm-AjN" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="qhp-ab-K8U"/>
+                            <constraint firstItem="1jn-Rb-SEc" firstAttribute="top" secondItem="qQJ-zm-AjN" secondAttribute="bottom" constant="16" id="xuf-rs-Iq9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="addressNameLabel" destination="FSY-GL-ktN" id="LCd-CN-YJz"/>
+                        <outlet property="naverMapView" destination="bno-Ce-tvU" id="ka4-k8-EXz"/>
+                        <outlet property="placeNameLabel" destination="weB-Dy-gpN" id="k9q-1M-DLe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="130.53435114503816" y="-34.507042253521128"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="main500">
+            <color red="1" green="0.32499998807907104" blue="0.10199999809265137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

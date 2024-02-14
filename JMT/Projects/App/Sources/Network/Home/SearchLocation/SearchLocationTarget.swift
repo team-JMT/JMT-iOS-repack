@@ -9,30 +9,26 @@ import Foundation
 import Alamofire
 
 enum SearchLocationTarget {
-    case getLocations(SearchLocationRequest)
+    case getSearchLocations(SearchLocationRequest)
 }
 
 extension SearchLocationTarget: TargetType {
     
-    var baseURL: String {
-        return "https://openapi.naver.com/v1/search/local.json"
-    }
-    
-    var method: Alamofire.HTTPMethod {
+    var method: HTTPMethod {
         switch self {
-        case .getLocations: return .get
+        case .getSearchLocations: return .get
         }
     }
     
     var path: String {
         switch self {
-        case .getLocations: return ""
+        case .getSearchLocations: return "/location/search"
         }
     }
     
     var parameters: RequestParams {
         switch self {
-        case .getLocations(let request): return .body(request)
+        case .getSearchLocations(let request): return .qurey(request)
         }
     }
 }

@@ -19,7 +19,7 @@ class RegistrationRestaurantTypeBottomSheetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+       
         fpc?.delegate = self
         fpc?.contentMode = .fitToBounds
 
@@ -33,21 +33,39 @@ class RegistrationRestaurantTypeBottomSheetViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
+    
+    @IBAction func didTabDoneButton(_ sender: Any) {
+        viewModel?.updateIsSelectedFilterType()
+        viewModel?.didCompletedFilterType?()
+        dismiss(animated: true)
+    }
 }
 
 extension RegistrationRestaurantTypeBottomSheetViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
+        return viewModel?.typeNames.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "typeCell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "typeCell", for: indexPath) as? RegistrationRestaurantTypeCell else { return UITableViewCell() }
+        
+        if indexPath.row < viewModel?.typeNames.count ?? 0 {
+            cell.typeNameLabel.text = viewModel?.typeNames[indexPath.row] ?? ""
+            cell.setupUI(isSelected: viewModel?.filterType == indexPath.row)
+        }
+        
         return cell
     }
 }
 
 extension RegistrationRestaurantTypeBottomSheetViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel?.updateFilterType(type: indexPath.row)
+        
+        DispatchQueue.main.async {
+            self.typeTableView.reloadData()
+        }
+    }
 }
 
 extension RegistrationRestaurantTypeBottomSheetViewController: FloatingPanelControllerDelegate {

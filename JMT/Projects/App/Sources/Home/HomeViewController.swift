@@ -23,15 +23,43 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var topContainerView: UIView!
     
     @IBOutlet weak var locationStackView: UIStackView!
+    @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(DefaultKeychainService.shared.accessToken)
+        
+        viewModel?.displayAlertHandler = {
+            self.showLocationAccessDeniedAlert()
+        }
+        
+        viewModel?.onUpdateCurrentLocation = { lat, lon in
+            
+            print(lat,lon)
+            
+            self.viewModel?.getCurrentLocationAddress(lat: String(lat), lon: String(lon), completed: { address in
+                
+                self.locationButton.setTitle(address, for: .normal)
+                
+                let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
+                cameraUpdate.animation = .easeIn
+                self.naverMapView.mapView.moveCamera(cameraUpdate)
+            })
+        }
+        
+        // 위치 권한 체크
+        viewModel?.checkLocationAuthorization()
+
         naverMapView.showCompass = false
         naverMapView.showScaleBar = false
         naverMapView.showZoomControls = false
+        naverMapView.mapView.positionMode = .direction
+        
+        let visibleRegion = naverMapView.mapView.projection.latlngBounds(fromViewBounds: naverMapView.frame)
+        print(visibleRegion)
         
         setupView()
         setTopViewShadow()
@@ -103,6 +131,10 @@ class HomeViewController: UIViewController {
     
     @IBAction func testButton(_ sender: Any) {
         fpc.move(to: .full, animated: true)
+    }
+    
+    @IBAction func didTabRefreshButton(_ sender: Any) {
+        viewModel?.refreshCurrentLocation()
     }
     
     @IBAction func didTabChangeAddressButton(_ sender: Any) {

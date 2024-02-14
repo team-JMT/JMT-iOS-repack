@@ -44,8 +44,6 @@ class PhotoKitViewController: UIViewController {
         }
     }
     
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
         

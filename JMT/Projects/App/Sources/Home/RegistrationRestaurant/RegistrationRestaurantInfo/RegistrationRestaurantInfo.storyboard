@@ -142,7 +142,7 @@
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="(필수) 멤버들에게 맛집소개 한마디를 적어주세요" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="lms-oI-X5E">
                                                     <rect key="frame" x="0.0" y="0.0" width="381" height="158"/>
-                                                    <color key="textColor" name="gray900"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>
@@ -187,6 +187,7 @@
                                                                     <state key="normal" image="SquareNoneCheckBox">
                                                                         <color key="titleColor" name="gray200"/>
                                                                     </state>
+                                                                    <state key="selected" image="SquareCheckBox"/>
                                                                     <connections>
                                                                         <action selector="didTabCheckButton:" destination="Fl3-4U-UJk" eventType="touchUpInside" id="bqo-3F-mHt"/>
                                                                     </connections>
@@ -198,7 +199,6 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" name="gray100"/>
                                                             <constraints>
                                                                 <constraint firstItem="zVS-Oh-vF0" firstAttribute="leading" secondItem="Xwb-dr-UrI" secondAttribute="trailing" constant="12" id="12m-KU-h0G"/>
                                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zVS-Oh-vF0" secondAttribute="trailing" constant="12" id="27z-8N-mtY"/>
@@ -251,19 +251,19 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="(필수) 추천해주고 싶은 메뉴" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3pF-a2-Ysg">
-                                                    <rect key="frame" x="0.0" y="0.0" width="131.66666666666666" height="94"/>
-                                                    <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="153.66666666666666" height="94"/>
+                                                    <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                                                     <color key="textColor" name="gray700"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" #으로 시작해주세요(최대 6개) " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jcU-Os-GJR">
-                                                    <rect key="frame" x="143.66666666666663" y="0.0" width="149.33333333333337" height="14.333333333333334"/>
+                                                    <rect key="frame" x="165.66666666666663" y="40" width="149.33333333333337" height="14.333333333333336"/>
                                                     <color key="backgroundColor" name="main200"/>
                                                     <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
                                                     <color key="textColor" name="main600"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="#돈까스 #짜장면 #치킨" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mPC-fL-mVY">
+                                                <textField opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="#돈까스 #짜장면 #치킨" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mPC-fL-mVY">
                                                     <rect key="frame" x="0.0" y="106" width="377" height="48"/>
                                                     <color key="backgroundColor" name="gray100"/>
                                                     <constraints>
@@ -277,15 +277,18 @@
                                                 <constraint firstItem="3pF-a2-Ysg" firstAttribute="top" secondItem="iYS-m1-PtX" secondAttribute="top" id="0vO-fU-5wR"/>
                                                 <constraint firstAttribute="trailing" secondItem="mPC-fL-mVY" secondAttribute="trailing" id="D8G-e8-AQh"/>
                                                 <constraint firstItem="3pF-a2-Ysg" firstAttribute="leading" secondItem="iYS-m1-PtX" secondAttribute="leading" id="JTl-2f-D6p"/>
+                                                <constraint firstItem="jcU-Os-GJR" firstAttribute="centerY" secondItem="3pF-a2-Ysg" secondAttribute="centerY" id="QXJ-S0-Asi"/>
                                                 <constraint firstItem="mPC-fL-mVY" firstAttribute="top" secondItem="3pF-a2-Ysg" secondAttribute="bottom" constant="12" id="U7Z-fD-u4q"/>
                                                 <constraint firstItem="mPC-fL-mVY" firstAttribute="leading" secondItem="iYS-m1-PtX" secondAttribute="leading" id="Udn-LZ-GYN"/>
-                                                <constraint firstItem="jcU-Os-GJR" firstAttribute="top" secondItem="iYS-m1-PtX" secondAttribute="top" id="YJJ-m4-2aU"/>
                                                 <constraint firstAttribute="bottom" secondItem="mPC-fL-mVY" secondAttribute="bottom" id="dVR-MH-VfB"/>
                                                 <constraint firstItem="jcU-Os-GJR" firstAttribute="leading" secondItem="3pF-a2-Ysg" secondAttribute="trailing" constant="12" id="hEJ-2N-VRJ"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="jcU-Os-GJR" secondAttribute="trailing" id="mMF-AB-seP"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="377" height="154"/>
+                                        <connections>
+                                            <outlet property="tagTextField" destination="mPC-fL-mVY" id="CfK-0a-uj6"/>
+                                        </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="tagCell" id="svU-IT-vKG" customClass="RecommendedMenuTagCell" customModule="JMTeng" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="653" width="98" height="50"/>
@@ -304,9 +307,11 @@
                                                     <rect key="frame" x="57.333333333333336" y="14" width="30.666666666666664" height="22"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" image="TagXmark"/>
+                                                    <connections>
+                                                        <action selector="didTabDeleteButton:" destination="svU-IT-vKG" eventType="touchUpInside" id="Ofn-7u-voV"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
-                                            <color key="backgroundColor" name="gray100"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="Ess-SS-LkX" secondAttribute="trailing" constant="10" id="EWf-0q-jhO"/>
                                                 <constraint firstItem="Ess-SS-LkX" firstAttribute="leading" secondItem="Xtv-Rg-Kdh" secondAttribute="trailing" constant="4" id="IQ6-gg-UCS"/>
@@ -317,6 +322,10 @@
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="98" height="50"/>
+                                        <connections>
+                                            <outlet property="deleteButton" destination="Ess-SS-LkX" id="uxd-nI-7H6"/>
+                                            <outlet property="tagLabel" destination="Xtv-Rg-Kdh" id="Nu9-Gr-sew"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
@@ -349,6 +358,7 @@
     <resources>
         <image name="Camera" width="20" height="20"/>
         <image name="CloseCellButton" width="20" height="20"/>
+        <image name="SquareCheckBox" width="20" height="20"/>
         <image name="SquareNoneCheckBox" width="20" height="20"/>
         <image name="TagXmark" width="18" height="19"/>
         <namedColor name="gray100">

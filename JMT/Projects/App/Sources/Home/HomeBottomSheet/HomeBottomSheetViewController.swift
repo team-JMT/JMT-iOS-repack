@@ -24,9 +24,12 @@ class HomeBottomSheetViewController: UIViewController {
         bottomSheetCollectionView.register(header1, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView1")
         let header2 = UINib(nibName: "HomeFilterHeaderView", bundle: nil)
         bottomSheetCollectionView.register(header2, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView2")
-        
-        
+    
         setupUI()
+        
+        viewModel?.didUpdateBottomSheetTableView = {
+            self.bottomSheetCollectionView.reloadData()
+        }
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -122,11 +125,12 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
 
             switch indexPath.section {
             case 0:
-                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView1", for: indexPath) as! FirstHeaderView
+                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView1", for: indexPath) as! HomeHeaderView
                 return header
             case 1:
-                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView2", for: indexPath) as! SecondHeaderView
+                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView2", for: indexPath) as! HomeFilterHeaderView
                 header.delegate = self
+                header.updateFilterButtonTitle(viewModel: viewModel)
                 return header
             default:
                 return UICollectionReusableView()
@@ -170,19 +174,19 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
     }
 }
 
-extension HomeBottomSheetViewController: SecondHeaderViewDelegate {
+extension HomeBottomSheetViewController: HomeFilterHeaderViewDelegate {
     func didTabFilter1Button() {
-        viewModel?.filterType = 0
+        viewModel?.updateSortType(type: .sort)
         viewModel?.coordinator?.showFilterBottomSheetViewController()
     }
     
     func didTabFilter2Button() {
-        viewModel?.filterType = 1
+        viewModel?.updateSortType(type: .category)
         viewModel?.coordinator?.showFilterBottomSheetViewController()
     }
     
     func didTabFilter3Button() {
-        viewModel?.filterType = 2
+        viewModel?.updateSortType(type: .drinking)
         viewModel?.coordinator?.showFilterBottomSheetViewController()
     }
 }

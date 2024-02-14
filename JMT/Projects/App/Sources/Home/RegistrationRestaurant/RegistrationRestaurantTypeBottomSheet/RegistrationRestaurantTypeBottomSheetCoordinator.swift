@@ -43,18 +43,6 @@ class DefaultRegistrationRestaurantTypeBottomSheetCoordinator: RegistrationResta
 
         self.navigationController?.present(fpc, animated: true)
     }
-    
-//    func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
-//        var childCoordinator: Coordinator? = nil
-//
-//        switch type {
-//        case .searchRestaurantMenuBS:
-//            childCoordinator = childCoordinators.first(where: { $0 is RegistrationRestaurantMenuBottomSheetCoordinator })
-//        default:
-//            break
-//        }
-//        return childCoordinator
-//    }
 }
 
 extension DefaultRegistrationRestaurantTypeBottomSheetCoordinator: CoordinatorFinishDelegate {

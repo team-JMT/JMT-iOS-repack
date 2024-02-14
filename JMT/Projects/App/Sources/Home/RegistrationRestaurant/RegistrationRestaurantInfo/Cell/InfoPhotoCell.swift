@@ -22,13 +22,13 @@ class InfoPhotoCell: UICollectionViewCell {
         super.awakeFromNib()
         
         menuImageView.layer.cornerRadius = 8
+        deleteButton.isHidden = true
         
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        deleteButton.tag = 0
+
     }
     
     @IBAction func didTabDeleteButton(_ sender: UIButton) {

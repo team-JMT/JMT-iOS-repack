@@ -11,8 +11,6 @@ import UIKit
 
 class FilterBottomSheetFloatingPanelLayout: FloatingPanelLayout {
     
-    var tbHeight: CGFloat = 0
-    
     var position: FloatingPanelPosition {
         return .bottom
     }
@@ -23,9 +21,9 @@ class FilterBottomSheetFloatingPanelLayout: FloatingPanelLayout {
 
     var anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring] { // 가능한 floating panel: 현재 full, half만 가능하게 설정
         return [
-            .full: FloatingPanelLayoutAnchor(absoluteInset: tbHeight, edge: .bottom, referenceGuide: .safeArea),
-            .half: FloatingPanelLayoutAnchor(absoluteInset: tbHeight + 110 + 32 + 24 + 16, edge: .bottom, referenceGuide: .safeArea),
-            .tip: FloatingPanelLayoutAnchor(absoluteInset: 0, edge: .bottom, referenceGuide: .safeArea)
+            .full: FloatingPanelLayoutAnchor(fractionalInset: 0.9, edge: .bottom, referenceGuide: .superview),
+            .half: FloatingPanelLayoutAnchor(fractionalInset: 0.5, edge: .bottom, referenceGuide: .superview),
+            .tip: FloatingPanelLayoutAnchor(absoluteInset: 0, edge: .bottom, referenceGuide: .superview)
         ]
     }
     

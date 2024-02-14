@@ -72,8 +72,8 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
     
     func handleImagePickerResult(_ images: [PhotoInfo], isDefault: Bool) {
         if let registrationRestaurantInfoViewController = self.navigationController?.topViewController as? RegistrationRestaurantInfoViewController {
-            registrationRestaurantInfoViewController.viewModel?.selectedImages = images
-            registrationRestaurantInfoViewController.settingInfoCollectionView.reloadSections(IndexSet(integer: 0))
+            registrationRestaurantInfoViewController.viewModel?.updateSelectedImages(images: images)
+            registrationRestaurantInfoViewController.updateSection(section: 0)
         }
     }
     

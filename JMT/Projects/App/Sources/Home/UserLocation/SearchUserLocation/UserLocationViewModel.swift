@@ -13,11 +13,12 @@ class UserLocationViewModel {
     var onSuccess: (() -> ())?
     
     var recentLocations = [String]()
-    var resultLocations = [String]()
+    var resultLocations = [SearchLocationModel]()
     
     var isSearch = false
 
     var enterPoint: Int = 0
+    var currentPage: Int = 1
 
     var workItem: DispatchWorkItem?
     
@@ -34,7 +35,8 @@ class UserLocationViewModel {
             } else {
                 self.isSearch = true
                 self.recentLocations.append(text)
-                self.getSearchLocations()
+                self.resultLocations.removeAll()
+                self.getSearchLocations(text: text)
             }
         }
         
@@ -43,10 +45,19 @@ class UserLocationViewModel {
         DispatchQueue.main.asyncAfter(deadline:  .now() + 0.5 , execute: workItem)
     }
     
-    func getSearchLocations() {
-        UserLocationAPI.getSearchLocations { result in
-            self.resultLocations = result
-            self.onSuccess?()
+    func getSearchLocations(text: String) {
+        
+        isSearch = true
+        
+        SearchLocationAPI.getSearchLocations(request: SearchLocationRequest(query: text, page: currentPage)) { response in
+            
+            switch response {
+            case .success(let locations):
+                self.resultLocations.append(contentsOf: locations)
+                self.onSuccess?()
+            case .failure(let error):
+                print(error)
+            }
         }
     }
     

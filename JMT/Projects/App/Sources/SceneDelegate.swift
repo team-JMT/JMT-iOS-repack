@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
         guard let scene = (scene as? UIWindowScene) else { return }
-            
+
         let navigationController = UINavigationController()
         self.window = UIWindow(windowScene: scene)
         self.window?.rootViewController = navigationController
@@ -43,10 +43,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                            MyPageDI(),
                            
                           ])
-        
+
         appCoordinator?.start()
     }
-    
+
     func sceneDidDisconnect(_ scene: UIScene) { }
     
     func sceneDidBecomeActive(_ scene: UIScene) { }

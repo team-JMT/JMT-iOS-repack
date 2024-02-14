@@ -32,14 +32,16 @@ class DefaultFilterBottomSheetCoordinator: FilterBottomSheetCoordinator {
     func start() {
         let storyboard = UIStoryboard(name: "FilterBottomSheet", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "FilterBottomSheetViewController") as? FilterBottomSheetViewController else { return }
-        let fpc = FloatingPanelController()
-        vc.fpc = fpc
-        fpc.set(contentViewController: vc)
         
         if let tvc = self.navigationController?.topViewController as? HomeViewController {
             vc.viewModel = tvc.viewModel
         }
+    
+        let fpc = FloatingPanelController()
+        vc.fpc = fpc
+        fpc.set(contentViewController: vc)
         
+       
         self.navigationController?.present(fpc, animated: true)
     }
 }

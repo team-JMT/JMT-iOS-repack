@@ -17,14 +17,16 @@ class RegistrationRestaurantTypeCell: UITableViewCell {
         super.awakeFromNib()
         
         typeContrainerView.layer.cornerRadius = 8
-        typeContrainerView.layer.borderColor = JMTengAsset.gray100.color.cgColor
         typeContrainerView.layer.borderWidth = 2
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
+        
     }
-
+    
+    func setupUI(isSelected: Bool) {
+        typeContrainerView.layer.borderColor = isSelected ? JMTengAsset.main500.color.cgColor : JMTengAsset.gray100.color.cgColor
+    }
 }

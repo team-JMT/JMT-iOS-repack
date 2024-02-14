@@ -19,9 +19,8 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kr7-FS-trJ">
                     <rect key="frame" x="0.0" y="24" width="549" height="56"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Noi-0y-019">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RestaurantTypeArrow" translatesAutoresizingMaskIntoConstraints="NO" id="Noi-0y-019">
                             <rect key="frame" x="517" y="18" width="20" height="20"/>
-                            <color key="backgroundColor" name="gray200"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="DC3-cQ-h9N"/>
                                 <constraint firstAttribute="width" constant="20" id="EfZ-h7-0Eq"/>
@@ -30,7 +29,7 @@
                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KYe-4u-VmN">
                             <rect key="frame" x="12" y="16" width="493" height="24"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jlr-Nc-c61">
+                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jlr-Nc-c61">
                                     <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
                                     <color key="backgroundColor" name="gray200"/>
                                     <constraints>
@@ -39,7 +38,7 @@
                                     </constraints>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(필수) 식당 종류를 선택해주세요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="02E-vC-Dm4">
-                                    <rect key="frame" x="24" y="0.0" width="469" height="24"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="493" height="24"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -79,6 +78,7 @@
             </constraints>
             <connections>
                 <outlet property="containerView" destination="kr7-FS-trJ" id="qum-yY-PlH"/>
+                <outlet property="headerStackView" destination="KYe-4u-VmN" id="EKL-43-Vhh"/>
                 <outlet property="restaurantCheckImageView" destination="Noi-0y-019" id="YdC-Vd-TYc"/>
                 <outlet property="restaurantTypeImageView" destination="jlr-Nc-c61" id="zX9-cJ-QBF"/>
                 <outlet property="restaurantTypeLabel" destination="02E-vC-Dm4" id="ZFo-oM-iNa"/>
@@ -87,6 +87,7 @@
         </collectionReusableView>
     </objects>
     <resources>
+        <image name="RestaurantTypeArrow" width="20" height="20"/>
         <namedColor name="gray200">
             <color red="0.83099997043609619" green="0.85500001907348633" blue="0.87099999189376831" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

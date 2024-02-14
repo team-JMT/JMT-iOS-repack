@@ -23,6 +23,7 @@ class UserLocationViewController: UIViewController {
         super.viewDidLoad()
     
         setupUI()
+        addressListTableView.keyboardDismissMode = .onDrag
         
         viewModel?.onSuccess = {
             if self.viewModel?.isSearch == false {
@@ -33,8 +34,6 @@ class UserLocationViewController: UIViewController {
             
             self.addressListTableView.reloadData()
         }
-        
-        viewModel?.getRecentLocations()
     }
 
     
@@ -96,13 +95,12 @@ extension UserLocationViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let cell = tableView.cellForRow(at: indexPath) as? AddressTitleCell {
-            
             if viewModel?.isSearch == false {
                 let text = cell.addressNameLabel.text ?? ""
                 addressTextField.text = text
                 viewModel?.didChangeTextField(text: text)
             } else {
-                // 위치 변경 코드
+                viewModel?.coordinator?.showConvertUserLocationViewController(with: viewModel?.resultLocations[indexPath.row])
             }
         }
     }
@@ -110,7 +108,7 @@ extension UserLocationViewController: UITableViewDelegate {
 
 extension UserLocationViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.isSearch == false ? viewModel?.recentLocations.count ?? 0 : viewModel?.resultLocations.count ?? 0
+        return viewModel?.isSearch == true ? viewModel?.resultLocations.count ?? 0 : viewModel?.recentLocations.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -121,7 +119,7 @@ extension UserLocationViewController: UITableViewDataSource {
             cell.delegate = self
             return cell
         } else {
-            cell.addressNameLabel.text = viewModel?.resultLocations[indexPath.row]
+            cell.addressNameLabel.text = viewModel?.resultLocations[indexPath.row].placeName ?? ""
             cell.deleteButton.isHidden = true
             return cell
         }
