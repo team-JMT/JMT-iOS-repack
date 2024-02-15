@@ -14,6 +14,7 @@ struct CurrentLocationAPI {
         AF.request(CurrentLocationTarget.getCurrentLocation(request), interceptor: DefaultRequestInterceptor())
             .validate(statusCode: 200..<300)
             .responseDecodable(of: CurrentLocationResponse.self) { response in
+                
                 switch response.result {
                 case .success(let response):
                     completion(.success(response.toDomain))

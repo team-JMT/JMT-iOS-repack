@@ -9,5 +9,4 @@ import Foundation
 
 struct CurrentLocationModel {
     let address: String
-    let roadAddress: String
 }

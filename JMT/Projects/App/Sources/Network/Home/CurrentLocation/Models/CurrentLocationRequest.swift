@@ -8,6 +8,5 @@
 import Foundation
 
 struct CurrentLocationRequest: Encodable {
-    let x: String
-    let y: String
+    let coords: String
 }

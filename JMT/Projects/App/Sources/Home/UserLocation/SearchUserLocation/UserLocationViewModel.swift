@@ -13,106 +13,90 @@ class UserLocationViewModel {
     var recentLocations = [String]()
     var resultLocations = [SearchLocationModel]()
     
-    var enterPoint: Int = 0
+    var enterPoint = 0
     
     var isSearch = false
     
-    var currentPage: Int = 1
+    var currentPage = 0
     var isFetching = false
     var isEnd = false
     
-
     var workItem: DispatchWorkItem?
     
-    var onSuccess: (() -> ())?
+    var onSuccess: (() -> Void)?
+}
+
+// 검색 관련 메소드
+extension UserLocationViewModel {
     
-    func didChangeTextField(text: String) {
+    func didChangeTextField(keyword: String) {
+        resetSearchState()
         
         workItem?.cancel()
         
-        let workItem = DispatchWorkItem {
-            
-            if text.isEmpty {
-                self.isSearch = false
-                self.resultLocations.removeAll()
-                self.getRecentLocations()
-                self.onSuccess?()
-            } else {
-                self.isSearch = true
-                self.saveRecentLocation(text: text)
-                self.resultLocations.removeAll()
-                //self.getSearchLocations(text: text)
-                self.fetchSearchLocations(text: text)
+        workItem = DispatchWorkItem { [weak self] in
+            guard let self = self, !keyword.isEmpty else {
+                self?.onSuccess?()
+                return
             }
+            
+            self.handleTextChange(keyword: keyword)
         }
         
-        self.workItem = workItem
-        
-        DispatchQueue.main.asyncAfter(deadline:  .now() + 0.5 , execute: workItem)
+        if let workItem = workItem {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
+        }
     }
     
-    func fetchSearchLocations(text: String) {
-        print(currentPage)
+    private func handleTextChange(keyword: String) {
+        fetchSearchLocation(keyword: keyword)
+        saveRecentLocation(keyword: keyword)
+        fetchRecentLocations()
+    }
+    
+    func fetchSearchLocation(keyword: String) {
+        guard !isFetching && !isEnd else { return }
         
-        guard !isFetching, !isEnd else { return }
-        
-        isSearch = true
         isFetching = true
         
-        SearchLocationAPI.getSearchLocations(request: SearchLocationRequest(query: text, page: currentPage)) { response in
-            switch response {
-            case .success(let locations):
-                
-                self.isFetching = false
-                self.resultLocations.append(contentsOf: locations)
-                self.onSuccess?()
-                
-                self.currentPage += 1
-                
-                if locations.isEmpty {
-                    self.isEnd = true
-                }
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-    
-    func getSearchLocations(text: String) {
-        
-        isSearch = true
-        
-        SearchLocationAPI.getSearchLocations(request: SearchLocationRequest(query: text, page: currentPage)) { response in
+        SearchLocationAPI.getSearchLocations(request: SearchLocationRequest(query: keyword, page: currentPage)) { [weak self] response in
+            guard let self = self else { return }
+            self.isFetching = false
             
             switch response {
             case .success(let locations):
                 self.resultLocations.append(contentsOf: locations)
-                self.onSuccess?()
-            case .failure(let error):
-                print(error)
+                self.isEnd = locations.isEmpty
+            case .failure(let failure):
+                self.isEnd = true
             }
+            self.onSuccess?()
         }
     }
     
-    func saveRecentLocation(text: String) {
-        DefaultUserDefaultService.saveSearchKeyword(text)
+    private func resetSearchState() {
+        currentPage = 1
+        isEnd = false
+        resultLocations.removeAll()
     }
+}
+
+// 최근 검색어 관련 메소드
+extension UserLocationViewModel {
     
-    func getRecentLocations() {
-        isSearch = false
+    func fetchRecentLocations() {
         recentLocations = DefaultUserDefaultService.getRecentSearchKeywords()
         onSuccess?()
     }
+
+    func saveRecentLocation(keyword: String) {
+        DefaultUserDefaultService.saveSearchKeyword(keyword)
+    }
     
     func deleteRecentLocation(_ row: Int) {
-        
         let keywoard = recentLocations[row]
-        
         recentLocations.remove(at: row)
-        
         DefaultUserDefaultService.deleteSearchKeyword(keywoard)
-        
         onSuccess?()
     }
     

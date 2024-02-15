@@ -55,47 +55,57 @@ extension HomeViewModel {
     // 설정 좌표로 Address 조회
     func getCurrentLocationAddress(lat: String, lon: String, completed: @escaping (String) -> ()) {
         
-        CurrentLocationAPI.getCurrentLocation(request: CurrentLocationRequest(x: lon, y: lat)) { response in
+        CurrentLocationAPI.getCurrentLocation(request: CurrentLocationRequest(coords: "\(lon),\(lat)")) { response in
             switch response {
             case .success(let locationData):
-                let address = self.extractSpecificParts(from: locationData.address)
-                completed(address)
+                completed(locationData.address)
             case .failure(let error):
-                completed("2222")
+                completed("검색 중")
             }
         }
+        
+//        CurrentLocationAPI.getCurrentLocation(request: CurrentLocationRequest(x: lon, y: lat)) { response in
+//            switch response {
+//            case .success(let locationData):
+//                let address = self.extractSpecificParts(from: locationData.address)
+//                completed(address)
+//            case .failure(let error):
+//                completed("검색 중")
+//            }
+//        }
     }
     
-    // 시/구/군, 동/읍/면 필터링
-    func extractSpecificParts(from address: String) -> String {
-        // "시", "구", "동"을 포함할 수 있는 정규 표현식 패턴
-        let pattern = "([가-힣]+(시|구|군))\\s?([가-힣]*(구)?)\\s+([가-힣]+(동|읍|면))"
-        let regex = try? NSRegularExpression(pattern: pattern)
-        
-        var extractedParts: [String] = []
-        
-        if let match = regex?.firstMatch(in: address, range: NSRange(address.startIndex..., in: address)) {
-            // "시" 부분 추출
-            if let cityRange = Range(match.range(at: 1), in: address) {
-                extractedParts.append(String(address[cityRange]))
-            }
-            // "구" 부분 추출 (있는 경우)
-            if let districtRange = Range(match.range(at: 3), in: address), !address[districtRange].isEmpty {
-                extractedParts.append(String(address[districtRange]))
-            }
-            // "동" 부분 추출
-            if let townRange = Range(match.range(at: 5), in: address) {
-                extractedParts.append(String(address[townRange]))
-            }
-        }
-        
-        // "구"가 있으면 "시"를 제외, 없으면 모두 포함
-        if extractedParts.count > 2 && !extractedParts[1].isEmpty {
-            extractedParts.remove(at: 0) // "시" 제거
-        }
-        
-        return extractedParts.joined(separator: " ")
-    }}
+//    // 시/구/군, 동/읍/면 필터링
+//    func extractSpecificParts(from address: String) -> String {
+//        // "시", "구", "동"을 포함할 수 있는 정규 표현식 패턴
+//        let pattern = "([가-힣]+(시|구|군))\\s?([가-힣]*(구)?)\\s+([가-힣]+(동|읍|면))"
+//        let regex = try? NSRegularExpression(pattern: pattern)
+//
+//        var extractedParts: [String] = []
+//
+//        if let match = regex?.firstMatch(in: address, range: NSRange(address.startIndex..., in: address)) {
+//            // "시" 부분 추출
+//            if let cityRange = Range(match.range(at: 1), in: address) {
+//                extractedParts.append(String(address[cityRange]))
+//            }
+//            // "구" 부분 추출 (있는 경우)
+//            if let districtRange = Range(match.range(at: 3), in: address), !address[districtRange].isEmpty {
+//                extractedParts.append(String(address[districtRange]))
+//            }
+//            // "동" 부분 추출
+//            if let townRange = Range(match.range(at: 5), in: address) {
+//                extractedParts.append(String(address[townRange]))
+//            }
+//        }
+//
+//        // "구"가 있으면 "시"를 제외, 없으면 모두 포함
+//        if extractedParts.count > 2 && !extractedParts[1].isEmpty {
+//            extractedParts.remove(at: 0) // "시" 제거
+//        }
+//
+//        return extractedParts.joined(separator: " ")
+//    }
+}
 
 // 필터링 관련 메소드
 extension HomeViewModel {

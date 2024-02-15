@@ -26,16 +26,11 @@ class UserLocationViewController: UIViewController {
         addressListTableView.keyboardDismissMode = .onDrag
         
         viewModel?.onSuccess = {
-            if self.viewModel?.isSearch == false {
-                self.recentSearchView.isHidden = false
-            } else {
-                self.recentSearchView.isHidden = true
-            }
-            
             self.addressListTableView.reloadData()
+            self.addressListTableView.isUserInteractionEnabled = true
         }
         
-        viewModel?.getRecentLocations()
+        viewModel?.fetchRecentLocations()
     }
 
     
@@ -56,13 +51,22 @@ class UserLocationViewController: UIViewController {
     }
     
     @IBAction func didTabTextFieldCancelButton(_ sender: Any) {
-        viewModel?.isSearch = false
         addressTextField.text = ""
         addressTextField.resignFirstResponder()
+        finishSearch()
     }
     
     @IBAction func recentLocationDeleteAll(_ sender: Any) {
         viewModel?.coordinator?.showButtonPopupViewController()
+    }
+    
+    func finishSearch() {
+        viewModel?.isSearch = false
+        viewModel?.isEnd = false
+        viewModel?.isFetching = false
+        cancelButton.isHidden = true
+        recentSearchView.isHidden = false
+        addressListTableView.reloadData()
     }
     
     func setupUI() {
@@ -78,7 +82,6 @@ class UserLocationViewController: UIViewController {
         let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: addressTextField.frame.height))
         addressTextField.rightView = rightPaddingView
         addressTextField.rightViewMode = .always
-        
         
         let image = UIImage(named: "TextFieldSearch")!
         let leftImageView = UIImageView(frame: CGRect(x: 0.0, y: 0.0, width: image.size.width, height: addressTextField.frame.height))
@@ -97,15 +100,16 @@ class UserLocationViewController: UIViewController {
 extension UserLocationViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let cell = tableView.cellForRow(at: indexPath) as? AddressTitleCell {
-            if viewModel?.isSearch == false {
-                let text = cell.addressNameLabel.text ?? ""
-                addressTextField.text = text
-                cancelButton.isHidden = false
-                viewModel?.didChangeTextField(text: text)
-            } else {
-                viewModel?.coordinator?.showConvertUserLocationViewController(with: viewModel?.resultLocations[indexPath.row])
-            }
+        addressListTableView.isUserInteractionEnabled = false
+        
+        if viewModel?.isSearch == false {
+            addressTextField.becomeFirstResponder()
+            addressTextField.text = viewModel?.recentLocations[indexPath.row] ?? ""
+            viewModel?.didChangeTextField(keyword: addressTextField.text ?? "")
+        } else {
+            let location = viewModel?.resultLocations[indexPath.row]
+            viewModel?.coordinator?.showConvertUserLocationViewController(with: location)
+            addressListTableView.isUserInteractionEnabled = true
         }
     }
 }
@@ -132,9 +136,10 @@ extension UserLocationViewController: UITableViewDataSource {
 
 extension UserLocationViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        
+        guard viewModel?.isSearch == true else { return }
+       
         if indexPaths.contains(where: isLoadingCell) {
-            viewModel?.fetchSearchLocations(text: addressTextField.text ?? "")
+            viewModel?.fetchSearchLocation(keyword: addressTextField.text ?? "")
         }
     }
     
@@ -146,19 +151,25 @@ extension UserLocationViewController: UITableViewDataSourcePrefetching {
 
 extension UserLocationViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        viewModel?.didChangeTextField(text: textField.text ?? "")
+        viewModel?.didChangeTextField(keyword: textField.text ?? "")
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        print("시작")
+        viewModel?.isSearch = true
         cancelButton.isHidden = false
+        recentSearchView.isHidden = true
+        addressListTableView.reloadData()
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text == "" {
-            cancelButton.isHidden = true
-        } else {
-            cancelButton.isHidden = false
+            finishSearch()
         }
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        addressTextField.resignFirstResponder()
     }
 }
 

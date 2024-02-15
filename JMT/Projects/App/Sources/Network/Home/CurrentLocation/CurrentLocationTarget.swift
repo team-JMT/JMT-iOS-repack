@@ -16,19 +16,20 @@ extension CurrentLocationTarget: TargetType {
     
     var method: HTTPMethod {
         switch self {
-        case .getCurrentLocation: return .get
+        case .getCurrentLocation: return .post
         }
     }
     
     var path: String {
         switch self {
-        case .getCurrentLocation: return "/location/current"
+//        case .getCurrentLocation: return "/location/current"
+        case .getCurrentLocation: return "/naver/location/convert"
         }
     }
     
     var parameters: RequestParams {
         switch self {
-        case .getCurrentLocation(let request): return .qurey(request)
+        case .getCurrentLocation(let request): return .body(request)
         }
     }
 }

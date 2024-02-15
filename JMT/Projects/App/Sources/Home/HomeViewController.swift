@@ -32,11 +32,16 @@ class HomeViewController: UIViewController {
         
         print(DefaultKeychainService.shared.accessToken)
         
+//        DefaultKeychainService.shared.accessToken = nil
+        
         viewModel?.displayAlertHandler = {
             self.showLocationAccessDeniedAlert()
         }
         
         viewModel?.onUpdateCurrentLocation = { lat, lon in
+            
+            print(lat, lon)
+            
             self.viewModel?.getCurrentLocationAddress(lat: String(lat), lon: String(lon), completed: { address in
                 
                 self.locationButton.setTitle(address, for: .normal)

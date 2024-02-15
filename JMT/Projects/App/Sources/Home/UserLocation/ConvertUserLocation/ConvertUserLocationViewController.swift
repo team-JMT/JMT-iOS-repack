@@ -32,6 +32,9 @@ class ConvertUserLocationViewController: UIViewController {
         let marker = NMFMarker()
         marker.position = NMGLatLng(lat: viewModel?.locationData?.y ?? 0.0, lng: viewModel?.locationData?.x ?? 0.0)
         marker.mapView = naverMapView.mapView
+        
+        print(viewModel?.locationData)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,6 +53,6 @@ class ConvertUserLocationViewController: UIViewController {
     
     @IBAction func didTabDoneButton(_ sender: Any) {
         LocationManager.shared.updateCurrentLocation(lat: viewModel?.locationData?.y ?? 0.0, lon: viewModel?.locationData?.x ?? 0.0)
-        viewModel?.coordinator?.goToHomeViewController()
+        viewModel?.coordinator?.navigationController?.popToRootViewController(animated: true)
     }
 }

@@ -17,7 +17,7 @@ struct SocialLoginAPI {
             .responseDecodable(of: SocialLoginResponse.self) { response in
                 switch response.result {
                 case .success(let response):
-                    
+                                    
                     DefaultKeychainService.shared.accessToken = response.data.accessToken
                     DefaultKeychainService.shared.refreshToken = response.data.refreshToken
                     DefaultKeychainService.shared.accessTokenExpiresIn = response.data.accessTokenExpiresIn
