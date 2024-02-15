@@ -10,7 +10,7 @@ import UIKit
 class MyPageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource
     
  {
-   //
+   
     weak var coordinator: MyPageCoordinator?
     
     var viewModel: MyPageViewModel?
@@ -52,8 +52,8 @@ class MyPageViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 // 로그인 상태 체크
         viewModel?.checkLoginStatus()
         
-        viewModel?.fetchTokens()
-        
+//        viewModel?.fetchTokens()
+//        viewModel?.getUserInfo()
     }
     
     

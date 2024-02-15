@@ -7,11 +7,11 @@
 
 import Foundation
 
+
 class MyPageViewModel {
     
     weak var coordinator: MyPageCoordinator?
     private let keychainAccess: KeychainAccessible
-    
     
     let test = "홈"
     
@@ -21,14 +21,14 @@ class MyPageViewModel {
     
     // ID 토큰과 액세스 토큰 값을 확인하는 함수
     func fetchTokens() {
-       
-        if let idToken = keychainAccess.getToken("idToken") {
+        // ID 토큰 저장 여부 플래그 확인
+        if let isIdTokenSaved = keychainAccess.getToken("isIdTokenSaved"), isIdTokenSaved == "true", let idToken = keychainAccess.getToken("idToken") {
             print("ID Token: \(idToken)")
         } else {
-            print("ID Token is not available")
+            print("ID Token is not available. Checking if saved correctly...")
         }
-        
-        
+
+        // 액세스 토큰 조회
         if let accessToken = keychainAccess.getToken("accessToken") {
             print("Access Token: \(accessToken)")
         } else {
@@ -36,11 +36,29 @@ class MyPageViewModel {
         }
     }
     
+    func getUserInfo() {
+        UserInfoAPI.getLoginInfo { response in
+            switch response {
+            case .success(let info):
+               print(1)
+            case .failure(let error):
+                print("getUserInfo 실패!!", error)
+              //self.onFailure?()
+            }
+        }
+    }
+    
+    
     func handleLoginSuccess(idToken: String) {
-        let keychainAccess = DefaultKeychainAccessible()
-        let saveSuccess = keychainAccess.saveToken("idToken", idToken)
-        print("ID Token saved successfully: \(idToken)")
-
+        keychainAccess.saveToken("idToken", idToken)
+        keychainAccess.saveToken("isIdTokenSaved", "true") // 플래그 저장
+        print("ID Token saved: \(idToken)")
+    }
+    
+    // 로그아웃 처리
+    func logout() {
+        keychainAccess.removeAll()
+        print("Logged out and all tokens removed.")
     }
 
     
@@ -92,12 +110,7 @@ class MyPageViewModel {
         //               print("User is not logged in")
         //           }
     }
-    
-    // 로그아웃 처리
-    func logout() {
-        keychainAccess.removeAll()
-        // 로그아웃 후 필요한 처리 수행
-    }
+   
 }
 
 
