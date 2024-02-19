@@ -22,8 +22,6 @@ class InfoPhotoCell: UICollectionViewCell {
         super.awakeFromNib()
         
         menuImageView.layer.cornerRadius = 8
-        deleteButton.isHidden = true
-        
     }
     
     override func prepareForReuse() {

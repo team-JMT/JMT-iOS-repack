@@ -24,10 +24,21 @@ struct GroupRestaurantsInfoModel {
     let canDrinkLiquor: String
     let differenceInDistance: String
 }
-//
+
 //let groupRestaurantsInfo = [
-//    GroupRestaurantsInfoModel(id: 0, name: "맛집 1번", placeUrl: "http://place.map.kakao.com/1574464357", phone: "010-1111-1111", address: "대구 동구 신천동 384-12", roadAddress: "대구 동구 동부로 158-7", x: <#T##Int#>, y: <#T##Int#>, restaurantImageUrl: <#T##String#>, introduce: <#T##String#>, category: <#T##String#>, userNickName: <#T##String#>, userProfileImageUrl: <#T##String#>, canDrinkLiquor: <#T##String#>, differenceInDistance: <#T##String#>)
-//
-//
-//
+//    GroupRestaurantsInfoModel(id: 0,
+//                              name: "맛집 1번",
+//                              placeUrl: "http://place.map.kakao.com/1574464357",
+//                              phone: "010-1111-1111",
+//                              address: "대구 동구 신천동 384-12",
+//                              roadAddress: "대구 동구 동부로 158-7",
+//                              x: <#T##Int#>,
+//                              y: <#T##Int#>,
+//                              restaurantImageUrl: <#T##String#>,
+//                              introduce: <#T##String#>,
+//                              category: <#T##String#>,
+//                              userNickName: <#T##String#>,
+//                              userProfileImageUrl: <#T##String#>,
+//                              canDrinkLiquor: <#T##String#>,
+//                              differenceInDistance: <#T##String#>)
 //]

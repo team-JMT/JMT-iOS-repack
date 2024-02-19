@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class RegistrationRestaurantInfoViewModel {
     weak var coordinator: RegistrationRestaurantInfoCoordinator?
@@ -23,7 +24,7 @@ class RegistrationRestaurantInfoViewModel {
     var isSelectedFilterType: Bool = false
     
     var filterType: Int = 0
-    var selectedImages = [PhotoInfo]()
+    var selectedImages = [UIImage]()
     var commentString: String = ""
     var isDrinking = false
     var drinkingComment: String = ""
@@ -37,8 +38,8 @@ class RegistrationRestaurantInfoViewModel {
         self.filterType = type
     }
     
-    func updateSelectedImages(images: [PhotoInfo]) {
-        self.selectedImages = images
+    func updateSelectedImages(images: [UIImage]) {
+        self.selectedImages.append(contentsOf: images)
     }
     
     func updateCommentString(text: String) {

@@ -116,7 +116,6 @@ class AlbumsManager: NSObject, PHPhotoLibraryChangeObserver {
             photos = phAssets.enumerated().map { order, info in
                 PhotoInfo(phAsset: info, image: nil, localIdentifier: info.localIdentifier, albumIndex: index, selectedIndex: order, selectedOrder: .none)
             }
-            
             completion()
         }
     }
@@ -137,20 +136,30 @@ extension AlbumsManager {
     }
 }
 
+// MARK: 앨범에서 선택한 이미지 다시 앨범에 표시하기
 // 사진 선택시 상태 업데이트 관련
 extension AlbumsManager {
-    
+
     // 사진의 선택 상태 업데이트
-    func updatePhotoSelectionState(for photo: PhotoInfo, with selectedOrder: SelectionOrder) {
-            
-        photos[photo.selectedIndex] = .init(phAsset: photo.phAsset, image: photo.image, localIdentifier: photo.localIdentifier, albumIndex: photo.albumIndex, selectedIndex: photo.selectedIndex, selectedOrder: selectedOrder)
+    func updatePhotoSelectionState(for photo: PhotoInfo, selectedOrder: SelectionOrder) {
+        photos[photo.selectedIndex] = .init(phAsset: photo.phAsset,
+                                            image: photo.image,
+                                            localIdentifier: photo.localIdentifier,
+                                            albumIndex: photo.albumIndex,
+                                            selectedIndex: photo.selectedIndex,
+                                            selectedOrder: selectedOrder)
     }
-    
+
     // 선택된 사진들의 순서를 현재 앨범에 반영
-    func reflectSelectedOrders(for photos: [PhotoInfo]) {
+    func reflectSelectedPhotosOrder(for photos: [PhotoInfo]) {
         for photo in photos {
             if case .selected(let order) = photo.selectedOrder {
-                self.photos[photo.selectedIndex] = .init(phAsset: photo.phAsset, image: photo.image, localIdentifier: photo.localIdentifier, albumIndex: photo.albumIndex, selectedIndex: photo.selectedIndex, selectedOrder: .selected(order))
+                self.photos[photo.selectedIndex] = .init(phAsset: photo.phAsset,
+                                                         image: photo.image,
+                                                         localIdentifier: photo.localIdentifier,
+                                                         albumIndex: photo.albumIndex,
+                                                         selectedIndex: photo.selectedIndex,
+                                                         selectedOrder: .selected(order))
             }
         }
     }
@@ -164,7 +173,7 @@ extension Array where Element == PhotoInfo {
             self[index] = photo
         }
     }
-    
+
     func maxSelectedOrder() -> Int {
         self.compactMap { photo -> Int? in
             if case .selected(let order) = photo.selectedOrder {

@@ -9,11 +9,11 @@ import UIKit
 
 class PhotoKitNavigationController: UINavigationController {
     
-    var didFinishCompletion: (([PhotoInfo]) -> ())?
+    var didFinishCompletion: (([UIImage]) -> ())?
     
     var albumViewController: PhotoKitViewController!
     
-    var selectedPhotos = [PhotoInfo]()
+    var photosCount = 0
     
     convenience init() {
         self.init(configuration: PhotoKitConfiguration.shared)
@@ -39,8 +39,7 @@ class PhotoKitNavigationController: UINavigationController {
         super.viewDidLoad()
         
         viewControllers = [albumViewController]
-        
-        albumViewController.selectedPhotos = selectedPhotos
+        albumViewController.totalSelectPhotoCount = photosCount
 
         albumViewController.didSelectItems = { images in
             self.didFinishCompletion?(images)

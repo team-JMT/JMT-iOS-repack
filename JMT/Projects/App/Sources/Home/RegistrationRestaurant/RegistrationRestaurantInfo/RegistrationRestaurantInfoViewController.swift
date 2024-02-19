@@ -305,7 +305,7 @@ extension RegistrationRestaurantInfoViewController: UICollectionViewDataSource {
             default:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? InfoPhotoCell else { return UICollectionViewCell() }
                 cell.delegate = self
-                cell.menuImageView.image = viewModel?.selectedImages[indexPath.row - 1].image
+                cell.menuImageView.image = viewModel?.selectedImages[indexPath.row - 1]
                 return cell
             }
         case 1:
@@ -387,8 +387,9 @@ extension RegistrationRestaurantInfoViewController: InfoPhotoCellDelegate {
         guard let indexPath = settingInfoCollectionView.indexPath(for: cell) else { return  }
         
         viewModel?.selectedImages.remove(at: indexPath.item - 1)
-        
+
         settingInfoCollectionView.performBatchUpdates {
+            settingInfoCollectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
             settingInfoCollectionView.deleteItems(at: [indexPath])
         }
     }

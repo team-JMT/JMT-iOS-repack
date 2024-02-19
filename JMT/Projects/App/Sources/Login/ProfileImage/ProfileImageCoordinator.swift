@@ -57,7 +57,7 @@ class DefaultProfileImageCoordinator: ProfileImageCoordinator {
         
         picker.didFinishCompletion = { photo in
         
-            self.handleImagePickerResult(photo.first?.image, isDefault: false)
+            self.handleImagePickerResult(photo.first, isDefault: false)
             picker.dismiss(animated: true)
         }
 

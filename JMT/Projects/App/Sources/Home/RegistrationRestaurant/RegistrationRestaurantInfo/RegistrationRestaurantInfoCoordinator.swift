@@ -59,7 +59,7 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
         config.library.maxNumberOfItems = 10
         
         let picker = PhotoKitNavigationController(configuration: config)
-        picker.selectedPhotos = handleSelectedPhotos()
+        picker.photosCount = handleSelectedPhotosCount()
         
         picker.didFinishCompletion = { images in
         
@@ -70,18 +70,18 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
         self.navigationController?.present(picker, animated: true)
     }
     
-    func handleImagePickerResult(_ images: [PhotoInfo], isDefault: Bool) {
+    func handleImagePickerResult(_ images: [UIImage], isDefault: Bool) {
         if let registrationRestaurantInfoViewController = self.navigationController?.topViewController as? RegistrationRestaurantInfoViewController {
             registrationRestaurantInfoViewController.viewModel?.updateSelectedImages(images: images)
             registrationRestaurantInfoViewController.updateSection(section: 0)
         }
     }
     
-    func handleSelectedPhotos() -> [PhotoInfo] {
+    func handleSelectedPhotosCount() -> Int {
         if let registrationRestaurantInfoViewController = self.navigationController?.topViewController as? RegistrationRestaurantInfoViewController {
-            return registrationRestaurantInfoViewController.viewModel?.selectedImages ?? []
+            return registrationRestaurantInfoViewController.viewModel?.selectedImages.count ?? 0
         }
-        return []
+        return 0
     }
     
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
