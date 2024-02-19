@@ -15,6 +15,7 @@ protocol MyPageCoordinator: Coordinator {
 }
 
 class DefaultMyPageCoordinator: MyPageCoordinator {
+    
     var parentCoordinator: Coordinator? = nil
     
     var childCoordinators: [Coordinator] = []
@@ -30,23 +31,45 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
     func start() {
         let mypageViewController = MyPageViewController.instantiateFromStoryboard(storyboardName: "MyPage") as MyPageViewController
         
-         mypageViewController.viewModel?.coordinator = self
+         mypageViewController.coordinator = self
         self.navigationController?.pushViewController(mypageViewController, animated: true)
         
         
     }
-
-    // 세그먼트 인덱스에 따라 다른 뷰 컨트롤러를 푸시.
+    
+    
     func goToDetailView(for segmentIndex: Int) {
-            switch segmentIndex {
-            case 0:
-                print("1111")
-            case 1:
-                print("12123")
-            case 2:
-                print("13124321")
-            default: 
-                break
-            }
-        }
+     //   goToSegmentViewController(for : segmentIndex)
+    }
+
+//    func goToSegmentViewController(for index: Int) {
+//           switch index {
+//           case 0:
+//               showFirstSegmentViewController()
+//           case 1:
+//               showSecondSegmentViewController()
+//           case 2:
+//               showThirdSegmentViewController()
+//           default:
+//               break
+//           }
+//       }
+////
+//       private func showFirstSegmentViewController() {
+//           // 첫 번째 세그먼트에 해당하는 뷰 컨트롤러 생성 및 표시
+//           let viewController = FirstSegmentViewController.instantiateFromStoryboard(storyboardName: "MyPage")
+//           navigationController?.pushViewController(viewController, animated: true)
+//       }
+//
+//       private func showSecondSegmentViewController() {
+//           // 두 번째 세그먼트에 해당하는 뷰 컨트롤러 생성 및 표시
+//           let viewController = SecondSegmentViewController.instantiateFromStoryboard(storyboardName: "MyPage")
+//           navigationController?.pushViewController(viewController, animated: true)
+//       }
+//
+//       private func showThirdSegmentViewController() {
+//           // 세 번째 세그먼트에 해당하는 뷰 컨트롤러 생성 및 표시
+//           let viewController = ThirdSegmentViewController.instantiateFromStoryboard(storyboardName: "MyPage")
+//           navigationController?.pushViewController(viewController, animated: true)
+//       }
 }

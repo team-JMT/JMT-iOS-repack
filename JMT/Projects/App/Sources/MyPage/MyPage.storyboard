@@ -36,9 +36,9 @@
                                         <segmentedControl opaque="NO" contentMode="scaleToFill" restorationIdentifier="UnderlineSegmentedControl" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5KR-0p-oXr" customClass="UnderlineSegmentedControl" customModule="JMTeng" customModuleProvider="target">
                                             <rect key="frame" x="10" y="184" width="373" height="32"/>
                                             <segments>
-                                                <segment title="1"/>
-                                                <segment title="2"/>
-                                                <segment title="3"/>
+                                                <segment title="등록한 맛집"/>
+                                                <segment title="좋아한 맛집"/>
+                                                <segment title="나의 후기"/>
                                             </segments>
                                             <connections>
                                                 <action selector="segmentChanged:" destination="Y6W-OH-hqX" eventType="valueChanged" id="1mc-zk-oqG"/>
@@ -113,6 +113,13 @@
                                                 <constraint firstAttribute="width" constant="16" id="rRf-aD-FDm"/>
                                             </constraints>
                                         </imageView>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G1K-AV-qoF">
+                                            <rect key="frame" x="0.0" y="215" width="393" height="1"/>
+                                            <color key="backgroundColor" name="gray100"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="1" id="zbx-TV-xJt"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
@@ -125,7 +132,10 @@
                                         <constraint firstItem="O5j-3O-0po" firstAttribute="top" secondItem="onI-dI-xMw" secondAttribute="bottom" constant="35" id="D2V-Aj-zI3"/>
                                         <constraint firstItem="onI-dI-xMw" firstAttribute="leading" secondItem="tQr-cB-nIW" secondAttribute="leading" id="Fla-fx-Mdq"/>
                                         <constraint firstAttribute="trailing" secondItem="onI-dI-xMw" secondAttribute="trailing" id="JZJ-9z-QiX"/>
+                                        <constraint firstItem="G1K-AV-qoF" firstAttribute="top" secondItem="5KR-0p-oXr" secondAttribute="bottom" id="KwC-bV-0yO"/>
                                         <constraint firstItem="eCi-kE-Bqi" firstAttribute="top" secondItem="onI-dI-xMw" secondAttribute="bottom" constant="24" id="P5p-eW-RmE"/>
+                                        <constraint firstItem="G1K-AV-qoF" firstAttribute="leading" secondItem="tQr-cB-nIW" secondAttribute="leading" id="RpR-Uf-2oj"/>
+                                        <constraint firstAttribute="trailing" secondItem="G1K-AV-qoF" secondAttribute="trailing" id="eat-qi-Fg9"/>
                                         <constraint firstAttribute="trailing" secondItem="5KR-0p-oXr" secondAttribute="trailing" constant="10" id="fT7-8J-ILv"/>
                                         <constraint firstItem="5KR-0p-oXr" firstAttribute="top" secondItem="eCi-kE-Bqi" secondAttribute="bottom" constant="31" id="fd6-dD-69o"/>
                                         <constraint firstAttribute="bottom" secondItem="5KR-0p-oXr" secondAttribute="bottom" constant="15" id="gCn-dU-g62"/>
@@ -212,6 +222,78 @@
             </objects>
             <point key="canvasLocation" x="130.53435114503816" y="-34.507042253521128"/>
         </scene>
+        <!--First Segment View Controller-->
+        <scene sceneID="p8z-i6-IAv">
+            <objects>
+                <viewController storyboardIdentifier="FirstSegmentViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="atD-kE-Ke8" customClass="FirstSegmentViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eQt-n9-Sqn">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c7c-4P-toE">
+                                <rect key="frame" x="192" y="637" width="8" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="dvx-Ut-lNx"/>
+                        <color key="backgroundColor" systemColor="systemBrownColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="moI-wX-JcX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1129" y="-209"/>
+        </scene>
+        <!--Third Segment View Controller-->
+        <scene sceneID="Lrn-kv-0GY">
+            <objects>
+                <viewController storyboardIdentifier="ThirdSegmentViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="A7H-3o-lUv" customClass="ThirdSegmentViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ea1-wR-OYe">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uao-4P-ydz">
+                                <rect key="frame" x="175" y="416" width="11" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="0dZ-wJ-wla"/>
+                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cLO-sM-aix" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2827" y="-209"/>
+        </scene>
+        <!--Second Segment View Controller-->
+        <scene sceneID="Sfe-tS-9rX">
+            <objects>
+                <viewController storyboardIdentifier="SecondSegmentViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="A1g-Fz-9OD" customClass="SecondSegmentViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cfx-Io-7dD">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7bx-3i-fjV">
+                                <rect key="frame" x="202" y="416" width="10" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="DwG-6H-VuL"/>
+                        <color key="backgroundColor" systemColor="systemFillColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uph-Wj-GDU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1993" y="-209"/>
+        </scene>
         <!--My Page Test View Controller-->
         <scene sceneID="YXR-FZ-ooN">
             <objects>
@@ -234,7 +316,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EfW-hl-ion" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="952" y="-35"/>
+            <point key="canvasLocation" x="3920" y="-246"/>
         </scene>
     </scenes>
     <resources>
@@ -249,6 +331,15 @@
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBrownColor">
+            <color red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemFillColor">
+            <color red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
