@@ -11,7 +11,7 @@ enum CoordinatorType {
     case app, tabBar
     case socialLogin, nickname
     case profileImage, album, cropPhoto, profile
-    case home, userLocation
+    case home, userLocation, homeBS, filterBS
     case search
     case group
     case mypage

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Pretendard-Medium.otf">
+            <string>Pretendard-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="headerView2" id="CHJ-S2-fTp" customClass="SecondHeaderView" customModule="JMTeng" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="398" height="102"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nea-4W-NSm">
+                    <rect key="frame" x="102" y="52" width="53" height="23"/>
+                    <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
+                    <inset key="contentEdgeInsets" minX="12" minY="4" maxX="10" maxY="4"/>
+                    <inset key="imageEdgeInsets" minX="4" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" title="종류" image="MenuArrow">
+                        <color key="titleColor" systemColor="labelColor"/>
+                    </state>
+                    <connections>
+                        <action selector="didTabFilter2Button:" destination="CHJ-S2-fTp" eventType="touchUpInside" id="PFc-vA-ATz"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i0o-dJ-RpR">
+                    <rect key="frame" x="163" y="52" width="77" height="23"/>
+                    <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
+                    <inset key="contentEdgeInsets" minX="12" minY="4" maxX="10" maxY="4"/>
+                    <inset key="imageEdgeInsets" minX="4" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" title="주류 가능" image="MenuArrow">
+                        <color key="titleColor" systemColor="labelColor"/>
+                    </state>
+                    <connections>
+                        <action selector="didTabFilter3Button:" destination="CHJ-S2-fTp" eventType="touchUpInside" id="Q90-e1-xDB"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ar-ze-4iZ">
+                    <rect key="frame" x="89" y="56.666666666666664" width="1" height="13.999999999999993"/>
+                    <color key="backgroundColor" name="gray200"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="14" id="J5g-Mp-mLi"/>
+                        <constraint firstAttribute="width" constant="1" id="kXw-gN-0c9"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qww-bY-UA6">
+                    <rect key="frame" x="0.0" y="52" width="77" height="23"/>
+                    <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
+                    <inset key="contentEdgeInsets" minX="12" minY="4" maxX="10" maxY="4"/>
+                    <inset key="imageEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" title="가까운 순" image="MenuArrow">
+                        <color key="titleColor" systemColor="labelColor"/>
+                    </state>
+                    <connections>
+                        <action selector="didTabFilter1Button:" destination="CHJ-S2-fTp" eventType="touchUpInside" id="GFo-eD-3xt"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fcg-cm-EaH"/>
+            <constraints>
+                <constraint firstItem="9Ar-ze-4iZ" firstAttribute="centerY" secondItem="qww-bY-UA6" secondAttribute="centerY" id="8bp-Sm-b5I"/>
+                <constraint firstItem="Nea-4W-NSm" firstAttribute="centerY" secondItem="qww-bY-UA6" secondAttribute="centerY" id="8k9-Rn-aLi"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="i0o-dJ-RpR" secondAttribute="trailing" id="BXI-C5-nJf"/>
+                <constraint firstItem="qww-bY-UA6" firstAttribute="centerY" secondItem="fcg-cm-EaH" secondAttribute="centerY" id="DwO-Se-83v"/>
+                <constraint firstItem="qww-bY-UA6" firstAttribute="leading" secondItem="fcg-cm-EaH" secondAttribute="leading" id="HxG-wU-VnD"/>
+                <constraint firstItem="9Ar-ze-4iZ" firstAttribute="leading" secondItem="qww-bY-UA6" secondAttribute="trailing" constant="12" id="Hxe-eJ-WGh"/>
+                <constraint firstItem="i0o-dJ-RpR" firstAttribute="leading" secondItem="Nea-4W-NSm" secondAttribute="trailing" constant="8" id="L9D-rc-CzF"/>
+                <constraint firstItem="i0o-dJ-RpR" firstAttribute="centerY" secondItem="Nea-4W-NSm" secondAttribute="centerY" id="Lvu-W2-uf0"/>
+                <constraint firstItem="Nea-4W-NSm" firstAttribute="leading" secondItem="9Ar-ze-4iZ" secondAttribute="trailing" constant="12" id="zF4-Wm-RiV"/>
+            </constraints>
+            <connections>
+                <outlet property="filterButton1" destination="qww-bY-UA6" id="c5L-ch-3wN"/>
+                <outlet property="filterButton2" destination="Nea-4W-NSm" id="kA3-7k-OBm"/>
+                <outlet property="filterButton3" destination="i0o-dJ-RpR" id="Phy-Hf-rNh"/>
+            </connections>
+            <point key="canvasLocation" x="201.52671755725191" y="-24.647887323943664"/>
+        </collectionReusableView>
+    </objects>
+    <resources>
+        <image name="MenuArrow" width="10" height="10"/>
+        <namedColor name="gray200">
+            <color red="0.83099997043609619" green="0.85500001907348633" blue="0.87099999189376831" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

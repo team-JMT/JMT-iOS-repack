@@ -13,8 +13,8 @@ class ProfileImageViewModel {
         case saveProfileImage
     }
     
-    weak var coordinator: DefaultProfileImageCoordinator?
-    var photoAuthService: DefaultPhotoAuthService?
+    weak var coordinator: ProfileImageCoordinator?
+    var photoAuthService: PhotoAuthService?
     
     var onSuccess: ((UpdateUI) -> ())?
     var onFailure: (() -> ())?

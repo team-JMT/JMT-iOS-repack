@@ -62,8 +62,8 @@ class DefaultTabBarCoordinator: TabBarCoordinator {
         self.tabBarController.selectedIndex = TabBarPage.home.pageOrderNumber()
         self.tabBarController.view.backgroundColor = .white
         self.tabBarController.tabBar.backgroundColor = .white
-        self.tabBarController.tabBar.tintColor = JMTengAsset.main500.color
-        self.tabBarController.tabBar.unselectedItemTintColor = JMTengAsset.gray300.color
+        self.tabBarController.tabBar.tintColor = JMTengAsset.gray800.color
+        self.tabBarController.tabBar.unselectedItemTintColor = JMTengAsset.gray200.color
         
         let lineView = UIView(frame: CGRect(x: 0, y: 0, width:  self.tabBarController.tabBar.frame.width, height: 1))
         lineView.backgroundColor = JMTengAsset.gray100.color // 선의 색상 설정

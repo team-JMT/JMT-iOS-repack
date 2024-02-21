@@ -18,7 +18,6 @@ class UserLocationViewController: UIViewController {
     @IBOutlet weak var recentSearchView: UIView!
     
     var isFolded = false
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,10 +63,8 @@ class UserLocationViewController: UIViewController {
         viewModel?.coordinator?.showButtonPopupViewController()
     }
     
-    
-
     func setupUI() {
-        setCustomNavigationBarBackButton()
+        setCustomNavigationBarBackButton(isSearchVC: false)
         self.navigationItem.title = "위치 변경"
         
         cancelButton.isHidden = true
