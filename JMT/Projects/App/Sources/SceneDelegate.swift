@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
         guard let scene = (scene as? UIWindowScene) else { return }
-            
+
         let navigationController = UINavigationController()
         self.window = UIWindow(windowScene: scene)
         self.window?.rootViewController = navigationController
@@ -29,18 +29,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         appCoordinator = DefaultAppCoordinator(navigationController: navigationController)
         
         injector.assemble([SocialLoginDI(),
+                           
                            NicknameDI(),
-                           ProfileImageDI(),
-                           ProfilePopupDI(),
-                           HomeDI(), UserLocationDI(),
-                           SearchDI(), TotalResultDI(), RestaurantResultDI(), GroupResultDI(),
+                           
+                           ProfileImageDI(), ProfilePopupDI(),
+                           
+                           HomeDI(), UserLocationDI(), RegistrationRestaurantDI(),
+                           
+                           SearchDI(), RestaurantDetailDI(),
+                           
                            GroupDI(),
+                           
                            MyPageDI(),
+                           
                           ])
-        
+
         appCoordinator?.start()
     }
-    
+
     func sceneDidDisconnect(_ scene: UIScene) { }
     
     func sceneDidBecomeActive(_ scene: UIScene) { }

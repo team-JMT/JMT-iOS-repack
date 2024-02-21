@@ -33,8 +33,8 @@ class SocialLoginViewController: UIViewController {
     }
     
     @IBAction func didTabGoogleLoginButton(_ sender: Any) {
-//        viewModel?.startGoogleLogin()
-        viewModel?.testLogin()
+        viewModel?.startGoogleLogin()
+//        viewModel?.testLogin()
         
 
     }

@@ -7,15 +7,15 @@
 
 import UIKit
 
-protocol SecondHeaderViewDelegate: AnyObject {
+protocol HomeFilterHeaderViewDelegate: AnyObject {
     func didTabFilter1Button()
     func didTabFilter2Button()
     func didTabFilter3Button()
 }
 
-class SecondHeaderView: UICollectionReusableView {
+class HomeFilterHeaderView: UICollectionReusableView {
     
-    weak var delegate: SecondHeaderViewDelegate?
+    weak var delegate: HomeFilterHeaderViewDelegate?
     
     @IBOutlet weak var filterButton1: UIButton!
     @IBOutlet weak var filterButton2: UIButton!
@@ -38,6 +38,12 @@ class SecondHeaderView: UICollectionReusableView {
         filterButton3.layer.cornerRadius = filterButton3.frame.height / 2
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        updateFilterButtonTitle(viewModel: nil)
+    }
+    
     @IBAction func didTabFilter1Button(_ sender: Any) {
         delegate?.didTabFilter1Button()
     }
@@ -50,4 +56,20 @@ class SecondHeaderView: UICollectionReusableView {
         delegate?.didTabFilter3Button()
     }
     
+    func updateFilterButtonTitle(viewModel: HomeViewModel?) {
+       
+        filterButton1.setTitle(viewModel?.sortList[viewModel?.selectedSortIndex ?? 0], for: .normal)
+        
+        if viewModel?.selectedCategoryIndex == 99999 {
+            filterButton2.setTitle("종류", for: .normal)
+        } else {
+            filterButton2.setTitle(viewModel?.categoryList[viewModel?.selectedCategoryIndex ?? 0], for: .normal)
+        }
+        
+        if viewModel?.selectedDrinkingIndex == 99999 {
+            filterButton3.setTitle("주류 여부", for: .normal)
+        } else {
+            filterButton3.setTitle(viewModel?.drinkingList[viewModel?.selectedDrinkingIndex ?? 0], for: .normal)
+        }
+    }
 }

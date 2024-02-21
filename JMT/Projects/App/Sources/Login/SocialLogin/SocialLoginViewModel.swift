@@ -22,6 +22,8 @@ class SocialLoginViewModel {
             switch result {
             case .success(let idToken):
                 
+                print(idToken)
+                
                 SocialLoginAPI.googleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
                     case .success(let actionStr):

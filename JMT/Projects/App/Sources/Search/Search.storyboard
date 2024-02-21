@@ -28,7 +28,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="음식이나 식당명을 검색하세요" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LAL-hb-l6X" customClass="SearchTextField" customModule="JMTeng" customModuleProvider="target">
-                                <rect key="frame" x="20" y="103" width="303" height="56"/>
+                                <rect key="frame" x="20" y="115" width="303" height="56"/>
                                 <color key="backgroundColor" name="gray300"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="sef-gY-Ja4"/>
@@ -40,7 +40,7 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SzO-i8-h7F">
-                                <rect key="frame" x="343" y="115" width="30" height="32"/>
+                                <rect key="frame" x="343" y="127" width="30" height="32"/>
                                 <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="취소">
@@ -51,7 +51,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="gYD-C2-rAV">
-                                <rect key="frame" x="0.0" y="171" width="393" height="133"/>
+                                <rect key="frame" x="0.0" y="183" width="393" height="133"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s5t-kW-cbW">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="60"/>
@@ -162,7 +162,7 @@
                                 </subviews>
                             </stackView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="3lS-Fc-Z3c">
-                                <rect key="frame" x="0.0" y="316" width="393" height="502"/>
+                                <rect key="frame" x="0.0" y="328" width="393" height="490"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="resultCell" rowHeight="84" id="sOx-HE-1Yv" customClass="SearchResultCell" customModule="JMTeng" customModuleProvider="target">
@@ -197,7 +197,7 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DHZ-B0-fsw">
-                                <rect key="frame" x="0.0" y="316" width="393" height="502"/>
+                                <rect key="frame" x="0.0" y="328" width="393" height="490"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
@@ -205,7 +205,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="3lS-Fc-Z3c" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="4KU-zt-cBP"/>
-                            <constraint firstItem="LAL-hb-l6X" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="6Ff-yq-czI"/>
+                            <constraint firstItem="LAL-hb-l6X" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="12" id="6Ff-yq-czI"/>
                             <constraint firstItem="DHZ-B0-fsw" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="70A-Wu-xUo"/>
                             <constraint firstItem="gYD-C2-rAV" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="76w-bB-tJs"/>
                             <constraint firstItem="3lS-Fc-Z3c" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="AH5-et-ofa"/>
@@ -299,7 +299,7 @@
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="여기가 진짜 수제버거 노원점" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tn1-ms-YAQ">
-                                                    <rect key="frame" x="116" y="84.666666666666671" width="177" height="20"/>
+                                                    <rect key="frame" x="116" y="86" width="177" height="18.666666666666671"/>
                                                     <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
                                                     <color key="textColor" name="gray900"/>
                                                     <nil key="highlightedColor"/>
@@ -313,7 +313,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Treenamu" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sr8-t9-jGQ">
-                                                    <rect key="frame" x="140" y="137" width="55" height="15"/>
+                                                    <rect key="frame" x="140" y="137.66666666666666" width="55" height="14"/>
                                                     <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
                                                     <color key="textColor" name="gray900"/>
                                                     <nil key="highlightedColor"/>
@@ -358,7 +358,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="버거대지도" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Ke-TT-12h">
-                                                    <rect key="frame" x="96" y="84.666666666666671" width="69.333333333333314" height="20"/>
+                                                    <rect key="frame" x="96" y="86" width="69.333333333333314" height="18.666666666666671"/>
                                                     <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
                                                     <color key="textColor" name="gray900"/>
                                                     <nil key="highlightedColor"/>

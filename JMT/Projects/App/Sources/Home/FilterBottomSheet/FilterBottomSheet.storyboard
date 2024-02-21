@@ -26,8 +26,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="hyP-E9-bkx">
+                                <rect key="frame" x="20" y="91" width="135" height="32"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5Op-Mh-uWu">
+                                        <rect key="frame" x="0.0" y="0.0" width="135" height="32"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VFd-sz-dej">
+                                                <rect key="frame" x="0.0" y="0.0" width="68" height="32"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <inset key="contentEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="종류">
+                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTabCategoryButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="gmI-ic-s2v"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bfg-Sj-9s3">
+                                                <rect key="frame" x="76" y="0.0" width="59" height="32"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="주류 여부">
+                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTabDrinkingButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="hvZ-xw-7Fn"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YzS-Qp-1wj">
+                                        <rect key="frame" x="0.0" y="32" width="50" height="0.0"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" id="LHL-YC-bZk"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                            </stackView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="SKH-tV-pT0">
-                                <rect key="frame" x="0.0" y="131" width="393" height="687"/>
+                                <rect key="frame" x="0.0" y="139" width="393" height="679"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="filterCell" rowHeight="120" id="Aee-JN-EtN" customClass="FilterCell" customModule="JMTeng" customModuleProvider="target">
@@ -77,57 +116,35 @@
                                     <outlet property="delegate" destination="Y6W-OH-hqX" id="VoJ-AK-VLa"/>
                                 </connections>
                             </tableView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5Op-Mh-uWu">
-                                <rect key="frame" x="20" y="91" width="135" height="24"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VFd-sz-dej">
-                                        <rect key="frame" x="0.0" y="0.0" width="68" height="24"/>
-                                        <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
-                                        <inset key="contentEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="종류">
-                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bfg-Sj-9s3">
-                                        <rect key="frame" x="76" y="0.0" width="59" height="24"/>
-                                        <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="주류 여부">
-                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        </state>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="24" id="eZo-ol-1pL"/>
-                                </constraints>
-                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="SKH-tV-pT0" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="1mh-Ei-vg4"/>
-                            <constraint firstItem="SKH-tV-pT0" firstAttribute="top" secondItem="5Op-Mh-uWu" secondAttribute="bottom" constant="16" id="8o5-1t-fWM"/>
-                            <constraint firstItem="5Op-Mh-uWu" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="32" id="WBO-DT-GC4"/>
                             <constraint firstItem="SKH-tV-pT0" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="Yxi-HN-1bI"/>
+                            <constraint firstItem="SKH-tV-pT0" firstAttribute="top" secondItem="hyP-E9-bkx" secondAttribute="bottom" constant="16" id="dw5-Mn-Wju"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="SKH-tV-pT0" secondAttribute="bottom" id="pEa-K5-TJv"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5Op-Mh-uWu" secondAttribute="trailing" constant="20" id="qDp-3S-nj2"/>
-                            <constraint firstItem="5Op-Mh-uWu" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="uxD-EL-lli"/>
+                            <constraint firstItem="hyP-E9-bkx" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="32" id="qLX-Dh-A7o"/>
+                            <constraint firstItem="hyP-E9-bkx" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="wgt-uQ-XD8"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hyP-E9-bkx" secondAttribute="trailing" constant="20" id="yED-Vp-V5n"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="bottomContainerView" destination="SrV-uk-kiv" id="5Fm-j2-A8F"/>
+                        <outlet property="categoryButton" destination="VFd-sz-dej" id="iPv-mU-dz2"/>
                         <outlet property="doneButton" destination="Xf8-bE-m2Q" id="lxm-E2-4Ez"/>
+                        <outlet property="drinkingButton" destination="bfg-Sj-9s3" id="l0P-Kh-zk9"/>
                         <outlet property="filterTableView" destination="SKH-tV-pT0" id="lqv-Pj-wIT"/>
+                        <outlet property="filterTypeContainerView" destination="5Op-Mh-uWu" id="Vbs-Qc-7e2"/>
                         <outlet property="resetButton" destination="Mcl-31-hjI" id="sVr-0l-EJB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" id="SrV-uk-kiv">
+                <view contentMode="scaleToFill" ambiguous="YES" id="SrV-uk-kiv">
                     <rect key="frame" x="0.0" y="0.0" width="539" height="216"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FxJ-aV-kX6">
+                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FxJ-aV-kX6">
                             <rect key="frame" x="0.0" y="72" width="539" height="110"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mcl-31-hjI">
@@ -138,6 +155,9 @@
                                     <state key="normal" title="초기화">
                                         <color key="titleColor" name="gray400"/>
                                     </state>
+                                    <connections>
+                                        <action selector="didTabResetButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="uXx-fE-Zch"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xf8-bE-m2Q">
                                     <rect key="frame" x="144" y="12" width="375" height="56"/>
@@ -146,6 +166,9 @@
                                     <inset key="contentEdgeInsets" minX="10" minY="16" maxX="16" maxY="16"/>
                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                     <state key="normal" title="확인"/>
+                                    <connections>
+                                        <action selector="didTabDoneButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="RXe-Ye-f9U"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <constraints>
