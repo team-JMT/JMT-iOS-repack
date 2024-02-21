@@ -18,6 +18,8 @@ protocol SocialLoginCoordinator: Coordinator {
     
     func showGoogleLoginViewController(completion: @escaping (Result<String,NetworkError>) -> ())
     func showAppleLoginViewController()
+    
+    var onAppleLoginSuccess: ((Result<String,NetworkError>) -> ())? { get set }
 }
 
 class DefaultSocialLoginCoordinator: NSObject, SocialLoginCoordinator {

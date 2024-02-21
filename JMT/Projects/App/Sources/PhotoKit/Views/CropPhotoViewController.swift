@@ -83,7 +83,7 @@ class CropPhotoViewController: UIViewController {
     }
     
     func setupUI() {
-        setCustomNavigationBarBackButton()
+        setCustomNavigationBarBackButton(isSearchVC: false)
         nextButton.layer.cornerRadius = 8
     }
 }

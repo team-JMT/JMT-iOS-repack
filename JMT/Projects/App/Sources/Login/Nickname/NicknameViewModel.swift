@@ -19,7 +19,7 @@ class NicknameViewModel: NicknameModelProtocol {
         case updateNextButtonAndAvailabilityLabelText(Bool, String)
     }
     
-    weak var coordinator: DefaultNicknameCoordinator?
+    weak var coordinator: NicknameCoordinator?
     var workItem: DispatchWorkItem?
     
     var onSuccess: ((UIUpdateState) -> ())?

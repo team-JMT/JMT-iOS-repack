@@ -33,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                            ProfileImageDI(),
                            ProfilePopupDI(),
                            HomeDI(), UserLocationDI(),
-                           SearchDI(),
+                           SearchDI(), TotalResultDI(), RestaurantResultDI(), GroupResultDI(),
                            GroupDI(),
                            MyPageDI(),
                           ])
