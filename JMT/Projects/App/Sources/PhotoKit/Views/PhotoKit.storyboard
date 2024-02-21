@@ -278,6 +278,7 @@
                         <outlet property="albumTitleLabel" destination="V4t-oS-6Ub" id="QAK-Lr-BxJ"/>
                         <outlet property="bottomStackView" destination="q5Q-Ne-Nae" id="odW-pE-7Ga"/>
                         <outlet property="hiddenViewHeightConstraint" destination="YBa-mc-qgf" id="DAk-b9-PN1"/>
+                        <outlet property="photoCountLabel" destination="QlL-rF-TPJ" id="pDr-F7-tTb"/>
                         <outlet property="photoCountView" destination="saU-ex-Mot" id="ozT-9z-FED"/>
                         <outlet property="photoListCollectionView" destination="cNY-QM-UlP" id="nQF-lM-DFu"/>
                         <outlet property="selectedButton" destination="HgM-1Q-Fnp" id="l3F-7C-t9T"/>

@@ -9,7 +9,6 @@ import UIKit
 
 class RestaurantDetailPhotoViewController: UIViewController {
 
-    
     var viewModel: RestaurantDetailPhotoViewModel?
     
     @IBOutlet weak var photoCollectionView: UICollectionView!
@@ -17,7 +16,7 @@ class RestaurantDetailPhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        photoCollectionView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 41, right: 20)
+        photoCollectionView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 41 + 56, right: 20)
         
     }
 }

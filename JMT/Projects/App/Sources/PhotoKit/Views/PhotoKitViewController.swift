@@ -18,6 +18,8 @@ class PhotoKitViewController: UIViewController {
     
     @IBOutlet weak var bottomStackView: UIStackView!
     @IBOutlet weak var photoCountView: UIView!
+    @IBOutlet weak var photoCountLabel: UILabel!
+    
     @IBOutlet weak var selectedButtonView: UIView!
     @IBOutlet weak var selectedButton: UIButton!
     
@@ -65,7 +67,8 @@ class PhotoKitViewController: UIViewController {
     
     func setupUI() {
         
-        selectedButton.setTitle("선택하기 \(selectedPhotos.count)/10", for: .normal)
+        photoCountLabel.text = "사진 최대 \(photoKitConfig.library.maxNumberOfItems)장까지 등록 가능합니다"
+        selectedButton.setTitle("선택하기 \(selectedPhotos.count)/\(photoKitConfig.library.maxNumberOfItems)", for: .normal)
         
         if photoKitConfig.library.defaultMultipleSelection {
             photoCountView.isHidden = false
@@ -211,75 +214,6 @@ extension PhotoKitViewController: UICollectionViewDelegate {
             cropVC.originalImage = albumsManager.photos[indexPath.item].image
             self.navigationController?.pushViewController(cropVC, animated: true)
         }
-        
-//        // MARK: 앨범에서 선택한 이미지 다시 앨범에 표시하기
-//        if photoKitConfig.library.defaultMultipleSelection {
-//
-//            // 사진 여러장 선택시
-//
-//            // 선택한 사진 정보
-//            var info = albumsManager.photos[indexPath.item]
-//
-//            // 업데이트할 인덱스 패스 배열
-//            let updatingIndexPaths: [IndexPath]
-//
-//            // 선택 가능한 최대 항목 수를 초과했는지 검사
-//            if selectedPhotos.count >= photoKitConfig.library.maxNumberOfItems { // && info.selectedOrder == SelectionOrder.none
-//                print("선택 불가")  // 사용자에게 경고 메시지 표시
-//                return
-//            }
-//
-//            // 이미 선택한 사진의 선택을 취소하는 경우
-//            if case .selected = info.selectedOrder {
-//
-//                // 사진 선택 상태 업데이트
-//                albumsManager.updatePhotoSelectionState(for: info, with: .none)
-//
-//                // 선택한 사진 삭제
-//                selectedPhotos.removeAll(where: { $0.localIdentifier == info.localIdentifier })
-//
-//                // 선택한 사진 순서
-//                selectedPhotos.redefineOrders()
-//
-//                // 현재 앨범의 선택된 사진들만 필터링
-//                let currentAlbumPhotos = selectedPhotos.filter({ $0.albumIndex == currentAlbumIndex })
-//
-//                // 현재 앨범의 선택된 사진들의 순서를 albumsManager에 반영
-//                albumsManager.reflectSelectedOrders(for: currentAlbumPhotos)
-//
-//                updatingIndexPaths = [indexPath] + currentAlbumPhotos.map({ IndexPath(row: $0.selectedIndex, section: 0)})
-//            } else {
-//
-//                // 선택된 순서의 최댓값
-//                let maxOrder = selectedPhotos.maxSelectedOrder()
-//
-//                // 선택된 사진의 순서
-//                info.selectedOrder = .selected(maxOrder + 1)
-//
-//                // 선택된 사진 배열에 추가
-//                selectedPhotos.append(info)
-//
-//                // 현재 앨범에 포함된 사진
-//                let currentAlbumPhotos = selectedPhotos.filter({ $0.albumIndex == currentAlbumIndex })
-//
-//                albumsManager.updatePhotoSelectionState(for: info, with: .selected(maxOrder + 1))
-//
-//                updatingIndexPaths = currentAlbumPhotos.map({ IndexPath(row: $0.selectedIndex, section: 0)})
-//            }
-//
-//            update(indexPaths: updatingIndexPaths)
-//            updateSelectedButton()
-//        } else {
-//            // 사진 선택 하나만
-//            guard let cropVC = storyboard?.instantiateViewController(withIdentifier: "CropPhotoViewController") as? CropPhotoViewController else { return }
-//
-//            cropVC.didFinishCropping = { image in
-//                self.didSelectItems?([image])
-//            }
-//
-//            cropVC.originalImage = albumsManager.photos[indexPath.item]
-//            self.navigationController?.pushViewController(cropVC, animated: true)
-//        }
     }
     
     private func update(indexPaths: [IndexPath]) {

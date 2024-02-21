@@ -381,8 +381,7 @@ extension RegistrationRestaurantInfoViewController: RestaurantTypeHeaderViewDele
 }
  
 extension RegistrationRestaurantInfoViewController: InfoPhotoCellDelegate {
-    
-    // 일단 사용 안함 
+
     func didTabDeleteButton(in cell: UICollectionViewCell) {
         guard let indexPath = settingInfoCollectionView.indexPath(for: cell) else { return  }
         

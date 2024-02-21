@@ -102,6 +102,8 @@
                     </view>
                     <connections>
                         <outlet property="addressNameLabel" destination="FSY-GL-ktN" id="LCd-CN-YJz"/>
+                        <outlet property="doneButton" destination="bHT-aq-bBv" id="g6p-Wo-TaE"/>
+                        <outlet property="infoContainerView" destination="qQJ-zm-AjN" id="xtw-0v-4fa"/>
                         <outlet property="naverMapView" destination="bno-Ce-tvU" id="ka4-k8-EXz"/>
                         <outlet property="placeNameLabel" destination="weB-Dy-gpN" id="k9q-1M-DLe"/>
                     </connections>

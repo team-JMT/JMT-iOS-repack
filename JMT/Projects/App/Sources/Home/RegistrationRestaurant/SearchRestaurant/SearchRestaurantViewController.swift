@@ -19,7 +19,11 @@ class SearchRestaurantViewController: UIViewController {
         self.navigationItem.title = "맛집 등록"
         setCustomNavigationBarBackButton(isSearchVC: false)
         
+        viewModel?.didUpdateRestaurantsInfo = {
+            self.searchRestaurantResultTableView.reloadData()
+        }
         
+        viewModel?.fetchRestaurantsInfo(keyword: "장강")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,11 +46,12 @@ class SearchRestaurantViewController: UIViewController {
 
 extension SearchRestaurantViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return viewModel?.restaurantsInfo.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "locationCell", for: indexPath) as? RestaurantLocationCell else { return UITableViewCell() }
+        cell.setupData(viewModel: viewModel?.restaurantsInfo[indexPath.row])
         return cell
     }
 }

@@ -6,9 +6,19 @@
 //
 
 import Foundation
+import UIKit
 
 class RestaurantDetailViewModel {
     weak var coordinator: RestaurantDetailCoordinator?
     
     var currentSegIndex: Int = 0
+    
+    var reviewImages = [UIImage]()
+    
+    var didUpdateReviewImage: (() -> Void)?
+    
+    func updateReviewImages(images: [UIImage]) {
+        reviewImages.append(contentsOf: images)
+        didUpdateReviewImage?()
+    }
 }

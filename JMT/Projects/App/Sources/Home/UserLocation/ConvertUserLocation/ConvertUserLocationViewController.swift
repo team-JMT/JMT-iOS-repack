@@ -14,8 +14,12 @@ class ConvertUserLocationViewController: UIViewController {
     
     @IBOutlet weak var naverMapView: NMFNaverMapView!
     
+    @IBOutlet weak var infoContainerView: UIView!
+    
     @IBOutlet weak var placeNameLabel: UILabel!
     @IBOutlet weak var addressNameLabel: UILabel!
+    
+    @IBOutlet weak var doneButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +29,8 @@ class ConvertUserLocationViewController: UIViewController {
         placeNameLabel.text = viewModel?.locationData?.placeName ?? ""
         addressNameLabel.text = viewModel?.locationData?.addressName ?? ""
         
+        naverMapView.showZoomControls = false
+        
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: viewModel?.locationData?.y ?? 0.0, lng: viewModel?.locationData?.x ?? 0.0))
         cameraUpdate.animation = .easeIn
         naverMapView.mapView.moveCamera(cameraUpdate)
@@ -33,8 +39,7 @@ class ConvertUserLocationViewController: UIViewController {
         marker.position = NMGLatLng(lat: viewModel?.locationData?.y ?? 0.0, lng: viewModel?.locationData?.x ?? 0.0)
         marker.mapView = naverMapView.mapView
         
-        print(viewModel?.locationData)
-        
+        setupUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,5 +59,10 @@ class ConvertUserLocationViewController: UIViewController {
     @IBAction func didTabDoneButton(_ sender: Any) {
         LocationManager.shared.updateCurrentLocation(lat: viewModel?.locationData?.y ?? 0.0, lon: viewModel?.locationData?.x ?? 0.0)
         viewModel?.coordinator?.navigationController?.popToRootViewController(animated: true)
+    }
+    
+    func setupUI() {
+        infoContainerView.layer.cornerRadius = 8
+        doneButton.layer.cornerRadius = 8
     }
 }

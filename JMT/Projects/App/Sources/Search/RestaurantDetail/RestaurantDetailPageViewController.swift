@@ -15,7 +15,6 @@ class RestaurantDetailPageViewController: UIPageViewController {
     
     weak var pageViewDelegate: RestaurantDetailPageViewControllerDelegate?
     var vcArray: [UIViewController] = []
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,5 +77,4 @@ extension RestaurantDetailPageViewController: UIPageViewControllerDataSource {
     
         return vcArray[nextIndex]
     }
-    
 }

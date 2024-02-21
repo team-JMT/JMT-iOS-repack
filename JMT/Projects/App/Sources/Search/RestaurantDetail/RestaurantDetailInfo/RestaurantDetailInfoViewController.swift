@@ -154,7 +154,7 @@ class RestaurantDetailInfoViewController: UIViewController {
       
         // Section
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 41, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 41 + 56, trailing: 20)
 
         // Header
         section.boundarySupplementaryItems = [

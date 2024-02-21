@@ -44,7 +44,7 @@ class HomeViewModel {
     var selectedCategoryIndex: Int = 99999
     var selectedDrinkingIndex: Int = 99999
     
-    var popularRestaurants = ["1","2","3","4","5"] // [String]()
+    var popularRestaurants = ["1","2","3","4","5"]  // [String]() //  
     var restaurants = ["1","2","3","4","5","6","7","8","9"]
 
 }

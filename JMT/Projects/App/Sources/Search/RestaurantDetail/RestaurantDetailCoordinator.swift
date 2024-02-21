@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol RestaurantDetailCoordinator: Coordinator {
-    
+    func showImagePicker()
 }
 
 
@@ -47,5 +47,37 @@ class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
         restaurantDetailViewController.pageViewController = pageViewController
                 
         self.navigationController?.pushViewController(restaurantDetailViewController, animated: true)
+    }
+    
+    func showImagePicker() {
+        
+        var config = PhotoKitConfiguration()
+        config.library.defaultMultipleSelection = true
+        config.library.maxNumberOfItems = 5
+    
+        
+        let picker = PhotoKitNavigationController(configuration: config)
+        picker.photosCount = handleSelectedPhotosCount()
+        
+        picker.didFinishCompletion = { images in
+        
+            self.handleImagePickerResult(images, isDefault: false)
+            picker.dismiss(animated: true)
+        }
+
+        self.navigationController?.present(picker, animated: true)
+    }
+    
+    func handleImagePickerResult(_ images: [UIImage], isDefault: Bool) {
+        if let restaurantDetailViewController = self.navigationController?.topViewController as? RestaurantDetailViewController {
+            restaurantDetailViewController.viewModel?.updateReviewImages(images: images)
+        }
+    }
+    
+    func handleSelectedPhotosCount() -> Int {
+        if let restaurantDetailViewController = self.navigationController?.topViewController as? RestaurantDetailViewController {
+            return restaurantDetailViewController.viewModel?.reviewImages.count ?? 0
+        }
+        return 0
     }
 }
