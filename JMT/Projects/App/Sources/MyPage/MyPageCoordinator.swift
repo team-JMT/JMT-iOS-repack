@@ -8,11 +8,15 @@
 import UIKit
 
 protocol MyPageCoordinator: Coordinator {
+   
+    func goToDetailView(for segmentIndex: Int)
+    func goToDetailMyPageView()
     //func goToTestt()
     
 }
 
 class DefaultMyPageCoordinator: MyPageCoordinator {
+    
     var parentCoordinator: Coordinator? = nil
     
     var childCoordinators: [Coordinator] = []
@@ -28,25 +32,25 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
     func start() {
         let mypageViewController = MyPageViewController.instantiateFromStoryboard(storyboardName: "MyPage") as MyPageViewController
         
-         mypageViewController.viewModel?.coordinator = self
+         mypageViewController.coordinator = self
         self.navigationController?.pushViewController(mypageViewController, animated: true)
-        
-        
     }
     
-//    func goToTestt() {
-//        let storyboard = UIStoryboard(name: "MyPage", bundle: nil)
-//
-//             guard let mypageTestVC = storyboard.instantiateViewController(withIdentifier: "MyPageTestViewController") as? MyPageTestViewController else {
-//             
-//             print("MyPageTestViewController를 찾을 수 없습니다.")
-//             
-//             return
-//             
-//             }
-//             self.navigationController?.pushViewController(mypageTestVC, animated: true)
-//             print(1)
-//    }
     
+    func goToDetailView(for segmentIndex: Int) {
+     //   goToSegmentViewController(for : segmentIndex)
+    }
+    
+    
+    func goToDetailMyPageView() {
+        let storyboard = UIStoryboard(name: "DetailMyPage", bundle: nil)
+        if let viewController = storyboard.instantiateViewController(withIdentifier: "DetailMyPageVC") as? DetailMyPageVC {
+            navigationController?.pushViewController(viewController, animated: true)
+        } else {
+            print("DetailMyPageVC could not be instantiated.")
+        }
+    }
+
+
     
 }

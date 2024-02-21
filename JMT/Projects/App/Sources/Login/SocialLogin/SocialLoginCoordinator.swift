@@ -95,6 +95,7 @@ class DefaultSocialLoginCoordinator: NSObject, SocialLoginCoordinator {
             }
             
             completion(.success(idToken))
+            print(idToken)
         }
     }
     
