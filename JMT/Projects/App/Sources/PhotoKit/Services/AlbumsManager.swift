@@ -113,10 +113,9 @@ class AlbumsManager: NSObject, PHPhotoLibraryChangeObserver {
                 phAssets.append(asset)
             }
             
-            photos = phAssets.map {
-                PhotoInfo(phAsset: $0, image: nil, selectedOrder: .none)
+            photos = phAssets.enumerated().map { order, info in
+                PhotoInfo(phAsset: info, image: nil, localIdentifier: info.localIdentifier, albumIndex: index, selectedIndex: order, selectedOrder: .none)
             }
-            
             completion()
         }
     }
@@ -134,5 +133,53 @@ extension AlbumsManager {
     
     private func getSortDescriptors() -> [NSSortDescriptor] {
         return [NSSortDescriptor(key: "creationDate", ascending: false)]
+    }
+}
+
+// MARK: 앨범에서 선택한 이미지 다시 앨범에 표시하기
+// 사진 선택시 상태 업데이트 관련
+extension AlbumsManager {
+
+    // 사진의 선택 상태 업데이트
+    func updatePhotoSelectionState(for photo: PhotoInfo, selectedOrder: SelectionOrder) {
+        photos[photo.selectedIndex] = .init(phAsset: photo.phAsset,
+                                            image: photo.image,
+                                            localIdentifier: photo.localIdentifier,
+                                            albumIndex: photo.albumIndex,
+                                            selectedIndex: photo.selectedIndex,
+                                            selectedOrder: selectedOrder)
+    }
+
+    // 선택된 사진들의 순서를 현재 앨범에 반영
+    func reflectSelectedPhotosOrder(for photos: [PhotoInfo]) {
+        for photo in photos {
+            if case .selected(let order) = photo.selectedOrder {
+                self.photos[photo.selectedIndex] = .init(phAsset: photo.phAsset,
+                                                         image: photo.image,
+                                                         localIdentifier: photo.localIdentifier,
+                                                         albumIndex: photo.albumIndex,
+                                                         selectedIndex: photo.selectedIndex,
+                                                         selectedOrder: .selected(order))
+            }
+        }
+    }
+}
+
+// 선택된 사진들의 순서 재정의
+extension Array where Element == PhotoInfo {
+    mutating func redefineOrders() {
+        for (index, var photo) in self.enumerated() {
+            photo.selectedOrder = .selected(index + 1)
+            self[index] = photo
+        }
+    }
+
+    func maxSelectedOrder() -> Int {
+        self.compactMap { photo -> Int? in
+            if case .selected(let order) = photo.selectedOrder {
+                return order
+            }
+            return nil
+        }.max() ?? 0
     }
 }

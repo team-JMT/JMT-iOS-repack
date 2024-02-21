@@ -23,18 +23,14 @@ class UserLocationViewController: UIViewController {
         super.viewDidLoad()
     
         setupUI()
+        addressListTableView.keyboardDismissMode = .onDrag
         
         viewModel?.onSuccess = {
-            if self.viewModel?.isSearch == false {
-                self.recentSearchView.isHidden = false
-            } else {
-                self.recentSearchView.isHidden = true
-            }
-            
             self.addressListTableView.reloadData()
+            self.addressListTableView.isUserInteractionEnabled = true
         }
         
-        viewModel?.getRecentLocations()
+        viewModel?.fetchRecentLocations()
     }
 
     
@@ -57,10 +53,20 @@ class UserLocationViewController: UIViewController {
     @IBAction func didTabTextFieldCancelButton(_ sender: Any) {
         addressTextField.text = ""
         addressTextField.resignFirstResponder()
+        finishSearch()
     }
     
     @IBAction func recentLocationDeleteAll(_ sender: Any) {
         viewModel?.coordinator?.showButtonPopupViewController()
+    }
+    
+    func finishSearch() {
+        viewModel?.isSearch = false
+        viewModel?.isEnd = false
+        viewModel?.isFetching = false
+        cancelButton.isHidden = true
+        recentSearchView.isHidden = false
+        addressListTableView.reloadData()
     }
     
     func setupUI() {
@@ -76,7 +82,6 @@ class UserLocationViewController: UIViewController {
         let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: addressTextField.frame.height))
         addressTextField.rightView = rightPaddingView
         addressTextField.rightViewMode = .always
-        
         
         let image = UIImage(named: "TextFieldSearch")!
         let leftImageView = UIImageView(frame: CGRect(x: 0.0, y: 0.0, width: image.size.width, height: addressTextField.frame.height))
@@ -95,60 +100,82 @@ class UserLocationViewController: UIViewController {
 extension UserLocationViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let cell = tableView.cellForRow(at: indexPath) as? AddressTitleCell {
-            
-            if viewModel?.isSearch == false {
-                let text = cell.addressNameLabel.text ?? ""
-                addressTextField.text = text
-                viewModel?.didChangeTextField(text: text)
-            } else {
-                // 위치 변경 코드
-            }
+        addressListTableView.isUserInteractionEnabled = false
+        
+        if viewModel?.isSearch == false {
+            addressTextField.becomeFirstResponder()
+            addressTextField.text = viewModel?.recentLocations[indexPath.row] ?? ""
+            viewModel?.didChangeTextField(keyword: addressTextField.text ?? "")
+        } else {
+            let location = viewModel?.resultLocations[indexPath.row]
+            viewModel?.coordinator?.showConvertUserLocationViewController(with: location)
+            addressListTableView.isUserInteractionEnabled = true
         }
     }
 }
 
 extension UserLocationViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.isSearch == false ? viewModel?.recentLocations.count ?? 0 : viewModel?.resultLocations.count ?? 0
+        return viewModel?.isSearch == true ? viewModel?.resultLocations.count ?? 0 : viewModel?.recentLocations.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "addressCell", for: indexPath) as? AddressTitleCell else { return UITableViewCell() }
         if viewModel?.isSearch == false {
-            cell.addressNameLabel.text = viewModel?.recentLocations[indexPath.row]
+            cell.addressNameLabel.text = viewModel?.recentLocations[indexPath.row] ?? ""
             cell.indexPath = indexPath
             cell.delegate = self
             return cell
         } else {
-            cell.addressNameLabel.text = viewModel?.resultLocations[indexPath.row]
+            cell.addressNameLabel.text = viewModel?.resultLocations[indexPath.row].placeName ?? ""
             cell.deleteButton.isHidden = true
             return cell
         }
     }
 }
 
+extension UserLocationViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard viewModel?.isSearch == true else { return }
+       
+        if indexPaths.contains(where: isLoadingCell) {
+            viewModel?.fetchSearchLocation(keyword: addressTextField.text ?? "")
+        }
+    }
+    
+    // 지정된 인덱스 패스가 로딩 셀인지 확인하는 메소드
+    func isLoadingCell(for indexPath: IndexPath) -> Bool {
+        return indexPath.row >= (viewModel?.resultLocations.count ?? 0) - 1
+    }
+}
+
 extension UserLocationViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        viewModel?.didChangeTextField(text: textField.text ?? "")
+        viewModel?.didChangeTextField(keyword: textField.text ?? "")
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        print("시작")
+        viewModel?.isSearch = true
         cancelButton.isHidden = false
+        recentSearchView.isHidden = true
+        addressListTableView.reloadData()
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text == "" {
-            cancelButton.isHidden = true
-        } else {
-            cancelButton.isHidden = false
+            finishSearch()
         }
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        addressTextField.resignFirstResponder()
     }
 }
 
 extension UserLocationViewController: AddressTitleCellDelegate {
     func didTapDeleteButton(at indexPath: IndexPath) {
-        viewModel?.deleteRecentLocation(index: indexPath)
+        viewModel?.deleteRecentLocation(indexPath.row)
     }
 }
 

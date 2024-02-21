@@ -9,10 +9,12 @@ import UIKit
 
 class PhotoKitNavigationController: UINavigationController {
     
-    var didFinishCompletion: ((UIImage?) -> ())?
+    var didFinishCompletion: (([UIImage]) -> ())?
     
     var albumViewController: PhotoKitViewController!
-
+    
+    var photosCount = 0
+    
     convenience init() {
         self.init(configuration: PhotoKitConfiguration.shared)
     }
@@ -24,6 +26,7 @@ class PhotoKitNavigationController: UINavigationController {
         let storyboard = UIStoryboard(name: "PhotoKit", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "PhotoKitViewController") as? PhotoKitViewController else { return }
         albumViewController = vc
+       
         modalPresentationStyle = .fullScreen
     }
     
@@ -36,9 +39,10 @@ class PhotoKitNavigationController: UINavigationController {
         super.viewDidLoad()
         
         viewControllers = [albumViewController]
-        
-        albumViewController.didSelectItems = { image in
-            self.didFinishCompletion?(image)
+        albumViewController.totalSelectPhotoCount = photosCount
+
+        albumViewController.didSelectItems = { images in
+            self.didFinishCompletion?(images)
         }
     }
 }

@@ -46,7 +46,7 @@ class RestaurantResultViewController: UIViewController {
             }
         }
         
-        layout.register(GrayBackgroundView.self, forDecorationViewOfKind: "macapickBackground")
+        layout.register(GrayBackgroundViewInset.self, forDecorationViewOfKind: "GrayBackgroundViewInset")
         return layout
     }
     
@@ -76,7 +76,7 @@ class RestaurantResultViewController: UIViewController {
         ]
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "macapickBackground")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
 
         return section
@@ -109,7 +109,7 @@ class RestaurantResultViewController: UIViewController {
         ]
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "macapickBackground")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
 
         return section
@@ -135,13 +135,8 @@ class RestaurantResultViewController: UIViewController {
         section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 32, trailing: 20)
         section.interGroupSpacing = CGFloat(12)
         
-//        // Header
-//        section.boundarySupplementaryItems = [
-//            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(72)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-//        ]
-        
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "macapickBackground")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
         
         return section

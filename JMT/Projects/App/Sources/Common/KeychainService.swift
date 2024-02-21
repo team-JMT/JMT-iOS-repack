@@ -64,5 +64,4 @@ class DefaultKeychainService: KeychainService {
             }
         }
     }
-    
 }

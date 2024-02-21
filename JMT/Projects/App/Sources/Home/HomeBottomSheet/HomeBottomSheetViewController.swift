@@ -24,22 +24,31 @@ class HomeBottomSheetViewController: UIViewController {
         bottomSheetCollectionView.register(header1, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView1")
         let header2 = UINib(nibName: "HomeFilterHeaderView", bundle: nil)
         bottomSheetCollectionView.register(header2, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView2")
-        
-        
+    
         setupUI()
+        
+        viewModel?.didUpdateBottomSheetTableView = {
+            self.bottomSheetCollectionView.reloadData()
+        }
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
-       UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
-            switch sectionIndex {
-            case 0:
-                return self.createFirstColumnSection()
-            case 1:
-                return self.createSecondColumnSection()
-            default:
-                return nil
-            }
-        }
+       UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
+           
+           guard let self = self else { return nil }
+           
+           let isPopularRestaurantsEmpty = self.viewModel?.popularRestaurants.isEmpty ?? true
+           let adjustedSectionIndex = isPopularRestaurantsEmpty ? sectionIndex + 1 : sectionIndex
+           
+           switch adjustedSectionIndex {
+           case 0:
+               return self.createFirstColumnSection() // popularRestaurants 섹션
+           case 1:
+               return self.createSecondColumnSection() // restaurants 섹션
+           default:
+               return nil
+           }
+       }
     }
     
     func createFirstColumnSection() -> NSCollectionLayoutSection {
@@ -110,30 +119,34 @@ class HomeBottomSheetViewController: UIViewController {
     }
     
     @IBAction func didTabAddButton(_ sender: Any) {
-        
+        viewModel?.coordinator?.showSearchRestaurantViewController()
     }
-    
-    
 }
 
 extension HomeBottomSheetViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-
+        
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-
-            switch indexPath.section {
-            case 0:
-                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView1", for: indexPath) as! FirstHeaderView
-                return header
-            case 1:
-                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView2", for: indexPath) as! SecondHeaderView
+            if viewModel?.popularRestaurants.isEmpty == true  {
+                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView2", for: indexPath) as! HomeFilterHeaderView
                 header.delegate = self
+                header.updateFilterButtonTitle(viewModel: viewModel)
                 return header
-            default:
-                return UICollectionReusableView()
+            } else {
+                switch indexPath.section {
+                case 0:
+                    let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView1", for: indexPath) as! HomeHeaderView
+                    return header
+                case 1:
+                    let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView2", for: indexPath) as! HomeFilterHeaderView
+                    header.delegate = self
+                    header.updateFilterButtonTitle(viewModel: viewModel)
+                    return header
+                default:
+                    return UICollectionReusableView()
+                }
             }
-
         default:
             return UICollectionReusableView()
         }
@@ -142,49 +155,58 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
 
 extension HomeBottomSheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return viewModel?.popularRestaurants.isEmpty == true ? 1 : 2
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 5
-        case 1:
-            return 5
-        default:
-            return 0
+        
+        if section == 0 && viewModel?.popularRestaurants.isEmpty == false {
+            return viewModel?.popularRestaurants.count ?? 0 // 첫 번째 섹션의 아이템 수
+            
+        } else if section == 1 || (section == 0 && viewModel?.popularRestaurants.isEmpty == true) {
+            return viewModel?.restaurants.count ?? 0 // 두 번째 섹션의 아이템 수
         }
+        return 0 // 그 외의 경우에는 아이템 없음
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath)
-            cell.layer.borderColor = JMTengAsset.gray200.color.cgColor
-            cell.layer.borderWidth = 1
-            return cell
-        case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath)
-            return cell
-        default:
-            return UICollectionViewCell()
+        if viewModel?.popularRestaurants.isEmpty == true {
+            if indexPath.section == 0 {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
+                return cell
+            } else {
+                return UICollectionViewCell()
+            }
+        } else {
+            switch indexPath.section {
+            case 0:
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
+                cell.layer.borderColor = JMTengAsset.gray200.color.cgColor
+                cell.layer.borderWidth = 1
+                return cell
+            case 1:
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
+                return cell
+            default:
+                return UICollectionViewCell()
+            }
         }
     }
 }
 
-extension HomeBottomSheetViewController: SecondHeaderViewDelegate {
+extension HomeBottomSheetViewController: HomeFilterHeaderViewDelegate {
     func didTabFilter1Button() {
-        viewModel?.filterType = 0
+        viewModel?.updateSortType(type: .sort)
         viewModel?.coordinator?.showFilterBottomSheetViewController()
     }
     
     func didTabFilter2Button() {
-        viewModel?.filterType = 1
+        viewModel?.updateSortType(type: .category)
         viewModel?.coordinator?.showFilterBottomSheetViewController()
     }
     
     func didTabFilter3Button() {
-        viewModel?.filterType = 2
+        viewModel?.updateSortType(type: .drinking)
         viewModel?.coordinator?.showFilterBottomSheetViewController()
     }
 }

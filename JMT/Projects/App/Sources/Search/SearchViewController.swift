@@ -51,15 +51,13 @@ class SearchViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        searchTextField.becomeFirstResponder()
-        self.navigationController?.isNavigationBarHidden = false
+//        searchTextField.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        searchTextField.resignFirstResponder()
-        self.navigationController?.isNavigationBarHidden = true
+//        searchTextField.resignFirstResponder()
     }
 
     func setupUI() {

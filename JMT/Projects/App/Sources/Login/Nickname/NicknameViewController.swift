@@ -28,7 +28,9 @@ class NicknameViewController: UIViewController {
 
         bind()
         setupUI()
-        registerForKeyboardNotifications(view: containerView, constraint: containerViewBottomConstraint)
+        
+        // 수정해야함 
+//        registerForKeyboardNotifications(view: containerView, constraint: containerViewBottomConstraint)
     }
     
     override func viewWillAppear(_ animated: Bool) {

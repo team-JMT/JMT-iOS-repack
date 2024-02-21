@@ -8,5 +8,6 @@
 import Foundation
 
 struct SearchLocationRequest: Encodable {
-    let searchText: String
+    let query: String
+    let page: Int
 }

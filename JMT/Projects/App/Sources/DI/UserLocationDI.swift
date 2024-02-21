@@ -19,5 +19,15 @@ struct UserLocationDI: Assembly {
             let viewModel = r.resolve(UserLocationViewModel.self)!
             c.viewModel = viewModel
         }
+        
+        container.register(ConvertUserLocationViewModel.self) { r in
+            let viewModel = ConvertUserLocationViewModel()
+            return viewModel
+        }
+        
+        container.storyboardInitCompleted(ConvertUserLocationViewController.self) { r, c in
+            let viewModel = r.resolve(ConvertUserLocationViewModel.self)!
+            c.viewModel = viewModel
+        }
     }
 }

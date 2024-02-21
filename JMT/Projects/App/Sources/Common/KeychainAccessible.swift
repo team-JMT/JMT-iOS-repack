@@ -44,27 +44,3 @@ class DefaultKeychainAccessible: KeychainAccessible {
         keychain.removeAllKeys()
     }
 }
-    
-    
-//    static func saveTokens(accessToken: String, refreshToken: String) {
-//        UserDefaults.standard.set(accessToken, forKey: TokenType.accessToken.rawValue)
-//        UserDefaults.standard.set(refreshToken, forKey: TokenType.refreshToken.rawValue)
-//    }
-//
-//    static func saveAccessTokenExpiresIn(accessTokenExpiresIn: Int) {
-//        UserDefaults.standard.set(accessTokenExpiresIn, forKey: TokenType.accessTokenExpiresIn.rawValue)
-//    }
-//
-//    static func getAccessToken() -> String? {
-//        return UserDefaults.standard.string(forKey: TokenType.accessToken.rawValue)
-//    }
-//
-//    static func getRefreshToken() -> String? {
-//        return UserDefaults.standard.string(forKey: TokenType.refreshToken.rawValue)
-//    }
-//
-//    static func getAccessTokenExpiresIn() -> Int? {
-//        return UserDefaults.standard.integer(forKey: TokenType.accessTokenExpiresIn.rawValue)
-//    }
-//
-//}

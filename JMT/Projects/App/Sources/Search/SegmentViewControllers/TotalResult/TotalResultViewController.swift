@@ -41,7 +41,7 @@ class TotalResultViewController: UIViewController {
             }
         }
         
-        layout.register(GrayBackgroundView.self, forDecorationViewOfKind: "macapickBackground")
+        layout.register(GrayBackgroundViewInset.self, forDecorationViewOfKind: "GrayBackgroundViewInset")
         return layout
     }
     
@@ -71,7 +71,7 @@ class TotalResultViewController: UIViewController {
         ]
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "macapickBackground")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
 
         return section
@@ -103,7 +103,7 @@ class TotalResultViewController: UIViewController {
         ]
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "macapickBackground")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
 
         return section
@@ -198,6 +198,15 @@ extension TotalResultViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel?.coordinator?.testCoordinator()
+        switch indexPath.section {
+        case 0:
+            viewModel?.coordinator?.showRestaurantDetailViewController()
+        case 1:
+            return
+        case 2:
+            viewModel?.coordinator?.showRestaurantDetailViewController()
+        default:
+            return
+        }
     }
 }

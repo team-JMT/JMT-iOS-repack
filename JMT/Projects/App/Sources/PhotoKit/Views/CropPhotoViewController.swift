@@ -23,12 +23,12 @@ class CropPhotoViewController: UIViewController {
     private let pinchGR = UIPinchGestureRecognizer()
     private let panGR = UIPanGestureRecognizer()
     
-    var originalImage = UIImage()
+    var originalImage: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        imageView.image = originalImage
+        imageView.image = originalImage ?? UIImage()
         containerView.clipsToBounds = true
         
         // 이미지뷰 확대
@@ -66,7 +66,8 @@ class CropPhotoViewController: UIViewController {
     }
     
     func setupImageView() {
-        let imageRatio: Double = Double(originalImage.size.width / originalImage.size.height)
+        
+        let imageRatio: Double = Double((originalImage?.size.width ?? 0.0) / (originalImage?.size.height ?? 0.0))
         let cropViewRatio: Double =  Double(cropAreaView.frame.width / cropAreaView.frame.height)
         let screenWidth = UIScreen.main.bounds.width
     

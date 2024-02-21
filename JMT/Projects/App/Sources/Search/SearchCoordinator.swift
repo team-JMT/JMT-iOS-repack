@@ -8,7 +8,8 @@
 import UIKit
 
 protocol SearchCoordinator: Coordinator {
-    func testCoordinator()
+    func setRestaurantDetailCoordinator()
+    func showRestaurantDetailViewController()
 }
 
 class DefaultSearchCoordinator: SearchCoordinator {
@@ -45,7 +46,36 @@ class DefaultSearchCoordinator: SearchCoordinator {
         self.navigationController?.pushViewController(searchViewController, animated: true)
     }
     
-    func testCoordinator() {
-        print("123123123123123")
+    func setRestaurantDetailCoordinator() {
+        let coordinator = DefaultRestaurantDetailCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showRestaurantDetailViewController() {
+        if getChildCoordinator(.restaurantDetail) == nil {
+            setRestaurantDetailCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.restaurantDetail) as! RestaurantDetailCoordinator
+        coordinator.start()
+    }
+    
+    func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
+        var childCoordinator: Coordinator? = nil
+        
+        switch type {
+        case .restaurantDetail:
+            childCoordinator = childCoordinators.first(where: { $0 is RestaurantDetailCoordinator })
+        default:
+            break
+        }
+    
+        return childCoordinator
+    }
+}
+
+extension DefaultSearchCoordinator: CoordinatorFinishDelegate {
+    func coordinatorDidFinish(childCoordinator: Coordinator) {
+        self.childCoordinators = self.childCoordinators.filter{ $0.type != childCoordinator.type }
     }
 }

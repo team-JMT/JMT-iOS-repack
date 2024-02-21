@@ -135,6 +135,7 @@
                                         <connections>
                                             <outlet property="dataSource" destination="Y6W-OH-hqX" id="SBK-Zg-Jb9"/>
                                             <outlet property="delegate" destination="Y6W-OH-hqX" id="EeZ-GO-l53"/>
+                                            <outlet property="prefetchDataSource" destination="Y6W-OH-hqX" id="rfT-ug-sSR"/>
                                         </connections>
                                     </tableView>
                                 </subviews>
