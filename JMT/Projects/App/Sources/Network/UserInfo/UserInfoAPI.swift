@@ -20,9 +20,7 @@ struct UserInfoAPI {
                 
                 switch response.result {
                 case .success(let response):
-                    
-               
-                    
+                    print(response.data)
                     completion(.success(response.toDomain))
                 case .failure(let error):
                     print("getLoginInfo 실패!!", error)

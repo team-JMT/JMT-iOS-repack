@@ -28,7 +28,7 @@ class FilterCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        setupCell(filter: nil, index: nil)
+       setupCell(viewModel: nil, row: nil)
     }
     
     override func layoutSubviews() {
@@ -37,56 +37,33 @@ class FilterCell: UITableViewCell {
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 20, bottom: 12, right: 20))
     }
     
-    func setupCell(filter: Int?, index: Int?) {
-        
-        
-        
-        switch filter {
-        case 0:
-            switch index {
-            case 0:
-                menuLabel.text = "가까운 순"
-                menuImageView.isHidden = true
-            case 1:
-                menuLabel.text = "좋아요 순"
-                menuImageView.isHidden = true
-            case 2:
-                menuLabel.text = "최신 순"
-                menuImageView.isHidden = true
-            default:
-                return
+    func setupCell(viewModel: HomeViewModel?, row: Int?) {
+        let menuOptions: [(text: String, isHideImage: Bool)] = {
+            switch viewModel?.sortType {
+            case .sort:
+                return [("가까운 순", true), ("좋아요 순", true), ("최신 순", true)]
+            case .category:
+                return [("한식", false), ("일식", false), ("중식", false), ("양식", false), ("퓨전", false), ("카페", false), ("주점", false), ("기타", false)]
+            case .drinking:
+                return [("주류 가능", false), ("주류 불가능/모름", false)]
+            case .none:
+                return []
             }
-        case 1:
-            switch index {
-            case 0:
-                menuLabel.text = "한식"
-            case 1:
-                menuLabel.text = "일식"
-            case 2:
-                menuLabel.text = "중식"
-            case 3:
-                menuLabel.text = "양식"
-            case 4:
-                menuLabel.text = "퓨전"
-            case 5:
-                menuLabel.text = "카페"
-            case 6:
-                menuLabel.text = "주점"
-            default:
-                return
-            }
-        case 2:
-            switch index {
-            case 0:
-                menuLabel.text = "주류 가능"
-            case 1:
-                menuLabel.text = "주류 불가능/모름"
-            default:
-                return
-            }
-            
-            
-        default:
+        }()
+        
+        guard let idx = row, idx < menuOptions.count else { return }
+        
+        menuLabel.text = menuOptions[idx].text
+        menuImageView.isHidden = menuOptions[idx].isHideImage
+        
+        switch viewModel?.sortType {
+        case .sort:
+            self.contentView.layer.borderColor = viewModel?.selectedSortIndex == row ? JMTengAsset.main500.color.cgColor : JMTengAsset.gray100.color.cgColor
+        case .category:
+            self.contentView.layer.borderColor = viewModel?.selectedCategoryIndex == row ? JMTengAsset.main500.color.cgColor : JMTengAsset.gray100.color.cgColor
+        case .drinking:
+            self.contentView.layer.borderColor = viewModel?.selectedDrinkingIndex == row ? JMTengAsset.main500.color.cgColor : JMTengAsset.gray100.color.cgColor
+        case .none:
             return
         }
     }

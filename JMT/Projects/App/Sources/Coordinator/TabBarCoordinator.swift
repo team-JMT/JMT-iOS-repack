@@ -46,7 +46,7 @@ class DefaultTabBarCoordinator: TabBarCoordinator {
     private func createTabNavigationController(of page: TabBarPage) -> UINavigationController {
         let tabNavigationController = UINavigationController()
         
-        tabNavigationController.setNavigationBarHidden(true, animated: false)
+//        tabNavigationController.setNavigationBarHidden(true, animated: false)
         
         let attributes = [NSAttributedString.Key.font: UIFont(name: "Pretendard-Medium", size: 16)!]
         tabNavigationController.navigationBar.titleTextAttributes = attributes

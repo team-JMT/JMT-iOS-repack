@@ -176,7 +176,7 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bQD-jO-XbV">
-                                <rect key="frame" x="0.0" y="672" width="375" height="106"/>
+                                <rect key="frame" x="0.0" y="706" width="375" height="106"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MTG-sF-oKJ">
                                         <rect key="frame" x="20" y="15" width="335" height="52"/>
@@ -215,7 +215,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="bQD-jO-XbV" firstAttribute="leading" secondItem="kOL-dN-NsK" secondAttribute="leading" id="05R-xj-JT8"/>
-                            <constraint firstItem="kOL-dN-NsK" firstAttribute="bottom" secondItem="bQD-jO-XbV" secondAttribute="bottom" id="8Xd-La-3QY"/>
+                            <constraint firstAttribute="bottom" secondItem="bQD-jO-XbV" secondAttribute="bottom" id="8Xd-La-3QY"/>
                             <constraint firstItem="JTc-6Z-g3X" firstAttribute="leading" secondItem="1wT-60-HsX" secondAttribute="leading" id="902-hW-hWR"/>
                             <constraint firstItem="JTc-6Z-g3X" firstAttribute="top" secondItem="1wT-60-HsX" secondAttribute="bottom" constant="8" id="96u-a6-ZSh"/>
                             <constraint firstItem="kOL-dN-NsK" firstAttribute="trailing" secondItem="bQD-jO-XbV" secondAttribute="trailing" id="Gph-vj-S3p"/>
@@ -293,7 +293,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="glu-km-g6J">
-                                <rect key="frame" x="0.0" y="670" width="375" height="107"/>
+                                <rect key="frame" x="0.0" y="704" width="375" height="107"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fLy-PP-oXM">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
@@ -328,7 +328,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="설정하지 않으면 기본이미지로 표시됩니다." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bbH-5Y-bM9">
-                                <rect key="frame" x="20" y="629" width="335" height="17"/>
+                                <rect key="frame" x="20" y="663" width="335" height="17"/>
                                 <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                                 <color key="textColor" name="gray600"/>
                                 <nil key="highlightedColor"/>
@@ -339,7 +339,7 @@
                         <constraints>
                             <constraint firstItem="Cow-li-8QL" firstAttribute="trailing" secondItem="glu-km-g6J" secondAttribute="trailing" id="2Lx-6G-790"/>
                             <constraint firstItem="bbH-5Y-bM9" firstAttribute="leading" secondItem="Cow-li-8QL" secondAttribute="leading" constant="20" id="31x-c0-zbh"/>
-                            <constraint firstItem="Cow-li-8QL" firstAttribute="bottom" secondItem="glu-km-g6J" secondAttribute="bottom" id="4fI-Hr-Ze8"/>
+                            <constraint firstAttribute="bottom" secondItem="glu-km-g6J" secondAttribute="bottom" id="4fI-Hr-Ze8"/>
                             <constraint firstItem="Ph4-Xu-EkM" firstAttribute="top" secondItem="eQn-1K-Aqk" secondAttribute="top" id="771-gt-fb5"/>
                             <constraint firstItem="8eV-eo-l7b" firstAttribute="leading" secondItem="Cow-li-8QL" secondAttribute="leading" constant="20" id="914-1w-Aau"/>
                             <constraint firstItem="8eV-eo-l7b" firstAttribute="top" secondItem="Ph4-Xu-EkM" secondAttribute="bottom" constant="12" id="E7f-h5-dzC"/>
@@ -383,7 +383,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SSU-6E-bIU">
-                                <rect key="frame" x="0.0" y="594" width="375" height="184"/>
+                                <rect key="frame" x="0.0" y="628" width="375" height="184"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="yul-ot-wG3">
                                         <rect key="frame" x="20" y="32" width="335" height="116"/>
@@ -429,7 +429,7 @@
                         <constraints>
                             <constraint firstItem="Ed1-Hf-pa9" firstAttribute="trailing" secondItem="SSU-6E-bIU" secondAttribute="trailing" id="dS5-l5-O8a"/>
                             <constraint firstItem="SSU-6E-bIU" firstAttribute="leading" secondItem="Ed1-Hf-pa9" secondAttribute="leading" id="fc3-pi-KGB"/>
-                            <constraint firstItem="Ed1-Hf-pa9" firstAttribute="bottom" secondItem="SSU-6E-bIU" secondAttribute="bottom" id="xUN-6T-lJk"/>
+                            <constraint firstAttribute="bottom" secondItem="SSU-6E-bIU" secondAttribute="bottom" id="xUN-6T-lJk"/>
                         </constraints>
                     </view>
                     <size key="freeformSize" width="375" height="812"/>

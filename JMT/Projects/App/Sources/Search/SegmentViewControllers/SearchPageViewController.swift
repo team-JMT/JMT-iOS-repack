@@ -10,13 +10,13 @@ import Swinject
 import SwinjectStoryboard
 
 
-protocol SearchPageViewControllerDelegate {
+protocol SearchPageViewControllerDelegate: AnyObject {
     func updateSegmentIndex(index: Int)
 }
 
 class SearchPageViewController: UIPageViewController {
     
-    var searchPVDelegate: SearchPageViewControllerDelegate?
+    weak var searchPVDelegate: SearchPageViewControllerDelegate?
     var vcArray: [UIViewController] = []
 
     override func viewDidLoad() {
@@ -26,7 +26,7 @@ class SearchPageViewController: UIPageViewController {
         dataSource = self
         
         if let firstVC = vcArray.first {
-            setViewControllers([firstVC], direction: .forward, animated: true, completion: nil)
+            setViewControllers([firstVC], direction: .forward, animated: true)
         }
     }
 }

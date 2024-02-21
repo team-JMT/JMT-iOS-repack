@@ -7,6 +7,6 @@
 
 import UIKit
 
-class FirstHeaderView: UICollectionReusableView {
+class HomeHeaderView: UICollectionReusableView {
 
 }

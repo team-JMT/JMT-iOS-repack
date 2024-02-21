@@ -8,7 +8,8 @@
 import Photos
 import UIKit
 
-enum SelectionOrder {
+// MARK: 앨범에서 선택한 이미지 다시 앨범에 표시하기
+enum SelectionOrder: Equatable {
     case none
     case selected(Int)
 }
@@ -16,6 +17,8 @@ enum SelectionOrder {
 struct PhotoInfo {
     let phAsset: PHAsset
     var image: UIImage?
-    let selectedOrder: SelectionOrder
+    let localIdentifier: String
+    let albumIndex: Int
+    let selectedIndex: Int
+    var selectedOrder: SelectionOrder
 }
-

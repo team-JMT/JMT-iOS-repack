@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import MapKit
 import NMapsMap
 import FloatingPanel
 
@@ -24,23 +23,58 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var topContainerView: UIView!
     
     @IBOutlet weak var locationStackView: UIStackView!
+    @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(DefaultKeychainService.shared.accessToken)
+        
+//        DefaultKeychainService.shared.accessToken = nil
+        
+        viewModel?.displayAlertHandler = {
+            self.showLocationAccessDeniedAlert()
+        }
+        
+        viewModel?.onUpdateCurrentLocation = { lat, lon in
+            
+            print(lat, lon)
+            
+            self.viewModel?.getCurrentLocationAddress(lat: String(lat), lon: String(lon), completed: { address in
+                
+                self.locationButton.setTitle(address, for: .normal)
+                
+                let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
+                cameraUpdate.animation = .easeIn
+                self.naverMapView.mapView.moveCamera(cameraUpdate)
+            })
+        }
+        
+        // 위치 권한 체크
+        viewModel?.checkLocationAuthorization()
+
         naverMapView.showCompass = false
         naverMapView.showScaleBar = false
         naverMapView.showZoomControls = false
+        naverMapView.mapView.positionMode = .direction
         
-        setupView()
+        let visibleRegion = naverMapView.mapView.projection.latlngBounds(fromViewBounds: naverMapView.frame)
+        print(visibleRegion)
+        
+        setupBottomSheetView()
+        setupUI()
         setTopViewShadow()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
-    func setupView() {
+    func setupBottomSheetView() {
         let storyboard = UIStoryboard(name: "HomeBottomSheet", bundle: nil)
         guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
     
@@ -53,6 +87,10 @@ class HomeViewController: UIViewController {
         fpc.invalidateLayout()
         
         updateLocationButtonBottomConstraint()
+    }
+    
+    func setupUI() {
+        locationButton.layer.cornerRadius = 8
     }
     
     func setTopViewShadow() {
@@ -98,8 +136,8 @@ class HomeViewController: UIViewController {
         self.tabBarController?.selectedIndex = 1
     }
     
-    @IBAction func testButton(_ sender: Any) {
-        fpc.move(to: .full, animated: true)
+    @IBAction func didTabRefreshButton(_ sender: Any) {
+        viewModel?.refreshCurrentLocation()
     }
     
     @IBAction func didTabChangeAddressButton(_ sender: Any) {

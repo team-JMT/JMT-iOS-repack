@@ -36,7 +36,7 @@ class GroupResultViewController: UIViewController {
             }
         }
         
-        layout.register(GrayBackgroundView.self, forDecorationViewOfKind: "macapickBackground")
+        layout.register(GrayBackgroundViewInset.self, forDecorationViewOfKind: "GrayBackgroundViewInset")
         return layout
     }
     
@@ -61,7 +61,7 @@ class GroupResultViewController: UIViewController {
         section.interGroupSpacing = CGFloat(12)
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "macapickBackground")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
 
         return section
@@ -94,7 +94,7 @@ class GroupResultViewController: UIViewController {
         ]
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "macapickBackground")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
 
         return section

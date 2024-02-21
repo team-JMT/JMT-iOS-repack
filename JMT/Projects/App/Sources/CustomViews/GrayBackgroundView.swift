@@ -10,18 +10,20 @@ import SnapKit
 import Then
 
 class GrayBackgroundView: UICollectionReusableView {
+    
     private let grayBackgroundView = UIView().then {
         $0.backgroundColor = .systemBackground 
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         backgroundColor = .clear
         addSubview(grayBackgroundView)
-
+        
         grayBackgroundView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(12)
+            $0.bottom.equalToSuperview()
         }
     }
 

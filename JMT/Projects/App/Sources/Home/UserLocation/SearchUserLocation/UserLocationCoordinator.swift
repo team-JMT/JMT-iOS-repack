@@ -12,10 +12,12 @@ protocol UserLocationCoordinator: Coordinator {
     var enterPoint: Int { get set }
     func setButtonPopupCoordinator()
     func showButtonPopupViewController()
+    func setConvertUserLocationCoordinator()
+    func showConvertUserLocationViewController(with data: SearchLocationModel?)
 }
 
 class DefaultUserLocationCoordinator: UserLocationCoordinator {
-
+  
     var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController?
@@ -52,12 +54,28 @@ class DefaultUserLocationCoordinator: UserLocationCoordinator {
         coordinator.start()
     }
     
+    func setConvertUserLocationCoordinator() {
+        let coordinator = DefaultConvertUserLocationCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showConvertUserLocationViewController(with data: SearchLocationModel?) {
+        if getChildCoordinator(.convertUserLocation) == nil {
+            setConvertUserLocationCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.convertUserLocation) as! ConvertUserLocationCoordinator
+        coordinator.startWithData(data: data)
+    }
+    
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil
         
         switch type {
         case .buttonPopup:
             childCoordinator = childCoordinators.first(where: { $0 is ButtonPopupCoordinator })
+        case .convertUserLocation:
+            childCoordinator = childCoordinators.first(where: { $0 is ConvertUserLocationCoordinator })
         default:
             break
         }
