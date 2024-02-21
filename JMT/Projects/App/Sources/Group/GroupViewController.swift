@@ -37,6 +37,15 @@ class GroupViewController: UIViewController {
         
     }
     
+    @IBAction func goOrginWeb(_ sender: Any) {
+
+
+        let storyboard = UIStoryboard(name: "Group", bundle: nil)
+        if let webVc = storyboard.instantiateViewController(withIdentifier: "OriginWebViewController") as? OriginWebViewController {
+            self.navigationController?.pushViewController(webVc, animated: true)
+        }
+    }
+
     
     @IBAction func goUrl(_ sender: Any) {
         guard let urlText = tf.text, !urlText.isEmpty else { return }

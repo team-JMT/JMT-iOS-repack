@@ -18,19 +18,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Bzd-jZ-Td6">
-                                <rect key="frame" x="29" y="305" width="332" height="34"/>
+                                <rect key="frame" x="30" y="334" width="332" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l9x-Pa-8F6">
-                                <rect key="frame" x="159" y="374" width="75" height="35"/>
+                                <rect key="frame" x="159" y="403" width="75" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                 <connections>
                                     <action selector="goUrl:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="AP9-Cq-OfG"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Jt-mo-JGi">
+                                <rect key="frame" x="75" y="141" width="243" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="헤더에 토큰넣고 웹뷰로 이동하기"/>
+                                <connections>
+                                    <action selector="goOrginWeb:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="LyG-HD-YSt"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -44,6 +53,40 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="130.53435114503816" y="-34.507042253521128"/>
+        </scene>
+        <!--Origin Web View Controller-->
+        <scene sceneID="m0C-hX-S6Z">
+            <objects>
+                <viewController storyboardIdentifier="OriginWebViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="0xj-Vv-RMD" customClass="OriginWebViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dKd-b0-jRH">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d9g-dL-NU5">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="X0s-sy-0J9"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="X0s-sy-0J9" firstAttribute="trailing" secondItem="d9g-dL-NU5" secondAttribute="trailing" id="0ps-pq-DKM"/>
+                            <constraint firstItem="d9g-dL-NU5" firstAttribute="top" secondItem="X0s-sy-0J9" secondAttribute="top" id="Cz3-M7-EoH"/>
+                            <constraint firstItem="X0s-sy-0J9" firstAttribute="bottom" secondItem="d9g-dL-NU5" secondAttribute="bottom" id="SAt-FO-4mg"/>
+                            <constraint firstItem="d9g-dL-NU5" firstAttribute="leading" secondItem="dKd-b0-jRH" secondAttribute="leading" id="nzq-pV-kam"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="d9g-dL-NU5" id="8A6-ij-HWR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fIn-Jn-h4G" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1256" y="263"/>
         </scene>
         <!--Web View Controller-->
         <scene sceneID="F2T-Sd-a2w">
@@ -73,7 +116,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MlI-50-UKn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1030" y="-35"/>
+            <point key="canvasLocation" x="1256" y="-432"/>
         </scene>
     </scenes>
     <resources>
