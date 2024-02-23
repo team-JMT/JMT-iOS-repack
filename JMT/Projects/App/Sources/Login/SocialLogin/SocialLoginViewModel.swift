@@ -36,6 +36,14 @@ class SocialLoginViewModel {
                             case .LOG_IN:
                                 let appCoordinator = self.coordinator?.getTopCoordinator()
                                 appCoordinator?.showTabBarViewController()
+<<<<<<< HEAD
+=======
+                                self.coordinator?.showNicknameViewController()
+                                
+//                                let appCoordinator = self.coordinator?.getTopCoordinator()
+//                                appCoordinator?.showTabBarViewController()
+
+>>>>>>> hooni
                             }
                         }
                     case .failure(let error):
