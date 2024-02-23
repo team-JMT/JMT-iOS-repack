@@ -43,13 +43,23 @@
                                             <action selector="didTabRegistrationButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="16n-Fy-RYu"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EEB-nH-Tg2">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1"/>
+                                        <color key="backgroundColor" name="gray100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="3Xi-30-zDU"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Idm-GG-jMW" secondAttribute="trailing" constant="20" id="1lz-ah-shL"/>
                                     <constraint firstItem="Idm-GG-jMW" firstAttribute="leading" secondItem="Ye0-ST-xTl" secondAttribute="leading" constant="20" id="Onc-h7-hlg"/>
+                                    <constraint firstAttribute="trailing" secondItem="EEB-nH-Tg2" secondAttribute="trailing" id="d7r-75-Wzw"/>
                                     <constraint firstItem="Idm-GG-jMW" firstAttribute="top" secondItem="Ye0-ST-xTl" secondAttribute="top" constant="15" id="fUN-0x-zsD"/>
                                     <constraint firstAttribute="height" constant="110" id="nR3-eA-9uD"/>
+                                    <constraint firstItem="EEB-nH-Tg2" firstAttribute="top" secondItem="Ye0-ST-xTl" secondAttribute="top" id="twf-8c-bPn"/>
+                                    <constraint firstItem="EEB-nH-Tg2" firstAttribute="leading" secondItem="Ye0-ST-xTl" secondAttribute="leading" id="u6z-Sx-4ZD"/>
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="GrA-SF-d7i">
@@ -347,6 +357,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="registrationButton" destination="Idm-GG-jMW" id="imz-Ef-cz7"/>
                         <outlet property="settingInfoCollectionView" destination="GrA-SF-d7i" id="ukA-1I-rdW"/>
                     </connections>
                 </viewController>

@@ -38,7 +38,7 @@
                                                 <color key="textColor" name="gray900"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ov6-Bu-mc2">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title2" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ov6-Bu-mc2">
                                                 <rect key="frame" x="138.33333333333334" y="36" width="36.666666666666657" height="17"/>
                                                 <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                                                 <color key="textColor" name="gray600"/>
@@ -77,13 +77,24 @@
                                             </button>
                                         </subviews>
                                     </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hn6-23-69J">
+                                        <rect key="frame" x="315.66666666666669" y="25" width="17.333333333333314" height="22"/>
+                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="xmark" catalog="system"/>
+                                        <connections>
+                                            <action selector="didTabCloseButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="6a6-D6-pZC"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
+                                    <constraint firstItem="Hn6-23-69J" firstAttribute="centerY" secondItem="hmd-aX-gqx" secondAttribute="centerY" id="FhH-jl-hRW"/>
                                     <constraint firstAttribute="trailing" secondItem="GWw-6K-EC4" secondAttribute="trailing" constant="20" id="Had-ka-YFO"/>
                                     <constraint firstAttribute="bottom" secondItem="QGm-W3-QR6" secondAttribute="bottom" constant="24" id="N5h-5I-UK7"/>
                                     <constraint firstItem="GWw-6K-EC4" firstAttribute="top" secondItem="oFf-n1-Xs9" secondAttribute="top" constant="24" id="N8u-gK-cgu"/>
                                     <constraint firstAttribute="trailing" secondItem="QGm-W3-QR6" secondAttribute="trailing" constant="20" id="OJE-p2-KyD"/>
+                                    <constraint firstAttribute="trailing" secondItem="Hn6-23-69J" secondAttribute="trailing" constant="20" id="P8y-kz-EwA"/>
                                     <constraint firstItem="QGm-W3-QR6" firstAttribute="top" secondItem="GWw-6K-EC4" secondAttribute="bottom" constant="20" id="TCf-Ad-pbd"/>
                                     <constraint firstItem="GWw-6K-EC4" firstAttribute="leading" secondItem="oFf-n1-Xs9" secondAttribute="leading" constant="20" id="lhN-yq-Okv"/>
                                     <constraint firstItem="QGm-W3-QR6" firstAttribute="leading" secondItem="oFf-n1-Xs9" secondAttribute="leading" constant="20" id="nea-Xe-1Ez"/>
@@ -101,6 +112,7 @@
                     </view>
                     <connections>
                         <outlet property="cancelButton" destination="u5L-0w-XgX" id="SoE-qZ-PxK"/>
+                        <outlet property="closeButton" destination="Hn6-23-69J" id="klz-hF-YRF"/>
                         <outlet property="containerView" destination="oFf-n1-Xs9" id="Up2-2e-e6V"/>
                         <outlet property="doneButton" destination="xeD-Ow-qRs" id="7aP-dz-whr"/>
                         <outlet property="subTitleLabel" destination="ov6-Bu-mc2" id="fgp-4u-YFW"/>
@@ -113,6 +125,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="xmark" catalog="system" width="32" height="32"/>
         <namedColor name="gray600">
             <color red="0.49000000953674316" green="0.56499999761581421" blue="0.6119999885559082" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

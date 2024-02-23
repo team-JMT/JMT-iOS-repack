@@ -18,12 +18,15 @@ class RegistrationRestaurantInfoViewModel {
     var didCompletedDrinkingComment: (() -> Void)?
     var didCompletedTags: ((Bool) -> Void)?
     var didCompletedDeleteTag: (() -> Void)?
+    var didCompletedCheckInfo: ((checkInfoType) -> Void)?
+    
+    var info: SearchRestaurantsLocationModel?
     
     let typeNames = ["한식", "일식", "중식", "양식", "퓨전", "카페", "주점", "기타"]
     
     var isSelectedFilterType: Bool = false
     
-    var filterType: Int = 0
+    var filterType: Int = 999999
     var selectedImages = [UIImage]()
     var commentString: String = ""
     var isDrinking = false
@@ -135,5 +138,40 @@ extension RegistrationRestaurantInfoViewModel {
         }
         
         return result
+    }
+}
+
+// 미입력 정보 체크
+extension RegistrationRestaurantInfoViewModel {
+    
+    enum checkInfoType {
+        case filterType
+        case commentString
+        case drinkingComment
+        case tags
+    }
+    
+    func checkNotInfo() {
+        if filterType == 999999 {
+            didCompletedCheckInfo?(.filterType)
+            return
+        }
+        
+        if commentString == "" {
+            didCompletedCheckInfo?(.commentString)
+            return
+        }
+        
+        if isDrinking == true {
+            if drinkingComment == "" {
+                didCompletedCheckInfo?(.drinkingComment)
+                return
+            }
+        }
+        
+        if tags.isEmpty == true {
+            didCompletedCheckInfo?(.tags)
+            return
+        }
     }
 }

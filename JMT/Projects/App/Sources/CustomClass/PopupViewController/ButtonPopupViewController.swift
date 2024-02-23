@@ -9,10 +9,12 @@ import UIKit
 
 protocol ButtonPopupDelegate: AnyObject {
     func didTabDoneButton()
+    func didTabCloseButton()
 }
 
 enum PopupType {
     case location
+    case registrationRestaurant
     case none
 }
     
@@ -25,6 +27,7 @@ class ButtonPopupViewController: UIViewController {
     @IBOutlet weak var subTitleLabel: UILabel!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var doneButton: UIButton!
+    @IBOutlet weak var closeButton: UIButton!
     
     var popupType: PopupType = .none
     
@@ -42,6 +45,11 @@ class ButtonPopupViewController: UIViewController {
         self.dismiss(animated: false)
     }
     
+    @IBAction func didTabCloseButton(_ sender: Any) {
+        popupDelegate?.didTabCloseButton()
+        self.dismiss(animated: false)
+    }
+    
     
     func setupUI() {
         containerView.layer.cornerRadius = 20
@@ -56,7 +64,11 @@ class ButtonPopupViewController: UIViewController {
        
         switch popupType {
         case .location:
-            return
+            closeButton.isHidden = true
+        case .registrationRestaurant:
+            cancelButton.isHidden = true
+            doneButton.isHidden = true
+            closeButton.isHidden = false
         case .none:
             return
         }
@@ -70,6 +82,9 @@ class ButtonPopupViewController: UIViewController {
             subTitleLabel.text = "삭제한 기록은 다시 복구할 수 없어요"
             cancelButton.setTitle("그만두기", for: .normal)
             doneButton.setTitle("삭제하기", for: .normal)
+        case .registrationRestaurant:
+            titleLabel.text = "필수 항목을 입력해주세요"
+            subTitleLabel.text = "(필수)항목을 입력해야\n맛집 등록을 할 수 있어요"
         case .none:
             return
         }

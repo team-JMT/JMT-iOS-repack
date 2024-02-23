@@ -7,8 +7,9 @@
 
 import UIKit
 
-class NicknameViewController: UIViewController {
-
+class NicknameViewController: UIViewController, KeyboardEvent {
+    var transformView: UIView { return self.view }
+    
     var viewModel: NicknameViewModel?
     
     @IBOutlet weak var titleLabel: UILabel!
@@ -28,21 +29,27 @@ class NicknameViewController: UIViewController {
 
         bind()
         setupUI()
-        
-        // 수정해야함 
-//        registerForKeyboardNotifications(view: containerView, constraint: containerViewBottomConstraint)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        setupKeyboardEvent { noti in
+            guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+            
+            self.containerView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.cgRectValue.height)
+            
+        } keyboardWillHide: { noti in
+            self.containerView.transform = .identity
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        unregisterForKeyboardNotifications()
+        removeKeyboardObserver()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -89,7 +96,11 @@ class NicknameViewController: UIViewController {
     }
     
     @IBAction func didTabNextButton(_ sender: Any) {
-        viewModel?.saveNickname(text: nicknameTextField.text ?? "")
+        if viewModel?.isSaveNickname == false {
+            viewModel?.saveNickname(text: nicknameTextField.text ?? "")
+        } else {
+            viewModel?.coordinator?.showProfileViewController()
+        }
     }
 }
 

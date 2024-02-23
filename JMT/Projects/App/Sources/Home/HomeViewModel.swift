@@ -31,6 +31,8 @@ class HomeViewModel {
     var displayAlertHandler: (() -> Void)?
     var onUpdateCurrentLocation: ((Double, Double) -> Void)?
     
+    var didCompletedCheckJoinGroup: ((Bool) -> Void)?
+    
     let sortList = ["가까운 순", "좋아요 순", "최신 순"]
     let categoryList = ["한식", "일식", "중식", "양식", "퓨전", "카페", "주점", "기타"]
     let drinkingList = ["주류 가능", "주류 불가능/모름"]
@@ -43,10 +45,9 @@ class HomeViewModel {
     var selectedSortIndex: Int = 0
     var selectedCategoryIndex: Int = 99999
     var selectedDrinkingIndex: Int = 99999
-    
-    var popularRestaurants = ["1","2","3","4","5"]  // [String]() //  
-    var restaurants = ["1","2","3","4","5","6","7","8","9"]
 
+    var popularRestaurants: [String] = [] //["1","2","3","4","5"]  // [String]() //
+    var restaurants: [String] = [] //["1","2","3","4","5","6","7","8","9"]
 }
 
 // 지도 관련 메소드
@@ -63,48 +64,7 @@ extension HomeViewModel {
                 completed("검색 중")
             }
         }
-        
-//        CurrentLocationAPI.getCurrentLocation(request: CurrentLocationRequest(x: lon, y: lat)) { response in
-//            switch response {
-//            case .success(let locationData):
-//                let address = self.extractSpecificParts(from: locationData.address)
-//                completed(address)
-//            case .failure(let error):
-//                completed("검색 중")
-//            }
-//        }
     }
-    
-//    // 시/구/군, 동/읍/면 필터링
-//    func extractSpecificParts(from address: String) -> String {
-//        // "시", "구", "동"을 포함할 수 있는 정규 표현식 패턴
-//        let pattern = "([가-힣]+(시|구|군))\\s?([가-힣]*(구)?)\\s+([가-힣]+(동|읍|면))"
-//        let regex = try? NSRegularExpression(pattern: pattern)
-//
-//        var extractedParts: [String] = []
-//
-//        if let match = regex?.firstMatch(in: address, range: NSRange(address.startIndex..., in: address)) {
-//            // "시" 부분 추출
-//            if let cityRange = Range(match.range(at: 1), in: address) {
-//                extractedParts.append(String(address[cityRange]))
-//            }
-//            // "구" 부분 추출 (있는 경우)
-//            if let districtRange = Range(match.range(at: 3), in: address), !address[districtRange].isEmpty {
-//                extractedParts.append(String(address[districtRange]))
-//            }
-//            // "동" 부분 추출
-//            if let townRange = Range(match.range(at: 5), in: address) {
-//                extractedParts.append(String(address[townRange]))
-//            }
-//        }
-//
-//        // "구"가 있으면 "시"를 제외, 없으면 모두 포함
-//        if extractedParts.count > 2 && !extractedParts[1].isEmpty {
-//            extractedParts.remove(at: 0) // "시" 제거
-//        }
-//
-//        return extractedParts.joined(separator: " ")
-//    }
 }
 
 // 필터링 관련 메소드
@@ -194,5 +154,21 @@ extension HomeViewModel {
     
     func refreshCurrentLocation() {
         locationManager.refreshCurrentLocation()
+    }
+}
+
+// 그룹 가입 여부 분기 처리
+extension HomeViewModel {
+
+    // API 오류로 임시 처리
+    func checkJoinGroup() {
+        UserInfoAPI.getLoginInfo { response in
+            switch response {
+            case .success(let success):
+                self.didCompletedCheckJoinGroup?(false)
+            case .failure(let failure):
+                self.didCompletedCheckJoinGroup?(true)
+            }
+        }
     }
 }
