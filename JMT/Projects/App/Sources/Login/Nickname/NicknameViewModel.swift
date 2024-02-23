@@ -24,7 +24,7 @@ class NicknameViewModel: NicknameModelProtocol {
     
     var onSuccess: ((UIUpdateState) -> ())?
     var isSaveNickname: Bool = false
-    
+    var preventButtonTouch: Bool = false
     
     func didChangeTextField(text: String) {
         
@@ -73,6 +73,9 @@ class NicknameViewModel: NicknameModelProtocol {
     }
     
     func saveNickname(text: String) {
+        
+        preventButtonTouch = true
+        
         NicknameAPI.saveNickname(request: NicknameRequest(nickname: text)) { response in
             switch response {
             case .success(let code):
@@ -83,6 +86,9 @@ class NicknameViewModel: NicknameModelProtocol {
                     self.isSaveNickname = true
                     self.coordinator?.showProfileViewController()
                 }
+                
+                self.preventButtonTouch = false
+                
             case .failure(let error):
                 print("2", error)
             }

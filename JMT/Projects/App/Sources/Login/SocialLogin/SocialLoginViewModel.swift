@@ -34,16 +34,8 @@ class SocialLoginViewModel {
                             case .PROFILE_IMAGE_PROCESS:
                                 self.coordinator?.showProfileViewController()
                             case .LOG_IN:
-<<<<<<< HEAD
                                 let appCoordinator = self.coordinator?.getTopCoordinator()
                                 appCoordinator?.showTabBarViewController()
-                                print(12312312)
-=======
-                                self.coordinator?.showNicknameViewController()
-                                
-//                                let appCoordinator = self.coordinator?.getTopCoordinator()
-//                                appCoordinator?.showTabBarViewController()
->>>>>>> develop
                             }
                         }
                     case .failure(let error):
