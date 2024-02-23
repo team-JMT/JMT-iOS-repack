@@ -9,9 +9,15 @@ import Foundation
 
 struct SearchRestaurantsLocationModel {
     let placeName: String
-    let distance: String
+    let distance: Int
+    let placeUrl: String
+    let categoryName: String
     let addressName: String
-    let subID: String
+    let roadAddressName: String
+    let id: String
+    let phone: String
+    let categoryGroupCode: String
+    let categoryGroupName: String
     let x: Double
     let y: Double
 }

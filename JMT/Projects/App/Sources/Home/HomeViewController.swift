@@ -26,13 +26,43 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
 
+    @IBOutlet weak var noGroupInfoView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(DefaultKeychainService.shared.accessToken)
+        setupBind()
         
-//        DefaultKeychainService.shared.accessToken = nil
+        print(DefaultKeychainService.shared.accessToken)
+
+        DefaultKeychainService.shared.accessToken = nil
+        
+        
+        viewModel?.checkJoinGroup()
+        
+        setupUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+
+
+    @IBAction func didTabSearchGroupButton(_ sender: Any) {
+        self.tabBarController?.selectedIndex = 1
+    }
+    
+    @IBAction func didTabRefreshButton(_ sender: Any) {
+        viewModel?.refreshCurrentLocation()
+    }
+    
+    @IBAction func didTabChangeAddressButton(_ sender: Any) {
+        viewModel?.coordinator?.showUserLocationViewController(endPoint: 1)
+    }
+    
+    func setupBind() {
         
         viewModel?.displayAlertHandler = {
             self.showLocationAccessDeniedAlert()
@@ -51,48 +81,48 @@ class HomeViewController: UIViewController {
                 self.naverMapView.mapView.moveCamera(cameraUpdate)
             })
         }
-        
-        // 위치 권한 체크
-        viewModel?.checkLocationAuthorization()
 
+        viewModel?.didCompletedCheckJoinGroup = { state in
+            if state {
+                // 위치 권한 체크
+                self.viewModel?.checkLocationAuthorization()
+                self.setupBottomSheetView()
+                self.setTopViewShadow()
+                self.noGroupInfoView.isHidden = true
+            } else {
+                self.noGroupInfoView.isHidden = false
+            }
+        }
+    }
+}
+
+// MARK: UI
+extension HomeViewController {
+    
+    func setupUI() {
+        locationButton.layer.cornerRadius = 8
+        
         naverMapView.showCompass = false
         naverMapView.showScaleBar = false
         naverMapView.showZoomControls = false
         naverMapView.mapView.positionMode = .direction
-        
-        let visibleRegion = naverMapView.mapView.projection.latlngBounds(fromViewBounds: naverMapView.frame)
-        print(visibleRegion)
-        
-        setupBottomSheetView()
-        setupUI()
-        setTopViewShadow()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    // 바텀시트뷰 상단에 버튼의 제약조건을 변경
+    func updateLocationButtonBottomConstraint() {
+        locationButtonBottom.isActive = false
         
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-    }
-
-    func setupBottomSheetView() {
-        let storyboard = UIStoryboard(name: "HomeBottomSheet", bundle: nil)
-        guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
-    
-        vc.viewModel = self.viewModel
-        fpc = FloatingPanelController(delegate: self)
-        fpc.setPanelStyle(radius: 24, isHidden: false)
-        fpc.set(contentViewController: vc)
-        fpc.addPanel(toParent: self)
-        fpc.layout = HomeBottomSheetFloatingPanelLayout()
-        fpc.invalidateLayout()
-        
-        updateLocationButtonBottomConstraint()
+        let newConstraint = NSLayoutConstraint(item: locationStackView!,
+                                               attribute: .bottom,
+                                               relatedBy: .equal,
+                                               toItem: fpc.surfaceView,
+                                               attribute: .top,
+                                               multiplier: 1.0,
+                                               constant: -15)
+        newConstraint.isActive = true
     }
     
-    func setupUI() {
-        locationButton.layer.cornerRadius = 8
-    }
-    
+    // 상단 네비게이션뷰의 그림자
     func setTopViewShadow() {
         // 그림자 컬러
         topContainerView.layer.shadowColor = JMTengAsset.gray400.color.cgColor
@@ -117,34 +147,35 @@ class HomeViewController: UIViewController {
         
         self.view.bringSubviewToFront(topContainerView)
     }
-    
-    func updateLocationButtonBottomConstraint() {
-        locationButtonBottom.isActive = false
-        
-        let newConstraint = NSLayoutConstraint(item: locationStackView!,
-                                               attribute: .bottom,
-                                               relatedBy: .equal,
-                                               toItem: fpc.surfaceView,
-                                               attribute: .top,
-                                               multiplier: 1.0,
-                                               constant: -15)
-        newConstraint.isActive = true
-    }
+}
 
+// MARK: Setup BottomSheetViewController
+extension HomeViewController {
     
-    @IBAction func didTabSearchGroupButton(_ sender: Any) {
-        self.tabBarController?.selectedIndex = 1
-    }
+    func setupBottomSheetView() {
+        let storyboard = UIStoryboard(name: "HomeBottomSheet", bundle: nil)
+        guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
     
-    @IBAction func didTabRefreshButton(_ sender: Any) {
-        viewModel?.refreshCurrentLocation()
-    }
-    
-    @IBAction func didTabChangeAddressButton(_ sender: Any) {
-        viewModel?.coordinator?.showUserLocationViewController(endPoint: 1)
+        vc.viewModel = self.viewModel
+        fpc = FloatingPanelController(delegate: self)
+        fpc.setPanelStyle(radius: 24, isHidden: false)
+        fpc.set(contentViewController: vc)
+        fpc.addPanel(toParent: self)
+        
+        let layout = HomeBottomSheetFloatingPanelLayout()
+      
+        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
+            layout.isExpandable = false
+            layout.contentHeight = vc.bottomSheetCollectionView.contentSize.height
+        }
+         
+        fpc.layout = layout
+        fpc.invalidateLayout()
+        updateLocationButtonBottomConstraint()
     }
 }
 
+// MARK: FloatingPanelControllerDelegate
 extension HomeViewController: FloatingPanelControllerDelegate {
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
         switch fpc.state {
@@ -173,6 +204,7 @@ extension HomeViewController: FloatingPanelControllerDelegate {
     }
 }
 
+// MARK: BottomSheetViewController 핸들바 설정
 extension FloatingPanelController {
     func setPanelStyle(radius: CGFloat, isHidden: Bool) {
         
@@ -190,3 +222,16 @@ extension FloatingPanelController {
         surfaceView.appearance = appearance
     }
 }
+
+// MARK: ==
+
+// MARK: ==
+
+// MARK: 나중에 사용
+/*
+ 
+ //        let visibleRegion = naverMapView.mapView.projection.latlngBounds(fromViewBounds: naverMapView.frame)
+ //        print(visibleRegion)
+ //
+ 
+ */

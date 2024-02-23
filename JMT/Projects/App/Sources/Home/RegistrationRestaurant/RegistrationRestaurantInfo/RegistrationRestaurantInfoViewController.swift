@@ -14,11 +14,12 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     var viewModel: RegistrationRestaurantInfoViewModel?
     
     @IBOutlet weak var settingInfoCollectionView: UICollectionView!
+    @IBOutlet weak var registrationButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.title = "맛집 이름은 여기에"
+        self.navigationItem.title = viewModel?.info?.placeName ?? ""
         settingInfoCollectionView.collectionViewLayout = createLayout()
         settingInfoCollectionView.keyboardDismissMode = .onDrag
         
@@ -26,6 +27,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         settingInfoCollectionView.register(typeheaderView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "typeHeaderView")
         
         setCustomNavigationBarBackButton(isSearchVC: false)
+        registrationButton.layer.cornerRadius = 8
 
         viewModel?.didCompletedFilterType = {
             self.updateSection(section: 0)
@@ -46,6 +48,19 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         
         viewModel?.didCompletedDeleteTag = {
             self.updateSection(section: 4)
+        }
+        
+        viewModel?.didCompletedCheckInfo = { type in
+            switch type {
+            case .filterType:
+                self.settingInfoCollectionView.setContentOffset(CGPoint(x: 0, y: -self.settingInfoCollectionView.contentInset.top), animated: true)
+            case .commentString:
+                self.settingInfoCollectionView.moveToScroll(section: 1, row: 0, margin: 100)
+            case .drinkingComment:
+                self.settingInfoCollectionView.moveToScroll(section: 2, row: 0, margin: 100)
+            case .tags:
+                self.settingInfoCollectionView.moveToScroll(section: 3, row: 0, margin: 100)
+            }
         }
     }
     
@@ -263,6 +278,13 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     }
     
     @IBAction func didTabRegistrationButton(_ sender: Any) {
+        
+        print(viewModel?.info)
+        
+        print("------------")
+        
+        viewModel?.coordinator?.showButtonPopupViewController()
+        
         print(viewModel?.filterType)
         print(viewModel?.selectedImages)
         print(viewModel?.commentString)
@@ -419,5 +441,13 @@ extension RegistrationRestaurantInfoViewController: RecommendedMenuCellDelegate 
 extension RegistrationRestaurantInfoViewController: RecommendedMenuTagCellDelegate {
     func didTabDeleteButton(index: Int) {
         viewModel?.deleteTags(index: index)
+    }
+}
+
+extension RegistrationRestaurantInfoViewController: ButtonPopupDelegate {
+    func didTabDoneButton() { }
+    
+    func didTabCloseButton() {
+        viewModel?.checkNotInfo()
     }
 }

@@ -49,6 +49,8 @@ class DefaultButtonPopupCoordinator: ButtonPopupCoordinator {
         switch topViewController {
         case is UserLocationViewController:
             vc.popupType = .location
+        case is RegistrationRestaurantInfoViewController:
+            vc.popupType = .registrationRestaurant
         default:
             return
         }

@@ -23,6 +23,8 @@ class NicknameViewModel: NicknameModelProtocol {
     var workItem: DispatchWorkItem?
     
     var onSuccess: ((UIUpdateState) -> ())?
+    var isSaveNickname: Bool = false
+    
     
     func didChangeTextField(text: String) {
         
@@ -78,6 +80,7 @@ class NicknameViewModel: NicknameModelProtocol {
                 case "UNAUTHORIZED":
                     print("인증이 필요하므로 엑세스토큰 갱신 필요")
                 default:
+                    self.isSaveNickname = true
                     self.coordinator?.showProfileViewController()
                 }
             case .failure(let error):
@@ -88,7 +91,7 @@ class NicknameViewModel: NicknameModelProtocol {
     
     func isValidNickname(text: String) -> Bool {
         // 정규식 패턴 정의: 알파벳, 숫자, 밑줄, 대시 포함, 3~10자 길이
-        let pattern = "^[A-Za-z0-9_-]{3,10}$"
+        let pattern = "^[A-Za-z0-9_\\-가-힣]{2,10}$"
         let regex = try! NSRegularExpression(pattern: pattern)
         let range = NSRange(location: 0, length: text.utf16.count)
         
