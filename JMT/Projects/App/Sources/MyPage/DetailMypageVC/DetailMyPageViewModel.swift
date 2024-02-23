@@ -9,6 +9,7 @@ import Foundation
 
 
 class DetailMyPageViewModel {
+    
     weak var coordinator: DetailMyPageCoordinator?
     
     

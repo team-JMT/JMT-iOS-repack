@@ -51,6 +51,13 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
         }
     }
 
+    func showUserInfoViewController() {
+           let storyboard = UIStoryboard(name: "MyPage", bundle: nil) // 스토리보드 이름 확인
+           if let userInfoVC = storyboard.instantiateViewController(withIdentifier: "MyPageViewController") as? MyPageViewController {
+               userInfoVC.viewModel = MyPageViewModel()
+               navigationController?.pushViewController(userInfoVC, animated: true)
+           }
+       }
 
     
 }

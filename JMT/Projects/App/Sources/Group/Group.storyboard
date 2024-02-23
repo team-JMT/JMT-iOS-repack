@@ -25,19 +25,19 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l9x-Pa-8F6">
-                                <rect key="frame" x="159" y="403" width="75" height="35"/>
+                                <rect key="frame" x="126" y="403" width="141" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="위 url로 이동하기"/>
                                 <connections>
                                     <action selector="goUrl:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="AP9-Cq-OfG"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Jt-mo-JGi">
-                                <rect key="frame" x="75" y="141" width="243" height="35"/>
+                                <rect key="frame" x="52" y="141" width="289" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="헤더에 토큰넣고 웹뷰로 이동하기"/>
+                                <buttonConfiguration key="configuration" style="plain" title="헤더에 토큰넣고 웹뷰로 이동하기 (기본)"/>
                                 <connections>
                                     <action selector="goOrginWeb:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="LyG-HD-YSt"/>
                                 </connections>
