@@ -23,6 +23,7 @@ class MyPageViewModel {
     func fetchTokens() {
         // ID 토큰 저장 여부 플래그 확인
         if let isIdTokenSaved = keychainAccess.getToken("isIdTokenSaved"), isIdTokenSaved == "true", let idToken = keychainAccess.getToken("idToken") {
+            print("---===---")
             print("ID Token: \(idToken)")
         } else {
             print("ID Token is not available. Checking if saved correctly...")
@@ -48,7 +49,21 @@ class MyPageViewModel {
         }
     }
     
-    
+    func getMyPagUserLoginInfo() {
+        MyPageUserInfo.getUserInfo { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let userInfo):
+                    // 사용자 정보 처리 로직 (예: 데이터 바인딩)
+                    print(userInfo)
+                    self?.onDataUpdated?()
+                case .failure(let error):
+                    print("getUserInfo 실패: \(error)")
+                }
+            }
+        }
+    }
+        
     func handleLoginSuccess(idToken: String) {
         keychainAccess.saveToken("idToken", idToken)
         keychainAccess.saveToken("isIdTokenSaved", "true") // 플래그 저장

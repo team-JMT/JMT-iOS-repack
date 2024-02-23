@@ -91,6 +91,7 @@ class DefaultSocialLoginCoordinator: NSObject, SocialLoginCoordinator {
             
             guard let idToken = signInResult?.user.idToken?.tokenString else {
                 completion(.failure(.idTokenError))
+                print(1)
                 return
             }
             
