@@ -50,6 +50,10 @@ class ProfileImageViewController: UIViewController {
     
     @IBAction func didTabNextButton(_ sender: Any) {
         
+        if viewModel?.preventButtonTouch == true {
+             return
+        }
+        
         if let isDefault = viewModel?.isDefaultProfileImage {
             if isDefault {
                 viewModel?.saveDefaultProfileImage()

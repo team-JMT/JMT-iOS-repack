@@ -96,6 +96,11 @@ class NicknameViewController: UIViewController, KeyboardEvent {
     }
     
     @IBAction func didTabNextButton(_ sender: Any) {
+        
+        if viewModel?.preventButtonTouch == true {
+            return
+        }
+        
         if viewModel?.isSaveNickname == false {
             viewModel?.saveNickname(text: nicknameTextField.text ?? "")
         } else {

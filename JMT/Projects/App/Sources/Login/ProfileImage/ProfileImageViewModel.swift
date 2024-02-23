@@ -21,6 +21,7 @@ class ProfileImageViewModel {
     
     var nickname: String?
     var isDefaultProfileImage: Bool = false
+    var preventButtonTouch: Bool = false
     
     func getUserInfo() {
         UserInfoAPI.getLoginInfo { response in
@@ -36,10 +37,11 @@ class ProfileImageViewModel {
     }
     
     func saveProfileImage(imageData: Data?) {
+        
+        preventButtonTouch = true
+        
         if let data = imageData {
-            
             let base64 = data.base64EncodedString()
-            
             ProfileImageAPI.saveProfileImage(request: ProfileImageReqeust(imageStr: base64)) { response in
                 switch response {
                 case .success(let response):
@@ -54,11 +56,16 @@ class ProfileImageViewModel {
                     print("saveProfileImage - ProfileImageAPI.saveProfileImage 실패!!", error)
                     self.onFailure?()
                 }
+                
+                self.preventButtonTouch = false
             }
         }
     }
     
     func saveDefaultProfileImage() {
+        
+        preventButtonTouch = true
+        
         ProfileImageAPI.saveDefaultProfileImage { response in
             switch response {
             case .success(let response):
@@ -72,6 +79,8 @@ class ProfileImageViewModel {
             case .failure(let error):
                 print("saveDefaultProfileImage - 실패!!",error)
             }
+            
+            self.preventButtonTouch = false
         }
     }
 }
