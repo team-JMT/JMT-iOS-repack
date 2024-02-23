@@ -11,6 +11,7 @@ import Alamofire
 
 class DetailMyPageVC : UIViewController {
     
+    weak var coordinator: DetailMyPageCoordinator?
     var viewModel: DetailMyPageViewModel?
     
     
@@ -481,7 +482,7 @@ extension DetailMyPageVC: UITableViewDelegate, UITableViewDataSource{
             print(1)
         case 1:
             
-            viewModel?.coordinator?.goToServiceTermsViewController()
+            coordinator?.goToServiceTermsViewController()
             print(1)
             
         case 2:
