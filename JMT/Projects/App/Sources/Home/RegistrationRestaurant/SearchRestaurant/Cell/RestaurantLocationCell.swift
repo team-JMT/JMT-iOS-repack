@@ -26,7 +26,7 @@ class RestaurantLocationCell: UITableViewCell {
     
     func setupData(viewModel: SearchRestaurantsLocationModel?) {
         restaurantNameLabel.text = viewModel?.placeName ?? ""
-        distanceLabel.text = (viewModel?.distance ?? "").distanceWithUnit()
+        distanceLabel.text = (viewModel?.distance ?? 0).distanceWithUnit()
         addressLabel.text = viewModel?.addressName ?? ""
     }
 

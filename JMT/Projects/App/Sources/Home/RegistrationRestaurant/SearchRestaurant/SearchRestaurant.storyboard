@@ -37,6 +37,9 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="Y6W-OH-hqX" id="LQw-Rf-WH5"/>
+                                        </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="463-2r-yeB">
                                         <rect key="frame" x="323" y="0.0" width="30" height="56"/>
@@ -45,6 +48,9 @@
                                         <state key="normal" title="취소">
                                             <color key="titleColor" name="gray600"/>
                                         </state>
+                                        <connections>
+                                            <action selector="didTabCancelButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="xst-To-9Zh"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -120,6 +126,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="searchRestaurantResultTableView" destination="7T0-jt-rZr" id="vKx-kL-dGJ"/>
+                        <outlet property="searchRestaurantTextField" destination="T2b-ry-T82" id="umc-70-yjD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

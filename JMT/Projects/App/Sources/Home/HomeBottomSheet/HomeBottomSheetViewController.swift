@@ -15,7 +15,6 @@ class HomeBottomSheetViewController: UIViewController {
     @IBOutlet weak var moveTopButton: UIButton!
     @IBOutlet weak var addButton: UIButton!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,8 +37,14 @@ class HomeBottomSheetViewController: UIViewController {
            guard let self = self else { return nil }
            
            let isPopularRestaurantsEmpty = self.viewModel?.popularRestaurants.isEmpty ?? true
-           let adjustedSectionIndex = isPopularRestaurantsEmpty ? sectionIndex + 1 : sectionIndex
+           let isRestaurantsEmpty = self.viewModel?.restaurants.isEmpty ?? true
            
+           if isPopularRestaurantsEmpty && isRestaurantsEmpty {
+               return self.createEmptyColumnSection()
+           }
+           
+           let adjustedSectionIndex = isPopularRestaurantsEmpty ? sectionIndex + 1 : sectionIndex
+
            switch adjustedSectionIndex {
            case 0:
                return self.createFirstColumnSection() // popularRestaurants 섹션
@@ -109,13 +114,36 @@ class HomeBottomSheetViewController: UIViewController {
         
     }
     
+    func createEmptyColumnSection() -> NSCollectionLayoutSection {
+        // Item
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(1)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+      
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(1)
+        )
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+     
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 20, bottom: 32, trailing: 20)
+//        section.interGroupSpacing = 32
+
+        return section
+    }
+    
     func setupUI() {
         moveTopButton.layer.cornerRadius = moveTopButton.frame.height / 2
         addButton.layer.cornerRadius = addButton.frame.height / 2
     }
     
     @IBAction func didTabMoveTopButton(_ sender: Any) {
-        
+        bottomSheetCollectionView.setContentOffset(CGPoint(x: 0, y: -bottomSheetCollectionView.contentInset.top), animated: true)
     }
     
     @IBAction func didTabAddButton(_ sender: Any) {
@@ -155,28 +183,35 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
 
 extension HomeBottomSheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return viewModel?.popularRestaurants.isEmpty == true ? 1 : 2
+        
+        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
+            return 1
+        } else if viewModel?.popularRestaurants.isEmpty == true {
+            return 1
+        } else {
+            return 2
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if section == 0 && viewModel?.popularRestaurants.isEmpty == false {
-            return viewModel?.popularRestaurants.count ?? 0 // 첫 번째 섹션의 아이템 수
-            
-        } else if section == 1 || (section == 0 && viewModel?.popularRestaurants.isEmpty == true) {
-            return viewModel?.restaurants.count ?? 0 // 두 번째 섹션의 아이템 수
+        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
+            return 1
+        } else if section == 0 && viewModel?.popularRestaurants.isEmpty == false {
+            return viewModel?.popularRestaurants.count ?? 0
+        } else {
+            return viewModel?.restaurants.count ?? 0
         }
-        return 0 // 그 외의 경우에는 아이템 없음
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if viewModel?.popularRestaurants.isEmpty == true {
-            if indexPath.section == 0 {
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
-                return cell
-            } else {
-                return UICollectionViewCell()
-            }
+        
+        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emptyDataCell", for: indexPath) as? PopularEmptyCell else { return UICollectionViewCell()}
+            return cell
+        } else if viewModel?.popularRestaurants.isEmpty == true {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
+            return cell
         } else {
             switch indexPath.section {
             case 0:

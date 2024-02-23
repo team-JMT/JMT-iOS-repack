@@ -9,8 +9,9 @@ import Foundation
 import UIKit
 
 protocol SearchRestaurantMapCoordinator: Coordinator {
+    func start(info: SearchRestaurantsLocationModel?)
     func setRegistrationRestaurantInfoCoordinator()
-    func showRegistrationRestaurantInfoViewController()
+    func showRegistrationRestaurantInfoViewController(info: SearchRestaurantsLocationModel?)
 }
 
 class DefaultSearchRestaurantMapCoordinator: SearchRestaurantMapCoordinator {
@@ -29,9 +30,12 @@ class DefaultSearchRestaurantMapCoordinator: SearchRestaurantMapCoordinator {
         self.finishDelegate = finishDelegate
     }
     
-    func start() {
+    func start() { }
+    
+    func start(info: SearchRestaurantsLocationModel?) {
         let searchRestaurantMapViewController = SearchRestaurantMapViewController.instantiateFromStoryboard(storyboardName: "SearchRestaurantMap") as SearchRestaurantMapViewController
         searchRestaurantMapViewController.viewModel?.coordinator = self
+        searchRestaurantMapViewController.viewModel?.info = info
         self.navigationController?.pushViewController(searchRestaurantMapViewController, animated: true)
     }
     
@@ -40,13 +44,13 @@ class DefaultSearchRestaurantMapCoordinator: SearchRestaurantMapCoordinator {
         childCoordinators.append(coordinator)
     }
     
-    func showRegistrationRestaurantInfoViewController() {
+    func showRegistrationRestaurantInfoViewController(info: SearchRestaurantsLocationModel?) {
         if getChildCoordinator(.registrationRestaurantInfo) == nil {
             setRegistrationRestaurantInfoCoordinator()
         }
         
         let coordinator = getChildCoordinator(.registrationRestaurantInfo) as! RegistrationRestaurantInfoCoordinator
-        coordinator.start()
+        coordinator.start(info: info)
     }
     
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {

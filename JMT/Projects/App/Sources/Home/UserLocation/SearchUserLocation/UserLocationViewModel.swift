@@ -17,7 +17,7 @@ class UserLocationViewModel {
     
     var isSearch = false
     
-    var currentPage = 0
+    var currentPage = 1
     var isFetching = false
     var isEnd = false
     
@@ -29,26 +29,26 @@ class UserLocationViewModel {
 // 검색 관련 메소드
 extension UserLocationViewModel {
     
-    func didChangeTextField(keyword: String) {
-        resetSearchState()
-        
-        workItem?.cancel()
-        
-        workItem = DispatchWorkItem { [weak self] in
-            guard let self = self, !keyword.isEmpty else {
-                self?.onSuccess?()
-                return
-            }
-            
-            self.handleTextChange(keyword: keyword)
-        }
-        
-        if let workItem = workItem {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
-        }
-    }
+//    func didChangeTextField(keyword: String) {
+//        resetSearchState()
+//
+//        workItem?.cancel()
+//
+//        workItem = DispatchWorkItem { [weak self] in
+//            guard let self = self, !keyword.isEmpty else {
+//                self?.onSuccess?()
+//                return
+//            }
+//
+//            self.handleTextChange(keyword: keyword)
+//        }
+//
+//        if let workItem = workItem {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
+//        }
+//    }
     
-    private func handleTextChange(keyword: String) {
+    func handleTextChange(keyword: String) {
         fetchSearchLocation(keyword: keyword)
         saveRecentLocation(keyword: keyword)
         fetchRecentLocations()
@@ -74,7 +74,7 @@ extension UserLocationViewModel {
         }
     }
     
-    private func resetSearchState() {
+    func resetSearchState() {
         currentPage = 1
         isEnd = false
         resultLocations.removeAll()

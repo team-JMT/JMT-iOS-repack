@@ -105,7 +105,9 @@ extension UserLocationViewController: UITableViewDelegate {
         if viewModel?.isSearch == false {
             addressTextField.becomeFirstResponder()
             addressTextField.text = viewModel?.recentLocations[indexPath.row] ?? ""
-            viewModel?.didChangeTextField(keyword: addressTextField.text ?? "")
+//            viewModel?.didChangeTextField(keyword: addressTextField.text ?? "")
+            viewModel?.handleTextChange(keyword: addressTextField.text ?? "")
+            
         } else {
             let location = viewModel?.resultLocations[indexPath.row]
             viewModel?.coordinator?.showConvertUserLocationViewController(with: location)
@@ -150,12 +152,11 @@ extension UserLocationViewController: UITableViewDataSourcePrefetching {
 }
 
 extension UserLocationViewController: UITextFieldDelegate {
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        viewModel?.didChangeTextField(keyword: textField.text ?? "")
-    }
+//    func textFieldDidChangeSelection(_ textField: UITextField) {
+//        viewModel?.didChangeTextField(keyword: textField.text ?? "")
+//    }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("시작")
         viewModel?.isSearch = true
         cancelButton.isHidden = false
         recentSearchView.isHidden = true
@@ -169,7 +170,9 @@ extension UserLocationViewController: UITextFieldDelegate {
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        addressTextField.resignFirstResponder()
+        viewModel?.resetSearchState()
+        viewModel?.handleTextChange(keyword: textField.text ?? "")
+        return true
     }
 }
 
@@ -183,4 +186,6 @@ extension UserLocationViewController: ButtonPopupDelegate {
     func didTabDoneButton() {
         viewModel?.deleteAllRecentLocation()
     }
+    
+    func didTabCloseButton() { }
 }
