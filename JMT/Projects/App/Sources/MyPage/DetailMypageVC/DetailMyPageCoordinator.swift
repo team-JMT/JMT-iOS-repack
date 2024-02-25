@@ -16,7 +16,7 @@ protocol DetailMyPageCoordinator: Coordinator {
 }
 
 class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
-   
+    
     var parentCoordinator: Coordinator? = nil
     
     var childCoordinators: [Coordinator] = []
@@ -25,37 +25,50 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
     var type: CoordinatorType = .home
     
     init(navigationController: UINavigationController?) {
-    
+        
         self.navigationController = navigationController
     }
     
     
+    
     func start() {
         let storyboard = UIStoryboard(name: "DetailMyPage", bundle: nil)
-        if let mypageViewController = storyboard.instantiateViewController(withIdentifier: "DetailMyPageVC") as? DetailMyPageVC {
-            let viewModel = DetailMyPageViewModel()
-            viewModel.coordinator = self
-            mypageViewController.viewModel = viewModel
-            navigationController?.pushViewController(mypageViewController, animated: true)
+        guard let mypageViewController = storyboard.instantiateViewController(withIdentifier: "DetailMyPageVC") as? DetailMyPageVC else {
+            print("DetailMyPageVC could not be instantiated.")
+            return
         }
+        
+        let viewModel = DetailMyPageViewModel()
+        viewModel.coordinator = self // Coordinator 할당
+        mypageViewController.viewModel = viewModel
+        
+        // NavigationController 상태 확인
+        guard let navigationController = navigationController else {
+            print("NavigationController is nil")
+            return
+        }
+        
+        navigationController.pushViewController(mypageViewController, animated: true)
     }
 
     
     
     func goToServiceTermsViewController() {
-        let storyboard = UIStoryboard(name: "Service", bundle: nil)
-        if let viewController = storyboard.instantiateViewController(withIdentifier: "ServiceTermsViewController") as? ServiceTermsViewController {
-            navigationController?.pushViewController(viewController, animated: true)
-        } else {
-            // viewController가 nil인 경우 로그 출력 또는 디버깅
-            print("ServiceTermsViewController could not be instantiated.")
+        let storyboard = UIStoryboard(name: "DetailMyPage", bundle: nil)
+        if let detailVC = storyboard.instantiateViewController(withIdentifier: "DetailMyPageVC") as? DetailMyPageVC {
+            let viewModel = DetailMyPageViewModel()
+            viewModel.coordinator = self // Assuming 'self' is the coordinator
+            detailVC.viewModel = viewModel
+            detailVC.coordinator = self // Direct assignment to the VC
+            navigationController?.pushViewController(detailVC, animated: true)
         }
     }
 
-        func goToServiceUseViewController() {
-            let storyboard = UIStoryboard(name: "Service", bundle: nil)
-            if let viewController = storyboard.instantiateViewController(withIdentifier: "ServiceUseViewController") as? ServiceUseViewController {
-                navigationController?.pushViewController(viewController, animated: true)
-            }
+    
+    func goToServiceUseViewController() {
+        let storyboard = UIStoryboard(name: "Service", bundle: nil)
+        if let viewController = storyboard.instantiateViewController(withIdentifier: "ServiceUseViewController") as? ServiceUseViewController {
+            navigationController?.pushViewController(viewController, animated: true)
         }
+    }
 }

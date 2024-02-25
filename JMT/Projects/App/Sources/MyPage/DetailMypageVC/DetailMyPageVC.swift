@@ -53,9 +53,17 @@ class DetailMyPageVC : UIViewController {
     //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("NicknameUpdateSuccess"), object: nil)
     //    }
     //
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if viewModel?.coordinator == nil {
+            print("Coordinator in DetailMyPageVC's viewModel is nil")
+        } else {
+            print("Coordinator in DetailMyPageVC's viewModel is not nil")
+        }
+    
         //    profileImageView.layer.cornerRadius = profileImageView.layer.frame.size.width / 2
         profileImage.layer.cornerRadius = profileImage.layer.frame.size.width / 2
         profileImage.contentMode = .scaleAspectFill
@@ -481,9 +489,12 @@ extension DetailMyPageVC: UITableViewDelegate, UITableViewDataSource{
             //            }
             print(1)
         case 1:
-            
-            coordinator?.goToServiceTermsViewController()
-            print(1)
+                print("Attempting to navigate to ServiceTermsViewController")
+                if let coordinator = coordinator {
+                    coordinator.goToServiceTermsViewController()
+                } else {
+                    print("Coordinator is nil")
+                }
             
         case 2:
             viewModel?.coordinator?.goToServiceUseViewController()

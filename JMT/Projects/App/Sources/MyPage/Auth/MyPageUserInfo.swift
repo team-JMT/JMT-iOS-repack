@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 class MyPageUserInfo {
     
@@ -33,17 +34,4 @@ class MyPageUserInfo {
 
         task.resume()
     }
-}
-
-struct MyPageUserLogin: Codable {
-    let data: UserData
-    let message: String
-    let code: String
-    let id: Int
-    let email, nickname, profileImg: String
-}
-
-struct UserData: Codable {
-    let id: Int
-    let email, nickname, profileImg: String
 }

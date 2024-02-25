@@ -10,11 +10,17 @@ import UIKit
 class MyPageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPageViewControllerDataSource, UIPageViewControllerDelegate
 
 {
-    var dataSource: [DummyDataType] = []
     
     @IBOutlet weak var HeaderView: UIView!
     @IBOutlet weak var MyPageSegment: UISegmentedControl!
     @IBOutlet weak var MypageMainTableView: UITableView!
+    
+    @IBOutlet weak var ProfileImage: UIImageView!
+    
+    @IBOutlet weak var NickNameLabel: UILabel!
+    
+    @IBOutlet weak var registerResturant: UILabel!
+    
     
     
     weak var coordinator: MyPageCoordinator?
@@ -46,16 +52,30 @@ class MyPageViewController: UIViewController, UITableViewDelegate, UITableViewDa
         //   self.changeValue(control: self.segmentedControl)
         
         
-                setupPageViewController()
-        MyPageSegment.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
-
-        //        setupSegmentedControl()
-        //
+        setupPageViewController()
         
-        //        viewModel?.checkLoginStatus()
-        //
-        //        viewModel?.fetchTokens()
-        //        viewModel?.getUserInfo()
+        MyPageSegment.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
+       
+        viewModel?.onUserInfoLoaded = { [weak self] in
+            DispatchQueue.main.async {
+                self?.updateUI()
+            }
+        }
+        viewModel?.fetchUserInfo()
+    }
+    
+    private func updateUI() {
+        if let userInfo = viewModel?.userInfo {
+            NickNameLabel.text = userInfo.data?.nickname
+            registerResturant.text = userInfo.data?.email
+            if let imageUrl = URL(string: userInfo.data?.profileImg ?? "0") {
+
+                print(NickNameLabel)
+                print(registerResturant)
+                print(imageUrl)
+                print("--")
+            }
+        }
     }
     
     private func setupPageViewController() {
@@ -95,7 +115,7 @@ class MyPageViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     // MARK: UIPageViewControllerDataSource
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-       
+        
         guard let viewControllerIndex = viewControllerIdentifiers.firstIndex(of: viewController.restorationIdentifier ?? ""), viewControllerIndex - 1 >= 0 else { return nil }
         return self.viewController(for: viewControllerIndex - 1)
     }

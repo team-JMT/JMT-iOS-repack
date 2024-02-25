@@ -9,12 +9,12 @@ import Foundation
 
 import UIKit
 
-protocol MyPageServiceTermsVC: Coordinator {
+protocol MyPageServiceTermsCoordinator: Coordinator {
 
     
 }
 
-class DefaultMyPageServiceTermsVC: MyPageTestCoordinator {
+class DefaultMyPageServiceTermsVC: MyPageServiceTermsCoordinator {
    
     var parentCoordinator: Coordinator? = nil
     
@@ -29,9 +29,9 @@ class DefaultMyPageServiceTermsVC: MyPageTestCoordinator {
     }
     
     func start() {
-        let mypageViewController = ServiceTermsViewController.instantiateFromStoryboard(storyboardName: "Service") as MyPageTestViewController
+        let mypageViewController = ServiceTermsVC.instantiateFromStoryboard(storyboardName: "ServiceTerm") as ServiceTermsVC
         
-        mypageViewController.viewModel?.coordinator = self
+        mypageViewController.viewModel.coordinator = self
         self.navigationController?.pushViewController(mypageViewController, animated: true)
         
         

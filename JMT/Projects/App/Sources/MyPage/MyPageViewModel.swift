@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 
 class MyPageViewModel {
@@ -13,7 +14,15 @@ class MyPageViewModel {
     weak var coordinator: MyPageCoordinator?
     private let keychainAccess: KeychainAccessible
     
-    let test = "홈"
+    
+    var userInfo: MyPageUserLogin? {
+        didSet {
+            self.onUserInfoLoaded?()
+        }
+    }
+    var onUserInfoLoaded: (() -> Void)?
+        
+    
     
     init(keychainAccess: KeychainAccessible = DefaultKeychainAccessible()) {
         self.keychainAccess = keychainAccess
@@ -36,6 +45,21 @@ class MyPageViewModel {
             print("Access Token is not available")
         }
     }
+    
+    func fetchUserInfo() {
+            let headers: HTTPHeaders = [
+                "accept": "*/*",
+                "Authorization": "Bearer 13"
+            ]
+            AF.request("https://api.jmt-matzip.dev/api/v1/user/info", method: .get, headers: headers).responseDecodable(of: MyPageUserLogin.self) { response in
+                switch response.result {
+                case .success(let userInfo):
+                    self.userInfo = userInfo
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
     
     func getUserInfo() {
         UserInfoAPI.getLoginInfo { response in
