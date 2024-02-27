@@ -34,12 +34,12 @@ class SocialLoginViewModel {
                             case .PROFILE_IMAGE_PROCESS:
                                 self.coordinator?.showProfileViewController()
                             case .LOG_IN:
-                                let appCoordinator = self.coordinator?.getTopCoordinator()
-                                appCoordinator?.showTabBarViewController()
-                                self.coordinator?.showNicknameViewController()
-                                
 //                                let appCoordinator = self.coordinator?.getTopCoordinator()
 //                                appCoordinator?.showTabBarViewController()
+//                                self.coordinator?.showNicknameViewController()
+                                
+                                let appCoordinator = self.coordinator?.getTopCoordinator()
+                                appCoordinator?.showTabBarViewController()
 
                             }
                         }

@@ -21,7 +21,7 @@ class DefaultMyPageServiceTermsVC: MyPageServiceTermsCoordinator {
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController?
     var finishDelegate: CoordinatorFinishDelegate?
-    var type: CoordinatorType = .home
+    var type: CoordinatorType = .serviceTerms
     
     init(navigationController: UINavigationController?) {
     
@@ -36,6 +36,21 @@ class DefaultMyPageServiceTermsVC: MyPageServiceTermsCoordinator {
         
         
     }
+//    
+//    func setMyPageManegeCoordinator() {
+//        let coordinator = ServiceTermsCoordinator(navigationController: navigationController)
+//        childCoordinators.append(coordinator)
+//    }
+//
+//    func showMyPageManageViewController() {
+//        //있는지 예외처리
+//        if getChildCoordinator(.myPageManage) == nil {
+//            setMyPageManegeCoordinator()
+//        }
+//        
+//        let coordinator = getChildCoordinator(.myPageManage) as! ServiceTermsCoordinator
+//        coordinator.start()
+//    }
     
     
     

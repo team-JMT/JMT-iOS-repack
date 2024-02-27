@@ -35,3 +35,4 @@ class MyPageUserInfo {
         task.resume()
     }
 }
+

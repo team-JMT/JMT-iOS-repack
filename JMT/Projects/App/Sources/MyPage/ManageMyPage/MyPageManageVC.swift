@@ -9,9 +9,9 @@ import Foundation
 
 import UIKit
 
-class MyPageManageCoordinatorVC: UIViewController {
+class MyPageManageVC: UIViewController {
     
-    var viewModel: MyPageTestViewModel?
+    var viewModel: MyPageManageViewModel?
   
     
     override func viewDidLoad() {
@@ -19,6 +19,6 @@ class MyPageManageCoordinatorVC: UIViewController {
         
 
     }
-    
+    //
 
 }

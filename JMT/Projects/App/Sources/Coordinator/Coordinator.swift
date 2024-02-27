@@ -14,7 +14,7 @@ enum CoordinatorType {
     case home, userLocation, convertUserLocation, homeBS, filterBS
     case search, restaurantDetail, searchRestaurant, searchRestaurantMap, registrationRestaurantInfo, searchRestaurantMenuBS
     case group
-    case mypage
+    case mypage, detailMyPage, myPageManage, serviceTerms
     case buttonPopup
 }
 

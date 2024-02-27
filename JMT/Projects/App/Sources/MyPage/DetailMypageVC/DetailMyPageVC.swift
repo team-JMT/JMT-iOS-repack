@@ -11,7 +11,7 @@ import Alamofire
 
 class DetailMyPageVC : UIViewController {
     
-    weak var coordinator: DetailMyPageCoordinator?
+   // weak var coordinator: DetailMyPageCoordinator?
     var viewModel: DetailMyPageViewModel?
     
     
@@ -479,25 +479,21 @@ extension DetailMyPageVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true) // 선택한 셀의 하이라이트 제거
         
-        let storyboard = UIStoryboard(name: "DetailMyPage", bundle: nil) // "Main"은 스토리보드 파일 이름에 따라 변경
+        //let storyboard = UIStoryboard(name: "DetailMyPage", bundle: nil) // "Main"은 스토리보드 파일 이름에 따라 변경
         
         switch indexPath.row {
         case 0:
-            // 첫 번째 셀 선택 시 동작
-            //            if let viewController = storyboard.instantiateViewController(withIdentifier: "ServiceTermsViewController") as? ServiceTermsViewController {
-            //                self.navigationController?.pushViewController(viewController, animated: true)
-            //            }
-            print(1)
+            return
+//            print(viewModel)
+//            // 첫 번째 셀 선택 시 동작
+//            //            if let viewController = storyboard.instantiateViewController(withIdentifier: "ServiceTermsViewController") as? ServiceTermsViewController {
+//            //                self.navigationController?.pushViewController(viewController, animated: true)
+//            //            }
+//            print(1)
         case 1:
-                print("Attempting to navigate to ServiceTermsViewController")
-                if let coordinator = coordinator {
-                    coordinator.goToServiceTermsViewController()
-                } else {
-                    print("Coordinator is nil")
-                }
-            
-        case 2:
-            viewModel?.coordinator?.goToServiceUseViewController()
+            viewModel?.coordinator?.showMyPageManageViewController()
+//        case 2:
+//            viewModel?.coordinator?.goToServiceUseViewController()
 
         
         default:
