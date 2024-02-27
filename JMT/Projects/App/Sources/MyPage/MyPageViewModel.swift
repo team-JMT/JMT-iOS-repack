@@ -47,20 +47,26 @@ class MyPageViewModel {
     }
     
     func fetchUserInfo() {
-            let headers: HTTPHeaders = [
-                "accept": "*/*",
-                "Authorization": "Bearer 13"
-            ]
-            AF.request("https://api.jmt-matzip.dev/api/v1/user/info", method: .get, headers: headers).responseDecodable(of: MyPageUserLogin.self) { response in
-                switch response.result {
-                case .success(let userInfo):
-                    self.userInfo = userInfo
-                case .failure(let error):
-                    print(error)
-                }
+        guard let accessToken = keychainAccess.getToken("accessToken") else {
+            print("Access Token is not available")
+            return
+        }
+
+        let headers: HTTPHeaders = [
+            "accept": "*/*",
+            "Authorization": "Bearer \(accessToken)"
+        ]
+
+        AF.request("https://api.jmt-matzip.dev/api/v1/user/info", method: .get, headers: headers).responseDecodable(of: MyPageUserLogin.self) { response in
+            switch response.result {
+            case .success(let userInfo):
+                self.userInfo = userInfo
+            case .failure(let error):
+                print(error)
             }
         }
-    
+    }
+
     func getUserInfo() {
         UserInfoAPI.getLoginInfo { response in
             switch response {

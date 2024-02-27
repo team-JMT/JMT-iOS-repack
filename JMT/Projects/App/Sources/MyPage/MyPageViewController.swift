@@ -75,13 +75,16 @@ class MyPageViewController: UIViewController, UIPageViewControllerDataSource, UI
         if let userInfo = viewModel?.userInfo {
             NickNameLabel.text = userInfo.data?.nickname
             registerResturant.text = userInfo.data?.email
-            if let imageUrl = URL(string: userInfo.data?.profileImg ?? "0") {
-                
-                print(NickNameLabel)
-                print(registerResturant)
-                print(imageUrl)
-                print("--")
+            if let imageUrl = URL(string: userInfo.data?.profileImg ?? "") {
+                DispatchQueue.global().async {
+                    if let data = try? Data(contentsOf: imageUrl) {
+                        DispatchQueue.main.async {
+                            self.ProfileImage.image = UIImage(data: data)
+                        }
+                    }
+                }
             }
+            print(NickNameLabel)
         }
     }
     
@@ -184,22 +187,6 @@ class MyPageViewController: UIViewController, UIPageViewControllerDataSource, UI
         //   coordinator?.goToDetailView(for: sender.selectedSegmentIndex)
         
     }
-    
-    //    // 테이블 뷰 데이터 소스 및 델리게이트 메서드
-    //    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    //        // 세그먼트 선택에 따른 콘텐츠 셀 1개만 표시
-    //        return 1
-    //    }
-    //
-    //    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    //        let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageTableViewCell", for: indexPath) as? MyPageTableViewCell
-    //
-    //        // 이전에 추가된 뷰 제거
-    //        cell?.contentView.subviews.forEach { $0.removeFromSuperview() }
-    //
-    //        return cell!
-    //    }
-    
     
 }
 
