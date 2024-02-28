@@ -19,6 +19,7 @@ class DetailMyPageViewModel {
             self.onUserInfoLoaded?()
         }
     }
+    
     var onUserInfoLoaded: (() -> Void)?
         
     var isDefaultProfileImage: Bool = false
