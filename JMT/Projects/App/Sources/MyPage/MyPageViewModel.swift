@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 
 class MyPageViewModel {
@@ -13,7 +14,15 @@ class MyPageViewModel {
     weak var coordinator: MyPageCoordinator?
     private let keychainAccess: KeychainAccessible
     
-    let test = "홈"
+    
+    var userInfo: MyPageUserLogin? {
+        didSet {
+            self.onUserInfoLoaded?()
+        }
+    }
+    var onUserInfoLoaded: (() -> Void)?
+        
+    
     
     init(keychainAccess: KeychainAccessible = DefaultKeychainAccessible()) {
         self.keychainAccess = keychainAccess
@@ -37,6 +46,55 @@ class MyPageViewModel {
         }
     }
     
+    func fetchUserInfo() {
+        guard let accessToken = keychainAccess.getToken("accessToken") else {
+            print("Access Token is not available")
+            return
+        }
+
+        let headers: HTTPHeaders = [
+            "accept": "*/*",
+            "Authorization": "Bearer \(accessToken)"
+        ]
+
+        AF.request("https://api.jmt-matzip.dev/api/v1/user/info", method: .get, headers: headers).responseDecodable(of: MyPageUserLogin.self) { response in
+            switch response.result {
+            case .success(let userInfo):
+                self.userInfo = userInfo
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+//    
+//    func fetchTotalRestaurants(userId: Int) {
+//        guard let accessToken = keychainAccess.getToken("accessToken") else {
+//            print("Access Token is not available")
+//            return
+//        }
+//
+//        let headers: HTTPHeaders = [
+//            "accept": "*/*",
+//            "Authorization": "Bearer \(accessToken)"
+//        ]
+//
+//        // userId를 URL에 포함하여 요청
+//        let url = "https://api.jmt-matzip.dev/api/v1/restaurant/search/\(userId)"
+//        
+//        AF.request(url, method: .get, headers: headers).responseDecodable(of: RestaurantSearchResponse.self) { response in
+//            switch response.result {
+//            case .success(let responseData):
+//                DispatchQueue.main.async {
+//                    // totalElements 값을 레이블에 설정
+//                    self.registerRestaurant.text = "\(responseData.data?.page?.totalElements ?? 0)"
+//                }
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
+//    }
+
+
     func getUserInfo() {
         UserInfoAPI.getLoginInfo { response in
             switch response {

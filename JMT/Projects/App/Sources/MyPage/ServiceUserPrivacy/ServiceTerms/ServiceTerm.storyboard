@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Service Terms View Controller-->
+        <!--Service TermsVC-->
         <scene sceneID="aUu-Db-gKI">
             <objects>
-                <viewController storyboardIdentifier="ServiceTermsViewController" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="s6R-Sp-A7z" customClass="ServiceTermsViewController" customModule="JMT" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ServiceTermsVC" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="s6R-Sp-A7z" customClass="ServiceTermsVC" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VQ4-o3-A4H">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -43,41 +43,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K55-AI-hY1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3279" y="329"/>
-        </scene>
-        <!--Service Use View Controller-->
-        <scene sceneID="w5n-kN-iUd">
-            <objects>
-                <viewController storyboardIdentifier="ServiceUseViewController" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="o22-ED-l66" customClass="ServiceUseViewController" customModule="JMT" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="MeN-eP-Ws9">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QYE-NL-cZo">
-                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <wkWebViewConfiguration key="configuration">
-                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
-                                    <wkPreferences key="preferences"/>
-                                </wkWebViewConfiguration>
-                            </wkWebView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="AAi-CS-hwC"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="QYE-NL-cZo" firstAttribute="top" secondItem="AAi-CS-hwC" secondAttribute="top" id="46Y-OO-xKP"/>
-                            <constraint firstItem="AAi-CS-hwC" firstAttribute="trailing" secondItem="QYE-NL-cZo" secondAttribute="trailing" id="NaK-Ko-nwk"/>
-                            <constraint firstItem="AAi-CS-hwC" firstAttribute="bottom" secondItem="QYE-NL-cZo" secondAttribute="bottom" id="Zeh-BR-cTy"/>
-                            <constraint firstItem="QYE-NL-cZo" firstAttribute="leading" secondItem="AAi-CS-hwC" secondAttribute="leading" id="joM-j1-QWI"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="nAc-Xf-OZD"/>
-                    <connections>
-                        <outlet property="wkweb" destination="QYE-NL-cZo" id="fxD-a7-yZx"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MvS-Y7-jik" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2436" y="329"/>
         </scene>
     </scenes>
     <resources>

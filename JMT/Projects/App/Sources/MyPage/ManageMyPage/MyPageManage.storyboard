@@ -18,10 +18,10 @@
         </array>
     </customFonts>
     <scenes>
-        <!--Account View Controller-->
+        <!--My Page ManageVC-->
         <scene sceneID="Za9-xG-jXQ">
             <objects>
-                <viewController storyboardIdentifier="AccountViewController" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="9Qj-VF-5gv" customClass="AccountViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MyPageManageVC" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="9Qj-VF-5gv" customClass="MyPageManageVC" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eTn-gt-jZj">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -131,12 +131,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="7qg-lJ-vDp"/>
-                    <connections>
-                        <outlet property="Logout" destination="cbd-7U-JSI" id="Os4-fJ-Svr"/>
-                        <outlet property="WithdrawalView" destination="tpw-7b-2ds" id="lXG-AX-knH"/>
-                        <outlet property="logoutView" destination="OSr-QS-Zem" id="v6m-fL-MrE"/>
-                        <outlet property="withdraw" destination="e6V-Ig-Xs7" id="I2a-Um-Qze"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uMS-aO-yRS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -151,10 +145,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KWz-S6-Ahs">
-                                <rect key="frame" x="20" y="326" width="353" height="200"/>
+                                <rect key="frame" x="20" y="326" width="353.33333333333331" height="200"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="로그아웃 할까요?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qmD-1F-hRq">
-                                        <rect key="frame" x="108" y="24" width="137" height="24"/>
+                                        <rect key="frame" x="108.33333333333334" y="24" width="137" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="137" id="uNZ-ss-Mhf"/>
                                         </constraints>
@@ -163,13 +157,13 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="jIf-zQ-5JY">
-                                        <rect key="frame" x="20" y="130" width="313" height="50"/>
+                                        <rect key="frame" x="20" y="130" width="313.33333333333331" height="50"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3PI-oB-JXO">
                                                 <rect key="frame" x="0.0" y="0.0" width="146.66666666666666" height="50"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4aG-4g-tRa">
-                                                        <rect key="frame" x="16.999999999999993" y="8" width="112.33333333333331" height="34.333333333333336"/>
+                                                        <rect key="frame" x="17.333333333333336" y="8" width="112.33333333333331" height="34.333333333333336"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" title="로그아웃하기" titleAlignment="center">
                                                             <color key="baseForegroundColor" name="main500"/>
@@ -189,7 +183,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="agg-rK-1VA">
-                                                <rect key="frame" x="166.66666666666663" y="0.0" width="146.33333333333337" height="50"/>
+                                                <rect key="frame" x="166.66666666666669" y="0.0" width="146.66666666666669" height="50"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XKH-Va-PiJ">
                                                         <rect key="frame" x="35" y="7" width="75" height="35"/>
@@ -198,7 +192,7 @@
                                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fCS-NJ-Pyt">
-                                                        <rect key="frame" x="31.666666666666686" y="8" width="83" height="34.333333333333336"/>
+                                                        <rect key="frame" x="32" y="8" width="83" height="34.333333333333336"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="83" id="Gkn-6l-Ia9"/>
                                                         </constraints>
@@ -286,10 +280,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9RB-fi-bXc">
-                                <rect key="frame" x="20" y="326" width="353" height="200"/>
+                                <rect key="frame" x="20" y="326" width="353.33333333333331" height="200"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="정말로 탈퇴하시겠어요?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qph-U2-Cty">
-                                        <rect key="frame" x="82" y="21" width="189" height="24"/>
+                                        <rect key="frame" x="82.333333333333329" y="21" width="188.66666666666669" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="188.66999999999999" id="iiU-cj-iqK"/>
                                         </constraints>
@@ -298,13 +292,13 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="m0B-Xf-Ddu">
-                                        <rect key="frame" x="20" y="130" width="313" height="50"/>
+                                        <rect key="frame" x="20" y="130" width="313.33333333333331" height="50"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vxd-NS-Vrh">
                                                 <rect key="frame" x="0.0" y="0.0" width="146.66666666666666" height="50"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zRZ-ZI-uz2">
-                                                        <rect key="frame" x="17.000000000000007" y="8" width="112.66666666666669" height="35"/>
+                                                        <rect key="frame" x="17" y="8" width="113" height="35"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" title="탈퇴하기">
                                                             <color key="baseForegroundColor" name="main500"/>
@@ -327,10 +321,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QKW-6C-z1m">
-                                                <rect key="frame" x="166.66666666666663" y="0.0" width="146.33333333333337" height="50"/>
+                                                <rect key="frame" x="166.66666666666669" y="0.0" width="146.66666666666669" height="50"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6rh-l1-IRa">
-                                                        <rect key="frame" x="31.666666666666686" y="8" width="83" height="34.333333333333336"/>
+                                                        <rect key="frame" x="32" y="8" width="83" height="34.333333333333336"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" title="유지하기">
                                                             <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
