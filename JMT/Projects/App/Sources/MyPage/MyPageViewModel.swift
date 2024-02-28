@@ -66,6 +66,34 @@ class MyPageViewModel {
             }
         }
     }
+//    
+//    func fetchTotalRestaurants(userId: Int) {
+//        guard let accessToken = keychainAccess.getToken("accessToken") else {
+//            print("Access Token is not available")
+//            return
+//        }
+//
+//        let headers: HTTPHeaders = [
+//            "accept": "*/*",
+//            "Authorization": "Bearer \(accessToken)"
+//        ]
+//
+//        // userId를 URL에 포함하여 요청
+//        let url = "https://api.jmt-matzip.dev/api/v1/restaurant/search/\(userId)"
+//        
+//        AF.request(url, method: .get, headers: headers).responseDecodable(of: RestaurantSearchResponse.self) { response in
+//            switch response.result {
+//            case .success(let responseData):
+//                DispatchQueue.main.async {
+//                    // totalElements 값을 레이블에 설정
+//                    self.registerRestaurant.text = "\(responseData.data?.page?.totalElements ?? 0)"
+//                }
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
+//    }
+
 
     func getUserInfo() {
         UserInfoAPI.getLoginInfo { response in

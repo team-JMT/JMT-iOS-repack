@@ -77,15 +77,15 @@
                                                         </constraints>
                                                     </imageView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="eti-tO-rD3">
-                                                        <rect key="frame" x="124" y="84" width="87.666666666666686" height="45.333333333333343"/>
+                                                        <rect key="frame" x="124" y="84" width="87.666666666666686" height="48.333333333333343"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="bottom" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="ISS-5f-RZB">
-                                                                <rect key="frame" x="0.0" y="0.0" width="10.333333333333334" height="20"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="10.333333333333334" height="23"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="jj" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vsv-kQ-OLW">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="10.333333333333334" height="20"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="10.333333333333334" height="23"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="20" id="cZ2-Ek-6SI"/>
+                                                                            <constraint firstAttribute="height" constant="23" id="cZ2-Ek-6SI"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="20"/>
                                                                         <nil key="textColor"/>
@@ -94,7 +94,7 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="E7h-t7-41t">
-                                                                <rect key="frame" x="0.0" y="25" width="87.666666666666671" height="20.333333333333329"/>
+                                                                <rect key="frame" x="0.0" y="28" width="87.666666666666671" height="20.333333333333329"/>
                                                                 <subviews>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="U68-l7-z2J">
                                                                         <rect key="frame" x="0.0" y="0.0" width="87.666666666666671" height="20.333333333333332"/>
@@ -138,7 +138,7 @@
                                                             <constraint firstAttribute="width" constant="147" id="k1G-59-807"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="ㅤ"/>
                                                         <connections>
                                                             <action selector="DetailMyPage:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Ta7-rY-gYu"/>
                                                             <action selector="DetailMyPage:" destination="7ra-iV-2jw" eventType="touchUpInside" id="dAm-pF-eJ7"/>
@@ -598,16 +598,16 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBrownColor">
-            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

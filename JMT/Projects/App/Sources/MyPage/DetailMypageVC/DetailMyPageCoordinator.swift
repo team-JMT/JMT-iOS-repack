@@ -9,12 +9,19 @@ import Foundation
 import UIKit
 
 protocol DetailMyPageCoordinator: Coordinator {
+    //
+    //    func goToServiceTermsViewController()
+    //    func goToServiceUseViewController()
+    //
     
-    func goToServiceTermsViewController()
-    func goToServiceUseViewController()
-    
-    func setMyPageManegeCoordinator()
+    func setMyPageManageCoordinator()
     func showMyPageManageViewController()
+    
+    func setMyPageServiceTermsCoordinator()
+    func showMyPageServiceTermsViewController()
+    
+    func setMyPageServiceUseCoordinator()
+    func showMyPageServiceUseVC()
     
 }
 
@@ -38,59 +45,86 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         let detailMyPageViewController = DetailMyPageVC.instantiateFromStoryboard(storyboardName: "DetailMyPage") as DetailMyPageVC
         detailMyPageViewController.viewModel?.coordinator = self
         self.navigationController?.pushViewController(detailMyPageViewController, animated: true)
-       
+        
     }
     
-    func setMyPageManegeCoordinator() {
+    
+    //계정관리
+    func setMyPageManageCoordinator() {
+        let coordinator = DefaultMyPageManageCoordinator(navigationController: navigationController)
+        childCoordinators.append(coordinator)
+    }
+    
+    
+    func showMyPageManageViewController() {
+        //있는지 예외처리
+        if getChildCoordinator(.myPageManage) == nil {
+            setMyPageManageCoordinator()
+
+        }
+    
+        let coordinator = getChildCoordinator(.myPageManage) as! MyPageManageCoordinator
+        coordinator.start()
+        }
+
+
+    //서비스 이용동의
+    func setMyPageServiceTermsCoordinator() {
         let coordinator = DefaultMyPageServiceTermsVC(navigationController: navigationController)
         childCoordinators.append(coordinator)
     }
 
-    func showMyPageManageViewController() {
+    func showMyPageServiceTermsViewController() {
         //있는지 예외처리
         if getChildCoordinator(.serviceTerms) == nil {
-            setMyPageManegeCoordinator()
+            setMyPageServiceTermsCoordinator()
+
         }
         
         let coordinator = getChildCoordinator(.serviceTerms) as! MyPageServiceTermsCoordinator
         coordinator.start()
     }
     
-    
-    func goToServiceTermsViewController() {
-        let storyboard = UIStoryboard(name: "DetailMyPage", bundle: nil)
-        if let detailVC = storyboard.instantiateViewController(withIdentifier: "DetailMyPageVC") as? DetailMyPageVC {
-            let viewModel = DetailMyPageViewModel()
-            viewModel.coordinator = self // Assuming 'self' is the coordinator
-            detailVC.viewModel = viewModel
-            detailVC.viewModel?.coordinator = self // Direct assignment to the VC
-            navigationController?.pushViewController(detailVC, animated: true)
-        }
+    //개인정보 처리방침
+    func setMyPageServiceUseCoordinator() {
+        let coordinator = DefaultServiceUseCoordinator(navigationController: navigationController)
+        childCoordinators.append(coordinator)
     }
 
-    
-    func goToServiceUseViewController() {
-        let storyboard = UIStoryboard(name: "Service", bundle: nil)
-        if let viewController = storyboard.instantiateViewController(withIdentifier: "ServiceUseViewController") as? ServiceUseViewController {
-            navigationController?.pushViewController(viewController, animated: true)
+    func showMyPageServiceUseVC() {
+        //있는지 예외처리
+        if getChildCoordinator(.serviceUse) == nil {
+            setMyPageServiceUseCoordinator()
+
         }
+        
+        let coordinator = getChildCoordinator(.serviceUse) as! ServiceUseCoordinator
+        coordinator.start()
     }
-    
-    //배열내에 있는 코디네이터에 enum으로 선언한 애가 있는지
+
+
+
+//배열내에 있는 코디네이터에 enum으로 선언한 애가 있는지
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil
         
         switch type {
         case .serviceTerms:
-            childCoordinator = childCoordinators.first(where:  { $0 is MyPageServiceTermsCoordinator })
+            childCoordinator = childCoordinators.first(where: { $0 is MyPageServiceTermsCoordinator })
+        case .myPageManage:
+            childCoordinator = childCoordinators.first(where: { $0 is MyPageManageCoordinator })
+        case .serviceUse:
+            childCoordinator = childCoordinators.first(where: { $0 is ServiceUseCoordinator})
+            
         default:
             break
         }
         
         return childCoordinator
     }
-    
-    
+
+
+
 }
 
 extension DefaultDetailMyPageCoordinator: CoordinatorFinishDelegate {

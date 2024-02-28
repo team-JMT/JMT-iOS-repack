@@ -11,8 +11,7 @@ import UIKit
 
 protocol MyPageManageCoordinator: Coordinator {
 
-    //func setLogout()
-    // show
+    
 }
 
 class DefaultMyPageManageCoordinator: MyPageManageCoordinator {

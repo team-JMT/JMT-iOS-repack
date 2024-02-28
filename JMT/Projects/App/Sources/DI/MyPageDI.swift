@@ -52,5 +52,19 @@ struct MyPageDI: Assembly {
             let viewModel = r.resolve(ServiceTermsViewModel.self)!
             c.viewModel = viewModel
         }
+        
+        //ServiceTermsVC
+        container.register(ServiceUseViewModel.self) { r in
+            let viewModel = ServiceUseViewModel()
+            return viewModel
+        }
+        
+        container.storyboardInitCompleted(ServiceUseVC.self) { r, c in
+            let viewModel = r.resolve(ServiceUseViewModel.self)!
+            c.viewModel = viewModel
+        }
+        
+        
+        
     }
 }

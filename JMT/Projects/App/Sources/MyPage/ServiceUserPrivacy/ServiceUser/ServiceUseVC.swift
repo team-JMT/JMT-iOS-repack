@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import WebKit
 
-class ServiceUseViewController: UIViewController {
+class ServiceUseVC: UIViewController {
     
     var viewModel: ServiceUseViewModel?
   
