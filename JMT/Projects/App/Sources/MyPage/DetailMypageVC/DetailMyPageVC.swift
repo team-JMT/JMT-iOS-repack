@@ -49,7 +49,19 @@ class DetailMyPageVC : UIViewController {
         
         mainTable.separatorStyle = .singleLine
         updateUI()
-      
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        setCustomNavigationBarBackButton(isSearchVC: false)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     
@@ -201,39 +213,11 @@ class DetailMyPageVC : UIViewController {
         AF.request(url, method: .post, headers: headers).response { response in
             debugPrint(response)
         }
-   
     }
-        @IBAction func changePhoto(_ sender: UIButton) {
-            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            
-            let option1Action = UIAlertAction(title: "앨범에서 사진 가져오기", style: .default) { [weak self] (action) in
-              //  self?.showImageView(sender)
-            }
-            
-            let option2Action = UIAlertAction(title: "기본 프로필로 변경", style: .default) { [weak self] (action) in
-                self?.profileImage.image = UIImage(named: "DefaultImage")
-                UserDefaults.standard.removeObject(forKey: "profileImage")
-                self?.sendDefaultProfileImageToServer()
-                if let imageData = self?.profileImage.image?.pngData() {
-                    self?.sendProfileImageToServer(with: imageData)
-                }
-            }
-            
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            
-            actionSheet.addAction(option1Action)
-            actionSheet.addAction(option2Action)
-            actionSheet.addAction(cancelAction)
-            
-            if let popoverController = actionSheet.popoverPresentationController {
-                popoverController.sourceView = sender
-                popoverController.sourceRect = sender.bounds
-            }
-            
-            self.present(actionSheet, animated: true, completion: nil)
-        }
-        
     
+    @IBAction func changePhoto(_ sender: UIButton) {
+        viewModel?.coordinator?.showProfileImagePopupViewController()
+    }
 }
 
 extension DetailMyPageVC: UITableViewDelegate, UITableViewDataSource{

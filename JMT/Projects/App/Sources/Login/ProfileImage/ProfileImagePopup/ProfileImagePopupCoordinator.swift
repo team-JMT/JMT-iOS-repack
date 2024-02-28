@@ -19,7 +19,7 @@ class DefaultProfileImagePopupCoordinator: ProfileImagePopupCoordinator {
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController?
     var finishDelegate: CoordinatorFinishDelegate?
-    var type: CoordinatorType = .profile
+    var type: CoordinatorType = .profilePopup
     
     init(navigationController: UINavigationController?,
          parentCoordinator: Coordinator,
@@ -37,12 +37,28 @@ class DefaultProfileImagePopupCoordinator: ProfileImagePopupCoordinator {
     }
     
     func showAlbum() {
-        let parentCoordinator = parentCoordinator as! DefaultProfileImageCoordinator
-        parentCoordinator.showImagePicker()
+        switch parentCoordinator {
+        case is DefaultProfileImageCoordinator:
+            let parentCoordinator = parentCoordinator as! DefaultProfileImageCoordinator
+            parentCoordinator.showImagePicker()
+        case is DefaultDetailMyPageCoordinator:
+            let parentCoordinator = parentCoordinator as! DefaultDetailMyPageCoordinator
+            parentCoordinator.showImagePicker()
+        default:
+            print("3333")
+        }
     }
     
     func setDefaultProfileImage() {
-        let parentCoordinator = parentCoordinator as! DefaultProfileImageCoordinator
-        parentCoordinator.handleImagePickerResult(UIImage(named: "DefaultProfileImage"), isDefault: true)
+        switch parentCoordinator {
+        case is DefaultProfileImageCoordinator:
+            let parentCoordinator = parentCoordinator as! DefaultProfileImageCoordinator
+            parentCoordinator.handleImagePickerResult(UIImage(named: "DefaultProfileImage"), isDefault: true)
+        case is DefaultDetailMyPageCoordinator:
+            let parentCoordinator = parentCoordinator as! DefaultDetailMyPageCoordinator
+            parentCoordinator.handleImagePickerResult(UIImage(named: "DefaultProfileImage"), isDefault: true)
+        default:
+            print("3333")
+        }
     }
 }

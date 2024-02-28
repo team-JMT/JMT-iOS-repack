@@ -45,7 +45,7 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
@@ -83,7 +83,7 @@ class HomeViewController: UIViewController {
         }
 
         viewModel?.didCompletedCheckJoinGroup = { state in
-            if !state {
+            if state {
                 // 위치 권한 체크
                 self.viewModel?.checkLocationAuthorization()
                 self.setupBottomSheetView()
