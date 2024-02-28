@@ -34,10 +34,6 @@ class SocialLoginViewModel {
                             case .LOG_IN:
                                 let appCoordinator = self.coordinator?.getTopCoordinator()
                                 appCoordinator?.showTabBarViewController()
-                                self.coordinator?.showNicknameViewController()
-//                                
-//                                let appCoordinator = self.coordinator?.getTopCoordinator()
-//                                appCoordinator?.showTabBarViewController()
 
                             }
                         }

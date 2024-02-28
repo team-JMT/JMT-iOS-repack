@@ -51,7 +51,6 @@ class DefaultProfileImageCoordinator: ProfileImageCoordinator {
         
         var config = PhotoKitConfiguration()
         config.library.defaultMultipleSelection = false
-        config.library.numberOfItemsInRow = 3
         
         let picker = PhotoKitNavigationController(configuration: config)
         
@@ -77,11 +76,11 @@ class DefaultProfileImageCoordinator: ProfileImageCoordinator {
     }
     
     func showProfilePopupViewController() {
-        if getChildCoordinator(.profile) == nil {
+        if getChildCoordinator(.profilePopup) == nil {
             setProfilePopupCoordinator()
         }
         
-        let coordinator = getChildCoordinator(.profile) as! ProfileImagePopupCoordinator
+        let coordinator = getChildCoordinator(.profilePopup) as! ProfileImagePopupCoordinator
         coordinator.start()
     }
     
@@ -89,7 +88,7 @@ class DefaultProfileImageCoordinator: ProfileImageCoordinator {
         var childCoordinator: Coordinator? = nil
         
         switch type {
-        case .profile:
+        case .profilePopup:
             childCoordinator = childCoordinators.first(where: { $0 is ProfileImagePopupCoordinator })
         default:
             break

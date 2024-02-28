@@ -23,6 +23,10 @@ protocol DetailMyPageCoordinator: Coordinator {
     func setMyPageServiceUseCoordinator()
     func showMyPageServiceUseVC()
     
+    func setProfileImagePopupCoordinator()
+    func showProfileImagePopupViewController()
+    
+    func showImagePicker()
 }
 
 class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
@@ -101,8 +105,44 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         let coordinator = getChildCoordinator(.serviceUse) as! ServiceUseCoordinator
         coordinator.start()
     }
+    
+    func setProfileImagePopupCoordinator() {
+        let coordinator = DefaultProfileImagePopupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showProfileImagePopupViewController() {
+        if getChildCoordinator(.profilePopup) == nil {
+            setProfileImagePopupCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.profilePopup) as! ProfileImagePopupCoordinator
+        coordinator.start()
+    }
+    
+    func showImagePicker() {
+        
+        var config = PhotoKitConfiguration()
+        config.library.defaultMultipleSelection = false
+        
+        let picker = PhotoKitNavigationController(configuration: config)
+        
+        picker.didFinishCompletion = { photo in
+        
+            self.handleImagePickerResult(photo.first, isDefault: false)
+            picker.dismiss(animated: true)
+        }
 
-
+        self.navigationController?.present(picker, animated: true)
+    }
+    
+    func handleImagePickerResult(_ image: UIImage?, isDefault: Bool) {
+        if let detailMyPageViewController = self.navigationController?.topViewController as? DetailMyPageVC {
+            detailMyPageViewController.profileImage.image = image
+            detailMyPageViewController.viewModel?.isDefaultProfileImage = isDefault
+        }
+    }
+    
 
 //배열내에 있는 코디네이터에 enum으로 선언한 애가 있는지
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
@@ -115,7 +155,8 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
             childCoordinator = childCoordinators.first(where: { $0 is MyPageManageCoordinator })
         case .serviceUse:
             childCoordinator = childCoordinators.first(where: { $0 is ServiceUseCoordinator})
-            
+        case .profilePopup:
+            childCoordinator = childCoordinators.first(where: { $0 is ProfileImagePopupCoordinator})
         default:
             break
         }

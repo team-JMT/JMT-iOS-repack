@@ -21,7 +21,7 @@ class DetailMyPageViewModel {
     }
     var onUserInfoLoaded: (() -> Void)?
         
-    
+    var isDefaultProfileImage: Bool = false
     
     init(keychainAccess: KeychainAccessible = DefaultKeychainAccessible()) {
         self.keychainAccess = keychainAccess
