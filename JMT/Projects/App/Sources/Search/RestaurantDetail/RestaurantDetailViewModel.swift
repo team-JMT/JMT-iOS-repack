@@ -11,6 +11,8 @@ import UIKit
 class RestaurantDetailViewModel {
     weak var coordinator: RestaurantDetailCoordinator?
     
+    var photoAuthService: PhotoAuthService?
+    
     var currentSegIndex: Int = 0
     
     var reviewImages = [UIImage]()

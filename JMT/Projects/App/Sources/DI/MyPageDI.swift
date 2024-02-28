@@ -19,5 +19,16 @@ struct MyPageDI: Assembly {
             let viewModel = r.resolve(MyPageViewModel.self)!
             c.viewModel = viewModel
         }
+        
+        // DetailMyPage
+        container.register(DetailMyPageViewModel.self) { r in
+            let viewModel = DetailMyPageViewModel()
+            return viewModel
+        }
+        
+        container.storyboardInitCompleted(DetailMyPageVC.self) { r, c in
+            let viewModel = r.resolve(DetailMyPageViewModel.self)!
+            c.viewModel = viewModel
+        }
     }
 }

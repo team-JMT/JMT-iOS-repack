@@ -51,11 +51,12 @@ class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
     
     func showImagePicker() {
         
+        let photoservice = DefaultPhotoAuthService()
+        
         var config = PhotoKitConfiguration()
         config.library.defaultMultipleSelection = true
         config.library.maxNumberOfItems = 5
     
-        
         let picker = PhotoKitNavigationController(configuration: config)
         picker.photosCount = handleSelectedPhotosCount()
         
@@ -64,8 +65,17 @@ class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
             self.handleImagePickerResult(images, isDefault: false)
             picker.dismiss(animated: true)
         }
-
-        self.navigationController?.present(picker, animated: true)
+        
+        photoservice.requestAuthorization { result in
+            switch result {
+            case .success(_):
+                self.navigationController?.present(picker, animated: true)
+            case .failure(_):
+                if let topViewController = self.navigationController?.topViewController {
+                    topViewController.showAccessDeniedAlert(type: .photo)
+                }
+            }
+        }
     }
     
     func handleImagePickerResult(_ images: [UIImage], isDefault: Bool) {

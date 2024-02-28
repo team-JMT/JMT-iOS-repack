@@ -102,6 +102,12 @@
                                         </collectionViewCellContentView>
                                         <color key="backgroundColor" name="gray900"/>
                                         <size key="customSize" width="315" height="204"/>
+                                        <connections>
+                                            <outlet property="restaurantImageView" destination="aTf-2w-ZYw" id="EnI-uz-7qy"/>
+                                            <outlet property="restaurantNameLabel" destination="D0c-I6-YzG" id="LUL-cw-0A6"/>
+                                            <outlet property="userNicknameLabel" destination="F7Q-JY-Sks" id="jmX-2y-jql"/>
+                                            <outlet property="userProfileImageView" destination="C63-U3-hUf" id="jRW-Xf-NEH"/>
+                                        </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell2" id="yNf-pu-SIy" customClass="PopularRestaurantInfoCell" customModule="JMTeng" customModuleProvider="target">
                                         <rect key="frame" x="39" y="214" width="315" height="492"/>
@@ -257,6 +263,14 @@
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="315" height="492"/>
+                                        <connections>
+                                            <outlet property="introduceLabel" destination="O1z-Dv-v0L" id="qHz-KR-us3"/>
+                                            <outlet property="likeCountLabel" destination="TBe-uH-WVf" id="eOE-Y6-KnX"/>
+                                            <outlet property="menuImageView" destination="pC9-dK-Evg" id="rs7-Ha-8H3"/>
+                                            <outlet property="restaurantNameLabel" destination="DQL-ac-lEK" id="fqN-ud-Cvh"/>
+                                            <outlet property="userNicknameLabel" destination="YRK-Yq-hw2" id="5t8-jq-dmQ"/>
+                                            <outlet property="userProfileImageView" destination="K7d-C1-3j7" id="IRM-82-4f3"/>
+                                        </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="emptyDataCell" id="aP8-Gr-J6y" customClass="PopularEmptyCell" customModule="JMTeng" customModuleProvider="target">
                                         <rect key="frame" x="39" y="716" width="315" height="204"/>
@@ -292,11 +306,13 @@
                                                             <inset key="contentEdgeInsets" minX="30" minY="16" maxX="30" maxY="16"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" title="맛집 등록하기"/>
+                                                            <connections>
+                                                                <action selector="didTabRegistrationRestaurantButton:" destination="aP8-Gr-J6y" eventType="touchUpInside" id="QlF-Fr-lNb"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
-                                            <color key="backgroundColor" name="gray400"/>
                                             <constraints>
                                                 <constraint firstItem="aTf-v9-75A" firstAttribute="leading" secondItem="dkO-iH-Yfv" secondAttribute="leading" constant="20" id="edP-ui-EZO"/>
                                                 <constraint firstAttribute="trailing" secondItem="aTf-v9-75A" secondAttribute="trailing" constant="20" id="llZ-e7-usf"/>
@@ -304,6 +320,9 @@
                                                 <constraint firstItem="aTf-v9-75A" firstAttribute="top" secondItem="dkO-iH-Yfv" secondAttribute="top" constant="40" id="wfB-9U-snt"/>
                                             </constraints>
                                         </collectionViewCellContentView>
+                                        <connections>
+                                            <outlet property="registrationRestaurantButton" destination="wgN-gZ-PtL" id="9zy-uc-1gt"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
@@ -370,9 +389,6 @@
         </namedColor>
         <namedColor name="gray200">
             <color red="0.83099997043609619" green="0.85500001907348633" blue="0.87099999189376831" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="gray400">
-            <color red="0.60399997234344482" green="0.66299998760223389" blue="0.69800001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray500">
             <color red="0.49000000953674316" green="0.56499999761581421" blue="0.6119999885559082" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

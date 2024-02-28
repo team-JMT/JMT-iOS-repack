@@ -27,8 +27,12 @@ class HomeBottomSheetViewController: UIViewController {
         setupUI()
         
         viewModel?.didUpdateBottomSheetTableView = {
-            self.bottomSheetCollectionView.reloadData()
+            DispatchQueue.main.async {
+                self.bottomSheetCollectionView.reloadData()
+            }
         }
+        
+        viewModel?.fetchRestaurantsData()
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -36,8 +40,8 @@ class HomeBottomSheetViewController: UIViewController {
            
            guard let self = self else { return nil }
            
-           let isPopularRestaurantsEmpty = self.viewModel?.popularRestaurants.isEmpty ?? true
-           let isRestaurantsEmpty = self.viewModel?.restaurants.isEmpty ?? true
+           let isPopularRestaurantsEmpty = self.viewModel?.filterPopularRestaurants.isEmpty ?? true
+           let isRestaurantsEmpty = self.viewModel?.filterRestaurants.isEmpty ?? true
            
            if isPopularRestaurantsEmpty && isRestaurantsEmpty {
                return self.createEmptyColumnSection()
@@ -131,8 +135,6 @@ class HomeBottomSheetViewController: UIViewController {
      
         // Section
         let section = NSCollectionLayoutSection(group: group)
-//        section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 20, bottom: 32, trailing: 20)
-//        section.interGroupSpacing = 32
 
         return section
     }
@@ -140,6 +142,11 @@ class HomeBottomSheetViewController: UIViewController {
     func setupUI() {
         moveTopButton.layer.cornerRadius = moveTopButton.frame.height / 2
         addButton.layer.cornerRadius = addButton.frame.height / 2
+        
+        if viewModel?.filterPopularRestaurants.isEmpty == true && viewModel?.filterRestaurants.isEmpty == true {
+            moveTopButton.isHidden = true
+            addButton.isHidden = true
+        }
     }
     
     @IBAction func didTabMoveTopButton(_ sender: Any) {
@@ -156,7 +163,7 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
         
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            if viewModel?.popularRestaurants.isEmpty == true  {
+            if viewModel?.filterPopularRestaurants.isEmpty == true  {
                 let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView2", for: indexPath) as! HomeFilterHeaderView
                 header.delegate = self
                 header.updateFilterButtonTitle(viewModel: viewModel)
@@ -184,9 +191,9 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
 extension HomeBottomSheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         
-        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
+        if viewModel?.filterPopularRestaurants.isEmpty == true && viewModel?.filterRestaurants.isEmpty == true {
             return 1
-        } else if viewModel?.popularRestaurants.isEmpty == true {
+        } else if viewModel?.filterPopularRestaurants.isEmpty == true {
             return 1
         } else {
             return 2
@@ -195,22 +202,24 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
+        if viewModel?.filterPopularRestaurants.isEmpty == true && viewModel?.filterRestaurants.isEmpty == true {
             return 1
-        } else if section == 0 && viewModel?.popularRestaurants.isEmpty == false {
-            return viewModel?.popularRestaurants.count ?? 0
+        } else if section == 0 && viewModel?.filterPopularRestaurants.isEmpty == false {
+            return viewModel?.filterPopularRestaurants.count ?? 0
         } else {
-            return viewModel?.restaurants.count ?? 0
+            return viewModel?.filterRestaurants.count ?? 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
+        if viewModel?.filterPopularRestaurants.isEmpty == true && viewModel?.filterRestaurants.isEmpty == true {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emptyDataCell", for: indexPath) as? PopularEmptyCell else { return UICollectionViewCell()}
+            cell.delegate = self
             return cell
-        } else if viewModel?.popularRestaurants.isEmpty == true {
+        } else if viewModel?.filterPopularRestaurants.isEmpty == true {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
+            cell.setupData(model: viewModel?.filterPopularRestaurants[indexPath.row])
             return cell
         } else {
             switch indexPath.section {
@@ -218,9 +227,11 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
                 cell.layer.borderColor = JMTengAsset.gray200.color.cgColor
                 cell.layer.borderWidth = 1
+                cell.setupData(model: viewModel?.filterPopularRestaurants[indexPath.row])
                 return cell
             case 1:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
+                cell.setupData(model: viewModel?.filterRestaurants[indexPath.row])
                 return cell
             default:
                 return UICollectionViewCell()
@@ -243,5 +254,11 @@ extension HomeBottomSheetViewController: HomeFilterHeaderViewDelegate {
     func didTabFilter3Button() {
         viewModel?.updateSortType(type: .drinking)
         viewModel?.coordinator?.showFilterBottomSheetViewController()
+    }
+}
+
+extension HomeBottomSheetViewController: PopularEmptyCellDelegate {
+    func registrationRestaurant() {
+        viewModel?.coordinator?.showSearchRestaurantViewController()
     }
 }

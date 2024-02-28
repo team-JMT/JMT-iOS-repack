@@ -167,6 +167,11 @@
                             <constraint firstItem="srQ-dG-9DL" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="veU-Or-gz9"/>
                             <constraint firstItem="bKO-Rz-OHX" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="yYV-b2-60g"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="bKO-Rz-OHX"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="groupImageView" destination="jIS-Mw-Ls7" id="6Gj-Cs-gQe"/>
