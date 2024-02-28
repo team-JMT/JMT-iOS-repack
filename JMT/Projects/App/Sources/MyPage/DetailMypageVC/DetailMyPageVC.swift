@@ -11,7 +11,6 @@ import Alamofire
 
 class DetailMyPageVC : UIViewController {
     
-   // weak var coordinator: DetailMyPageCoordinator?
     var viewModel: DetailMyPageViewModel?
     
     
@@ -34,41 +33,23 @@ class DetailMyPageVC : UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if viewModel?.coordinator == nil {
-            print("Coordinator in DetailMyPageVC's viewModel is nil")
-        } else {
-            print("Coordinator in DetailMyPageVC's viewModel is not nil")
-        }
-    
-        //    profileImageView.layer.cornerRadius = profileImageView.layer.frame.size.width / 2
-        profileImage.layer.cornerRadius = profileImage.layer.frame.size.width / 2
-        profileImage.contentMode = .scaleAspectFill
-        profileImage.clipsToBounds = true
-        
-        mainTable.delegate = self
-        mainTable.dataSource = self
-        
-        navigationItems()
-        
-        
-        userEmail.lineBreakMode = .byTruncatingMiddle
-        
-        mainTable.separatorStyle = .singleLine
-        updateUI()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        setCustomNavigationBarBackButton(isSearchVC: false)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+            profileImage.layer.cornerRadius = profileImage.layer.frame.size.width / 2
+           profileImage.contentMode = .scaleAspectFill
+           profileImage.clipsToBounds = true
+
+           mainTable.delegate = self
+           mainTable.dataSource = self
+
+           navigationItems()
+           userEmail.lineBreakMode = .byTruncatingMiddle
+           mainTable.separatorStyle = .singleLine
+
+           viewModel?.onUserInfoLoaded = { [weak self] in
+               self?.updateUI()
+           }
+
+           viewModel?.fetchUserInfo()
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -88,12 +69,14 @@ class DetailMyPageVC : UIViewController {
                             self.profileImage.image = UIImage(data: data)
                             // 이미지 뷰를 원형으로 만듭니다.
                             self.profileImage.layer.cornerRadius = self.profileImage.frame.width / 2
-                            self.profileImage.clipsToBounds = true // 이 줄은 masksToBounds와 같은 역할을 합니다.
+                            self.profileImage.clipsToBounds = true
+                            
                         }
                     }
                 }
             }
             print(userNickname)
+            print(12321321321)
         }
     }
 
