@@ -24,6 +24,13 @@ class DetailMyPageVC : UIViewController {
     let cellLable: Array<String> = ["계정관리", "서비스 이용동의", "개인정보 처리방식"," "]
   
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        setCustomNavigationBarBackButton(isSearchVC: false)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +59,11 @@ class DetailMyPageVC : UIViewController {
       
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
     
     private func updateUI() {
         if let userInfo = viewModel?.userInfo {
