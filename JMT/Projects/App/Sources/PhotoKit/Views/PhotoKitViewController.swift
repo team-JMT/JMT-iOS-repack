@@ -55,7 +55,7 @@ class PhotoKitViewController: UIViewController {
                 self.setAlbumTitle(self.albumsManager.albums[self.currentAlbumIndex])
             }
         }
-    
+ 
         setupUI()
         
         NSLayoutConstraint.deactivate([albumListViewBottomConstraint])

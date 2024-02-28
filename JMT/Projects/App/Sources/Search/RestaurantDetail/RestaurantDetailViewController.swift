@@ -133,7 +133,18 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     }
     
     @IBAction func didTabAddPhotoButton(_ sender: Any) {
+        
         viewModel?.coordinator?.showImagePicker()
+        
+//        viewModel?.photoAuthService?.requestAuthorization(completion: { [weak self] result in
+//            guard let self = self else { return }
+//            switch result {
+//            case .success(let success):
+//                self.
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        })
     }
     
     @objc func handleTap(_ sender: UITapGestureRecognizer) {

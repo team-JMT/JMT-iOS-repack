@@ -8,7 +8,7 @@
 import Foundation
 
 class HomeViewModel {
-
+    
     enum SelectedSortType {
         case sort
         case category
@@ -33,6 +33,8 @@ class HomeViewModel {
     
     var didCompletedCheckJoinGroup: ((Bool) -> Void)?
     
+    var didTest: (() -> Void)?
+    
     let sortList = ["가까운 순", "좋아요 순", "최신 순"]
     let categoryList = ["한식", "일식", "중식", "양식", "퓨전", "카페", "주점", "기타"]
     let drinkingList = ["주류 가능", "주류 불가능/모름"]
@@ -45,9 +47,72 @@ class HomeViewModel {
     var selectedSortIndex: Int = 0
     var selectedCategoryIndex: Int = 99999
     var selectedDrinkingIndex: Int = 99999
+    
+    var popularRestaurants: [GroupRestaurantsInfoModel] = groupRestaurantsInfo
+    var restaurants: [GroupRestaurantsInfoModel] = groupRestaurantsInfo
+    
+    var filterPopularRestaurants: [GroupRestaurantsInfoModel] = []
+    var filterRestaurants: [GroupRestaurantsInfoModel] = []
+}
 
-    var popularRestaurants: [String] = [] //["1","2","3","4","5"]  // [String]() //
-    var restaurants: [String] = [] //["1","2","3","4","5","6","7","8","9"]
+// 데이터 관련 메소드
+extension HomeViewModel {
+    func fetchRestaurantsData() {
+        
+        filterPopularRestaurants.removeAll()
+        filterRestaurants.removeAll()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            
+            let filteredRestaurants = self.popularRestaurants.filter { restaurant in
+                let matchesCategory = self.selectedCategoryIndex == 99999 || self.categoryList[self.selectedCategoryIndex] == restaurant.category
+                let matchesDrinking = self.selectedDrinkingIndex == 99999 || self.drinkingList[self.selectedDrinkingIndex] == restaurant.canDrinkLiquor
+                return matchesCategory && matchesDrinking
+            }
+            
+            let filteredRestaurants2 = self.restaurants.filter { restaurant in
+                let matchesCategory = self.selectedCategoryIndex == 99999 || self.categoryList[self.selectedCategoryIndex] == restaurant.category
+                let matchesDrinking = self.selectedDrinkingIndex == 99999 || self.drinkingList[self.selectedDrinkingIndex] == restaurant.canDrinkLiquor
+                return matchesCategory && matchesDrinking
+            }
+            
+            // 정렬
+            let sortedRestaurants = filteredRestaurants.sorted { (first:GroupRestaurantsInfoModel , second: GroupRestaurantsInfoModel) in
+                switch self.sortList[self.selectedSortIndex] {
+                case "가까운 순":
+                    return first.differenceInDistance < second.differenceInDistance // 예시, 실제 모델에 맞게 조정
+                case "좋아요 순":
+                    return first.likeCount > second.likeCount // 예시, 실제 모델에 맞게 조정
+                case "최신 순":
+                    return first.id > second.id // 예시, 실제 모델에 맞게 조정
+                default:
+                    return true
+                }
+            }
+            
+            let sortedRestaurants2 = filteredRestaurants2.sorted { (first:GroupRestaurantsInfoModel , second: GroupRestaurantsInfoModel) in
+                switch self.sortList[self.selectedSortIndex] {
+                case "가까운 순":
+                    return first.differenceInDistance < second.differenceInDistance // 예시, 실제 모델에 맞게 조정
+                case "좋아요 순":
+                    return first.likeCount > second.likeCount // 예시, 실제 모델에 맞게 조정
+                case "최신 순":
+                    return first.id > second.id // 예시, 실제 모델에 맞게 조정
+                default:
+                    return true
+                }
+            }
+            
+            
+            
+            // 결과 할당
+            self.filterPopularRestaurants = sortedRestaurants
+            self.filterRestaurants = sortedRestaurants2
+            
+            self.didUpdateBottomSheetTableView?()
+            self.didTest?()
+        }
+    }
 }
 
 // 지도 관련 메소드
@@ -82,7 +147,7 @@ extension HomeViewModel {
         case .sort:
             selectedSortIndex = row
             didUpdateFilters?(true)
-            didUpdateBottomSheetTableView?()
+            fetchRestaurantsData()
         case .category:
             selectedCategoryIndex = row
             didUpdateFilters?(false)

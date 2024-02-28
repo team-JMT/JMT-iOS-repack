@@ -63,8 +63,5 @@ struct MyPageDI: Assembly {
             let viewModel = r.resolve(ServiceUseViewModel.self)!
             c.viewModel = viewModel
         }
-        
-        
-        
     }
 }

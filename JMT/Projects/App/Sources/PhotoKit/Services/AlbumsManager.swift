@@ -11,9 +11,11 @@ import UIKit
 
 class AlbumsManager: NSObject, PHPhotoLibraryChangeObserver {
     
-    let imageManager = PHCachingImageManager()
     weak var delegate: PHPhotoLibraryChangeObserver?
     
+    let imageManager = PHCachingImageManager()
+//    let photoservice = DefaultPhotoAuthService()
+
     var albums = [AlbumInfo]()
     var photos = [PhotoInfo]()
     

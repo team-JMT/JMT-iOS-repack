@@ -13,11 +13,10 @@ class HomeViewController: UIViewController {
     
     var viewModel: HomeViewModel?
     var fpc: FloatingPanelController!
-    var bottomSheetVC: HomeBottomSheetViewController!
+    var markers: [NMFMarker] = []
 
     @IBOutlet weak var naverMapView: NMFNaverMapView!
     @IBOutlet weak var groupImageView: UIImageView!
-    
     @IBOutlet weak var groupNameButton: UIButton!
  
     @IBOutlet weak var topContainerView: UIView!
@@ -33,14 +32,15 @@ class HomeViewController: UIViewController {
         
         setupBind()
         
+        naverMapView.mapView.addCameraDelegate(delegate: self)
+        
         print(DefaultKeychainService.shared.accessToken)
-
-        //DefaultKeychainService.shared.accessToken = nil
-        
-        
+//        DefaultKeychainService.shared.accessToken = nil
         viewModel?.checkJoinGroup()
         
         setupUI()
+        
+        test()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,7 +65,7 @@ class HomeViewController: UIViewController {
     func setupBind() {
         
         viewModel?.displayAlertHandler = {
-            self.showLocationAccessDeniedAlert()
+            self.showAccessDeniedAlert(type: .location)
         }
         
         viewModel?.onUpdateCurrentLocation = { lat, lon in
@@ -83,14 +83,20 @@ class HomeViewController: UIViewController {
         }
 
         viewModel?.didCompletedCheckJoinGroup = { state in
-            if state {
+            if !state {
                 // 위치 권한 체크
                 self.viewModel?.checkLocationAuthorization()
                 self.setupBottomSheetView()
                 self.setTopViewShadow()
-                self.noGroupInfoView.isHidden = true
+//                self.noGroupInfoView.isHidden = true
             } else {
-                self.noGroupInfoView.isHidden = false
+//                self.noGroupInfoView.isHidden = false
+            }
+        }
+        
+        viewModel?.didTest = {
+            DispatchQueue.main.async {
+                self.addMarkersInVisibleRegion()
             }
         }
     }
@@ -99,7 +105,14 @@ class HomeViewController: UIViewController {
 // MARK: UI
 extension HomeViewController {
     
+    func test() {
+        GroupAPI.fetchMyGroup { groupData in
+            print(groupData)
+        }
+    }
+    
     func setupUI() {
+        groupImageView.layer.cornerRadius = 8
         locationButton.layer.cornerRadius = 8
         
         naverMapView.showCompass = false
@@ -153,21 +166,24 @@ extension HomeViewController {
 extension HomeViewController {
     
     func setupBottomSheetView() {
+        
         let storyboard = UIStoryboard(name: "HomeBottomSheet", bundle: nil)
         guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
     
         vc.viewModel = self.viewModel
+        
         fpc = FloatingPanelController(delegate: self)
-        fpc.setPanelStyle(radius: 24, isHidden: false)
         fpc.set(contentViewController: vc)
         fpc.addPanel(toParent: self)
         
         let layout = HomeBottomSheetFloatingPanelLayout()
-      
-        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
-            layout.isExpandable = false
-            layout.contentHeight = vc.bottomSheetCollectionView.contentSize.height
-        }
+        fpc.setPanelStyle(radius: 24, isHidden: false)
+        
+//        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
+//            fpc.panGestureRecognizer.isEnabled = false
+//        } else {
+//            fpc.panGestureRecognizer.isEnabled = true
+//        }
          
         fpc.layout = layout
         fpc.invalidateLayout()
@@ -223,7 +239,40 @@ extension FloatingPanelController {
     }
 }
 
-// MARK: ==
+// MARK: 지도 마커 설정
+extension HomeViewController {
+    func addMarkersInVisibleRegion() {
+        
+        removeAllMarkers()
+        
+        let visibleRegion = naverMapView.mapView.projection.latlngBounds(fromViewBounds: naverMapView.frame)
+        
+        for data in viewModel!.filterPopularRestaurants {
+            if isCoordinate(NMGLatLng(lat: data.y, lng: data.x), withinBounds: visibleRegion) {
+                let marker = NMFMarker(position: NMGLatLng(lat: data.y, lng: data.x))
+                marker.mapView = naverMapView.mapView
+                markers.append(marker)
+            }
+        }
+    }
+    
+    func isCoordinate(_ coordinate: NMGLatLng, withinBounds bounds: NMGLatLngBounds) -> Bool {
+        let withinLat = coordinate.lat >= bounds.southWest.lat && coordinate.lat <= bounds.northEast.lat
+        let withinLng = coordinate.lng >= bounds.southWest.lng && coordinate.lng <= bounds.northEast.lng
+        return withinLat && withinLng
+    }
+    
+    func removeAllMarkers() {
+        markers.forEach { $0.mapView = nil } // 각 마커를 지도에서 제거
+        markers.removeAll() // 마커 배열 비우기
+    }
+}
+
+extension HomeViewController: NMFMapViewCameraDelegate {
+    func mapViewCameraIdle(_ mapView: NMFMapView) {
+        addMarkersInVisibleRegion()
+    }
+}
 
 // MARK: ==
 

@@ -117,7 +117,7 @@ class FilterBottomSheetViewController: UIViewController {
     
     @IBAction func didTabDoneButton(_ sender: Any) {
         viewModel?.saveUpdateIndex()
-        viewModel?.didUpdateBottomSheetTableView?()
+        viewModel?.fetchRestaurantsData()
         bottomContainerView.removeFromSuperview()
         dismiss(animated: true)
     }
