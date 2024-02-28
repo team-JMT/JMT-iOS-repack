@@ -14,14 +14,15 @@ protocol MyPageManageCoordinator: Coordinator {
     
 }
 
-class DefaultMyPageManageCoordinator: MyPageTestCoordinator {
+class DefaultMyPageManageCoordinator: MyPageManageCoordinator {
+    
    
     var parentCoordinator: Coordinator? = nil
     
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController?
     var finishDelegate: CoordinatorFinishDelegate?
-    var type: CoordinatorType = .home
+    var type: CoordinatorType = .myPageManage
     
     init(navigationController: UINavigationController?) {
     
@@ -29,12 +30,11 @@ class DefaultMyPageManageCoordinator: MyPageTestCoordinator {
     }
     
     func start() {
-        let mypageViewController = MyPageTestViewController.instantiateFromStoryboard(storyboardName: "MyPage") as MyPageTestViewController
-        
+        let mypageViewController = MyPageManageVC.instantiateFromStoryboard(storyboardName: "MyPageManage") as MyPageManageVC
         mypageViewController.viewModel?.coordinator = self
+        
+       
         self.navigationController?.pushViewController(mypageViewController, animated: true)
-        
-        
     }
     
     

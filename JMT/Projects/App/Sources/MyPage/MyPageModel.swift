@@ -8,7 +8,15 @@
 import Foundation
 
 
-struct DummyDataType {
-    var image: String
-    var labelText: String
+
+struct MyPageUserLogin: Codable {
+    let data: UserData?
+    let message: String
+    let code: String
+ 
+}
+
+struct UserData: Codable {
+    let id: Int
+    let email, nickname, profileImg: String
 }

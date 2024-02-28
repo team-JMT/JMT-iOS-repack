@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Service Use View Controller-->
+        <!--Service UseVC-->
         <scene sceneID="yRW-Zb-4Ea">
             <objects>
-                <viewController storyboardIdentifier="ServiceUseViewController" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sDG-WN-tnp" customClass="ServiceUseViewController" customModule="JMT" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ServiceUseVC" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sDG-WN-tnp" customClass="ServiceUseVC" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RGQ-TX-zWb">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

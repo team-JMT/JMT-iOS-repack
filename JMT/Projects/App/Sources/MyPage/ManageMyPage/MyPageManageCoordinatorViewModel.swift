@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MyPageManageCoordinatorViewModel {
+class MyPageManageViewModel {
     
     weak var coordinator: MyPageManageCoordinator?
     

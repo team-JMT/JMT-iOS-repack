@@ -11,7 +11,7 @@ import Alamofire
 
 class DetailMyPageVC : UIViewController {
     
-    weak var coordinator: DetailMyPageCoordinator?
+   // weak var coordinator: DetailMyPageCoordinator?
     var viewModel: DetailMyPageViewModel?
     
     
@@ -22,40 +22,18 @@ class DetailMyPageVC : UIViewController {
     
     let cellName = "ProfileCell"
     let cellLable: Array<String> = ["계정관리", "서비스 이용동의", "개인정보 처리방식"," "]
+  
     
-    //
-    //    override func viewWillAppear(_ animated: Bool) {
-    //        super.viewWillAppear(animated)
-    //
-    //        //닉네임 변경 플래그 + 노티
-    //        NotificationCenter.default.addObserver(self, selector: #selector(showToastPopup), name: Notification.Name("NicknameUpdateSuccess"), object: nil)
-    
-    //        // UserDefaults의 값 확인
-    //        let shouldShowToastPopup = UserDefaults.standard.bool(forKey: "ShouldShowToastPopup")
-    //        if shouldShowToastPopup {
-    //            showToastPopup()
-    //            UserDefaults.standard.set(false, forKey: "ShouldShowToastPopup") // 토스트 팝업 표시 후에는 이 값을 false로 리셋
-    //        }
-    //
-    //
-    //        if let nickname = UserDefaults.standard.string(forKey: "nickname") {
-    //            userNickname.text = nickname
-    //        }
-    //
-    //        fetchProfile()
-    //
-    //
-    //    }
-    //
-    //    override func viewWillDisappear(_ animated: Bool) {
-    //        super.viewWillDisappear(animated)
-    //
-    //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("NicknameUpdateSuccess"), object: nil)
-    //    }
-    //
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if viewModel?.coordinator == nil {
+            print("Coordinator in DetailMyPageVC's viewModel is nil")
+        } else {
+            print("Coordinator in DetailMyPageVC's viewModel is not nil")
+        }
+    
         //    profileImageView.layer.cornerRadius = profileImageView.layer.frame.size.width / 2
         profileImage.layer.cornerRadius = profileImage.layer.frame.size.width / 2
         profileImage.contentMode = .scaleAspectFill
@@ -66,18 +44,35 @@ class DetailMyPageVC : UIViewController {
         
         navigationItems()
         
-      //  fetchProfile()
         
         userEmail.lineBreakMode = .byTruncatingMiddle
         
         mainTable.separatorStyle = .singleLine
-        
-        //        NotificationCenter.default.addObserver(self, selector: #selector(showToastPopup), name: Notification.Name("NicknameUpdateSuccess"), object: nil)
-        //
-        //        UserDefaults.standard.set(false, forKey: "ShouldShowToastPopup") // 처음 로드될 때 토스트 팝업이 나타나지 않도록 플래그를 설정
-        
+        updateUI()
+      
     }
     
+    
+    private func updateUI() {
+        if let userInfo = viewModel?.userInfo {
+            userNickname.text = userInfo.data?.nickname
+            userEmail.text = userInfo.data?.email
+            if let imageUrl = URL(string: userInfo.data?.profileImg ?? "") {
+                DispatchQueue.global().async {
+                    if let data = try? Data(contentsOf: imageUrl) {
+                        DispatchQueue.main.async {
+                            self.profileImage.image = UIImage(data: data)
+                            // 이미지 뷰를 원형으로 만듭니다.
+                            self.profileImage.layer.cornerRadius = self.profileImage.frame.width / 2
+                            self.profileImage.clipsToBounds = true // 이 줄은 masksToBounds와 같은 역할을 합니다.
+                        }
+                    }
+                }
+            }
+            print(userNickname)
+        }
+    }
+
     private func navigationItems() {
         // SFSymbol을 사용해서 왼쪽 '뒤로가기' 버튼을 설정합니다.
         let leftImage = UIImage(named: "leftArrow")
@@ -97,82 +92,6 @@ class DetailMyPageVC : UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    
-    //이하 토스트 팝업
-    func handleNicknameUpdateSuccess(nickname: String) {
-        print("Nickname update success!")
-        UserDefaults.standard.set(nickname, forKey: "nickname") // Update the nickname in UserDefaults
-        
-        
-        self.userNickname.text = nickname
-        
-        DispatchQueue.main.async {
-            self.navigationController?.popViewController(animated: true)
-        }
-    }
-    
-//    
-//    @objc func showToastPopup() {
-//        print("showToastPopup Called!")
-//        DispatchQueue.main.async {
-//            self.showToastMessage("닉네임이 성공적으로 업데이트되었습니다.", imageName: "yesMark")
-//        }
-//    }
-//    
-    
-    //    @objc private func handleNicknameUpdate(_ notification: Notification) {
-    //
-    //        if let userInfo = notification.userInfo,
-    //           let isSuccess = userInfo["isSuccess"] as? Bool,
-    //           let nickname = userInfo["nickname"] as? String {
-    //            if isSuccess {
-    //                showToastMessage("프로필 사진 변경이 완료되었어요.", imageName: "yesMark")
-    //            } else {
-    //                showToastMessage("프로필 사진을 변경하지 못했어요.", imageName: "noMark")
-    //            }
-    //        }
-    //    }
-    //
-    //    private func showToastMessage(_ message: String, imageName: String) {
-    //        let toastView = UIView(frame: CGRect(x: 0, y: 0, width: 335, height: 56))
-    //        toastView.backgroundColor = .white
-    //        toastView.layer.cornerRadius = 12
-    //        configureShadow(for: toastView) // 그림자 추가
-    //
-    //        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 16, height: 16))
-    //        imageView.image = UIImage(named: imageName)
-    //        imageView.contentMode = .scaleAspectFit
-    //        toastView.addSubview(imageView)
-    //
-    //        let label = UILabel()
-    //        label.text = message
-    //        label.font = UIFont(name: "Pretendard-Medium", size: 16)
-    //        label.textColor = .black
-    //        label.numberOfLines = 0
-    //        label.textAlignment = .center // 텍스트를 중앙에 배치
-    //        toastView.addSubview(label)
-    //
-    //        // ImageView와 Label을 중앙에 배치
-    //        let spacing: CGFloat = 8 // ImageView와 Label 사이의 간격
-    //        let totalWidth = toastView.frame.width
-    //        let contentWidth = imageView.frame.width + spacing + label.intrinsicContentSize.width
-    //        imageView.center = CGPoint(x: (totalWidth - contentWidth) / 2 + imageView.frame.width / 2, y: toastView.frame.height / 2)
-    //        label.frame = CGRect(x: imageView.frame.maxX + spacing, y: 0, width: label.intrinsicContentSize.width, height: toastView.frame.height)
-    //
-    //        self.view.showToast(toastView, duration: 3.0, position: .bottom)
-    //    }
-    //
-    //    //뒤에 그림자
-    //    private func configureShadow(for view: UIView) {
-    //        view.layer.cornerRadius = 8
-    //        view.layer.masksToBounds = false
-    //        view.layer.shadowColor = UIColor(red: 0.086, green: 0.102, blue: 0.114, alpha: 0.08).cgColor
-    //        view.layer.shadowOffset = CGSize(width: 0, height: 4)
-    //        view.layer.shadowRadius = 4
-    //        view.layer.shadowOpacity = 1
-    //    }
-    //
-    //
     // 구글에 이미지 전송
     func sendProfileImageToGoogleServer(with imageData: Data) {
         let url = URL(string: "https://api.jmt-matzip.dev/api/v1/user/profileImg")!
@@ -282,94 +201,7 @@ class DetailMyPageVC : UIViewController {
         AF.request(url, method: .post, headers: headers).response { response in
             debugPrint(response)
         }
-        //    }
-        //
-        //    func fetchProfile() {
-        //        let urlString = "https://api.jmt-matzip.dev/api/v1/user/info"
-        //        let url = URL(string: urlString)!
-        //
-        //        var accessToken: String?
-        //        if UserDefaults.standard.string(forKey: "loginMethod") == "apple" {
-        //            accessToken = UserDefaults.standard.string(forKey: "accessToken")
-        //        } else if UserDefaults.standard.string(forKey: "loginMethod") == "google" {
-        //            accessToken = UserDefaults.standard.string(forKey: "CustomAccessToken")
-        //        }
-        //
-        //        guard let finalToken = accessToken?.trimmingCharacters(in: .whitespacesAndNewlines) else {
-        //            print("Access token is nil")
-        //            return
-        //        }
-        //
-        //        let headers: HTTPHeaders = [
-        //            "Authorization": "Bearer \(finalToken)",
-        //            "Content-Type": "application/json"
-        //        ]
-        //
-        //        AF.request(url, method: .get, headers: headers).responseData { [weak self] response in
-        //            guard let strongSelf = self else { return }
-        //
-        //            if let statusCode = response.response?.statusCode, statusCode == 401 {
-        //                // 토큰이 만료되었을 경우, 리프레시 토큰을 사용하여 액세스 토큰 재발급 받기
-        //                strongSelf.refreshAccessToken { success in
-        //                    if success {
-        //                        // 새로운 액세스 토큰으로 프로필 정보 다시 가져오기
-        //                        strongSelf.fetchProfile()
-        //                    } else {
-        //                        print("Failed to refresh access token")
-        //                    }
-        //                }
-        //            } else if let data = response.data {
-        //                do {
-        //                    let profile = try JSONDecoder().decode(UserProfileResponse.self, from: data)
-        //                    DispatchQueue.main.async {
-        //                        strongSelf.updateProfile(with: profile)
-        //                    }
-        //                } catch {
-        //                    print("Decoding failed with error: \(error)")
-        //                }
-        //            } else if let error = response.error {
-        //                print("Request failed with error: \(error)")
-        //            }
-        //        }
-        //    }
-        
-        
-        //
-        //
-        //
-        //    func updateProfile(with response: UserProfileResponse) {
-        //        let nickname = response.data?.nickname
-        //        let email = response.data?.email
-        //        let imageUrl = response.data?.profileImg
-        //
-        //        // 닉네임 설정
-        //        self.userNickname.text = nickname
-        //
-        //        // 이메일 설정
-        //        self.userEmail.text = email
-        //        self.mainTable.reloadData()
-        //
-        //        // 기본 이미지 설정
-        //        let defaultImage = UIImage(named: "DefaultImage")
-        //
-        //        // 이미지 설정
-        //        if let imageUrlString = imageUrl, let imageUrl = URL(string: imageUrlString) {
-        //            DispatchQueue.global().async {
-        //                if let imageData = try? Data(contentsOf: imageUrl) {
-        //                    DispatchQueue.main.async {
-        //                        self.profileImage.image = UIImage(data: imageData)
-        //                    }
-        //                } else {
-        //                    DispatchQueue.main.async {
-        //                        self.profileImage.image = defaultImage
-        //                    }
-        //                }
-        //            }
-        //        } else {
-        //            self.profileImage.image = defaultImage
-        //        }
-        //    }
-        //
+   
     }
         @IBAction func changePhoto(_ sender: UIButton) {
             let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -471,22 +303,15 @@ extension DetailMyPageVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true) // 선택한 셀의 하이라이트 제거
         
-        let storyboard = UIStoryboard(name: "DetailMyPage", bundle: nil) // "Main"은 스토리보드 파일 이름에 따라 변경
+        //let storyboard = UIStoryboard(name: "DetailMyPage", bundle: nil) // "Main"은 스토리보드 파일 이름에 따라 변경
         
         switch indexPath.row {
         case 0:
-            // 첫 번째 셀 선택 시 동작
-            //            if let viewController = storyboard.instantiateViewController(withIdentifier: "ServiceTermsViewController") as? ServiceTermsViewController {
-            //                self.navigationController?.pushViewController(viewController, animated: true)
-            //            }
-            print(1)
+            viewModel?.coordinator?.showMyPageManageViewController()
         case 1:
-            
-            coordinator?.goToServiceTermsViewController()
-            print(1)
-            
+            viewModel?.coordinator?.showMyPageServiceTermsViewController()
         case 2:
-            viewModel?.coordinator?.goToServiceUseViewController()
+            viewModel?.coordinator?.showMyPageServiceUseVC()
 
         
         default:

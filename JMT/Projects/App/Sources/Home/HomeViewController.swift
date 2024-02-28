@@ -35,7 +35,7 @@ class HomeViewController: UIViewController {
         
         print(DefaultKeychainService.shared.accessToken)
 
-        DefaultKeychainService.shared.accessToken = nil
+        //DefaultKeychainService.shared.accessToken = nil
         
         
         viewModel?.checkJoinGroup()

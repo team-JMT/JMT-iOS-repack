@@ -9,8 +9,10 @@
 import UIKit
 import WebKit
 
-class ServiceTermsViewController: UIViewController {
+class ServiceTermsVC: UIViewController {
 
+    var viewModel = ServiceTermsViewModel()
+    
     @IBOutlet weak var wkweb: WKWebView!
     
     override func viewDidLoad() {
