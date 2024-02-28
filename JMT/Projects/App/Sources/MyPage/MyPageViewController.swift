@@ -196,6 +196,7 @@ extension MyPageViewController: UIScrollViewDelegate {
         let yOffset = scrollView.contentOffset.y
         let headerViewHeight = HeaderView.frame.height
         let segmentHeight = MyPageSegment.frame.height
+        
         // 세그먼트 컨트롤이 고정될 지점 계산
         let stickyHeaderOffset = headerViewHeight - segmentHeight * 3
 
@@ -213,5 +214,7 @@ extension MyPageViewController: UIScrollViewDelegate {
         // 페이지 뷰 컨트롤러 뷰의 위치 조정
         let pageViewTopOffset = max(0, yOffset - stickyHeaderOffset + segmentHeight + 10)
         pageViewControllerTopConstraint?.constant = pageViewTopOffset
+        
+        
     }
 }
