@@ -30,7 +30,7 @@ class DefaultServiceUseCoordinator: ServiceUseCoordinator {
     
     func start() {
         
-        let mypageViewController = ServiceUseViewController.instantiateFromStoryboard(storyboardName: "ServiceUser") as ServiceUseViewController
+        let mypageViewController = ServiceUseVC.instantiateFromStoryboard(storyboardName: "ServiceUser") as ServiceUseVC
         
         mypageViewController.viewModel?.coordinator = self
         self.navigationController?.pushViewController(mypageViewController, animated: true)

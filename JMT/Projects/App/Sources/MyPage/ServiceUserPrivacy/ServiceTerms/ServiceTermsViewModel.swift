@@ -10,7 +10,8 @@ import Foundation
 
 
 class ServiceTermsViewModel {
-    weak var coordinator: MyPageTestCoordinator?
+    
+    weak var coordinator: MyPageServiceTermsCoordinator?
     
     
     let test = "홈"

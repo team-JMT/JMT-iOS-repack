@@ -12,8 +12,8 @@ class MyPageTableViewCell: UITableViewCell {
     @IBOutlet weak var myPageImage: UIImageView!
     @IBOutlet weak var mapageResturantName: UILabel!
 
-    func configure(with data: DummyDataType) {
-        myPageImage.image = UIImage(named: data.image)
-        mapageResturantName.text = data.labelText
-    }
+//    func configure(with data: DummyDataType) {
+//        myPageImage.image = UIImage(named: data.image)
+//        mapageResturantName.text = data.labelText
+//    }
 }

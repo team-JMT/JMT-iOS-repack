@@ -42,6 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                            
                            MyPageDI(),
                            
+                           
                           ])
 
         appCoordinator?.start()

@@ -21,9 +21,7 @@ class SocialLoginViewModel {
         coordinator?.showGoogleLoginViewController(completion: { result in
             switch result {
             case .success(let idToken):
-                
-                print(idToken)
-                
+                                
                 SocialLoginAPI.googleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
                     case .success(let actionStr):
@@ -36,6 +34,11 @@ class SocialLoginViewModel {
                             case .LOG_IN:
                                 let appCoordinator = self.coordinator?.getTopCoordinator()
                                 appCoordinator?.showTabBarViewController()
+                                self.coordinator?.showNicknameViewController()
+//                                
+//                                let appCoordinator = self.coordinator?.getTopCoordinator()
+//                                appCoordinator?.showTabBarViewController()
+
                             }
                         }
                     case .failure(let error):
