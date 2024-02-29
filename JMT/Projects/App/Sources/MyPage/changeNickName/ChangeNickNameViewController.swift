@@ -11,7 +11,7 @@ import Alamofire
 class ChangeNickNameVC: UIViewController {
     
     var viewModel: MyPageChangeNickNameViewModel?
-
+    
     
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var updateTF: UITextField!
@@ -27,7 +27,7 @@ class ChangeNickNameVC: UIViewController {
     @IBOutlet weak var btnView: UIView!
     
     
-
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -35,7 +35,7 @@ class ChangeNickNameVC: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         setCustomNavigationBarBackButton(isSearchVC: false)
     }
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +61,7 @@ class ChangeNickNameVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-
+        
         updateTF.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         
         updateTF.delegate = self
@@ -85,7 +85,7 @@ class ChangeNickNameVC: UIViewController {
         
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-   
+        
     }
     
     // MARK: - 네비게이션
@@ -111,79 +111,70 @@ class ChangeNickNameVC: UIViewController {
     
     
     //MARK: - 서버로 닉네임 전송
+//    func sendNicknameToServer(nickname: String, token: String, completion: @escaping (Bool) -> Void) {
+//        if let accessToken = UserDefaults.standard.string(forKey: "accessToken") {
+//            print("애플Access Token: \(accessToken)")
+//            
+//            let url = URL(string: "https://api.jmt-matzip.dev/api/v1/user/nickname")!
+//            let headers: HTTPHeaders = [
+//                "accept": "*/*",
+//                "Authorization": "Bearer \(accessToken)",
+//                "Content-Type": "application/json"
+//            ]
+//            let parameters: [String: Any] = [
+//                "nickname": nickname
+//            ]
+//            
+//            
+//            DispatchQueue.main.async {
+//                AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+//                    .validate()
+//                    .responseDecodable(of: NicknameRegister.self) { response in
+//                        switch response.result {
+//                        case .success(let nicknameData):
+//                            print("Nickname data: \(nicknameData)")
+//                            UserDefaults.standard.set(true, forKey: "ShouldShowToastPopup")
+//                            UserDefaults.standard.set(nickname, forKey: "nickname") // Update the nickname in UserDefaults
+//                            
+//                            NotificationCenter.default.post(name: Notification.Name("NicknameUpdateSuccess"), object: nil)
+//                            completion(true)
+//                        case .failure(let error):
+//                            print("Error sending nickname to server: \(error)")
+//                            completion(false)
+//                        }
+//                    }
+//            }
+//        }
+//    }
+    
+    
+    
     func sendNicknameToServer(nickname: String, token: String, completion: @escaping (Bool) -> Void) {
-        if let accessToken = UserDefaults.standard.string(forKey: "accessToken") {
-            print("애플Access Token: \(accessToken)")
-            
-            let url = URL(string: "https://api.jmt-matzip.dev/api/v1/user/nickname")!
-            let headers: HTTPHeaders = [
-                "accept": "*/*",
-                "Authorization": "Bearer \(accessToken)",
-                "Content-Type": "application/json"
-            ]
-            let parameters: [String: Any] = [
-                "nickname": nickname
-            ]
-            
-            
-            DispatchQueue.main.async {
-                    AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
-                        .validate()
-                        .responseDecodable(of: NicknameRegister.self) { response in
-                            switch response.result {
-                            case .success(let nicknameData):
-                                print("Nickname data: \(nicknameData)")
-                                UserDefaults.standard.set(true, forKey: "ShouldShowToastPopup")
-                                UserDefaults.standard.set(nickname, forKey: "nickname") // Update the nickname in UserDefaults
-                                
-                                NotificationCenter.default.post(name: Notification.Name("NicknameUpdateSuccess"), object: nil)
-                                completion(true)
-                            case .failure(let error):
-                                print("Error sending nickname to server: \(error)")
-                                completion(false)
-                            }
-                        }
+        let url = URL(string: "https://api.jmt-matzip.dev/api/v1/user/nickname")!
+        let headers: HTTPHeaders = [
+            "accept": "*/*",
+            "Authorization": "Bearer \(token)",
+            "Content-Type": "application/json"
+        ]
+        let parameters: [String: Any] = ["nickname": nickname]
+
+        // Alamofire를 사용하여 서버에 닉네임 전송
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .responseDecodable(of: NicknameRegister.self) { response in
+                switch response.result {
+                case .success:
+                    // 서버로부터 성공 응답을 받았을 때
+                    print("Nickname update success!")
+                    completion(true)
+                case .failure(let error):
+                    // 요청 실패
+                    print("Error sending nickname to server: \(error)")
+                    completion(false)
                 }
-        }
+            }
     }
-    
-    
-    
-    func sendNicknameToServerWithGoogleLogin(nickname: String, token: String, completion: @escaping (Bool) -> Void){
-        if let accessToken = UserDefaults.standard.string(forKey: "CustomAccessToken") {
-            print("Custom Access Token: \(accessToken)")
-            
-            let url = URL(string: "https://api.jmt-matzip.dev/api/v1/user/nickname")!
-            let headers: HTTPHeaders = [
-                "accept": "*/*",
-                "Authorization": "Bearer \(accessToken)",
-                "Content-Type": "application/json"
-            ]
-            let parameters: [String: Any] = [
-                "nickname": nickname
-            ]
-            
-            DispatchQueue.main.async {
-                    AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
-                        .validate()
-                        .responseDecodable(of: NicknameRegister.self) { response in
-                            switch response.result {
-                            case .success(let nicknameData):
-                                print("Nickname data: \(nicknameData)")
-                                UserDefaults.standard.set(true, forKey: "ShouldShowToastPopup")
-                                UserDefaults.standard.set(nickname, forKey: "nickname") // Update the nickname in UserDefaults
-                                
-                                NotificationCenter.default.post(name: Notification.Name("NicknameUpdateSuccess"), object: nil)
-                                completion(true)
-                            case .failure(let error):
-                                print("Error sending nickname to server: \(error)")
-                                completion(false)
-                            }
-                        }
-                }
-            
-        }
-    }
+
     
     func checkNicknameDuplication(nickname: String, completion: @escaping (Bool) -> Void) {
         if let accessToken = UserDefaults.standard.string(forKey: "accessToken") {
@@ -214,45 +205,92 @@ class ChangeNickNameVC: UIViewController {
     
     
     @IBAction func updateNickname(_ sender: Any) {
-//        guard let newNickname = updateTF.text, !newNickname.isEmpty else {
-//            print("No new nickname provided.")
-//            return
-//        }
-//        
-//        let loginMethod = UserDefaults.standard.string(forKey: "loginMethod")
-//        
-//        if loginMethod == "google", let accessToken = UserDefaults.standard.string(forKey: "GoogleAccessToken") {
-//            sendNicknameToServerWithGoogleLogin(nickname: newNickname, token: accessToken) { [weak self] success in
-//                if success {
-//                    self?.handleNicknameUpdateSuccess(nickname: newNickname)
-//                } else {
-//                    self?.handleNicknameUpdateFailure()
-//                }
-//            }
-//        } else if loginMethod == "apple", let accessToken = UserDefaults.standard.string(forKey: "accessToken") {
-//            sendNicknameToServer(nickname: newNickname, token: accessToken) { [weak self] success in
-//                if success {
-//                    self?.handleNicknameUpdateSuccess(nickname: newNickname)
-//                } else {
-//                    self?.handleNicknameUpdateFailure()
-//                }
-//            }
-//        }
+        
+        guard let newNickname = updateTF.text, !newNickname.isEmpty else {
+                print("No new nickname provided.")
+                return
+            }
+            
+            let keychainAccess = DefaultKeychainAccessible()
+            if let accessToken = keychainAccess.getToken("accessToken") {
+                // 서버에 닉네임 전송
+                sendNicknameToServer(nickname: newNickname, token: accessToken) { [weak self] success in
+                    if success {
+                        // 닉네임 업데이트 성공 처리
+                        self?.handleNicknameUpdateSuccess(nickname: newNickname)
+                    } else {
+                        // 닉네임 업데이트 실패 처리
+                        self?.handleNicknameUpdateFailure()
+                    }
+                }
+            } else {
+                print("Access Token is not available")
+            }
     }
-//    
-//    func handleNicknameUpdateSuccess(nickname: String) {
-//        print("Nickname update success!")
-//        updateNicknameInProfileViewController(nickname: nickname)
-//        
-//        // 닉네임이 성공적으로 변경되었을 때만 Notification post
-//        NotificationCenter.default.post(name: NSNotification.Name("NicknameUpdateSuccess"), object: nil)
-//
-//        DispatchQueue.main.async {
-//            self.navigationController?.popViewController(animated: true)
-//        }
-//    }
-//
-//    
+    
+    
+    func showToastWithCustomLayout(message: String, duration: TimeInterval = 3.0) {
+        let toastContainer = UIView(frame: CGRect(x: 0, y: 0, width: 335, height: 56))
+        toastContainer.backgroundColor = .white // 배경색 설정
+        toastContainer.layer.cornerRadius = 8
+        toastContainer.layer.shadowColor = UIColor(red: 0.086, green: 0.102, blue: 0.114, alpha: 0.08).cgColor
+        toastContainer.layer.shadowOpacity = 1
+        toastContainer.layer.shadowRadius = 16
+        toastContainer.layer.shadowOffset = CGSize(width: 0, height: 2)
+        toastContainer.center = CGPoint(x: self.view.frame.size.width/2, y: self.view.frame.size.height-100) // 화면 하단 중앙에 위치
+        self.view.addSubview(toastContainer)
+
+        let checkImageView = UIImageView(image: UIImage(named: "CheckMark")) // 이미지 이름 확인 필요
+        checkImageView.contentMode = .scaleAspectFit
+
+        let messageLabel = UILabel()
+        messageLabel.text = message
+        messageLabel.font = UIFont(name: "Pretendard-Bold", size: 14.0) // 글꼴 이름 확인 필요
+        messageLabel.textColor = .black
+        messageLabel.textAlignment = .left
+
+        let stackView = UIStackView(arrangedSubviews: [checkImageView, messageLabel])
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fill
+        stackView.spacing = 8
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        toastContainer.addSubview(stackView)
+
+        // 스택뷰의 제약 조건 설정
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: toastContainer.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: toastContainer.trailingAnchor, constant: -16),
+            stackView.topAnchor.constraint(equalTo: toastContainer.topAnchor, constant: 16),
+            stackView.bottomAnchor.constraint(equalTo: toastContainer.bottomAnchor, constant: -16),
+            checkImageView.widthAnchor.constraint(equalToConstant: 24), // 이미지 뷰의 너비 고정
+            checkImageView.heightAnchor.constraint(equalToConstant: 24) // 이미지 뷰의 높이 고정
+        ])
+
+        // 애니메이션을 사용하여 토스트 메시지 표시 후 자동으로 사라지게 함
+        UIView.animate(withDuration: duration, delay: 0.1, options: .curveEaseOut, animations: {
+            toastContainer.alpha = 0.0
+        }, completion: { _ in
+            toastContainer.removeFromSuperview()
+        })
+    }
+
+    
+    func handleNicknameUpdateSuccess(nickname: String) {
+        print("Nickname update success!")
+        updateNicknameInProfileViewController(nickname: nickname)
+        NotificationCenter.default.post(name: NSNotification.Name("NicknameUpdateSuccess"), object: nil)
+        DispatchQueue.main.async {
+            self.showToastWithCustomLayout(message: "닉네임이 성공적으로 변경되었습니다.")
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+
+    @objc func showNicknameUpdateSuccessToast() {
+        showToastWithCustomLayout(message: "닉네임이 성공적으로 변경되었습니다.", duration: 2.0)
+    }
+
+    
     
     
     func handleNicknameUpdateFailure() {
@@ -260,12 +298,12 @@ class ChangeNickNameVC: UIViewController {
     }
     
     
-//    
-//    private func updateNicknameInProfileViewController(nickname: String) {
-//        if let profileVC = navigationController?.viewControllers.first(where: { $0 is ProfileTableViewController }) as? ProfileTableViewController {
-//            profileVC.userNickname.text = nickname
-//        }
-//    }
+    
+    private func updateNicknameInProfileViewController(nickname: String) {
+        if let profileVC = navigationController?.viewControllers.first(where: { $0 is DetailMyPageVC }) as? DetailMyPageVC {
+            profileVC.userNickname.text = nickname
+        }
+    }
 }
 
 extension ChangeNickNameVC: UITextFieldDelegate {
@@ -317,7 +355,7 @@ extension ChangeNickNameVC: UITextFieldDelegate {
                     self.vaildation.textColor = UIColor(red: 1, green: 0.14, blue: 0.35, alpha: 1)
                     self.nextBtn.backgroundColor = UIColor(named: "main200")
                     self.nextBtn.isEnabled = false
-                    self.BoolImage.image = UIImage(named: "noMark")
+                    self.BoolImage.image = UIImage(named: "Xmark")
                 } else {
                     // 입력값이 유효한지 검사
                     let isValid = self.validateInput(nickname)
@@ -331,7 +369,15 @@ extension ChangeNickNameVC: UITextFieldDelegate {
                     self.nextBtn.isEnabled = isValid
                     
                     // vaildImage에 이미지 설정
-                    self.BoolImage.image = isValid ? UIImage(named: "yesMark") : UIImage(named: "noMark")
+                    self.BoolImage.image = isValid ? UIImage(named: "CheckMark") : UIImage(named: "Xmark")
+                    
+                    
+                    if let image = UIImage(named: "Xmark") {
+                        print("Image loaded successfully")
+                    } else {
+                        print("Failed to load the image")
+                    }
+                    
                 }
             }
         }
@@ -350,7 +396,7 @@ extension ChangeNickNameVC: UITextFieldDelegate {
         nextBtn.isEnabled = isValid
         
         // vaildImage에 이미지 설정
-        BoolImage.image = isValid ? UIImage(named: "yesMark") : UIImage(named: "noMark")
+        BoolImage.image = isValid ? UIImage(named: "CheckMark") : UIImage(named: "Xmark")
         BoolImage.isHidden = false
     }
     
