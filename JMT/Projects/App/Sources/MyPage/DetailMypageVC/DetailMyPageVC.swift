@@ -49,8 +49,12 @@ class DetailMyPageVC : UIViewController {
            }
 
            viewModel?.fetchUserInfo()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showNicknameUpdateSuccessToast), name: NSNotification.Name("NicknameUpdateSuccess"), object: nil)
+
 
     }
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -75,10 +79,60 @@ class DetailMyPageVC : UIViewController {
                     }
                 }
             }
-            print(userNickname)
-            print(12321321321)
+       
         }
     }
+    
+    func showToastWithCustomLayout(message: String, duration: TimeInterval = 2.0) {
+        let toastContainer = UIView(frame: CGRect(x: 0, y: 0, width: 335, height: 56))
+        toastContainer.backgroundColor = .white // 배경색 설정
+        toastContainer.layer.cornerRadius = 8
+        toastContainer.layer.shadowColor = UIColor(red: 0.086, green: 0.102, blue: 0.114, alpha: 0.08).cgColor
+        toastContainer.layer.shadowOpacity = 1
+        toastContainer.layer.shadowRadius = 16
+        toastContainer.layer.shadowOffset = CGSize(width: 0, height: 2)
+        toastContainer.center = CGPoint(x: self.view.frame.size.width/2, y: self.view.frame.size.height-100) // 화면 하단 중앙에 위치
+        self.view.addSubview(toastContainer)
+
+        let checkImageView = UIImageView(image: UIImage(named: "CheckMark")) // 이미지 이름 확인 필요
+        checkImageView.contentMode = .scaleAspectFit
+
+        let messageLabel = UILabel()
+        messageLabel.text = message
+        messageLabel.font = UIFont(name: "Pretendard-Bold", size: 14.0) // 글꼴 이름 확인 필요
+        messageLabel.textColor = .black
+        messageLabel.textAlignment = .left
+
+        let stackView = UIStackView(arrangedSubviews: [checkImageView, messageLabel])
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fill
+        stackView.spacing = 8
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        toastContainer.addSubview(stackView)
+
+        // 스택뷰의 제약 조건 설정
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: toastContainer.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: toastContainer.trailingAnchor, constant: -16),
+            stackView.topAnchor.constraint(equalTo: toastContainer.topAnchor, constant: 16),
+            stackView.bottomAnchor.constraint(equalTo: toastContainer.bottomAnchor, constant: -16),
+            checkImageView.widthAnchor.constraint(equalToConstant: 24), // 이미지 뷰의 너비 고정
+            checkImageView.heightAnchor.constraint(equalToConstant: 24) // 이미지 뷰의 높이 고정
+        ])
+
+        // 애니메이션을 사용하여 토스트 메시지 표시 후 자동으로 사라지게 함
+        UIView.animate(withDuration: duration, delay: 0.1, options: .curveEaseOut, animations: {
+            toastContainer.alpha = 0.0
+        }, completion: { _ in
+            toastContainer.removeFromSuperview()
+        })
+    }
+    
+    @objc func showNicknameUpdateSuccessToast() {
+        showToastWithCustomLayout(message: "닉네임이 성공적으로 변경되었습니다.", duration: 2.0)
+    }
+
 
     private func navigationItems() {
         // SFSymbol을 사용해서 왼쪽 '뒤로가기' 버튼을 설정합니다.
