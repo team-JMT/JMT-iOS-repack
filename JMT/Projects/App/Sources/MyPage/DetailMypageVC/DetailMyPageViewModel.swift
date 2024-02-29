@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import UIKit
 
 class DetailMyPageViewModel {
     
@@ -94,6 +95,38 @@ class DetailMyPageViewModel {
         }
     }
         
+    func uploadProfileImage(_ image: UIImage) {
+        guard let accessToken = keychainAccess.getToken("accessToken") else {
+            print("Access Token is not available")
+            return
+        }
+
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "multipart/form-data"
+        ]
+
+        AF.upload(
+            multipartFormData: { multipartFormData in
+                if let imageData = image.jpegData(compressionQuality: 0.5) {
+                    multipartFormData.append(imageData, withName: "profileImg", fileName: "file.jpeg", mimeType: "image/jpeg")
+                }
+            },
+            to: "https://api.jmt-matzip.dev/api/v1/user/profileImg",
+            method: .post,
+            headers: headers
+        ).responseDecodable(of: ImageResponse.self) { response in
+            switch response.result {
+            case .success(let responseData):
+                print(responseData.message)
+             //   self.userInfo?.data?.profileImg = responseData.data
+                self.onUserInfoLoaded?()
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
     func handleLoginSuccess(idToken: String) {
         keychainAccess.saveToken("idToken", idToken)
         keychainAccess.saveToken("isIdTokenSaved", "true") // 플래그 저장

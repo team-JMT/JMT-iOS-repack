@@ -213,6 +213,12 @@ class DetailMyPageVC : UIViewController {
     @IBAction func changePhoto(_ sender: UIButton) {
         viewModel?.coordinator?.showProfileImagePopupViewController()
     }
+    
+    
+    @IBAction func changeNickname(_ sender: Any) {
+        viewModel?.coordinator?.showMyPageChangeNicknameVC()
+    }
+    
 }
 
 extension DetailMyPageVC: UITableViewDelegate, UITableViewDataSource{

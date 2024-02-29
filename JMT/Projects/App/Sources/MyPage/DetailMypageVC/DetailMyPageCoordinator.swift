@@ -13,6 +13,8 @@ protocol DetailMyPageCoordinator: Coordinator {
     //    func goToServiceTermsViewController()
     //    func goToServiceUseViewController()
     //
+    func setMyPageChangeNicknameCoordinator()
+    func showMyPageChangeNicknameVC()
     
     func setMyPageManageCoordinator()
     func showMyPageManageViewController()
@@ -30,6 +32,9 @@ protocol DetailMyPageCoordinator: Coordinator {
 }
 
 class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
+    
+    
+   
     
     var parentCoordinator: Coordinator? = nil
     
@@ -106,12 +111,30 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         coordinator.start()
     }
     
+    //이미지 등록
     func setProfileImagePopupCoordinator() {
         let coordinator = DefaultProfileImagePopupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
         childCoordinators.append(coordinator)
     }
     
+    //닉네임 수정
+    func setMyPageChangeNicknameCoordinator() {
+        let coordinator = DefaultMyPageChangeNicknaemCoordinator(navigationController: navigationController)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showMyPageChangeNicknameVC() {
+        if getChildCoordinator(.serviceUse) == nil {
+            setMyPageChangeNicknameCoordinator()
+            
+        }
+        let coordinator = getChildCoordinator(.changeNickname) as! MyPageChangeNicknaemCoordinator
+        coordinator.start()
+    }
+    
+    
     func showProfileImagePopupViewController() {
+        
         if getChildCoordinator(.profilePopup) == nil {
             setProfileImagePopupCoordinator()
         }
@@ -154,6 +177,7 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         }
     }
     
+    
 
 //배열내에 있는 코디네이터에 enum으로 선언한 애가 있는지
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
@@ -167,7 +191,9 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         case .serviceUse:
             childCoordinator = childCoordinators.first(where: { $0 is ServiceUseCoordinator})
         case .profilePopup:
-            childCoordinator = childCoordinators.first(where: { $0 is ProfileImagePopupCoordinator})
+            childCoordinator = childCoordinators.first(where: { $0 is ProfileImagePopupCoordinator})  
+        case .changeNickname:
+            childCoordinator = childCoordinators.first(where: { $0 is MyPageChangeNicknaemCoordinator})
         default:
             break
         }
