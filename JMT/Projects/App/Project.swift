@@ -17,6 +17,7 @@ let project = Project.app(name: "JMTeng",
                                          .external(name: "Then"),
                                          .external(name: "SwiftKeychainWrapper"),
                                          .external(name: "FloatingPanel"),
-                                         .external(name: "IQKeyboardManagerSwift")],
+                                         .external(name: "SkeletonView")
+                                        ],
                           resources: .default)
 

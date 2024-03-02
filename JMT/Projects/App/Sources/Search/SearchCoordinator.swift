@@ -21,8 +21,9 @@ class DefaultSearchCoordinator: SearchCoordinator {
     var type: CoordinatorType = .search
     
     
-    init(navigationController: UINavigationController?) {
+    init(navigationController: UINavigationController?, parentCoordinator: Coordinator) {
         self.navigationController = navigationController
+        self.parentCoordinator = parentCoordinator
     }
     
     func start() {

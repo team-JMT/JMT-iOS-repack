@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class HomeViewModel {
     
@@ -26,14 +27,19 @@ class HomeViewModel {
     
     var didUpdateFilters: ((Bool) -> Void)?
     var didUpdateSortTypeButton: (() -> Void)?
+    
+    var didUpdateSkeletonView: (() -> Void)?
+    var didUpdateGroupName: ((Int) -> Void)?
     var didUpdateBottomSheetTableView: (() -> Void)?
     
     var displayAlertHandler: (() -> Void)?
     var onUpdateCurrentLocation: ((Double, Double) -> Void)?
     
-    var didCompletedCheckJoinGroup: ((Bool) -> Void)?
+    var didCompletedCheckJoinGroup: (() -> Void)?
     
     var didTest: (() -> Void)?
+    
+    var didUpdateIndex: ((Int) -> Void)?
     
     let sortList = ["가까운 순", "좋아요 순", "최신 순"]
     let categoryList = ["한식", "일식", "중식", "양식", "퓨전", "카페", "주점", "기타"]
@@ -48,8 +54,13 @@ class HomeViewModel {
     var selectedCategoryIndex: Int = 99999
     var selectedDrinkingIndex: Int = 99999
     
-    var popularRestaurants: [GroupRestaurantsInfoModel] = groupRestaurantsInfo
-    var restaurants: [GroupRestaurantsInfoModel] = groupRestaurantsInfo
+    var isNotGroup: Bool = false
+    var isLodingData: Bool = true
+    
+    var groupList: [GroupData] = []
+
+    var popularRestaurants: [GroupRestaurantsInfoModel] = generateDummyData(count: 100)
+    var restaurants: [GroupRestaurantsInfoModel] = generateDummyData2(count: 100)
     
     var filterPopularRestaurants: [GroupRestaurantsInfoModel] = []
     var filterRestaurants: [GroupRestaurantsInfoModel] = []
@@ -59,10 +70,13 @@ class HomeViewModel {
 extension HomeViewModel {
     func fetchRestaurantsData() {
         
+        didUpdateSkeletonView?()
+        isLodingData = true
+        
         filterPopularRestaurants.removeAll()
         filterRestaurants.removeAll()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             
             let filteredRestaurants = self.popularRestaurants.filter { restaurant in
                 let matchesCategory = self.selectedCategoryIndex == 99999 || self.categoryList[self.selectedCategoryIndex] == restaurant.category
@@ -103,14 +117,12 @@ extension HomeViewModel {
                 }
             }
             
-            
-            
             // 결과 할당
             self.filterPopularRestaurants = sortedRestaurants
             self.filterRestaurants = sortedRestaurants2
             
+            self.isLodingData = false
             self.didUpdateBottomSheetTableView?()
-            self.didTest?()
         }
     }
 }
@@ -128,6 +140,30 @@ extension HomeViewModel {
             case .failure(let error):
                 completed("검색 중")
             }
+        }
+    }
+    
+    func markerImage(category: String) -> String? {
+        switch category {
+        case "한식":
+            return JMTengAsset.marker1.name
+        case "일식":
+            return JMTengAsset.marker2.name
+        case "중식":
+            return JMTengAsset.marker3.name
+        case "양식":
+            return JMTengAsset.marker4.name
+        case "퓨전":
+            return JMTengAsset.marker5.name
+        case "카페":
+            return JMTengAsset.marker6.name
+        case "주류":
+            return JMTengAsset.marker7.name
+        case "기타":
+            return JMTengAsset.marker8.name
+        default:
+            // 임시
+            return JMTengAsset.marker2.name
         }
     }
 }
@@ -201,6 +237,7 @@ extension HomeViewModel {
     func authorizationStatusChanged() {
         locationManager.onAuthorizationStatusChanged = { isAuthorized in
             if !isAuthorized {
+                print("실패")
                 self.displayAlertHandler?()
             }
         }
@@ -224,15 +261,16 @@ extension HomeViewModel {
 
 // 그룹 가입 여부 분기 처리
 extension HomeViewModel {
-
-    // API 오류로 임시 처리
-    func checkJoinGroup() {
-        UserInfoAPI.getLoginInfo { response in
+    
+    func checkJoinGorup() {
+        GroupAPI.fetchMyGroup { response in
             switch response {
-            case .success(let success):
-                self.didCompletedCheckJoinGroup?(false)
+            case .success(let groupList):
+                self.groupList = groupList.data
+                self.didCompletedCheckJoinGroup?()
             case .failure(let failure):
-                self.didCompletedCheckJoinGroup?(true)
+                self.groupList.removeAll()
+                self.didCompletedCheckJoinGroup?()
             }
         }
     }

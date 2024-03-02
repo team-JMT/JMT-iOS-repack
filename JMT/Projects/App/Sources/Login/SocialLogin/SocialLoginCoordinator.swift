@@ -10,6 +10,9 @@ import GoogleSignIn
 import AuthenticationServices
 
 protocol SocialLoginCoordinator: Coordinator {
+    
+    func logout()
+    
     func setNicknameCoordinator()
     func showNicknameViewController()
     
@@ -46,6 +49,24 @@ class DefaultSocialLoginCoordinator: NSObject, SocialLoginCoordinator {
         let initialViewController = SocialLoginViewController.instantiateFromStoryboard(storyboardName: "Login") as SocialLoginViewController
         initialViewController.viewModel?.coordinator = self
         self.navigationController?.pushViewController(initialViewController, animated: true)
+    }
+    
+    func logout() {
+        
+        let initialViewController = SocialLoginViewController.instantiateFromStoryboard(storyboardName: "Login") as SocialLoginViewController
+        initialViewController.viewModel?.coordinator = self
+        self.navigationController?.setViewControllers([initialViewController], animated: false)
+    
+        if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
+            
+            window.rootViewController = self.navigationController
+            
+            UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                
+            }) { completed in
+                // 루트뷰 교체 후 작업 할 것
+            }
+        }
     }
     
     func setNicknameCoordinator() {

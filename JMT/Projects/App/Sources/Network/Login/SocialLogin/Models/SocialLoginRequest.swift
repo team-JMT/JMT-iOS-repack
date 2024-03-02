@@ -10,3 +10,9 @@ import Foundation
 struct SocialLoginRequest: Encodable {
     let token: String
 }
+
+struct LogoutRequest: Encodable {
+    let accessToken: String
+    let refreshToken: String
+}
+

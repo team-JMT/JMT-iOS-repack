@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Pretendard-Bold.otf">
+            <string>Pretendard-Bold</string>
+        </array>
+        <array key="Pretendard-Medium.otf">
+            <string>Pretendard-Medium</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Filter Bottom Sheet View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="FilterBottomSheetViewController" id="Y6W-OH-hqX" customClass="FilterBottomSheetViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="hyP-E9-bkx">
+                                <rect key="frame" x="20" y="91" width="135" height="32"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5Op-Mh-uWu">
+                                        <rect key="frame" x="0.0" y="0.0" width="135" height="32"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VFd-sz-dej">
+                                                <rect key="frame" x="0.0" y="0.0" width="68" height="32"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <inset key="contentEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="종류">
+                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTabCategoryButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="gmI-ic-s2v"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bfg-Sj-9s3">
+                                                <rect key="frame" x="76" y="0.0" width="59" height="32"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="주류 여부">
+                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTabDrinkingButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="hvZ-xw-7Fn"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YzS-Qp-1wj">
+                                        <rect key="frame" x="0.0" y="32" width="50" height="0.0"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" id="LHL-YC-bZk"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                            </stackView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="SKH-tV-pT0">
+                                <rect key="frame" x="0.0" y="139" width="393" height="679"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="filterCell" rowHeight="120" id="Aee-JN-EtN" customClass="FilterCell" customModule="JMTeng" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="120"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Aee-JN-EtN" id="b9J-Kf-z9n">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="120"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="QfD-UY-Je9">
+                                                    <rect key="frame" x="20" y="18" width="76.666666666666671" height="84"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="m66-yi-8va">
+                                                            <rect key="frame" x="0.0" y="0.0" width="30" height="84"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="dR9-yY-69d"/>
+                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="iSh-Fo-a5W"/>
+                                                                <constraint firstAttribute="height" constant="30" id="v3o-98-lqW"/>
+                                                                <constraint firstAttribute="width" constant="30" id="wAb-uY-g0y"/>
+                                                            </constraints>
+                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="한식" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAz-T8-5h5">
+                                                            <rect key="frame" x="42" y="0.0" width="34.666666666666657" height="84"/>
+                                                            <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="20"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="QfD-UY-Je9" firstAttribute="leading" secondItem="b9J-Kf-z9n" secondAttribute="leading" constant="20" id="9RL-Md-Red"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="QfD-UY-Je9" secondAttribute="trailing" constant="20" id="BbW-Ya-utT"/>
+                                                <constraint firstItem="QfD-UY-Je9" firstAttribute="top" secondItem="b9J-Kf-z9n" secondAttribute="top" constant="18" id="wNd-ik-Cxw"/>
+                                                <constraint firstAttribute="bottom" secondItem="QfD-UY-Je9" secondAttribute="bottom" constant="18" id="ynj-fa-I6T"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="menuImageView" destination="m66-yi-8va" id="Pob-Lh-HNt"/>
+                                            <outlet property="menuLabel" destination="HAz-T8-5h5" id="xw9-PX-F2d"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="Y6W-OH-hqX" id="XB1-YW-gNE"/>
+                                    <outlet property="delegate" destination="Y6W-OH-hqX" id="VoJ-AK-VLa"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="SKH-tV-pT0" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="1mh-Ei-vg4"/>
+                            <constraint firstItem="SKH-tV-pT0" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="Yxi-HN-1bI"/>
+                            <constraint firstItem="SKH-tV-pT0" firstAttribute="top" secondItem="hyP-E9-bkx" secondAttribute="bottom" constant="16" id="dw5-Mn-Wju"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="SKH-tV-pT0" secondAttribute="bottom" id="pEa-K5-TJv"/>
+                            <constraint firstItem="hyP-E9-bkx" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="32" id="qLX-Dh-A7o"/>
+                            <constraint firstItem="hyP-E9-bkx" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="wgt-uQ-XD8"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hyP-E9-bkx" secondAttribute="trailing" constant="20" id="yED-Vp-V5n"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="categoryButton" destination="VFd-sz-dej" id="iPv-mU-dz2"/>
+                        <outlet property="drinkingButton" destination="bfg-Sj-9s3" id="l0P-Kh-zk9"/>
+                        <outlet property="filterTableView" destination="SKH-tV-pT0" id="lqv-Pj-wIT"/>
+                        <outlet property="filterTypeContainerView" destination="5Op-Mh-uWu" id="Vbs-Qc-7e2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="61.832061068702288" y="-34.507042253521128"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

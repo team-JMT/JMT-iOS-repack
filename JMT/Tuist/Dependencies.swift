@@ -18,7 +18,7 @@ let dependencies = Dependencies(
         .remote(url: "https://github.com/devxoul/Then", requirement: .upToNextMajor(from: "3.0.0")),
         .remote(url: "https://github.com/jrendel/SwiftKeychainWrapper", requirement: .upToNextMajor(from: "4.0.0")),
         .remote(url: "https://github.com/scenee/FloatingPanel", requirement: .upToNextMajor(from: "2.0.0")),
-        .remote(url: "https://github.com/hackiftekhar/IQKeyboardManager", requirement: .upToNextMajor(from: "6.3.0"))
+        .remote(url: "https://github.com/Juanpe/SkeletonView.git", requirement: .upToNextMajor(from: "1.7.0"))
     ],
                                                          productTypes: ["Swinject": .framework,
                                                                         "SwinjectStoryboard": .framework,
@@ -28,7 +28,7 @@ let dependencies = Dependencies(
                                                                         "Then": .framework,
                                                                         "SwiftKeychainWrapper": .framework,
                                                                         "FloatingPanel": .framework,
-                                                                        "IQKeyboardManagerSwift": .framework]),
+                                                                        "SkeletonView": .framework]),
     platforms: [.iOS]
 )
 

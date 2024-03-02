@@ -51,13 +51,21 @@ class SearchViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-//        searchTextField.becomeFirstResponder()
+        if let coordinator = viewModel?.coordinator?.parentCoordinator as? DefaultTabBarCoordinator {
+            if coordinator.tabBarController.isHomeSearchButton {
+                self.navigationController?.setNavigationBarHidden(false, animated: false)
+            } else {
+                self.navigationController?.setNavigationBarHidden(true, animated: false)
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-//        searchTextField.resignFirstResponder()
+
+        if let coordinator = viewModel?.coordinator?.parentCoordinator as? DefaultTabBarCoordinator {
+            coordinator.tabBarController.isHomeSearchButton = false
+        }
     }
 
     func setupUI() {
@@ -105,7 +113,6 @@ class SearchViewController: UIViewController {
         recentContainerView.isHidden = false
         tagCollectionView.isHidden = false
         segmentedControllerContainerView.isHidden = true
-        navigationController?.isNavigationBarHidden = false
         pageVCContainerView.isHidden = true
     }
 }

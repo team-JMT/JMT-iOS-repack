@@ -12,6 +12,7 @@ enum SocialLoginTarget {
     case appleLogin(SocialLoginRequest)
     case googleLogin(SocialLoginRequest)
     case testLogin
+    case logout(LogoutRequest)
 }
 
 extension SocialLoginTarget: TargetType {
@@ -20,6 +21,7 @@ extension SocialLoginTarget: TargetType {
         case .appleLogin: return .post
         case .googleLogin: return .post
         case .testLogin: return .post
+        case .logout: return .delete
         }
     }
     
@@ -28,6 +30,7 @@ extension SocialLoginTarget: TargetType {
         case .appleLogin: return "/auth/apple"
         case .googleLogin: return "/auth/google"
         case .testLogin: return "/auth/test"
+        case .logout: return "/auth/user"
         }
     }
     
@@ -36,6 +39,7 @@ extension SocialLoginTarget: TargetType {
         case .appleLogin(let request): return .body(request)
         case .googleLogin(let request): return .body(request)
         case .testLogin: return .qurey(nil)
+        case .logout(let request): return .body(request)
         }
     }
 }

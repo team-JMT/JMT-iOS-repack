@@ -19,6 +19,7 @@ struct RefreshTokenAPI {
                     completion(.success(response.toDomain))
                 case .failure(let error):
                     print("refreshToken 실패!!", error)
+                    completion(.failure(.custom("refreshToken Error")))
                 }
             }
     }

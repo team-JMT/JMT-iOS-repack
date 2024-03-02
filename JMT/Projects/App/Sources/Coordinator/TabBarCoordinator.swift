@@ -9,15 +9,15 @@ import UIKit
 
 
 protocol TabBarCoordinator: Coordinator {
-    var tabBarController: UITabBarController { get }
+    var tabBarController: DefaultTabBarController { get }
 }
 
 class DefaultTabBarCoordinator: TabBarCoordinator {
     
     weak var parentCoordinator: Coordinator?
     
-    var tabBarController = UITabBarController()
-    
+    var tabBarController = DefaultTabBarController()
+     
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController?
     
@@ -99,11 +99,11 @@ class DefaultTabBarCoordinator: TabBarCoordinator {
     private func setTabBarCoordinator(of page: TabBarPage, to tabNavigationController: UINavigationController) {
         switch page {
         case .home:
-            let coordinator = DefaultHomeCoordinator(navigationController: tabNavigationController)
+            let coordinator = DefaultHomeCoordinator(navigationController: tabNavigationController, parentCoordinator: self)
             coordinator.start()
             childCoordinators.append(coordinator)
         case .search:
-            let coordinator = DefaultSearchCoordinator(navigationController: tabNavigationController)
+            let coordinator = DefaultSearchCoordinator(navigationController: tabNavigationController, parentCoordinator: self)
             coordinator.start()
             childCoordinators.append(coordinator)
         case .group:

@@ -14,7 +14,8 @@ protocol AppCoordinator: Coordinator {
     // 탭바 컨트롤러에 사용할 메소드 정의
     func setTabBarCoordinator()
     func showTabBarViewController()
-    
+
+    func logout()
 }
 
 class DefaultAppCoordinator: AppCoordinator {
@@ -32,12 +33,21 @@ class DefaultAppCoordinator: AppCoordinator {
     }
     
     func start() {
-        // 로그인 분기처리
         if DefaultKeychainService.shared.accessToken == nil {
             showSocialLoginViewController()
         } else {
             showTabBarViewController()
         }
+    }
+    
+    func logout() {
+        if getChildCoordinator(.socialLogin) == nil {
+            setSocialLoginCoordinator()
+        }
+        
+        let socialLocinCoordinator = getChildCoordinator(.socialLogin) as! SocialLoginCoordinator
+        socialLocinCoordinator.logout()
+
     }
     
     func setSocialLoginCoordinator() {
