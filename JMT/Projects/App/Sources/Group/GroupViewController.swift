@@ -30,7 +30,6 @@ class GroupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         //        let myURL = URL(string:"https://jmt-frontend-ad7b8.web.app/")
         //        let myRequest = URLRequest(url: myURL!)
         // webView.load(myRequest)
@@ -51,7 +50,7 @@ class GroupViewController: UIViewController {
             print(accessToken)
         }
     }
-
+    
     
     @IBAction func goUrl(_ sender: Any) {
         guard let urlText = tf.text, !urlText.isEmpty else { return }
@@ -67,6 +66,13 @@ class GroupViewController: UIViewController {
         }
     }
     
-    
-    
+    @IBAction func didTabShowCustomURLButton(_ sender: Any) {
+        guard let text = tf.text else { return }
+        
+        let storyboard = UIStoryboard(name: "Group", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController else { return }
+        vc.url = text
+
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 }

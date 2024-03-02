@@ -12,11 +12,11 @@ protocol HomeCoordinator: Coordinator {
     func setUserLocationCoordinator()
     func showUserLocationViewController(endPoint: Int)
     
-    func setFilterBottomSheetCoordinator()
-    func showFilterBottomSheetViewController()
-    
     func setSearchRestaurantCoordinator()
     func showSearchRestaurantViewController()
+    
+    func showSearchTabWithButton()
+    func showGroupTab()
 }
 
 class DefaultHomeCoordinator: HomeCoordinator {
@@ -27,8 +27,9 @@ class DefaultHomeCoordinator: HomeCoordinator {
     var finishDelegate: CoordinatorFinishDelegate?
     var type: CoordinatorType = .home
     
-    init(navigationController: UINavigationController?) {
+    init(navigationController: UINavigationController?, parentCoordinator: Coordinator) {
         self.navigationController = navigationController
+        self.parentCoordinator = parentCoordinator
     }
     
     func start() {
@@ -54,20 +55,6 @@ class DefaultHomeCoordinator: HomeCoordinator {
         coordinator.enterPoint = endPoint
         coordinator.start()
     }
-    
-    func setFilterBottomSheetCoordinator() {
-        let coordinator = DefaultFilterBottomSheetCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
-        childCoordinators.append(coordinator)
-    }
-    
-    func showFilterBottomSheetViewController() {
-        if getChildCoordinator(.filterBS) == nil {
-            setFilterBottomSheetCoordinator()
-        }
-        
-        let coordinator = getChildCoordinator(.filterBS) as! FilterBottomSheetCoordinator
-        coordinator.start()
-    }
   
     func setSearchRestaurantCoordinator() {
         let coordinator = DefaultSearchRestaurantCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
@@ -83,14 +70,25 @@ class DefaultHomeCoordinator: HomeCoordinator {
         coordinator.start()
     }
     
+    func showSearchTabWithButton() {
+        if let coordinator = parentCoordinator as? DefaultTabBarCoordinator {
+            coordinator.tabBarController.isHomeSearchButton = true
+            coordinator.tabBarController.selectedIndex = 1
+        }
+    }
+    
+    func showGroupTab() {
+        if let coordinator = parentCoordinator as? DefaultTabBarCoordinator {
+            coordinator.tabBarController.selectedIndex = 2
+        }
+    }
+    
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil
         
         switch type {
         case .userLocation:
             childCoordinator = childCoordinators.first(where: { $0 is UserLocationCoordinator })
-        case .filterBS:
-            childCoordinator = childCoordinators.first(where: { $0 is FilterBottomSheetCoordinator })
         case .searchRestaurant:
             childCoordinator = childCoordinators.first(where: { $0 is SearchRestaurantCoordinator })
         default:

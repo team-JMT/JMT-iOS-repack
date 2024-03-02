@@ -51,7 +51,7 @@ struct SocialLoginAPI {
     }
     
     // 테스트 계정
-    static func testLogin(completion: @escaping (Result<String, NetworkError>) -> () ) {
+    static func testLogin(completion: @escaping (Result<String, NetworkError>) -> ()) {
         AF.request(SocialLoginTarget.testLogin)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: SocialLoginResponse.self) { response in
@@ -65,6 +65,26 @@ struct SocialLoginAPI {
                     completion(.success(response.toDomain.userLoginAction))
                 case .failure(let error):
                     print("error")
+                }
+            }
+    }
+    
+    static func logout(completion: @escaping (Result<LogoutResponse, NetworkError>) -> ()) {
+        let accessToken = DefaultKeychainService.shared.accessToken ?? ""
+        let refreshToken = DefaultKeychainService.shared.refreshToken ?? ""
+        let request = LogoutRequest(accessToken: accessToken, refreshToken: refreshToken)
+    
+        AF.request(SocialLoginTarget.logout(request))
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: LogoutResponse.self) { response in
+                switch response.result {
+                case .success(let response):
+                    print(response)
+                    completion(.success(response))
+                    
+                case .failure(let error):
+                    print("logout Error")
+                    completion(.failure(.custom("logout Error")))
                 }
             }
     }

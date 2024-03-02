@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import UIKit
 
 class DefaultRequestInterceptor: RequestInterceptor {
     
@@ -53,7 +54,35 @@ class DefaultRequestInterceptor: RequestInterceptor {
                 completion(.retry)
             case .failure(let error):
                 print("retry - RefreshTokenAPI.refreshToken 실패", error)
-                completion(.doNotRetryWithError(error))
+             
+                SocialLoginAPI.logout { response in
+                    switch response {
+                    case .success(let success):
+
+                        guard let windowScene = UIApplication.shared
+                            .connectedScenes
+                            .filter({ $0.activationState == .foregroundActive })
+                            .first as? UIWindowScene else {
+                                return
+                        }
+                        
+                        guard let sceneDelegate = windowScene.delegate as? SceneDelegate else {
+                            return
+                        }
+                        
+                        DefaultKeychainService.shared.accessToken = nil
+                        DefaultKeychainService.shared.refreshToken = nil
+                        DefaultKeychainService.shared.accessTokenExpiresIn = nil
+                        
+                        let appCoordinator = sceneDelegate.appCoordinator
+                        appCoordinator?.logout()
+
+                    case .failure(let failure):
+                        print("SocialLoginAPI.logout Error")
+                    }
+
+                    completion(.doNotRetryWithError(error))
+                }
             }
         }
     }

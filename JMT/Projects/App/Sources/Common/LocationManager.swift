@@ -53,7 +53,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         case .authorizedWhenInUse:
             print("권한 설정")
             locationManager.startUpdatingLocation()
-            
         default:
             print("Default")
         }

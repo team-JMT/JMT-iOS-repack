@@ -23,3 +23,20 @@ extension UIFont {
     }
 }
 
+// 글자 간격
+extension UILabel {
+    func setAttributedText(str: String, lineHeightMultiple: CGFloat, kern: CGFloat, alignment: NSTextAlignment) {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = lineHeightMultiple
+        paragraphStyle.alignment = .center
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .paragraphStyle: paragraphStyle,
+            .kern: kern
+        ]
+        
+        let attributedString = NSMutableAttributedString(string: str, attributes: attributes)
+        self.attributedText = attributedString
+    }
+}
+

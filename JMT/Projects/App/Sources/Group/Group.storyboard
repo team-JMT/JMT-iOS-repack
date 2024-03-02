@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,34 +17,54 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Bzd-jZ-Td6">
-                                <rect key="frame" x="30" y="334" width="332" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Bzd-jZ-Td6">
+                                <rect key="frame" x="20" y="409" width="353" height="34"/>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l9x-Pa-8F6">
-                                <rect key="frame" x="126" y="403" width="141" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l9x-Pa-8F6">
+                                <rect key="frame" x="0.0" y="783" width="393" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="위 url로 이동하기"/>
                                 <connections>
                                     <action selector="goUrl:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="AP9-Cq-OfG"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Jt-mo-JGi">
-                                <rect key="frame" x="52" y="141" width="289" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Jt-mo-JGi">
+                                <rect key="frame" x="0.0" y="89" width="393" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="헤더에 토큰넣고 웹뷰로 이동하기 (기본)"/>
                                 <connections>
                                     <action selector="goOrginWeb:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="LyG-HD-YSt"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pQT-d2-m8Y">
+                                <rect key="frame" x="0.0" y="463" width="393" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="위 URL로 이동하기"/>
+                                <connections>
+                                    <action selector="didTabShowCustomURLButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Uu2-zQ-1SM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Bzd-jZ-Td6" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="2WZ-BB-vqw"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="l9x-Pa-8F6" secondAttribute="trailing" id="7jU-cE-1QJ"/>
+                            <constraint firstItem="pQT-d2-m8Y" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Jcg-Ig-Xo8"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Bzd-jZ-Td6" secondAttribute="trailing" constant="20" id="NHM-Xg-tBQ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="5Jt-mo-JGi" secondAttribute="trailing" id="OPv-XP-D7U"/>
+                            <constraint firstItem="Bzd-jZ-Td6" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="S8r-TB-C1R"/>
+                            <constraint firstItem="pQT-d2-m8Y" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="UgZ-rm-emZ"/>
+                            <constraint firstItem="pQT-d2-m8Y" firstAttribute="top" secondItem="Bzd-jZ-Td6" secondAttribute="bottom" constant="20" id="WiC-8e-3B8"/>
+                            <constraint firstItem="Bzd-jZ-Td6" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="Ya2-9u-3Kt"/>
+                            <constraint firstItem="l9x-Pa-8F6" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="bMz-Zf-TpV"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="l9x-Pa-8F6" secondAttribute="bottom" id="gcL-qZ-27n"/>
+                            <constraint firstItem="5Jt-mo-JGi" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="i6h-iO-SPb"/>
+                            <constraint firstItem="5Jt-mo-JGi" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="30" id="psr-jN-Z2E"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="tf" destination="Bzd-jZ-Td6" id="F4z-90-4fU"/>

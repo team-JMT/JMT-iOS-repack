@@ -29,3 +29,10 @@ extension SocialLoginResponse {
                                 userLoginAction: data.userLoginAction)
     }
 }
+
+
+struct LogoutResponse: Decodable {
+    let data: String
+    let message: String
+    let code: String
+}
