@@ -145,31 +145,47 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
     }
     
     func showImagePicker() {
-        
-        let photoService = DefaultPhotoAuthService()
-        
-        var config = PhotoKitConfiguration()
-        config.library.defaultMultipleSelection = false
-        
-        let picker = PhotoKitNavigationController(configuration: config)
-        
-        picker.didFinishCompletion = { photo in
-        
-            self.handleImagePickerResult(photo.first, isDefault: false)
-            picker.dismiss(animated: true)
-        }
-        
-        photoService.requestAuthorization { result in
-            switch result {
-            case .success(_):
-                self.navigationController?.present(picker, animated: true)
-            case .failure(_):
-                if let topViewController = self.navigationController?.topViewController {
-                    topViewController.showAccessDeniedAlert(type: .photo)
+            
+            let photoService = DefaultPhotoAuthService()
+            
+            var config = PhotoKitConfiguration()
+            config.library.defaultMultipleSelection = false
+            
+            let picker = PhotoKitNavigationController(configuration: config)
+            
+            picker.didFinishCompletion = { photo in
+            
+                self.handleImagePickerResult(photo.first, isDefault: false)
+                picker.dismiss(animated: true)
+            }
+            
+            photoService.requestAuthorization { result in
+                switch result {
+                case .success(_):
+                    self.navigationController?.present(picker, animated: true)
+                case .failure(_):
+                    if let topViewController = self.navigationController?.topViewController {
+                        topViewController.showAccessDeniedAlert(type: .photo)
+                    }
                 }
             }
         }
-    }
+    
+//    func showImagePicker() {
+//        
+//        var config = PhotoKitConfiguration()
+//        config.library.defaultMultipleSelection = false
+//        
+//        let picker = PhotoKitNavigationController(configuration: config)
+//        
+//        picker.didFinishCompletion = { photo in
+//        
+//            self.handleImagePickerResult(photo.first, isDefault: false)
+//            picker.dismiss(animated: true)
+//        }
+//
+//        self.navigationController?.present(picker, animated: true)
+//    }
     
     func handleImagePickerResult(_ image: UIImage?, isDefault: Bool) {
         if let detailMyPageViewController = self.navigationController?.topViewController as? DetailMyPageVC {
