@@ -34,12 +34,25 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // 홈화면 처음 진입시 위치 권한 체크
+        if !UserDefaultManager.hasLocationRequstBefore {
+            UserDefaultManager.hasLocationRequstBefore = true
+            
+            // 위치 권한을 설정하지 않았을때 위치 권한 요청하기
+            viewModel?.locationManager.requestWhenInUseAuthorization()
+        }
+        
+        setupBind()
+        
+        
+        viewModel?.fetchCurrentLocation()
+    
         print(DefaultKeychainService.shared.accessToken)
-//                DefaultKeychainService.shared.accessToken = nil
+//        DefaultKeychainService.shared.accessToken = nil
         
         self.view.showAnimatedGradientSkeleton()
         
-        setupBind()
+        
         
         naverMapView.mapView.addCameraDelegate(delegate: self)
         
@@ -47,6 +60,19 @@ class HomeViewController: UIViewController {
         
         showRestaurantListBottomSheetVC()
         updateLocationButtonBottomConstraint()
+    }
+    
+    func updateCamera() {
+        let lat = viewModel?.location?.latitude ?? 0.0
+        let lon = viewModel?.location?.longitude ?? 0.0
+        
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
+        cameraUpdate.animation = .easeIn
+        self.naverMapView.mapView.moveCamera(cameraUpdate)
+    }
+    
+    func updateLocationsButton(address: String) {
+        locationButton.setTitle(address, for: .normal)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,8 +88,14 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func didTabRefreshButton(_ sender: Any) {
-        viewModel?.checkLocationAuthorization()
-        viewModel?.refreshCurrentLocation()
+        
+        print("위치 새로 고침")
+        if viewModel?.locationManager.checkAuthorizationStatus() == false {
+            self.showAccessDeniedAlert(type: .location)
+        } else {
+            self.viewModel?.locationManager.startUpdatingLocation()
+            self.viewModel?.fetchCurrentLocation()
+        }
     }
     
     @IBAction func didTabChangeAddressButton(_ sender: Any) {
@@ -76,6 +108,17 @@ class HomeViewController: UIViewController {
     }
     
     func setupBind() {
+        
+        // 위치 정보 업데이트 후 카메라 업데이트
+        viewModel?.didUpdateCurrentAddress = { address in
+            self.updateCamera()
+            self.updateLocationsButton(address: address)
+        }
+        
+        
+        
+        
+        
         
         viewModel?.didUpdateGroupName = { index in
             self.groupNameButton.setTitle(self.viewModel?.groupList[index].groupName ?? "", for: .normal)
@@ -106,22 +149,6 @@ class HomeViewController: UIViewController {
         viewModel?.displayAlertHandler = {
             self.showAccessDeniedAlert(type: .location)
         }
-        
-        viewModel?.onUpdateCurrentLocation = { lat, lon in
-            
-            print(lat, lon)
-            
-            self.viewModel?.getCurrentLocationAddress(lat: String(lat), lon: String(lon), completed: { address in
-                
-                self.locationButton.setTitle(address, for: .normal)
-                
-                let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
-                cameraUpdate.animation = .easeIn
-                self.naverMapView.mapView.moveCamera(cameraUpdate)
-            })
-        }
-
-        
         
         viewModel?.didTest = {
             DispatchQueue.main.async {
@@ -339,4 +366,9 @@ extension HomeViewController {
 
         self.present(groupListFpc, animated: true)
     }
+}
+
+
+extension HomeViewController {
+    
 }

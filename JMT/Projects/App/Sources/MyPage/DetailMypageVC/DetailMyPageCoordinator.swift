@@ -145,6 +145,8 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
     
     func showImagePicker() {
         
+        let photoService = DefaultPhotoAuthService()
+        
         var config = PhotoKitConfiguration()
         config.library.defaultMultipleSelection = false
         
@@ -155,8 +157,17 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
             self.handleImagePickerResult(photo.first, isDefault: false)
             picker.dismiss(animated: true)
         }
-
-        self.navigationController?.present(picker, animated: true)
+        
+        photoService.requestAuthorization { result in
+            switch result {
+            case .success(_):
+                self.navigationController?.present(picker, animated: true)
+            case .failure(_):
+                if let topViewController = self.navigationController?.topViewController {
+                    topViewController.showAccessDeniedAlert(type: .photo)
+                }
+            }
+        }
     }
     
     func handleImagePickerResult(_ image: UIImage?, isDefault: Bool) {
