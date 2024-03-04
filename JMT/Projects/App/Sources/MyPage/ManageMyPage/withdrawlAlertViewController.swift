@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 
 class withdrawlAlertViewController: UIViewController {
     
@@ -22,8 +21,8 @@ class withdrawlAlertViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        acceptBtn.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
-        
+//        acceptBtn.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
+//        
         mainView.layer.cornerRadius = 20
         withdrawView.layer.cornerRadius = 12
         withdrawView.layer.borderColor = UIColor(named: "main500")?.cgColor
@@ -34,77 +33,75 @@ class withdrawlAlertViewController: UIViewController {
         
         
     }
-    
-    
-    @objc func dismissView() {
-        dismiss(animated: false, completion: nil)
-    }
-    
-    // 로그아웃 기능 구현
-    func logout(completion: @escaping (Bool) -> Void) {
-        let url = "https://api.jmt-matzip.dev/api/v1/user"
-        
-        // KeychainService에서 액세스 토큰 가져오기
-        guard let token = DefaultKeychainService.shared.accessToken else {
-            print("Access Token is not available")
-            completion(false)
-            return
-        }
-        
-        let headers: HTTPHeaders = [
-            "accept": "*/*",
-            "Authorization": "Bearer \(token)",
-            "Content-Type": "application/json"
-        ]
-        
-        // KeychainService에서 리프레시 토큰 가져오기
-        guard let refreshToken = DefaultKeychainService.shared.refreshToken else {
-            print("Refresh Token is not available")
-            completion(false)
-            return
-        }
-        
-        let parameters = ["refreshToken": refreshToken]
-        
-        AF.request(url, method: .delete, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate().response { response in
-            switch response.result {
-            case .success:
-                // Keychain에 저장된 토큰 정보 삭제
-                DefaultKeychainService.shared.accessToken = nil
-                DefaultKeychainService.shared.refreshToken = nil
-                DefaultKeychainService.shared.accessTokenExpiresIn = nil
-                
-                print("Logout successful.")
-                completion(true)
-            case .failure(let error):
-                print("Error during logout: \(error)")
-                completion(false)
-            }
-        }
-    }
-    
-        @IBAction func withdrawBtnTapped(_ sender: Any) {
-            logout { success in
-                    if success {
-                        print("Withdrawal successful.")
-
-                        // Keychain에서 모든 토큰 삭제
-                        DefaultKeychainService.shared.accessToken = nil
-                        DefaultKeychainService.shared.refreshToken = nil
-                        DefaultKeychainService.shared.accessTokenExpiresIn = nil
-
-                        // 회원 탈퇴 성공 시 SignInViewController로 돌아가기
-                        let storyboard = UIStoryboard(name: "Login", bundle: nil)
-                        if let signInVC = storyboard.instantiateViewController(withIdentifier: "SocialLoginViewController") as? SocialLoginViewController {
-                            signInVC.modalPresentationStyle = .fullScreen
-                            self.present(signInVC, animated: true, completion: nil)
-                        }
-                    } else {
-                        print("Withdrawal failed.")
-                    }
-                }
-        }
+    //
+    //    func withdrawAccount(completion: @escaping (Bool) -> Void) {
+    //        let url = "https://api.jmt-matzip.dev/api/v1/user"
+    //
+    //        var token: String = "" // Default value for token
+    //        let loginMethod = UserDefaults.standard.string(forKey: "loginMethod")
+    //
+    //        switch loginMethod {
+    //        case "google":
+    //            token = UserDefaults.standard.string(forKey: "CustomAccessToken") ?? ""
+    //        case "apple":
+    //            token = UserDefaults.standard.string(forKey: "accessToken") ?? ""
+    //        default:
+    //            token = UserDefaults.standard.string(forKey: "CustomAccessToken") ?? ""
+    //            print("Unexpected login method.")
+    //        }
+    //
+    //        let headers: HTTPHeaders = [
+    //            "accept": "*/*",
+    //            "Authorization": "Bearer \(token)",
+    //            "Content-Type": "application/json"
+    //        ]
+    //
+    //        AF.request(url, method: .delete, headers: headers).validate().response { response in
+    //            print(response)
+    //            switch response.result {
+    //            case .success:
+    //                completion(true)
+    //            case .failure(let error):
+    //                print("Error: \(error)")
+    //                completion(false)
+    //            }
+    //        }
+    //
+    //    }
+    //
+    //    @IBAction func withdrawBtnTapped(_ sender: Any) {
+    //        withdrawAccount { success in
+    //                if success {
+    //                    print("Withdrawal successful.")
+    //                    UserDefaults.standard.set(false, forKey: "IsWithdrawal") // 플래그
+    //                    let isWithdrawalValue = UserDefaults.standard.bool(forKey: "IsWithdrawal")
+    //                    print("IsWithdrawal value: \(isWithdrawalValue)")
+    //
+    //                    // 회원 탈퇴 성공 시 모든 저장된 정보 삭제 및 SignInViewController로 돌아가기
+    //                    HTTPCookieStorage.shared.cookies?.forEach(HTTPCookieStorage.shared.deleteCookie)
+    //                    UserDefaults.standard.removeObject(forKey: "accessToken")
+    //                    UserDefaults.standard.removeObject(forKey: "refreshToken")
+    //                    UserDefaults.standard.synchronize()
+    //
+    //                    print("Debug: Access Token after deletion: \(String(describing: UserDefaults.standard.string(forKey: "accessToken")))")
+    //                    print("Debug: Refresh Token after deletion: \(String(describing: UserDefaults.standard.string(forKey: "refreshToken")))")
+    //
+    //                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    //                    if let signInVC = storyboard.instantiateViewController(withIdentifier: "SignInViewController") as? SignInViewController {
+    //                        signInVC.modalPresentationStyle = .fullScreen
+    //                        self.present(signInVC, animated: true, completion: nil)
+    //                    }
+    //
+    //                } else {
+    //                    print("Withdrawal failed.")
+    //                }
+    //            }
+    //    }
+    //    @objc func dismissView(){
+    //           dismiss(animated: false, completion: nil)
+    //       }
+    //
+    //    }
+    //
     
 }
-
-
