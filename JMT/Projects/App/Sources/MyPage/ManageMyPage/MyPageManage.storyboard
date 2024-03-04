@@ -51,6 +51,9 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain"/>
+                                        <connections>
+                                            <action selector="didTabWithdrawl:" destination="9Qj-VF-5gv" eventType="touchUpInside" id="9ee-uK-0Us"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -69,6 +72,9 @@
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="52"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain"/>
+                                        <connections>
+                                            <action selector="didTapLogOut:" destination="9Qj-VF-5gv" eventType="touchUpInside" id="VaT-3d-lFD"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="로그아웃" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1jN-jx-Grw">
                                         <rect key="frame" x="20.000000000000004" y="24" width="55.333333333333343" height="19.333333333333329"/>
@@ -139,7 +145,7 @@
         <!--Logout Alert View Controller-->
         <scene sceneID="vH5-KW-hAD">
             <objects>
-                <viewController storyboardIdentifier="LogoutAlertViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="g1d-x3-YIr" customClass="LogoutAlertViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="logoutAlertViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="g1d-x3-YIr" customClass="logoutAlertViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" alpha="0.85000002384185791" contentMode="scaleToFill" id="Qgm-7M-YVx">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -170,7 +176,6 @@
                                                         </buttonConfiguration>
                                                         <connections>
                                                             <action selector="exitAlert:" destination="UGz-rt-idd" eventType="touchUpInside" id="EfK-WW-Lpv"/>
-                                                            <action selector="logoutTapped:" destination="g1d-x3-YIr" eventType="touchUpInside" id="0wd-pU-17r"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -271,10 +276,10 @@
             </objects>
             <point key="canvasLocation" x="3021" y="-486"/>
         </scene>
-        <!--Withdraw Alert Viewcontroller-->
+        <!--Withdrawl Alert View Controller-->
         <scene sceneID="RBj-gh-fFS">
             <objects>
-                <viewController storyboardIdentifier="withdrawAlertViewcontroller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="1bn-cZ-173" customClass="withdrawAlertViewcontroller" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="withdrawlAlertViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="1bn-cZ-173" customClass="withdrawlAlertViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" alpha="0.85000002384185791" contentMode="scaleToFill" id="Bhu-HS-noA">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

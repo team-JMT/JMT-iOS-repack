@@ -110,45 +110,6 @@ class ChangeNickNameVC: UIViewController {
     
     
     
-    //MARK: - 서버로 닉네임 전송
-//    func sendNicknameToServer(nickname: String, token: String, completion: @escaping (Bool) -> Void) {
-//        if let accessToken = UserDefaults.standard.string(forKey: "accessToken") {
-//            print("애플Access Token: \(accessToken)")
-//            
-//            let url = URL(string: "https://api.jmt-matzip.dev/api/v1/user/nickname")!
-//            let headers: HTTPHeaders = [
-//                "accept": "*/*",
-//                "Authorization": "Bearer \(accessToken)",
-//                "Content-Type": "application/json"
-//            ]
-//            let parameters: [String: Any] = [
-//                "nickname": nickname
-//            ]
-//            
-//            
-//            DispatchQueue.main.async {
-//                AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
-//                    .validate()
-//                    .responseDecodable(of: NicknameRegister.self) { response in
-//                        switch response.result {
-//                        case .success(let nicknameData):
-//                            print("Nickname data: \(nicknameData)")
-//                            UserDefaults.standard.set(true, forKey: "ShouldShowToastPopup")
-//                            UserDefaults.standard.set(nickname, forKey: "nickname") // Update the nickname in UserDefaults
-//                            
-//                            NotificationCenter.default.post(name: Notification.Name("NicknameUpdateSuccess"), object: nil)
-//                            completion(true)
-//                        case .failure(let error):
-//                            print("Error sending nickname to server: \(error)")
-//                            completion(false)
-//                        }
-//                    }
-//            }
-//        }
-//    }
-    
-    
-    
     func sendNicknameToServer(nickname: String, token: String, completion: @escaping (Bool) -> Void) {
         let url = URL(string: "https://api.jmt-matzip.dev/api/v1/user/nickname")!
         let headers: HTTPHeaders = [
