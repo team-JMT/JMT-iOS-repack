@@ -40,7 +40,7 @@ class MyPageManageVC: UIViewController {
     }
     
     @IBAction func didTabWithdrawl(_ sender: Any) {
-        
+        viewModel?.coordinator?.showWithdrawlViewController()
     }
     
     

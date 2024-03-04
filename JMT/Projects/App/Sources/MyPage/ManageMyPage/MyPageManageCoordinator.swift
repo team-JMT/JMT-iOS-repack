@@ -15,6 +15,7 @@ protocol MyPageManageCoordinator: Coordinator {
     func showlogOutAlertViewController()
     
     func showLogoutViewController()
+    func showWithdrawlViewController()
     
 }
 
@@ -71,7 +72,7 @@ class DefaultMyPageManageCoordinator: MyPageManageCoordinator {
         }
     }
     
-    func showBViewController() {
+    func showWithdrawlViewController() {
         if let bViewController = storyboard.instantiateViewController(withIdentifier: "withdrawlAlertViewController") as? withdrawlAlertViewController {
             bViewController.modalPresentationStyle = .overCurrentContext
             bViewController.modalTransitionStyle = .crossDissolve

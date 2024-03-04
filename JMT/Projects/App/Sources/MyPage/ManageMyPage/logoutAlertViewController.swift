@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class logoutAlertViewController: UIViewController {
     
@@ -38,81 +39,71 @@ class logoutAlertViewController: UIViewController {
         
     }
     
-    //
-    //    func logout(completion: @escaping (Bool) -> Void) {
-    //        let url = "https://api.jmt-matzip.dev/api/v1/user"
-    //
-    //        var token: String = "" // Default value for token
-    //        let loginMethod = UserDefaults.standard.string(forKey: "loginMethod")
-    //
-    //        switch loginMethod {
-    //        case "google":
-    //            token = UserDefaults.standard.string(forKey: "CustomAccessToken") ?? ""
-    //        case "apple":
-    //            token = UserDefaults.standard.string(forKey: "accessToken") ?? ""
-    //        default:
-    //            token = UserDefaults.standard.string(forKey: "CustomAccessToken") ?? ""
-    //            print("Unexpected login method.")
-    //        }
-    //
-    //        let headers: HTTPHeaders = [
-    //            "accept": "*/*",
-    //            "Authorization": "Bearer \(token)",
-    //            "Content-Type": "application/json"
-    //        ]
-    //
-    //        let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
-    //        let parameters = ["refreshToken": refreshToken]
-    //
-    //        AF.request(url, method: .delete, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate().response { response in
-    //            switch response.result {
-    //            case .success:
-    //                completion(true)
-    //            case .failure(let error):
-    //                print("Error: \(error)")
-    //                completion(false)
-    //            }
-    //        }
-    //    }
-    //
     
-        @objc func dismissView(){
-            dismiss(animated: false, completion: nil)
+    //유지하기
+    @objc func dismissView(){
+        dismiss(animated: false, completion: nil)
+    }
+    
+    
+    // 로그아웃 기능 구현
+    func logout(completion: @escaping (Bool) -> Void) {
+        let url = "https://api.jmt-matzip.dev/api/v1/auth/user"
+        
+        // KeychainService에서 액세스 토큰 가져오기
+        guard let token = DefaultKeychainService.shared.accessToken else {
+            print("Access Token is not available")
+            completion(false)
+            return
         }
+        
+        let headers: HTTPHeaders = [
+            "accept": "*/*",
+            "Authorization": "Bearer \(token)",
+            "Content-Type": "application/json"
+        ]
+        
+        // KeychainService에서 리프레시 토큰 가져오기
+        guard let refreshToken = DefaultKeychainService.shared.refreshToken else {
+            print("Refresh Token is not available")
+            completion(false)
+            return
+        }
+        
+        let parameters = ["refreshToken": refreshToken]
+        
+        AF.request(url, method: .delete, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate().response { response in
+            switch response.result {
+            case .success:
+                // Keychain에 저장된 토큰 정보 삭제
+                DefaultKeychainService.shared.accessToken = nil
+                DefaultKeychainService.shared.refreshToken = nil
+                DefaultKeychainService.shared.accessTokenExpiresIn = nil
+                
+                print("Logout successful.")
+                completion(true)
+            case .failure(let error):
+                print("Error during logout: \(error)")
+                completion(false)
+            }
+        }
+    }
     
-    //
-    //
-    //    @IBAction func logoutTapped(_ sender: Any) {
-    //        logout { success in
-    //            if success {
-    //
-    //                UserDefaults.standard.set(false, forKey: "IsWithdrawal")
-    //                let isWithdrawalValue = UserDefaults.standard.bool(forKey: "IsWithdrawal")
-    //                print("IsWithdrawal value after logout: \(isWithdrawalValue)")
-    //
-    //
-    //                HTTPCookieStorage.shared.cookies?.forEach(HTTPCookieStorage.shared.deleteCookie)
-    //                UserDefaults.standard.removeObject(forKey: "accessToken")
-    //                UserDefaults.standard.removeObject(forKey: "refreshToken")
-    //                UserDefaults.standard.synchronize()
-    //                print("Logout successful.")
-    //
-    //                // 로그아웃 성공 시 SignInViewController로 돌아가기
-    //                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    //                if let signInVC = storyboard.instantiateViewController(withIdentifier: "SignInViewController") as? SignInViewController {
-    //                    signInVC.modalPresentationStyle = .fullScreen
-    //                    self.present(signInVC, animated: true, completion: nil)
-    //                }
-    //
-    //            } else {
-    //                print("Logout failed.")
-    //            }
-    //
-    //        }
-    //    }
-    //
-    //
-    //
-    //
-    //
+    //로그아웃
+    @IBAction func logoutTapped(_ sender: Any) {
+        logout { [weak self] success in
+                if success {
+                    // 로그아웃 성공 시 SignInViewController로 돌아가기
+                    let storyboard = UIStoryboard(name: "Login", bundle: nil)
+                    if let signInVC = storyboard.instantiateViewController(withIdentifier: "SocialLoginViewController") as? SocialLoginViewController {
+                        signInVC.modalPresentationStyle = .fullScreen
+                        self?.present(signInVC, animated: true, completion: nil)
+                    }
+                } else {
+                    print("Logout failed.")
+                }
+            }
+        print("1221x")
+    }
+    
 }
