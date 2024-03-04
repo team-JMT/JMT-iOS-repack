@@ -40,20 +40,19 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" id="4AI-in-a9M">
-                                                <rect key="frame" x="0.0" y="0.0" width="393" height="230"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="393" height="216"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <segmentedControl opaque="NO" contentMode="scaleToFill" restorationIdentifier="UnderlineSegmentedControl" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5oI-iI-LwA" customClass="UnderlineSegmentedControl" customModule="JMTeng" customModuleProvider="target">
                                                         <rect key="frame" x="10" y="184" width="373" height="32"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="31" id="diV-UI-DWx"/>
+                                                        </constraints>
                                                         <segments>
                                                             <segment title="등록한 맛집"/>
                                                             <segment title="좋아한 맛집"/>
                                                             <segment title="나의 후기"/>
                                                         </segments>
-                                                        <connections>
-                                                            <action selector="segmentChanged:" destination="7ra-iV-2jw" eventType="valueChanged" id="GHI-Vg-KjR"/>
-                                                            <action selector="segmentChanged:" destination="Y6W-OH-hqX" eventType="valueChanged" id="mmt-nE-c5I"/>
-                                                        </connections>
                                                     </segmentedControl>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="moR-bc-JK4">
                                                         <rect key="frame" x="0.0" y="48" width="393" height="1"/>
@@ -139,11 +138,12 @@
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" title="ㅤ"/>
-                                                        <connections>
-                                                            <action selector="DetailMyPage:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Ta7-rY-gYu"/>
-                                                            <action selector="DetailMyPage:" destination="7ra-iV-2jw" eventType="touchUpInside" id="dAm-pF-eJ7"/>
-                                                        </connections>
                                                     </button>
+                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MqR-sd-5pC">
+                                                        <rect key="frame" x="90" y="-26" width="240" height="128"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                                    </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -160,7 +160,6 @@
                                                     <constraint firstItem="moR-bc-JK4" firstAttribute="top" secondItem="cJK-4J-UH2" secondAttribute="bottom" constant="12" id="NHG-hA-EMv"/>
                                                     <constraint firstItem="cJK-4J-UH2" firstAttribute="top" secondItem="4AI-in-a9M" secondAttribute="top" constant="12" id="Nkt-s4-HaA"/>
                                                     <constraint firstAttribute="trailing" secondItem="cJK-4J-UH2" secondAttribute="trailing" constant="20" id="Qlc-Mu-eSA"/>
-                                                    <constraint firstAttribute="bottom" secondItem="5oI-iI-LwA" secondAttribute="bottom" constant="15" id="Xud-Eu-SHH"/>
                                                     <constraint firstItem="PAk-vv-8fD" firstAttribute="leading" secondItem="4AI-in-a9M" secondAttribute="leading" id="YX4-WE-W5L"/>
                                                     <constraint firstAttribute="trailing" secondItem="5oI-iI-LwA" secondAttribute="trailing" constant="10" id="aGs-LS-zwe"/>
                                                     <constraint firstAttribute="trailing" secondItem="PAk-vv-8fD" secondAttribute="trailing" id="aaS-Is-YB4"/>
@@ -171,24 +170,36 @@
                                                     <constraint firstItem="eti-tO-rD3" firstAttribute="leading" secondItem="HEg-EI-f3j" secondAttribute="trailing" constant="24" id="y8N-ez-9ws"/>
                                                 </constraints>
                                             </view>
+                                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v9R-cf-JoU">
+                                                <rect key="frame" x="0.0" y="216" width="393" height="636"/>
+                                                <connections>
+                                                    <segue destination="Cd0-4A-wSY" kind="embed" id="rnN-eC-rt6"/>
+                                                </connections>
+                                            </containerView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="Rst-sJ-uhC" secondAttribute="trailing" constant="77" id="XC2-Gy-Xuk"/>
+                                            <constraint firstItem="v9R-cf-JoU" firstAttribute="top" secondItem="4AI-in-a9M" secondAttribute="bottom" id="Zzo-Gd-REf"/>
                                             <constraint firstItem="Rst-sJ-uhC" firstAttribute="top" secondItem="1S5-wD-Dkx" secondAttribute="top" id="ffB-fu-90h"/>
                                             <constraint firstItem="Rst-sJ-uhC" firstAttribute="leading" secondItem="1S5-wD-Dkx" secondAttribute="leading" constant="76" id="igZ-Hm-lyM"/>
                                             <constraint firstItem="4AI-in-a9M" firstAttribute="top" secondItem="Rst-sJ-uhC" secondAttribute="top" id="udq-32-mvR"/>
+                                            <constraint firstItem="v9R-cf-JoU" firstAttribute="top" secondItem="4AI-in-a9M" secondAttribute="top" priority="750" constant="238" id="zLj-ij-u0G"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="cyG-NB-b3l" firstAttribute="bottom" secondItem="1S5-wD-Dkx" secondAttribute="bottom" id="HPZ-13-M2l"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="trailing" secondItem="cyG-NB-b3l" secondAttribute="trailing" id="OPB-xj-mkM"/>
+                                    <constraint firstItem="v9R-cf-JoU" firstAttribute="width" secondItem="Jkv-FR-1iI" secondAttribute="width" id="Q3Y-hS-hZe"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="leading" secondItem="cyG-NB-b3l" secondAttribute="leading" id="Tu5-1U-h3H"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="width" secondItem="Jkv-FR-1iI" secondAttribute="width" id="Ymj-dV-zGc"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="top" secondItem="Jkv-FR-1iI" secondAttribute="top" id="aA8-EI-QZ1"/>
+                                    <constraint firstAttribute="bottom" secondItem="v9R-cf-JoU" secondAttribute="bottom" id="aKz-6L-cQB"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="leading" secondItem="Jkv-FR-1iI" secondAttribute="leading" id="c0c-tc-gDl"/>
+                                    <constraint firstItem="v9R-cf-JoU" firstAttribute="leading" secondItem="Jkv-FR-1iI" secondAttribute="leading" id="ekg-1w-2R3"/>
                                     <constraint firstAttribute="trailing" secondItem="1S5-wD-Dkx" secondAttribute="trailing" id="fuM-rx-jJO"/>
+                                    <constraint firstAttribute="trailing" secondItem="v9R-cf-JoU" secondAttribute="trailing" id="k3y-yC-0xB"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="height" secondItem="Jkv-FR-1iI" secondAttribute="height" priority="250" id="vRW-h7-LEt"/>
                                     <constraint firstAttribute="bottom" secondItem="1S5-wD-Dkx" secondAttribute="bottom" id="xkH-KO-a4U"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="top" secondItem="cyG-NB-b3l" secondAttribute="top" id="yn4-Gf-FKB"/>
@@ -214,7 +225,10 @@
                         <outlet property="MyPageSegment" destination="5oI-iI-LwA" id="ufK-G2-pPp"/>
                         <outlet property="NickNameLabel" destination="Vsv-kQ-OLW" id="2zV-AY-6NN"/>
                         <outlet property="ProfileImage" destination="HEg-EI-f3j" id="IEX-9U-iae"/>
+                        <outlet property="containerView" destination="v9R-cf-JoU" id="wh2-cU-Rmq"/>
+                        <outlet property="containerViewTopConstrains" destination="Zzo-Gd-REf" id="8Ic-nW-UN0"/>
                         <outlet property="contentView" destination="1S5-wD-Dkx" id="MLb-1d-Uv4"/>
+                        <outlet property="fixedHeaderView" destination="MqR-sd-5pC" id="7pq-Pg-bty"/>
                         <outlet property="mainScrollView" destination="Jkv-FR-1iI" id="x64-OM-iTF"/>
                         <outlet property="registerResturant" destination="t3l-tR-nRH" id="Nn9-QS-LYf"/>
                     </connections>
@@ -245,9 +259,6 @@
                                                 <segment title="좋아한 맛집"/>
                                                 <segment title="나의 후기"/>
                                             </segments>
-                                            <connections>
-                                                <action selector="segmentChanged:" destination="Y6W-OH-hqX" eventType="valueChanged" id="1mc-zk-oqG"/>
-                                            </connections>
                                         </segmentedControl>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="onI-dI-xMw">
                                             <rect key="frame" x="0.0" y="48" width="393" height="1"/>
@@ -333,9 +344,6 @@
                                             </constraints>
                                             <state key="normal" title="Button"/>
                                             <buttonConfiguration key="configuration" style="plain"/>
-                                            <connections>
-                                                <action selector="DetailMyPage:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="wMf-d1-e9I"/>
-                                            </connections>
                                         </button>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -432,13 +440,6 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="56F-Gt-bXk" secondAttribute="trailing" id="r3y-vb-dk8"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <outlet property="MyPageSegment" destination="5KR-0p-oXr" id="oIp-Cp-LPK"/>
-                        <outlet property="MypageMainTableView" destination="56F-Gt-bXk" id="Dbv-5y-3md"/>
-                        <outlet property="NickNameLabel" destination="CmT-P8-q8z" id="NgX-To-xb5"/>
-                        <outlet property="ProfileImage" destination="eCi-kE-Bqi" id="0Eh-Qw-7SZ"/>
-                        <outlet property="registerResturant" destination="onn-xm-spI" id="HNE-uD-YTe"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -580,6 +581,29 @@
             </objects>
             <point key="canvasLocation" x="3920" y="-246"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="5oA-6L-oIf">
+            <objects>
+                <viewController id="Cd0-4A-wSY" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Etg-VB-lQU">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="636"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jkJ-9L-pa0">
+                                <rect key="frame" x="175" y="59" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="46y-T7-Xj1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-50" y="-680"/>
+        </scene>
     </scenes>
     <resources>
         <image name="BellMark" width="24" height="24"/>
@@ -602,6 +626,9 @@
         </systemColor>
         <systemColor name="systemGray2Color">
             <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemMintColor">
             <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
