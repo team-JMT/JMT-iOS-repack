@@ -176,6 +176,7 @@
                                                         </buttonConfiguration>
                                                         <connections>
                                                             <action selector="exitAlert:" destination="UGz-rt-idd" eventType="touchUpInside" id="EfK-WW-Lpv"/>
+                                                            <action selector="logoutTapped:" destination="g1d-x3-YIr" eventType="touchUpInside" id="qYk-t6-kxC"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
