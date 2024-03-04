@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 class HomeViewModel {
     
@@ -18,12 +19,15 @@ class HomeViewModel {
     
     weak var coordinator: HomeCoordinator?
     
-    var locationManager = LocationManager.shared
+    var locationManager = LocationManager()
+    var location: CLLocationCoordinate2D?
     
-    init() {
-        authorizationStatusChanged()
-        updateCurrentLocation()
-    }
+    var didUpdateCurrentAddress: ((String) -> Void)?
+    
+//    init() {
+//        authorizationStatusChanged()
+//        updateCurrentLocation()
+//    }
     
     var didUpdateFilters: ((Bool) -> Void)?
     var didUpdateSortTypeButton: (() -> Void)?
@@ -228,35 +232,36 @@ extension HomeViewModel {
 
 // 위치 관련 메소드
 extension HomeViewModel {
-    // 위치 정보 권한 체크
-    func checkLocationAuthorization() {
-        locationManager.checkUserDeviceLocationServiceAuthorization()
-    }
     
-    // 위치 권한 거부시 Alert
-    func authorizationStatusChanged() {
-        locationManager.onAuthorizationStatusChanged = { isAuthorized in
-            if !isAuthorized {
-                print("실패")
-                self.displayAlertHandler?()
-            }
-        }
-    }
-    
-    // 위치 정보를 맵에 표시
-    func updateCurrentLocation() {
-        locationManager.didUpdateCurrentLocation = {
-        
-            let lat = self.locationManager.currentLocation?.latitude ?? 0.0
-            let lon = self.locationManager.currentLocation?.longitude ?? 0.0
-           
-            self.onUpdateCurrentLocation?(lat, lon)
-        }
-    }
-    
-    func refreshCurrentLocation() {
-        locationManager.refreshCurrentLocation()
-    }
+//    // 위치 정보 권한 체크
+//    func checkLocationAuthorization() {
+//        locationManager.checkUserDeviceLocationServiceAuthorization()
+//    }
+//
+//    // 위치 권한 거부시 Alert
+//    func authorizationStatusChanged() {
+//        locationManager.onAuthorizationStatusChanged = { isAuthorized in
+//            if !isAuthorized {
+//                print("실패")
+//                self.displayAlertHandler?()
+//            }
+//        }
+//    }
+//
+//    // 위치 정보를 맵에 표시
+//    func updateCurrentLocation() {
+//        locationManager.didUpdateCurrentLocation = {
+//
+//            let lat = self.locationManager.currentLocation?.latitude ?? 0.0
+//            let lon = self.locationManager.currentLocation?.longitude ?? 0.0
+//
+//            self.onUpdateCurrentLocation?(lat, lon)
+//        }
+//    }
+//
+//    func refreshCurrentLocation() {
+//        locationManager.refreshCurrentLocation()
+//    }
 }
 
 // 그룹 가입 여부 분기 처리
@@ -271,6 +276,38 @@ extension HomeViewModel {
             case .failure(let failure):
                 self.groupList.removeAll()
                 self.didCompletedCheckJoinGroup?()
+            }
+        }
+    }
+}
+
+
+
+extension HomeViewModel {
+
+    func fetchCurrentLocation() {
+        locationManager.fetchLocation { [weak self] (location, error) in
+            self?.location = location
+            
+            self?.fetchCurrentAddress(completion: { address in
+                self?.didUpdateCurrentAddress?(address)
+            })
+        }
+    }
+    
+    func fetchCurrentAddress(completion: @escaping (String) -> ()) {
+        
+        guard self.location != nil else { return }
+        
+        let lat: String = String(self.location?.latitude ?? 0.0)
+        let lon: String = String(self.location?.longitude ?? 0.0)
+        
+        CurrentLocationAPI.getCurrentLocation(request: CurrentLocationRequest(coords: "\(lon),\(lat)")) { response in
+            switch response {
+            case .success(let locationData):
+                completion(locationData.address)
+            case .failure(let error):
+                completion("검색 중")
             }
         }
     }

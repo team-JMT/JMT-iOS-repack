@@ -61,7 +61,7 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
     
     func showImagePicker() {
         
-        let photoservice = DefaultPhotoAuthService()
+        let photoService = DefaultPhotoAuthService()
         
         var config = PhotoKitConfiguration()
         config.library.defaultMultipleSelection = true
@@ -77,7 +77,7 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
             picker.dismiss(animated: true)
         }
         
-        photoservice.requestAuthorization { result in
+        photoService.requestAuthorization { result in
             switch result {
             case .success(let success):
                 self.navigationController?.present(picker, animated: true)

@@ -57,8 +57,8 @@ class ConvertUserLocationViewController: UIViewController {
     }
     
     @IBAction func didTabDoneButton(_ sender: Any) {
-        LocationManager.shared.updateCurrentLocation(lat: viewModel?.locationData?.y ?? 0.0, lon: viewModel?.locationData?.x ?? 0.0)
-        viewModel?.coordinator?.navigationController?.popToRootViewController(animated: true)
+//        LocationManager.shared.updateCurrentLocation(lat: viewModel?.locationData?.y ?? 0.0, lon: viewModel?.locationData?.x ?? 0.0)
+//        viewModel?.coordinator?.navigationController?.popToRootViewController(animated: true)
     }
     
     func setupUI() {
