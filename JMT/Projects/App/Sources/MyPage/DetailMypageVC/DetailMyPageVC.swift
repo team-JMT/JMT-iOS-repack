@@ -58,13 +58,6 @@ class DetailMyPageVC : UIViewController {
         updateUI()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        setCustomNavigationBarBackButton(isSearchVC: false)
-    }
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         

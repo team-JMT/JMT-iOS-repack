@@ -8,6 +8,7 @@
 import Foundation
 
 class DefaultUserDefaultService {
+
     static func saveSearchKeyword(_ keyword: String) {
         let defaults = UserDefaults.standard
         var searchKeywords: [String] = defaults.array(forKey: "recentSearchKeywords") as? [String] ?? []
@@ -53,4 +54,3 @@ class DefaultUserDefaultService {
         defaults.set(searchKeywords, forKey: "recentSearchKeywords")
     }
 }
-
