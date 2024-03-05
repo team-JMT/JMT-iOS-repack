@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Alamofire
 
 protocol DetailMyPageCoordinator: Coordinator {
     //
@@ -111,12 +112,6 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         coordinator.start()
     }
     
-    //이미지 등록
-    func setProfileImagePopupCoordinator() {
-        let coordinator = DefaultProfileImagePopupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
-        childCoordinators.append(coordinator)
-    }
-    
     //닉네임 수정
     func setMyPageChangeNicknameCoordinator() {
         let coordinator = DefaultMyPageChangeNicknaemCoordinator(navigationController: navigationController)
@@ -133,6 +128,12 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
     }
     
     
+    //이미지 등록
+    func setProfileImagePopupCoordinator() {
+        let coordinator = DefaultProfileImagePopupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
     func showProfileImagePopupViewController() {
         
         if getChildCoordinator(.profilePopup) == nil {
@@ -144,30 +145,88 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
     }
     
     func showImagePicker() {
-        
-        var config = PhotoKitConfiguration()
-        config.library.defaultMultipleSelection = false
-        
-        let picker = PhotoKitNavigationController(configuration: config)
-        
-        picker.didFinishCompletion = { photo in
-        
-            self.handleImagePickerResult(photo.first, isDefault: false)
-            picker.dismiss(animated: true)
+            
+            let photoService = DefaultPhotoAuthService()
+            
+            var config = PhotoKitConfiguration()
+            config.library.defaultMultipleSelection = false
+            
+            let picker = PhotoKitNavigationController(configuration: config)
+            
+            picker.didFinishCompletion = { photo in
+            
+                self.handleImagePickerResult(photo.first, isDefault: false)
+                picker.dismiss(animated: true)
+            }
+            
+            photoService.requestAuthorization { result in
+                switch result {
+                case .success(_):
+                    self.navigationController?.present(picker, animated: true)
+                case .failure(_):
+                    if let topViewController = self.navigationController?.topViewController {
+                        topViewController.showAccessDeniedAlert(type: .photo)
+                    }
+                }
+            }
         }
-
-        self.navigationController?.present(picker, animated: true)
-    }
+    
+//    func showImagePicker() {
+//        
+//        var config = PhotoKitConfiguration()
+//        config.library.defaultMultipleSelection = false
+//        
+//        let picker = PhotoKitNavigationController(configuration: config)
+//        
+//        picker.didFinishCompletion = { photo in
+//        
+//            self.handleImagePickerResult(photo.first, isDefault: false)
+//            picker.dismiss(animated: true)
+//        }
+//
+//        self.navigationController?.present(picker, animated: true)
+//    }
     
     func handleImagePickerResult(_ image: UIImage?, isDefault: Bool) {
         if let detailMyPageViewController = self.navigationController?.topViewController as? DetailMyPageVC {
             detailMyPageViewController.profileImage.image = image
             detailMyPageViewController.viewModel?.isDefaultProfileImage = isDefault
+
+            uploadProfileImage(image: (image ?? UIImage(named: "DefaultImage"))!)
+            NotificationCenter.default.post(name: NSNotification.Name("ProfileImageUpdated"), object: nil)
+
         }
     }
     
-    
+    func uploadProfileImage(image: UIImage) {
+        
+        guard let accessToken = DefaultKeychainService.shared.accessToken,
+              let imageData = image.jpegData(compressionQuality: 0.5) else {
+            print("Access Token or Image Data is not available")
+            return
+        }
 
+
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Accept": "*/*"
+        ]
+
+        AF.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(imageData, withName: "profileImg", fileName: "profile.jpg", mimeType: "image/jpeg")
+        }, to: "https://api.jmt-matzip.dev/api/v1/user/profileImg", method: .post, headers: headers)
+        .responseDecodable(of: ImageResponse.self) { response in
+            switch response.result {
+            case .success(let responseData):
+                print("Image uploaded successfully: \(responseData.message)")
+            case .failure(let error):
+                print("Failed to upload image: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    
+    
 //배열내에 있는 코디네이터에 enum으로 선언한 애가 있는지
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil

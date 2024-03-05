@@ -7,20 +7,22 @@
 
 import UIKit
 
-class MyPageViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate
+class MyPageViewController: UIViewController, UIScrollViewDelegate
 
 {
-    //weak var coordinator: MyPageCoordinator?
+    
     var viewModel: MyPageViewModel?
     private var pageViewControllerTopConstraint: NSLayoutConstraint?
-
     
+    // 고정 헤더 뷰 내 세그먼트 컨트롤
+    private var fixedSegmentedControl: UISegmentedControl!
+    
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
     
     @IBOutlet weak var HeaderView: UIView!
     @IBOutlet weak var MyPageSegment: UISegmentedControl!
-    @IBOutlet weak var MypageMainTableView: UITableView!
     
     @IBOutlet weak var ProfileImage: UIImageView!
     
@@ -28,43 +30,96 @@ class MyPageViewController: UIViewController, UIPageViewControllerDataSource, UI
     
     @IBOutlet weak var registerResturant: UILabel!
     
+    @IBOutlet weak var containerViewTopConstrains: NSLayoutConstraint!
     
-    private var pageViewController: UIPageViewController!
+    @IBOutlet weak var fixedHeaderView: UIView!
+    
+    private var currentViewController: UIViewController?
+    
+    
+    // private var pageViewController: UIPageViewController!
     private var viewControllerIdentifiers: [String] = ["FirstSegmentViewController", "SecondSegmentViewController", "ThirdSegmentViewController"]
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        mainScrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
+        // mainScrollView의 contentSize를 동적으로 계산
+        let contentHeight = HeaderView.frame.height + containerView.frame.height
+        mainScrollView.contentSize = CGSize(width: contentView.frame.width, height: contentHeight)
     }
     
+    
+    let fixedHeaderViewHeight: CGFloat = 80 // 고정될 뷰의 높이
+    let triggerOffset: CGFloat = 150 // 고정 뷰가 나타나기 시작할 스크롤 위치
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //viewModel = MyPageViewModel()
+        setupSegmentedControl()
+        setupFixedHeaderView()
+        switchToViewController(at: MyPageSegment.selectedSegmentIndex)
         
-        self.MyPageSegment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: .normal)
-        self.MyPageSegment.setTitleTextAttributes(
-            [
-                NSAttributedString.Key.foregroundColor: UIColor.gray900,
-                .font: UIFont(name: "Pretendard-Bold", size: 14)
-            ],
-            for: .selected
-        )
+    }
+    
+    
+    func setupFixedHeaderView() {
+        fixedHeaderView.isHidden = true
+        fixedHeaderView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: fixedHeaderViewHeight)
+        view.addSubview(fixedHeaderView)
         
-        self.MyPageSegment.selectedSegmentIndex = 0
+        // Calculate the y position so the segmented control is at the bottom of the fixedHeaderView
+        let segmentedControlHeight: CGFloat = 31 // Fixed height of the segmented control
+        let yPosition = fixedHeaderViewHeight - segmentedControlHeight // Position at the bottom
         
-        
-        setupPageViewController()
-        
+        // Initialize the fixedSegmentedControl with the calculated y position
+        fixedSegmentedControl = UnderlineSegmentedControl(items: ["등록한 맛집", "좋아한 맛집", "나의 후기"])
+        fixedSegmentedControl.frame = CGRect(x: 10, y: yPosition, width: fixedHeaderView.frame.width - 20, height: segmentedControlHeight)
+        fixedSegmentedControl.selectedSegmentIndex = MyPageSegment.selectedSegmentIndex
+        fixedSegmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
+        fixedHeaderView.addSubview(fixedSegmentedControl)
+    }
+
+
+    
+    // 세그먼트 컨트롤 설정 및 액션 추가
+    private func setupSegmentedControl() {
         MyPageSegment.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
-        
-        viewModel?.onUserInfoLoaded = { [weak self] in
-            DispatchQueue.main.async {
-                self?.updateUI()
-            }
+    }
+    
+    // 세그먼트 컨트롤 값 변경 시 호출될 메서드
+    @objc private func segmentedControlValueChanged(_ sender: UISegmentedControl) {
+        let selectedIndex = sender.selectedSegmentIndex
+        MyPageSegment.selectedSegmentIndex = selectedIndex
+        fixedSegmentedControl.selectedSegmentIndex = selectedIndex
+        switchToViewController(at: selectedIndex)
+    }
+
+
+    
+    // 주어진 인덱스에 해당하는 뷰 컨트롤러로 전환
+    private func switchToViewController(at index: Int) {
+        guard index >= 0 && index < viewControllerIdentifiers.count else { return }
+        let identifier = viewControllerIdentifiers[index]
+        if let newViewController = storyboard?.instantiateViewController(withIdentifier: identifier) {
+            // 이전 뷰 컨트롤러 제거
+            removeCurrentViewController()
+            
+            // 새 뷰 컨트롤러를 자식으로 추가
+            addChild(newViewController)
+            containerView.addSubview(newViewController.view)
+            newViewController.view.frame = containerView.bounds
+            newViewController.didMove(toParent: self)
+            
+            // 현재 뷰 컨트롤러 업데이트
+            currentViewController = newViewController
         }
-        viewModel?.fetchUserInfo()
+    }
+    
+    // 현재 활성화된 뷰 컨트롤러 제거
+    private func removeCurrentViewController() {
+        currentViewController?.willMove(toParent: nil)
+        currentViewController?.view.removeFromSuperview()
+        currentViewController?.removeFromParent()
     }
     
     private func updateUI() {
@@ -86,135 +141,26 @@ class MyPageViewController: UIViewController, UIPageViewControllerDataSource, UI
             print(NickNameLabel)
         }
     }
-
     
-    
-    private func setupLayout() {
-        // mainScrollView의 contentSize를 동적으로 계산하기 위해 Auto Layout을 사용합니다.
-        mainScrollView.addSubview(contentView)
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            pageViewController.view.topAnchor.constraint(equalTo: HeaderView.bottomAnchor, constant: 10),
-            pageViewController.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            pageViewController.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            pageViewController.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
-
-    }
-    
-    private func setupPageViewController() {
-        // 페이지 뷰 컨트롤러 설정
-            pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-            pageViewController.dataSource = self
-            pageViewController.delegate = self
-
-            // 첫 번째 페이지 설정
-            if let firstViewController = viewController(for: 0) {
-                pageViewController.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
-            }
-
-            // 페이지 뷰 컨트롤러의 뷰를 contentView에 추가
-            addChild(pageViewController)
-            contentView.addSubview(pageViewController.view)
-            pageViewController.didMove(toParent: self)
-
-            // 페이지 뷰 컨트롤러 뷰의 오토레이아웃 설정
-            pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
-            pageViewControllerTopConstraint = pageViewController.view.topAnchor.constraint(equalTo: MyPageSegment.bottomAnchor, constant: 10)
-            
-            NSLayoutConstraint.activate([
-                pageViewControllerTopConstraint!,
-                pageViewController.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                pageViewController.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                pageViewController.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-            ])
-        }
-
-    
-    
-    private func configureScrollView() {
-        mainScrollView.delegate = self
-        mainScrollView.contentInset.top = MyPageSegment.frame.height + 10 // 세그먼트의 높이만큼 contentInset.top 조정
-    }
-//    private func configureScrollView() {
-//        mainScrollView.delegate = self
-//        // 메인 스크롤 뷰의 contentSize 설정
-//        mainScrollView.contentSize = CGSize(width: view.frame.width, height: contentView.frame.height)
-//    }
-    
-    @objc private func segmentedControlValueChanged(_ sender: UISegmentedControl) {
-        if let viewController = viewController(for: sender.selectedSegmentIndex) {
-            let direction: UIPageViewController.NavigationDirection = .forward
-            pageViewController.setViewControllers([viewController], direction: direction, animated: true, completion: nil)
-        }
-    }
-    
-    private func viewController(for index: Int) -> UIViewController? {
-        guard index >= 0 && index < viewControllerIdentifiers.count else { return nil }
-        return storyboard?.instantiateViewController(withIdentifier: viewControllerIdentifiers[index])
-    }
-    
-    // MARK: UIPageViewControllerDataSource
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        
-        guard let viewControllerIndex = viewControllerIdentifiers.firstIndex(of: viewController.restorationIdentifier ?? ""), viewControllerIndex - 1 >= 0 else { return nil }
-        return self.viewController(for: viewControllerIndex - 1)
-    }
-    
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = viewControllerIdentifiers.firstIndex(of: viewController.restorationIdentifier ?? ""), viewControllerIndex + 1 < viewControllerIdentifiers.count else { return nil }
-        return self.viewController(for: viewControllerIndex + 1)
-    }
-    
-    // MARK: UIPageViewControllerDelegate
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if completed, let visibleViewController = pageViewController.viewControllers?.first, let index = viewControllerIdentifiers.firstIndex(of: visibleViewController.restorationIdentifier ?? "") {
-            MyPageSegment.selectedSegmentIndex = index
-        }
-    }
-    
-    
-    @IBAction func DetailMyPage(_ sender: Any) {
-        print("----- DetailMyPage")
-        viewModel?.coordinator?.showDetailMyPageVieController()
-        
-    }
-    
-    @IBAction func segmentChanged(_ sender: UISegmentedControl) {
-        //   updateDataSource(segmentIndex: sender.selectedSegmentIndex)
-        
-        //   coordinator?.goToDetailView(for: sender.selectedSegmentIndex)
-        
-    }
-    
-}
-
-extension MyPageViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let yOffset = scrollView.contentOffset.y
-        let headerViewHeight = HeaderView.frame.height
-        let segmentHeight = MyPageSegment.frame.height
-        
-        // 세그먼트 컨트롤이 고정될 지점 계산
-        let stickyHeaderOffset = headerViewHeight - segmentHeight * 3
-
-        if yOffset > stickyHeaderOffset {
-            // 세그먼트 컨트롤을 상단에 고정
-            MyPageSegment.transform = CGAffineTransform(translationX: 0, y: yOffset - stickyHeaderOffset)
-            // 고정된 세그먼트 컨트롤 아래로 컨텐츠가 시작되도록 조정
-            scrollView.contentInset.top = segmentHeight
+        if yOffset >= triggerOffset {
+            // 스크롤이 triggerOffset 이상일 때 고정 헤더 뷰를 표시하고 상단에 고정
+            fixedHeaderView.isHidden = false
+            fixedHeaderView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: fixedHeaderViewHeight)
+            view.bringSubviewToFront(fixedHeaderView) // 뷰 계층에서 가장 앞으로 가져옴
+            scrollView.contentInset.top = fixedHeaderViewHeight // 고정 헤더 뷰 높이만큼 상단 인셋 조정
         } else {
-            // 초기 위치로 복원
-            MyPageSegment.transform = .identity
-            scrollView.contentInset.top = 0
+            // 스크롤이 triggerOffset 미만일 때 고정 헤더 뷰 숨김
+            fixedHeaderView.isHidden = true
+            scrollView.contentInset.top = 0 // 상단 인셋 초기화
         }
-
-        // 페이지 뷰 컨트롤러 뷰의 위치 조정
-        let pageViewTopOffset = max(0, yOffset - stickyHeaderOffset + segmentHeight + 10)
-        pageViewControllerTopConstraint?.constant = pageViewTopOffset
-        
-        
     }
+    
+    @IBAction func goToDetail(_ sender: Any) {
+        viewModel?.coordinator?.goToDetailMyPageView()
+    }
+    
+    
 }
