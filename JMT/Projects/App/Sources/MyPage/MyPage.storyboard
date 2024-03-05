@@ -240,16 +240,42 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uao-4P-ydz">
-                                <rect key="frame" x="175" y="416" width="11" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="45" translatesAutoresizingMaskIntoConstraints="NO" id="QG7-oB-r1P">
+                                <rect key="frame" x="106.66666666666669" y="322.33333333333331" width="180" height="207.66666666666669"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="noService" translatesAutoresizingMaskIntoConstraints="NO" id="x4e-42-b6H">
+                                        <rect key="frame" x="0.0" y="0.0" width="180" height="110"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="110" id="VvM-wN-VaB"/>
+                                            <constraint firstAttribute="width" constant="180" id="jAh-FX-Y7N"/>
+                                        </constraints>
+                                    </imageView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="mQc-Xp-qIF">
+                                        <rect key="frame" x="25.333333333333329" y="155" width="154.66666666666669" height="52.666666666666657"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="앗, 서비스 준비중이에요!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iFs-vd-fnR">
+                                                <rect key="frame" x="0.0" y="0.0" width="154.66666666666666" height="19.333333333333332"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <color key="textColor" name="gray300"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="조금만 기다려 주세요." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mGX-vk-oEb">
+                                                <rect key="frame" x="9" y="33.333333333333371" width="136.66666666666666" height="19.333333333333329"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <color key="textColor" name="gray300"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0dZ-wJ-wla"/>
-                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="QG7-oB-r1P" firstAttribute="centerX" secondItem="ea1-wR-OYe" secondAttribute="centerX" id="fWT-i3-eVY"/>
+                            <constraint firstItem="QG7-oB-r1P" firstAttribute="centerY" secondItem="ea1-wR-OYe" secondAttribute="centerY" id="g0l-om-SUZ"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cLO-sM-aix" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -264,16 +290,42 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7bx-3i-fjV">
-                                <rect key="frame" x="202" y="416" width="10" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="45" translatesAutoresizingMaskIntoConstraints="NO" id="8et-I8-0cE">
+                                <rect key="frame" x="106.66666666666669" y="322.33333333333331" width="180" height="207.66666666666669"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="noService" translatesAutoresizingMaskIntoConstraints="NO" id="Hm5-QV-K9w">
+                                        <rect key="frame" x="0.0" y="0.0" width="180" height="110"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="180" id="AA4-qS-KA6"/>
+                                            <constraint firstAttribute="height" constant="110" id="LLi-oz-IaM"/>
+                                        </constraints>
+                                    </imageView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="Jt5-Jm-sl2">
+                                        <rect key="frame" x="25.333333333333329" y="155" width="154.66666666666669" height="52.666666666666657"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="앗, 서비스 준비중이에요!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Jh-bf-EWH">
+                                                <rect key="frame" x="0.0" y="0.0" width="154.66666666666666" height="19.333333333333332"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <color key="textColor" name="gray300"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="조금만 기다려 주세요." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8lJ-uc-ugH">
+                                                <rect key="frame" x="9" y="33.333333333333371" width="136.66666666666666" height="19.333333333333329"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <color key="textColor" name="gray300"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="DwG-6H-VuL"/>
-                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="8et-I8-0cE" firstAttribute="centerY" secondItem="cfx-Io-7dD" secondAttribute="centerY" id="c9d-Wj-0ki"/>
+                            <constraint firstItem="8et-I8-0cE" firstAttribute="centerX" secondItem="cfx-Io-7dD" secondAttribute="centerX" id="jzW-1n-0Lh"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uph-Wj-GDU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -436,11 +488,15 @@
         <image name="BellMark" width="24" height="24"/>
         <image name="NextButton" width="14" height="14"/>
         <image name="noProfile Image" width="26.666666030883789" height="26.666666030883789"/>
+        <image name="noService" width="161" height="110"/>
         <namedColor name="gray100">
             <color red="0.94499999284744263" green="0.95300000905990601" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray200">
             <color red="0.83099997043609619" green="0.85500001907348633" blue="0.87099999189376831" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="gray300">
+            <color red="0.71799999475479126" green="0.75700002908706665" blue="0.7839999794960022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray500">
             <color red="0.49000000953674316" green="0.56499999761581421" blue="0.6119999885559082" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -453,9 +509,6 @@
         </systemColor>
         <systemColor name="systemGray2Color">
             <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemPinkColor">
-            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
