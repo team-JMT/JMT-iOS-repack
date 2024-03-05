@@ -1,5 +1,5 @@
 //
-//  ThirdViewController.swift
+//  SecondSegmentViewController.swift
 //  JMTeng
 //
 //  Created by 이지훈 on 2/16/24.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ThirdSegmentViewController: UIViewController {
+class SecondSegmentViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
