@@ -419,6 +419,53 @@
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="315" height="470"/>
                                     </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="emptyDataCell" id="aP8-Gr-J6y" customClass="PopularEmptyCell" customModule="JMTeng" customModuleProvider="target">
+                                        <rect key="frame" x="39" y="716" width="315" height="204"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="dkO-iH-Yfv">
+                                            <rect key="frame" x="0.0" y="0.0" width="315" height="204"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="aTf-v9-75A">
+                                                    <rect key="frame" x="20" y="40" width="275" height="124"/>
+                                                    <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="YVs-ND-D07">
+                                                            <rect key="frame" x="21.333333333333329" y="0.0" width="232.33333333333337" height="51.333333333333336"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="그룹에 맛집을 등록해 볼까요?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4cs-MM-E0F">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="232.33333333333334" height="24"/>
+                                                                    <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="20"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="아직 등록된 맛집이 없어요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qQO-uF-50h">
+                                                                    <rect key="frame" x="34.333333333333343" y="32" width="164" height="19.333333333333329"/>
+                                                                    <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                        </stackView>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wgN-gZ-PtL">
+                                                            <rect key="frame" x="69.666666666666686" y="75" width="136" height="49"/>
+                                                            <color key="backgroundColor" name="main500"/>
+                                                            <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="14"/>
+                                                            <inset key="contentEdgeInsets" minX="30" minY="16" maxX="30" maxY="16"/>
+                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                            <state key="normal" title="맛집 등록하기"/>
+                                                        </button>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <color key="backgroundColor" name="gray400"/>
+                                            <constraints>
+                                                <constraint firstItem="aTf-v9-75A" firstAttribute="leading" secondItem="dkO-iH-Yfv" secondAttribute="leading" constant="20" id="edP-ui-EZO"/>
+                                                <constraint firstAttribute="trailing" secondItem="aTf-v9-75A" secondAttribute="trailing" constant="20" id="llZ-e7-usf"/>
+                                                <constraint firstAttribute="bottom" secondItem="aTf-v9-75A" secondAttribute="bottom" constant="40" id="qnb-au-OVp"/>
+                                                <constraint firstItem="aTf-v9-75A" firstAttribute="top" secondItem="dkO-iH-Yfv" secondAttribute="top" constant="40" id="wfB-9U-snt"/>
+                                            </constraints>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
                                 </cells>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>

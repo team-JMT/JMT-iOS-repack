@@ -24,7 +24,11 @@ class NicknameViewModel: NicknameModelProtocol {
     
     var onSuccess: ((UIUpdateState) -> ())?
     var isSaveNickname: Bool = false
+<<<<<<< Updated upstream
     var preventButtonTouch: Bool = false
+=======
+    
+>>>>>>> Stashed changes
     
     func didChangeTextField(text: String) {
         
