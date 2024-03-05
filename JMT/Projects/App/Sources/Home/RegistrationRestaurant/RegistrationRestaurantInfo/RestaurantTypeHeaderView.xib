@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="typeHeaderView" id="zSk-1f-8ul" customClass="RestaurantTypeHeaderView" customModule="JMTeng" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="549" height="351"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kr7-FS-trJ">
+                    <rect key="frame" x="0.0" y="24" width="549" height="56"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RestaurantTypeArrow" translatesAutoresizingMaskIntoConstraints="NO" id="Noi-0y-019">
+                            <rect key="frame" x="517" y="18" width="20" height="20"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="20" id="DC3-cQ-h9N"/>
+                                <constraint firstAttribute="width" constant="20" id="EfZ-h7-0Eq"/>
+                            </constraints>
+                        </imageView>
+                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KYe-4u-VmN">
+                            <rect key="frame" x="12" y="16" width="493" height="24"/>
+                            <subviews>
+                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jlr-Nc-c61">
+                                    <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
+                                    <color key="backgroundColor" name="gray200"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="24" id="4eI-MS-ABb"/>
+                                        <constraint firstAttribute="height" constant="24" id="yvw-X2-jXW"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(필수) 식당 종류를 선택해주세요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="02E-vC-Dm4">
+                                    <rect key="frame" x="0.0" y="0.0" width="493" height="24"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HpJ-Qi-sH5">
+                            <rect key="frame" x="0.0" y="0.0" width="549" height="56"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <connections>
+                                <action selector="didTabChangeTypeButton:" destination="zSk-1f-8ul" eventType="touchUpInside" id="7Yi-3O-wO1"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="HpJ-Qi-sH5" secondAttribute="bottom" id="6XH-AK-Vvx"/>
+                        <constraint firstItem="HpJ-Qi-sH5" firstAttribute="leading" secondItem="kr7-FS-trJ" secondAttribute="leading" id="7V8-oA-gwX"/>
+                        <constraint firstItem="HpJ-Qi-sH5" firstAttribute="top" secondItem="kr7-FS-trJ" secondAttribute="top" id="8Wf-SH-MEf"/>
+                        <constraint firstItem="KYe-4u-VmN" firstAttribute="leading" secondItem="kr7-FS-trJ" secondAttribute="leading" constant="12" id="NGP-6B-pGr"/>
+                        <constraint firstAttribute="trailing" secondItem="HpJ-Qi-sH5" secondAttribute="trailing" id="PQ0-3J-K4k"/>
+                        <constraint firstItem="Noi-0y-019" firstAttribute="leading" secondItem="KYe-4u-VmN" secondAttribute="trailing" constant="12" id="TwP-Yo-JPc"/>
+                        <constraint firstAttribute="height" constant="56" id="Ue0-zG-mf3"/>
+                        <constraint firstAttribute="trailing" secondItem="Noi-0y-019" secondAttribute="trailing" constant="12" id="bLS-Sq-HuV"/>
+                        <constraint firstItem="KYe-4u-VmN" firstAttribute="centerY" secondItem="kr7-FS-trJ" secondAttribute="centerY" id="hfN-Za-hju"/>
+                        <constraint firstItem="Noi-0y-019" firstAttribute="centerY" secondItem="kr7-FS-trJ" secondAttribute="centerY" id="kJW-jh-rgB"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="yQj-Dq-Ptt"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="kr7-FS-trJ" secondAttribute="bottom" priority="999" constant="12" id="Rn7-EX-yqr"/>
+                <constraint firstItem="kr7-FS-trJ" firstAttribute="leading" secondItem="yQj-Dq-Ptt" secondAttribute="leading" id="qZT-jF-Ddg"/>
+                <constraint firstItem="yQj-Dq-Ptt" firstAttribute="trailing" secondItem="kr7-FS-trJ" secondAttribute="trailing" id="v4q-51-ODJ"/>
+                <constraint firstItem="kr7-FS-trJ" firstAttribute="top" secondItem="zSk-1f-8ul" secondAttribute="top" constant="24" id="xal-Lx-fhw"/>
+            </constraints>
+            <connections>
+                <outlet property="containerView" destination="kr7-FS-trJ" id="qum-yY-PlH"/>
+                <outlet property="headerStackView" destination="KYe-4u-VmN" id="EKL-43-Vhh"/>
+                <outlet property="restaurantCheckImageView" destination="Noi-0y-019" id="YdC-Vd-TYc"/>
+                <outlet property="restaurantTypeImageView" destination="jlr-Nc-c61" id="zX9-cJ-QBF"/>
+                <outlet property="restaurantTypeLabel" destination="02E-vC-Dm4" id="ZFo-oM-iNa"/>
+            </connections>
+            <point key="canvasLocation" x="-180.91603053435114" y="-113.02816901408451"/>
+        </collectionReusableView>
+    </objects>
+    <resources>
+        <image name="RestaurantTypeArrow" width="20" height="20"/>
+        <namedColor name="gray200">
+            <color red="0.83099997043609619" green="0.85500001907348633" blue="0.87099999189376831" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
