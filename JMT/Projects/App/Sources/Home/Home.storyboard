@@ -54,6 +54,7 @@
                                     </button>
                                 </subviews>
                             </stackView>
+<<<<<<< Updated upstream
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dh8-u2-qgJ">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="65"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -111,16 +112,64 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                 </userDefinedRuntimeAttributes>
+=======
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bKO-Rz-OHX">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="26" translatesAutoresizingMaskIntoConstraints="NO" id="TnG-gx-MAd">
+                                        <rect key="frame" x="50" y="159.99999999999997" width="293" height="439.33333333333326"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Zw1-GW-UFe">
+                                                <rect key="frame" x="0.0" y="0.0" width="293" height="293"/>
+                                                <color key="backgroundColor" name="gray200"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Zw1-GW-UFe" secondAttribute="height" id="Net-al-GHM"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qor-9c-0I6">
+                                                <rect key="frame" x="0.0" y="319" width="293" height="38.333333333333314"/>
+                                                <string key="text">아직 가입된 그룹이 없어요. 
+둘러보고 싶은 그룹에 가입해보세요!</string>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Im5-Rg-IAO">
+                                                <rect key="frame" x="0.0" y="383.33333333333337" width="293" height="56"/>
+                                                <color key="backgroundColor" name="main500"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="56" id="dFj-iP-3ea"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="맛집 그룹 둘러보기&gt;"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="TnG-gx-MAd" firstAttribute="centerY" secondItem="bKO-Rz-OHX" secondAttribute="centerY" id="QV0-KJ-roe"/>
+                                    <constraint firstAttribute="trailing" secondItem="TnG-gx-MAd" secondAttribute="trailing" constant="50" id="htd-pf-TOC"/>
+                                    <constraint firstItem="TnG-gx-MAd" firstAttribute="centerX" secondItem="bKO-Rz-OHX" secondAttribute="centerX" id="iGY-fq-0Rt"/>
+                                    <constraint firstItem="TnG-gx-MAd" firstAttribute="leading" secondItem="bKO-Rz-OHX" secondAttribute="leading" constant="50" id="zY0-Te-ZrY"/>
+                                </constraints>
+>>>>>>> Stashed changes
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+<<<<<<< Updated upstream
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="dh8-u2-qgJ" secondAttribute="trailing" id="0Gx-7V-eho"/>
+=======
+                            <constraint firstItem="bKO-Rz-OHX" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="0r0-Fq-UIw"/>
+>>>>>>> Stashed changes
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="jEB-fM-TdX" secondAttribute="bottom" constant="30" id="5TB-hz-1Ev"/>
                             <constraint firstItem="srQ-dG-9DL" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="5XZ-qF-vXS"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="5oj-KE-prq"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="jEB-fM-TdX" secondAttribute="trailing" constant="11" id="7hN-us-MFu"/>
+<<<<<<< Updated upstream
                             <constraint firstItem="srQ-dG-9DL" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="CgV-xc-vg1"/>
                             <constraint firstItem="dh8-u2-qgJ" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="IJf-m8-8ca"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="KBq-S7-BnC"/>
@@ -128,6 +177,16 @@
                             <constraint firstAttribute="bottom" secondItem="Gz2-he-OL7" secondAttribute="bottom" id="ZXL-0d-BM1"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="Zl4-7T-l68"/>
                             <constraint firstItem="dh8-u2-qgJ" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="gXb-0x-a11"/>
+=======
+                            <constraint firstItem="Gz2-he-OL7" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="9Xb-xx-AQ3"/>
+                            <constraint firstItem="bKO-Rz-OHX" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Ac1-NT-ym4"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="srQ-dG-9DL" secondAttribute="trailing" id="StH-40-Brx"/>
+                            <constraint firstItem="Gz2-he-OL7" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="Zl4-7T-l68"/>
+                            <constraint firstItem="srQ-dG-9DL" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="kdQ-Tr-tc9"/>
+                            <constraint firstItem="bKO-Rz-OHX" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="tmG-5X-5Uc"/>
+                            <constraint firstItem="srQ-dG-9DL" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="veU-Or-gz9"/>
+                            <constraint firstItem="bKO-Rz-OHX" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="yYV-b2-60g"/>
+>>>>>>> Stashed changes
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
@@ -140,6 +199,7 @@
                         <outlet property="locationButtonBottom" destination="5TB-hz-1Ev" id="3gr-Z9-apu"/>
                         <outlet property="locationStackView" destination="jEB-fM-TdX" id="dU7-yG-9c6"/>
                         <outlet property="naverMapView" destination="Gz2-he-OL7" id="UmZ-u2-ujW"/>
+                        <outlet property="noGroupInfoView" destination="bKO-Rz-OHX" id="zuR-Iz-2hp"/>
                         <outlet property="topContainerView" destination="srQ-dG-9DL" id="g7O-KE-kCD"/>
                         <outlet property="topContainerViewHeight" destination="8Bc-j9-5CX" id="rzl-9K-tvQ"/>
                         <outlet property="topDummyView" destination="dh8-u2-qgJ" id="GNw-Ry-rUm"/>
@@ -147,7 +207,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
+<<<<<<< Updated upstream
             <point key="canvasLocation" x="130.43478260869566" y="-34.821428571428569"/>
+=======
+            <point key="canvasLocation" x="130.53435114503816" y="-34.507042253521128"/>
+>>>>>>> Stashed changes
         </scene>
     </scenes>
     <resources>
@@ -160,6 +224,9 @@
         </namedColor>
         <namedColor name="gray900">
             <color red="0.086000002920627594" green="0.10199999809265137" blue="0.11400000005960464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="main500">
+            <color red="1" green="0.32499998807907104" blue="0.10199999809265137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

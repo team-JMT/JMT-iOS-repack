@@ -35,11 +35,15 @@ class HomeViewModel {
     var displayAlertHandler: (() -> Void)?
     var onUpdateCurrentLocation: ((Double, Double) -> Void)?
     
+<<<<<<< Updated upstream
     var didCompletedCheckJoinGroup: (() -> Void)?
     
     var didTest: (() -> Void)?
     
     var didUpdateIndex: ((Int) -> Void)?
+=======
+    var didCompletedCheckJoinGroup: ((Bool) -> Void)?
+>>>>>>> Stashed changes
     
     let sortList = ["가까운 순", "좋아요 순", "최신 순"]
     let categoryList = ["한식", "일식", "중식", "양식", "퓨전", "카페", "주점", "기타"]
@@ -53,6 +57,7 @@ class HomeViewModel {
     var selectedSortIndex: Int = 0
     var selectedCategoryIndex: Int = 99999
     var selectedDrinkingIndex: Int = 99999
+<<<<<<< Updated upstream
     
     var isNotGroup: Bool = false
     var isLodingData: Bool = true
@@ -125,6 +130,11 @@ extension HomeViewModel {
             self.didUpdateBottomSheetTableView?()
         }
     }
+=======
+
+    var popularRestaurants: [String] = [] //["1","2","3","4","5"]  // [String]() //
+    var restaurants: [String] = [] //["1","2","3","4","5","6","7","8","9"]
+>>>>>>> Stashed changes
 }
 
 // 지도 관련 메소드
@@ -142,6 +152,7 @@ extension HomeViewModel {
             }
         }
     }
+<<<<<<< Updated upstream
     
     func markerImage(category: String) -> String? {
         switch category {
@@ -166,6 +177,8 @@ extension HomeViewModel {
             return JMTengAsset.marker2.name
         }
     }
+=======
+>>>>>>> Stashed changes
 }
 
 // 필터링 관련 메소드
@@ -261,6 +274,7 @@ extension HomeViewModel {
 
 // 그룹 가입 여부 분기 처리
 extension HomeViewModel {
+<<<<<<< Updated upstream
     
     func checkJoinGorup() {
         GroupAPI.fetchMyGroup { response in
@@ -271,6 +285,17 @@ extension HomeViewModel {
             case .failure(let failure):
                 self.groupList.removeAll()
                 self.didCompletedCheckJoinGroup?()
+=======
+
+    // API 오류로 임시 처리
+    func checkJoinGroup() {
+        UserInfoAPI.getLoginInfo { response in
+            switch response {
+            case .success(let success):
+                self.didCompletedCheckJoinGroup?(false)
+            case .failure(let failure):
+                self.didCompletedCheckJoinGroup?(true)
+>>>>>>> Stashed changes
             }
         }
     }

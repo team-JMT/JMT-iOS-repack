@@ -30,11 +30,19 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var locationStackView: UIStackView!
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
+<<<<<<< Updated upstream
+=======
+
+    @IBOutlet weak var noGroupInfoView: UIView!
+>>>>>>> Stashed changes
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupBind()
+        
         print(DefaultKeychainService.shared.accessToken)
+<<<<<<< Updated upstream
 //                DefaultKeychainService.shared.accessToken = nil
         
         self.view.showAnimatedGradientSkeleton()
@@ -54,15 +62,37 @@ class HomeViewController: UIViewController {
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         viewModel?.checkJoinGorup()
+=======
+
+        DefaultKeychainService.shared.accessToken = nil
+        
+        
+        viewModel?.checkJoinGroup()
+        
+        setupUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+>>>>>>> Stashed changes
     }
 
 
     @IBAction func didTabSearchGroupButton(_ sender: Any) {
+<<<<<<< Updated upstream
         viewModel?.coordinator?.showSearchTabWithButton()
     }
     
     @IBAction func didTabRefreshButton(_ sender: Any) {
         viewModel?.checkLocationAuthorization()
+=======
+        self.tabBarController?.selectedIndex = 1
+    }
+    
+    @IBAction func didTabRefreshButton(_ sender: Any) {
+>>>>>>> Stashed changes
         viewModel?.refreshCurrentLocation()
     }
     
@@ -70,6 +100,7 @@ class HomeViewController: UIViewController {
         viewModel?.coordinator?.showUserLocationViewController(endPoint: 1)
     }
     
+<<<<<<< Updated upstream
 
     @IBAction func didTabMyGroupButton(_ sender: Any) {
         showGorupListBottomSheetVC()
@@ -102,6 +133,9 @@ class HomeViewController: UIViewController {
                 self.viewModel?.fetchRestaurantsData()
             }
         }
+=======
+    func setupBind() {
+>>>>>>> Stashed changes
         
         viewModel?.displayAlertHandler = {
             self.showAccessDeniedAlert(type: .location)
@@ -121,11 +155,23 @@ class HomeViewController: UIViewController {
             })
         }
 
+<<<<<<< Updated upstream
         
         
         viewModel?.didTest = {
             DispatchQueue.main.async {
                 self.addMarkersInVisibleRegion()
+=======
+        viewModel?.didCompletedCheckJoinGroup = { state in
+            if state {
+                // 위치 권한 체크
+                self.viewModel?.checkLocationAuthorization()
+                self.setupBottomSheetView()
+                self.setTopViewShadow()
+                self.noGroupInfoView.isHidden = true
+            } else {
+                self.noGroupInfoView.isHidden = false
+>>>>>>> Stashed changes
             }
         }
     }
@@ -136,12 +182,32 @@ extension HomeViewController {
     
     func setupUI() {
         locationButton.layer.cornerRadius = 8
+<<<<<<< Updated upstream
         groupImageView.layer.cornerRadius = 8
+=======
+>>>>>>> Stashed changes
         
         naverMapView.showCompass = false
         naverMapView.showScaleBar = false
         naverMapView.showZoomControls = false
         naverMapView.mapView.positionMode = .direction
+<<<<<<< Updated upstream
+=======
+    }
+    
+    // 바텀시트뷰 상단에 버튼의 제약조건을 변경
+    func updateLocationButtonBottomConstraint() {
+        locationButtonBottom.isActive = false
+        
+        let newConstraint = NSLayoutConstraint(item: locationStackView!,
+                                               attribute: .bottom,
+                                               relatedBy: .equal,
+                                               toItem: fpc.surfaceView,
+                                               attribute: .top,
+                                               multiplier: 1.0,
+                                               constant: -15)
+        newConstraint.isActive = true
+>>>>>>> Stashed changes
     }
     
     // 상단 네비게이션뷰의 그림자
@@ -169,6 +235,7 @@ extension HomeViewController {
         
         self.view.bringSubviewToFront(topContainerView)
     }
+<<<<<<< Updated upstream
     
     // 바텀시트뷰 상단에 버튼의 제약조건을 변경
     func updateLocationButtonBottomConstraint() {
@@ -182,6 +249,33 @@ extension HomeViewController {
                                                multiplier: 1.0,
                                                constant: -15)
         newConstraint.isActive = true
+=======
+}
+
+// MARK: Setup BottomSheetViewController
+extension HomeViewController {
+    
+    func setupBottomSheetView() {
+        let storyboard = UIStoryboard(name: "HomeBottomSheet", bundle: nil)
+        guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
+    
+        vc.viewModel = self.viewModel
+        fpc = FloatingPanelController(delegate: self)
+        fpc.setPanelStyle(radius: 24, isHidden: false)
+        fpc.set(contentViewController: vc)
+        fpc.addPanel(toParent: self)
+        
+        let layout = HomeBottomSheetFloatingPanelLayout()
+      
+        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
+            layout.isExpandable = false
+            layout.contentHeight = vc.bottomSheetCollectionView.contentSize.height
+        }
+         
+        fpc.layout = layout
+        fpc.invalidateLayout()
+        updateLocationButtonBottomConstraint()
+>>>>>>> Stashed changes
     }
 }
 
@@ -214,7 +308,11 @@ extension HomeViewController: FloatingPanelControllerDelegate {
     }
 }
 
+<<<<<<< Updated upstream
 // MARK: BottomSheetViewController 핸들바 설정 // 따로 빼야함
+=======
+// MARK: BottomSheetViewController 핸들바 설정
+>>>>>>> Stashed changes
 extension FloatingPanelController {
     func setPanelStyle(radius: CGFloat, isHidden: Bool) {
         
@@ -233,6 +331,7 @@ extension FloatingPanelController {
     }
 }
 
+<<<<<<< Updated upstream
 // MARK: 지도 마커 설정
 extension HomeViewController {
     func addMarkersInVisibleRegion() {
@@ -340,3 +439,17 @@ extension HomeViewController {
         self.present(groupListFpc, animated: true)
     }
 }
+=======
+// MARK: ==
+
+// MARK: ==
+
+// MARK: 나중에 사용
+/*
+ 
+ //        let visibleRegion = naverMapView.mapView.projection.latlngBounds(fromViewBounds: naverMapView.frame)
+ //        print(visibleRegion)
+ //
+ 
+ */
+>>>>>>> Stashed changes
