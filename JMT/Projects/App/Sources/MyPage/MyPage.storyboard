@@ -21,7 +21,6 @@
         <!--My Page View Controller-->
         <scene sceneID="K25-hg-am7">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="8Nf-uC-k4m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="MyPageViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7ra-iV-2jw" customClass="MyPageViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wpY-gE-9PZ">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
@@ -229,8 +228,9 @@
                         <outlet property="registerResturant" destination="t3l-tR-nRH" id="Nn9-QS-LYf"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Nf-uC-k4m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-849.61832061068696" y="-43.661971830985919"/>
+            <point key="canvasLocation" x="340" y="-209"/>
         </scene>
         <!--Third Segment View Controller-->
         <scene sceneID="Lrn-kv-0GY">
