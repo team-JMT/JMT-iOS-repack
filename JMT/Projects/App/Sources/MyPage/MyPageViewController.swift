@@ -19,7 +19,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     private var pageViewController: UIPageViewController!
     private var viewControllerIdentifiers: [String] = ["FirstSegmentViewController", "SecondSegmentViewController", "ThirdSegmentViewController"]
     
-    
+    //
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
@@ -108,42 +108,26 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
         guard index >= 0 && index < viewControllerIdentifiers.count else { return }
         let identifier = viewControllerIdentifiers[index]
         if let newViewController = storyboard?.instantiateViewController(withIdentifier: identifier) {
+            // 이전 뷰 컨트롤러 제거
             removeCurrentViewController()
             
+            // 새 뷰 컨트롤러를 자식으로 추가
             addChild(newViewController)
             containerView.addSubview(newViewController.view)
             newViewController.view.frame = containerView.bounds
             newViewController.didMove(toParent: self)
-            currentViewController = newViewController
             
-            // Since the 2nd and 3rd view controllers do not contain scroll views,
-            // you might not need to explicitly disable scrolling for them.
-            // If the first segment is a UITableViewController, it will have scrolling enabled by default.
-            // For consistency and future-proofing, let's keep the conditional check.
-            if index == 0 && newViewController is UITableViewController {
-                if let tableView = (newViewController as? UITableViewController)?.tableView {
-                    tableView.isScrollEnabled = true // Ensure scrolling is enabled for the table view
-                    
-                }
-            }
+            // 현재 뷰 컨트롤러 업데이트
+            currentViewController = newViewController
         }
     }
-
-    // This method remains unchanged and is available if needed.
-    func disableScrollingInViewController(_ viewController: UIViewController) {
-        if let scrollView = viewController.view.subviews.first(where: { $0 is UIScrollView }) as? UIScrollView {
-            scrollView.isScrollEnabled = false
-            print(scrollView)
-        }
-    }
-
+    
     // 현재 활성화된 뷰 컨트롤러 제거
     private func removeCurrentViewController() {
         currentViewController?.willMove(toParent: nil)
         currentViewController?.view.removeFromSuperview()
         currentViewController?.removeFromParent()
     }
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let yOffset = scrollView.contentOffset.y
         if yOffset >= triggerOffset {
