@@ -16,6 +16,7 @@ protocol FilterBottomSheetViewControllerDelegate: AnyObject {
 class FilterBottomSheetViewController: UIViewController {
     
     weak var delegate: FilterBottomSheetViewControllerDelegate?
+//    var fpc: FloatingPanelController?
     var viewModel: HomeViewModel?
     
     @IBOutlet weak var filterTableView: UITableView!
@@ -34,6 +35,7 @@ class FilterBottomSheetViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         // 여기에 필요한 초기화 코드를 추가합니다.
+        
     }
     
     override func viewDidLoad() {
@@ -41,10 +43,14 @@ class FilterBottomSheetViewController: UIViewController {
         
         setupUI()
         
-        viewModel?.didUpdateFilterTableView = {
-            DispatchQueue.main.async {
-                self.filterTableView.reloadData()
-            }
+        viewModel?.didUpdateSortTypeButton = {
+            self.categoryButton.setTitleColor(self.viewModel?.sortType == .category ? JMTengAsset.gray900.color : JMTengAsset.gray400.color, for: .normal)
+            self.drinkingButton.setTitleColor(self.viewModel?.sortType == .drinking ? JMTengAsset.gray900.color : JMTengAsset.gray400.color, for: .normal)
+            self.filterTableView.reloadData()
+        }
+        
+        viewModel?.didUpdateFilters = { bool in
+            self.filterTableView.reloadData()
         }
     }
     
@@ -83,16 +89,13 @@ extension FilterBottomSheetViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 78
     }
-
+    
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel?.updateIndex(row: indexPath.row)
         
-        DispatchQueue.main.async {
-            self.filterTableView.reloadData()
-            
-            if self.viewModel?.sortType == .sort {
-                self.dismiss(animated: true)
-            }
+        if viewModel?.sortType == .sort {
+            self.dismiss(animated: true)
         }
     }
 }
@@ -102,7 +105,7 @@ extension FilterBottomSheetViewController: UITableViewDataSource {
         
         switch viewModel?.sortType {
         case .sort:
-            return 2
+            return 3
         case .category:
             return 8
         case .drinking:

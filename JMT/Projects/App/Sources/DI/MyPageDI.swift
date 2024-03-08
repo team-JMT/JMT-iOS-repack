@@ -63,5 +63,17 @@ struct MyPageDI: Assembly {
             let viewModel = r.resolve(ServiceUseViewModel.self)!
             c.viewModel = viewModel
         }
+        
+        //changeNickname
+        container.register(MyPageChangeNickNameViewModel.self) { r in
+            let viewModel = MyPageChangeNickNameViewModel()
+            return viewModel
+        }
+        
+        container.storyboardInitCompleted(ChangeNickNameVC.self) { r, c in
+            let viewModel = r.resolve(MyPageChangeNickNameViewModel.self)!
+            c.viewModel = viewModel
+        }
+        
     }
 }
