@@ -13,8 +13,8 @@ class RestaurantDetailViewModel {
     
     var photoAuthService: PhotoAuthService?
     
+    var restaurantInfo: SearchMapRestaurantItems?
     var currentSegIndex: Int = 0
-    
     var reviewImages = [UIImage]()
     
     var didUpdateReviewImage: (() -> Void)?
