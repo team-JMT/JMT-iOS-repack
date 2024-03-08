@@ -52,10 +52,6 @@ struct Area: Codable {
 
 extension CurrentLocationResponse {
     var toDomain: CurrentLocationModel {
-        
-        guard data.results.isEmpty != true else {
-            return CurrentLocationModel(address: "주소 변환 에러")
-        }
         let area1 = data.results[0].region.area1.name
         let area2 = data.results[0].region.area2.name
         let area3 = data.results[0].region.area3.name

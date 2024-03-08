@@ -16,18 +16,6 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     
     var pageViewController: RestaurantDetailPageViewController?
     
-    @IBOutlet weak var placeNameLabel: UILabel!
-    @IBOutlet weak var differenceInDistanceLabel: UILabel!
-    @IBOutlet weak var categoryLabel: UILabel!
-    @IBOutlet weak var addressLabel: UILabel!
-    
-    @IBOutlet weak var userProfileImageView: UIImageView!
-    @IBOutlet weak var userNicknameLabel: UILabel!
-    
-    
-    
-    
-    
     @IBOutlet weak var pageContainerView: UIView!
     
     @IBOutlet weak var restanurantSegController: UISegmentedControl!
@@ -52,12 +40,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupUI()
-        
         imageViews = [reviewImageView1, reviewImageView2, reviewImageView3, reviewImageView4, reviewImageView5]
-        
-        pageViewController?.pageViewDelegate = self
-        setCustomNavigationBarBackButton(isSearchVC: false)
         
         // 각 이미지뷰에 제스처 추가
         for (index, imageView) in imageViews.enumerated() {
@@ -70,12 +53,17 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         viewModel?.didUpdateReviewImage = {
             self.reorderImageViews()
         }
+
+        pageViewController?.pageViewDelegate = self
+        setCustomNavigationBarBackButton(isSearchVC: false)
+        
+        setupUI()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+//        self.navigationController?.isNavigationBarHidden = false
         self.tabBarController?.tabBar.isHidden = true
         
         setupKeyboardEvent { noti in
@@ -91,7 +79,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+//        self.navigationController?.isNavigationBarHidden = true
         self.tabBarController?.tabBar.isHidden = false
         
         removeKeyboardObserver()
@@ -132,14 +120,6 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         reviewTextView.layer.cornerRadius = 8
         reviewTextView.layer.borderColor = JMTengAsset.gray300.color.cgColor
         reviewTextView.layer.borderWidth = 1
-        
-        placeNameLabel.text = viewModel?.restaurantInfo?.name ?? ""
-        differenceInDistanceLabel.text = "위치에서 \(viewModel?.restaurantInfo?.differenceInDistance ?? "")"
-        categoryLabel.text = viewModel?.restaurantInfo?.category ?? ""
-        addressLabel.text = viewModel?.restaurantInfo?.address ?? ""
-        
-        userNicknameLabel.text = viewModel?.restaurantInfo?.userNickName ?? ""
-        
     }
     
     @IBAction func didTabSegmentedController(_ sender: UISegmentedControl) {
@@ -155,6 +135,16 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     @IBAction func didTabAddPhotoButton(_ sender: Any) {
         
         viewModel?.coordinator?.showImagePicker()
+        
+//        viewModel?.photoAuthService?.requestAuthorization(completion: { [weak self] result in
+//            guard let self = self else { return }
+//            switch result {
+//            case .success(let success):
+//                self.
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        })
     }
     
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
