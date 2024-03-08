@@ -10,7 +10,7 @@ import Foundation
 class SearchRestaurantViewModel {
     weak var coordinator: SearchRestaurantCoordinator?
     
-    var locationManager = LocationManager()
+    var locationManager = LocationManager.shared
     
     var filterType: Int = 0
     
@@ -20,10 +20,8 @@ class SearchRestaurantViewModel {
     
     func fetchRestaurantsInfo(keyword: String) {
         
-        locationManager.startUpdatingLocation()
-        
-        let x = locationManager.location?.coordinate.longitude ?? 0.0
-        let y = locationManager.location?.coordinate.latitude ?? 0.0
+        let x = locationManager.currentLocation?.longitude ?? 0.0
+        let y = locationManager.currentLocation?.latitude ?? 0.0
         
         SearchRestaurantsLocationAPI.getSearchRestaurantsLocation(request: SearchRestaurantsLocationRequest(query: keyword, page: 1, x: String(x), y: String(y))) { response in
             switch response {
@@ -39,3 +37,4 @@ class SearchRestaurantViewModel {
         }
     }
 }
+//
