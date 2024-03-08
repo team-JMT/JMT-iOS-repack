@@ -9,6 +9,34 @@ import Foundation
 import Alamofire
 
 struct GroupAPI {
+    static func fetchMyGroupAsync() async throws -> [GroupData] {
+        do  {
+            let response = try await AF.request(GroupTarget.fetchMyGroup, interceptor: DefaultRequestInterceptor())
+                .validate(statusCode: 200..<300)
+                .serializingDecodable(GroupResponse.self)
+                .value
+            return response.data
+        } catch {
+            throw NetworkError.custom("fetchMyGroupAsync Error")
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     static func fetchMyGroup(completion: @escaping (Result<GroupResponse, NetworkError>) -> ()) {
         
         AF.request(GroupTarget.fetchMyGroup, interceptor: DefaultRequestInterceptor())

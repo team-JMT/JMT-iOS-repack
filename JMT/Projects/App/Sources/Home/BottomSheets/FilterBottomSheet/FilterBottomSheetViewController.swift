@@ -43,14 +43,10 @@ class FilterBottomSheetViewController: UIViewController {
         
         setupUI()
         
-        viewModel?.didUpdateSortTypeButton = {
-            self.categoryButton.setTitleColor(self.viewModel?.sortType == .category ? JMTengAsset.gray900.color : JMTengAsset.gray400.color, for: .normal)
-            self.drinkingButton.setTitleColor(self.viewModel?.sortType == .drinking ? JMTengAsset.gray900.color : JMTengAsset.gray400.color, for: .normal)
-            self.filterTableView.reloadData()
-        }
-        
-        viewModel?.didUpdateFilters = { bool in
-            self.filterTableView.reloadData()
+        viewModel?.didUpdateFilterTableView = {
+            DispatchQueue.main.async {
+                self.filterTableView.reloadData()
+            }
         }
     }
     
@@ -89,13 +85,16 @@ extension FilterBottomSheetViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 78
     }
-    
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel?.updateIndex(row: indexPath.row)
         
-        if viewModel?.sortType == .sort {
-            self.dismiss(animated: true)
+        DispatchQueue.main.async {
+            self.filterTableView.reloadData()
+            
+            if self.viewModel?.sortType == .sort {
+                self.dismiss(animated: true)
+            }
         }
     }
 }
@@ -105,7 +104,7 @@ extension FilterBottomSheetViewController: UITableViewDataSource {
         
         switch viewModel?.sortType {
         case .sort:
-            return 3
+            return 2
         case .category:
             return 8
         case .drinking:
