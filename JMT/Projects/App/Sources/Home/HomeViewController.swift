@@ -92,8 +92,12 @@ class HomeViewController: UIViewController {
                 // 최종 UI 업데이트
                 updateUI(with: address)
                 
-            } catch {
-                print(error)
+            } catch RestaurantError.fetchRecentRestaurantsAsyncError {
+                print("첫번째 섹션 로드 데이터 에러")
+            } catch RestaurantError.fetchGroupRestaurantsAsyncError {
+                print("두번째 섹션 로드 데이터 에러")
+            } catch RestaurantError.fetchMapIncludedRestaurantsAsyncError {
+                print("네이버 맵 로드 데이터 에러")
             }
         }
     }

@@ -11,17 +11,11 @@ import Alamofire
 struct FetchRestaurantAPI {
     
     static func fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest) async throws -> [SearchMapRestaurantItems] {
-        
-        do {
-            let response = try await AF.request(FetchRestaurantTarget.fetchSearchMapRestaurants(request), interceptor: DefaultRequestInterceptor())
-                .validate(statusCode: 200..<300)
-                .serializingDecodable(SearchMapRestaurantResponse.self)
-                .value
-            return response.data.restaurants
-        } catch {
-            print(error)
-            throw NetworkError.custom("fetchSearchMapRestaurantsAsync Error")
-        }
+        let response = try await AF.request(FetchRestaurantTarget.fetchSearchMapRestaurants(request), interceptor: DefaultRequestInterceptor())
+            .validate(statusCode: 200..<300)
+            .serializingDecodable(SearchMapRestaurantResponse.self)
+            .value
+        return response.data.restaurants
     }
     
     
