@@ -132,7 +132,7 @@ extension HomeViewModel {
             let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
             self.popularRestaurants.append(contentsOf: data)
         } catch {
-            throw error
+            throw RestaurantError.fetchRecentRestaurantsAsyncError
         }
     }
     
@@ -168,9 +168,8 @@ extension HomeViewModel {
         do {
             let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
             self.restaurants.append(contentsOf: data)
-            
         } catch {
-            throw error
+            throw RestaurantError.fetchGroupRestaurantsAsyncError
         }
     }
     
@@ -186,11 +185,12 @@ extension HomeViewModel {
             endLocation: SearchMapRestaurantLocation(x: "\(bounds.northEastLng)", y: "\(bounds.northEastLat)"),
             filter: nil,
             groupId: currentGroupId)
+        
         do {
             let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
             self.markerRestaurants.append(contentsOf: data)
         } catch {
-            throw error
+            throw RestaurantError.fetchMapIncludedRestaurantsAsyncError
         }
     }
 }
@@ -279,17 +279,14 @@ extension HomeViewModel {
 extension HomeViewModel {
     
     func fetchJoinGroup() async throws -> Bool {
-        do {
-            let groupList = try await GroupAPI.fetchMyGroupAsync()
-            
-            if groupList.isEmpty {
-                return false
-            } else {
-                self.groupList.append(contentsOf: groupList)
-                return true
-            }
-        } catch {
-            throw error
+        
+        let groupList = try await GroupAPI.fetchMyGroupAsync()
+        
+        if groupList.isEmpty {
+            return false
+        } else {
+            self.groupList.append(contentsOf: groupList)
+            return true
         }
     }
 }
@@ -297,18 +294,15 @@ extension HomeViewModel {
 // 위치 관련 메소드
 extension HomeViewModel {
     
-    func fetchCurrentAddressAsync() async throws -> String {
+    func fetchCurrentAddressAsync() async throws -> String? {
         
-        guard self.location != nil else { return "검색 실패" }
+        guard self.location != nil else { return nil }
         
         let lat: String = String(self.location?.latitude ?? 0.0)
         let lon: String = String(self.location?.longitude ?? 0.0)
         
-        do {
-            let locationData = try await CurrentLocationAPI.fetchCurrentLoctionAsync(request: CurrentLocationRequest(coords: "\(lon),\(lat)"))
-            return locationData.address
-        } catch {
-            throw error
-        }
+        let locationData = try await CurrentLocationAPI.fetchCurrentLoctionAsync(request: CurrentLocationRequest(coords: "\(lon),\(lat)"))
+        return locationData.address
+       
     }
 }
