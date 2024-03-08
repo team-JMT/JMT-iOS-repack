@@ -54,7 +54,6 @@
                                     </button>
                                 </subviews>
                             </stackView>
-<<<<<<< Updated upstream
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dh8-u2-qgJ">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="65"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -112,7 +111,6 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                 </userDefinedRuntimeAttributes>
-=======
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bKO-Rz-OHX">
                                 <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <subviews>
@@ -154,22 +152,17 @@
                                     <constraint firstItem="TnG-gx-MAd" firstAttribute="centerX" secondItem="bKO-Rz-OHX" secondAttribute="centerX" id="iGY-fq-0Rt"/>
                                     <constraint firstItem="TnG-gx-MAd" firstAttribute="leading" secondItem="bKO-Rz-OHX" secondAttribute="leading" constant="50" id="zY0-Te-ZrY"/>
                                 </constraints>
->>>>>>> Stashed changes
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-<<<<<<< Updated upstream
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="dh8-u2-qgJ" secondAttribute="trailing" id="0Gx-7V-eho"/>
-=======
                             <constraint firstItem="bKO-Rz-OHX" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="0r0-Fq-UIw"/>
->>>>>>> Stashed changes
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="jEB-fM-TdX" secondAttribute="bottom" constant="30" id="5TB-hz-1Ev"/>
                             <constraint firstItem="srQ-dG-9DL" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="5XZ-qF-vXS"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="5oj-KE-prq"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="jEB-fM-TdX" secondAttribute="trailing" constant="11" id="7hN-us-MFu"/>
-<<<<<<< Updated upstream
                             <constraint firstItem="srQ-dG-9DL" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="CgV-xc-vg1"/>
                             <constraint firstItem="dh8-u2-qgJ" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="IJf-m8-8ca"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="KBq-S7-BnC"/>
@@ -177,7 +170,6 @@
                             <constraint firstAttribute="bottom" secondItem="Gz2-he-OL7" secondAttribute="bottom" id="ZXL-0d-BM1"/>
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="Zl4-7T-l68"/>
                             <constraint firstItem="dh8-u2-qgJ" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="gXb-0x-a11"/>
-=======
                             <constraint firstItem="Gz2-he-OL7" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="9Xb-xx-AQ3"/>
                             <constraint firstItem="bKO-Rz-OHX" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Ac1-NT-ym4"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="srQ-dG-9DL" secondAttribute="trailing" id="StH-40-Brx"/>
@@ -186,7 +178,6 @@
                             <constraint firstItem="bKO-Rz-OHX" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="tmG-5X-5Uc"/>
                             <constraint firstItem="srQ-dG-9DL" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="veU-Or-gz9"/>
                             <constraint firstItem="bKO-Rz-OHX" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="yYV-b2-60g"/>
->>>>>>> Stashed changes
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
@@ -207,11 +198,8 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-<<<<<<< Updated upstream
             <point key="canvasLocation" x="130.43478260869566" y="-34.821428571428569"/>
-=======
             <point key="canvasLocation" x="130.53435114503816" y="-34.507042253521128"/>
->>>>>>> Stashed changes
         </scene>
     </scenes>
     <resources>
