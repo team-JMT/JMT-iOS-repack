@@ -20,3 +20,25 @@ struct UserData: Codable {
     let id: Int
     let email, nickname, profileImg: String
 }
+
+struct RestaurantSearchResponse: Codable {
+    let data: RestaurantSearchData
+}
+
+struct RestaurantSearchData: Codable {
+    let restaurants: [Restaurant]
+    let page: Page
+}
+
+struct Restaurant: Codable {
+    // 여기에 Restaurant 구조체 필드 정의
+}
+
+struct Page: Codable {
+    let totalPages: Int
+    let currentPage: Int
+    let totalElements: Int
+    let size: Int
+    let numberOfElements: Int
+    let empty: Bool
+}
