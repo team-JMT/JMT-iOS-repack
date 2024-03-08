@@ -52,12 +52,11 @@ class DetailMyPageVC : UIViewController {
 
            viewModel?.fetchUserInfo()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(showNicknameUpdateSuccessToast), name: NSNotification.Name("NicknameUpdateSuccess"), object: nil)
         //닉네임 변경 노티
         NotificationCenter.default.addObserver(self, selector: #selector(showNicknameUpdateSuccessToast), name: NSNotification.Name("NicknameUpdateSuccess"), object: nil)
         //이미지 변경 노티
         NotificationCenter.default.addObserver(self, selector: #selector(profileImageUpdated), name: NSNotification.Name("ProfileImageUpdated"), object: nil)
-
-
     }
     
     
@@ -144,7 +143,6 @@ class DetailMyPageVC : UIViewController {
         viewModel?.fetchUserInfo()
 
     }
-
 
     private func navigationItems() {
         // SFSymbol을 사용해서 왼쪽 '뒤로가기' 버튼을 설정합니다.

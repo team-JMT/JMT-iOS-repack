@@ -127,12 +127,27 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         coordinator.start()
     }
     
-    
     //이미지 등록
     func setProfileImagePopupCoordinator() {
         let coordinator = DefaultProfileImagePopupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
         childCoordinators.append(coordinator)
     }
+    
+    //닉네임 수정
+    func setMyPageChangeNicknameCoordinator() {
+        let coordinator = DefaultMyPageChangeNicknaemCoordinator(navigationController: navigationController)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showMyPageChangeNicknameVC() {
+        if getChildCoordinator(.serviceUse) == nil {
+            setMyPageChangeNicknameCoordinator()
+            
+        }
+        let coordinator = getChildCoordinator(.changeNickname) as! MyPageChangeNicknaemCoordinator
+        coordinator.start()
+    }
+    
     
     func showProfileImagePopupViewController() {
         
@@ -205,7 +220,6 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
             print("Access Token or Image Data is not available")
             return
         }
-
 
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
