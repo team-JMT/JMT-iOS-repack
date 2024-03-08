@@ -41,7 +41,7 @@ class DefaultConvertUserLocationCoordinator: ConvertUserLocationCoordinator {
     func goToHomeViewController(lon: Double, lat: Double) {
         if let homeViewController = self.navigationController?.viewControllers[0] as? HomeViewController {
             homeViewController.viewModel?.location = CLLocationCoordinate2D.init(latitude: lon, longitude: lat)
-            //homeViewController.viewModel?.fetchCurrentAddress()
+            homeViewController.updateSearchLocation()
             self.navigationController?.popToRootViewController(animated: true)
         }
     }

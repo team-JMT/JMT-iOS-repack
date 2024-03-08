@@ -60,8 +60,6 @@ class HomeViewController: UIViewController {
 
     func fetchData()  {
     
-        
-        
         Task {
             guard !isInitialDataLoaded else { return }
             
@@ -150,31 +148,42 @@ class HomeViewController: UIViewController {
         let lon = viewModel?.location?.longitude ?? 0.0
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
         cameraUpdate.animation = .easeIn
+        naverMapView.mapView.zoomLevel = 18.0
         self.naverMapView.mapView.moveCamera(cameraUpdate)
     }
+  
+    func updateSearchLocation() {
+        updateCamera()
+        
+        Task {
+            do {
+                let address = try await viewModel?.fetchCurrentAddressAsync()
+                self.locationButton.setTitle(address, for: .normal)
+            } catch {
+                print(error)
+            }
+        }
+    }
     
-    
-
     @IBAction func didTabSearchGroupButton(_ sender: Any) {
         viewModel?.coordinator?.showSearchTabWithButton()
     }
     
     @IBAction func didTabRefreshButton(_ sender: Any) {
-    
-//        if viewModel?.locationManager.checkAuthorizationStatus() == false {
-//            self.showAccessDeniedAlert(type: .location)
-//        } else {
-//          
-//            Task {
-//                do {
-//                    let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
-//                    try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
-//                    self.refreshMarkersInVisibleRegion()
-//                } catch {
-//                    print(error)
-//                }
-//            }
-//        }
+        
+        if viewModel?.locationManager.checkAuthorizationStatus() == false {
+            self.showAccessDeniedAlert(type: .location)
+        } else {
+            Task {
+                do {
+                    let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
+                    try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+                    self.refreshMarkersInVisibleRegion()
+                } catch {
+                    print(error)
+                }
+            }
+        }
     }
     
     @IBAction func didTabChangeAddressButton(_ sender: Any) {
@@ -198,7 +207,6 @@ class HomeViewController: UIViewController {
         
         viewModel?.locationManager.didUpdateLocations = { [weak self] location in
             guard let self = self else { return }
-            print("권한 설정 완료", location)
             
             self.viewModel?.location = location
             
