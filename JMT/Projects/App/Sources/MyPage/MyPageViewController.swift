@@ -14,6 +14,8 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     
     //weak var coordinator: MyPageCoordinator?
     var viewModel = MyPageViewModel()
+    var restaurants: [Restaurant] = []
+
 
     
     private var fixedSegmentedControl: UISegmentedControl!
@@ -21,7 +23,6 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     private var pageViewController: UIPageViewController!
     private var viewControllerIdentifiers: [String] = ["FirstSegmentViewController", "SecondSegmentViewController", "ThirdSegmentViewController"]
     
-    //
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
@@ -56,7 +57,6 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
             guard let self = self, let totalRestaurants = self.viewModel.totalRestaurants else { return }
             DispatchQueue.main.async {
                 self.registerResturant.text = "\(totalRestaurants)"
-                print("==-=-=-==")
                 print("\(self.registerResturant)")
             }
         }
@@ -170,6 +170,18 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
         //   coordinator?.goToDetailView(for: sender.selectedSegmentIndex)
         
     }
-    
-    
+        
 }
+//extension MyPageViewController: UITableViewDataSource {
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return restaurants.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageTableViewCell", for: indexPath)
+//        
+//        let restaurant = restaurants[indexPath.row]
+//        cell.textLabel?.text = restaurant.name
+//        return cell
+//    }
+//}

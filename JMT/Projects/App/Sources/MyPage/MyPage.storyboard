@@ -431,7 +431,11 @@
                                                             </constraints>
                                                         </tableViewCellContentView>
                                                         <connections>
+                                                            <outlet property="ds" destination="8mU-NG-AOz" id="b89-CN-wkE"/>
                                                             <outlet property="imageView" destination="WYG-i5-VBX" id="e15-WQ-Id5"/>
+                                                            <outlet property="maPageResturantName" destination="8mU-NG-AOz" id="GTe-jG-J9Q"/>
+                                                            <outlet property="myPage111" destination="s9w-JM-bmm" id="cDk-WJ-F3o"/>
+                                                            <outlet property="myPageImage" destination="WYG-i5-VBX" id="sb1-Fw-uhP"/>
                                                             <outlet property="resturantName" destination="8mU-NG-AOz" id="bo8-fj-qSa"/>
                                                         </connections>
                                                     </tableViewCell>
