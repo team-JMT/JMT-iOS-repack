@@ -9,11 +9,13 @@ import UIKit
 
 
 class MyPageTableViewCell: UITableViewCell {
+  
     @IBOutlet weak var myPageImage: UIImageView!
-    @IBOutlet weak var mapageResturantName: UILabel!
+    @IBOutlet weak var maPageResturantName: UILabel!
 
-//    func configure(with data: DummyDataType) {
-//        myPageImage.image = UIImage(named: data.image)
-//        mapageResturantName.text = data.labelText
-//    }
+    @IBOutlet weak var myPage111: UILabel!
+    
+    
+    
+    
 }

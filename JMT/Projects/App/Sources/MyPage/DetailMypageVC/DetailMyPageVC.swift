@@ -64,7 +64,7 @@ class DetailMyPageVC : UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     private func updateUI() {
@@ -239,20 +239,6 @@ class DetailMyPageVC : UIViewController {
         }
         return imageData
     }
-    
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let selectedImage = info[.originalImage] as? UIImage {
-            profileImage.image = selectedImage
-            if let imageData = selectedImage.pngData() {
-                print("Selected image data: \(imageData)")
-                UserDefaults.standard.set(imageData, forKey: "profileImage")
-                sendProfileImageToServer(with: imageData)
-            }
-        }
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
     
     
     func sendDefaultProfileImageToServer() {

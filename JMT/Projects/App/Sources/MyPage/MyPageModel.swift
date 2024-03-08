@@ -31,7 +31,8 @@ struct RestaurantSearchData: Codable {
 }
 
 struct Restaurant: Codable {
-    // 여기에 Restaurant 구조체 필드 정의
+    
+    
 }
 
 struct Page: Codable {
