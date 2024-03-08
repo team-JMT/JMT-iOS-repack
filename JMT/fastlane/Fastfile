@@ -27,11 +27,12 @@ platform :ios do
     )
     
     # Increment the build number
-    increment_build_number
-    
+    increment_build_number(workspace: "JMT-iOS.xcworkspace")
+
+
     # Build the app
     build_app(workspace: "JMT-iOS.xcworkspace", scheme: "Jmteng")
-    
+
     # Upload the app to TestFlight
     upload_to_testflight
   end
