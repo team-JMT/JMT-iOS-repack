@@ -16,7 +16,6 @@ protocol FilterBottomSheetViewControllerDelegate: AnyObject {
 class FilterBottomSheetViewController: UIViewController {
     
     weak var delegate: FilterBottomSheetViewControllerDelegate?
-//    var fpc: FloatingPanelController?
     var viewModel: HomeViewModel?
     
     @IBOutlet weak var filterTableView: UITableView!
@@ -35,7 +34,6 @@ class FilterBottomSheetViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         // 여기에 필요한 초기화 코드를 추가합니다.
-        
     }
     
     override func viewDidLoad() {
