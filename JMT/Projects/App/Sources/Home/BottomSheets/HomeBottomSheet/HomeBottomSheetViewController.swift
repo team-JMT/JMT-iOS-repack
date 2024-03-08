@@ -65,14 +65,9 @@ class HomeBottomSheetViewController: UIViewController {
                     try await self.viewModel?.fetchGroupRestaurantsAsync()
                     self.viewModel?.isLodingData = false
                     
-                    self.viewModel?.restaurants.map { a in
-                        print(a.id, a.name)
-                    }
-            
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        self.bottomSheetCollectionView.reloadData()
-                        self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(1))
-                    }
+                    self.bottomSheetCollectionView.reloadData()
+                    self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(1))
+                    
                 } catch {
                     print(error)
                 }
