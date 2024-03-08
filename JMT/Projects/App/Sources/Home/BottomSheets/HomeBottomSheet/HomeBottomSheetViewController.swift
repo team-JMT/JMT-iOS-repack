@@ -35,29 +35,48 @@ class HomeBottomSheetViewController: UIViewController {
         let header2 = UINib(nibName: "HomeFilterHeaderView", bundle: nil)
         bottomSheetCollectionView.register(header2, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView2")
         
-        bottomSheetCollectionView.collectionViewLayout = createLayout()
-    
-        setupUI()
+        self.bottomSheetCollectionView.collectionViewLayout = self.createLayout()
         
-        bottomSheetCollectionView.showAnimatedGradientSkeleton()
+        setupUI()
+        self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
         
         viewModel?.didUpdateSkeletonView = {
-            self.view.showAnimatedGradientSkeleton()
+            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
         }
         
         viewModel?.didUpdateBottomSheetTableView = {
             
+            self.viewModel?.isLodingData = false
+            
             DispatchQueue.main.async {
-
                 self.hiddenBottomSheetButton()
                 self.bottomSheetCollectionView.reloadData()
                 self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(1))
             }
         }
         
+        viewModel?.didUpdateFilterRestaurants = {
         
-        viewModel?.didUpdateIndex = { index in
-            self.bottomSheetCollectionView.scrollToItem(at: IndexPath(row: index, section: 1), at: .top, animated: true)
+            self.viewModel?.isLodingData = true
+            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
+            
+            Task {
+                do {
+                    try await self.viewModel?.fetchGroupRestaurantsAsync()
+                    self.viewModel?.isLodingData = false
+                    
+                    self.viewModel?.restaurants.map { a in
+                        print(a.id, a.name)
+                    }
+            
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        self.bottomSheetCollectionView.reloadData()
+                        self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(1))
+                    }
+                } catch {
+                    print(error)
+                }
+            }
         }
     }
     
@@ -76,8 +95,8 @@ class HomeBottomSheetViewController: UIViewController {
                    return nil
                }
            } else {
-               let isPopularRestaurantsEmpty = self.viewModel?.filterPopularRestaurants.isEmpty ?? true
-               let isRestaurantsEmpty = self.viewModel?.filterRestaurants.isEmpty ?? true
+               let isPopularRestaurantsEmpty = self.viewModel?.popularRestaurants.isEmpty ?? true
+               let isRestaurantsEmpty = self.viewModel?.restaurants.isEmpty ?? true
 
                if isPopularRestaurantsEmpty && isRestaurantsEmpty {
                    return self.createEmptyColumnSection()
@@ -105,7 +124,7 @@ class HomeBottomSheetViewController: UIViewController {
       
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .absolute(250), // .fractionalWidth(0.6675),
-            heightDimension: .absolute(225) // .fractionalHeight(0.4215)
+            heightDimension: .absolute(240) //.absolute(225) // .fractionalHeight(0.4215)
         )
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
@@ -128,13 +147,13 @@ class HomeBottomSheetViewController: UIViewController {
         // Item
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(400)
+            heightDimension: .estimated(1)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
       
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(400)
+            heightDimension: .estimated(1)
         )
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
@@ -196,7 +215,7 @@ class HomeBottomSheetViewController: UIViewController {
     }
     
     func hiddenBottomSheetButton() {
-        if viewModel?.filterPopularRestaurants.isEmpty == true && viewModel?.filterRestaurants.isEmpty == true {
+        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
             moveTopButton.isHidden = true
             addButton.isHidden = true
         } else {
@@ -215,11 +234,12 @@ class HomeBottomSheetViewController: UIViewController {
     
     @IBAction func didTabResetButton(_ sender: Any) {
         viewModel?.resetUpdateIndex()
+        viewModel?.didUpdateFilterTableView?()
     }
     
     @IBAction func didTabDoneButton(_ sender: Any) {
         viewModel?.saveUpdateIndex()
-        viewModel?.fetchRestaurantsData()
+        viewModel?.didUpdateFilterRestaurants?()
         bottomContainerView.removeFromSuperview()
         fpc.dismiss(animated: true)
     }
@@ -246,58 +266,110 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
             return UICollectionReusableView()
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            guard viewModel?.popularRestaurants.isEmpty == false else { return }
+            
+            if let info = viewModel?.popularRestaurants[indexPath.row] {
+                viewModel?.coordinator?.showDetailRestaurantViewController(info: info)
+            }
+        case 1:
+            guard viewModel?.restaurants.isEmpty == false else { return }
+            
+            if let info = viewModel?.restaurants[indexPath.row] {
+                viewModel?.coordinator?.showDetailRestaurantViewController(info: info)
+            }
+        default:
+            return
+        }
+    }
 }
 
 extension HomeBottomSheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-            
-        if viewModel?.filterPopularRestaurants.isEmpty == true && viewModel?.filterRestaurants.isEmpty == true {
-            return 1
-        } else {
+        if viewModel?.isLodingData == true {
             return 2
+        } else {
+            if viewModel?.popularRestaurants.isEmpty == true {
+                return 1
+            } else{
+                return 2
+            }
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if viewModel?.filterPopularRestaurants.isEmpty == true && viewModel?.filterRestaurants.isEmpty == true {
-            return 1
-        } else {
+        if viewModel?.isLodingData == true {
             switch section {
             case 0:
-                return viewModel?.filterPopularRestaurants.count ?? 0
+                return 5
             case 1:
-                return viewModel?.filterRestaurants.isEmpty == true ? 1 : viewModel?.filterRestaurants.count ?? 0
+                return 5
             default:
                 return 0
+            }
+        } else {
+            if viewModel?.popularRestaurants.isEmpty == true {
+                return 1
+            } else {
+                switch section {
+                case 0:
+                    return viewModel?.restaurants.count ?? 0 >= 10 ? 10 : viewModel?.popularRestaurants.count ?? 0
+                case 1:
+                    return viewModel?.restaurants.isEmpty == true ? 1 : viewModel?.restaurants.count ?? 0
+                default:
+                    return 0
+                }
             }
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        if viewModel?.filterPopularRestaurants.isEmpty == true && viewModel?.filterRestaurants.isEmpty == true {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emptyDataCell", for: indexPath) as? PopularEmptyCell else { return UICollectionViewCell()}
-            cell.delegate = self
-            return cell
-        } else {
+        if viewModel?.isLodingData == true {
             switch indexPath.section {
             case 0:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
-                cell.setupData(model: viewModel?.filterPopularRestaurants[indexPath.row])
                 return cell
             case 1:
-                if viewModel?.filterRestaurants.isEmpty == true {
-                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlaceholderCell", for: indexPath) as? PlaceholderCollectionViewCell else { return UICollectionViewCell() }
-                    return cell
-
-                } else {
-                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
-                    cell.setupData(model: viewModel?.filterRestaurants[indexPath.row])
-                    return cell
-                }
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
+                return cell
             default:
                 return UICollectionViewCell()
+            }
+        } else {
+            if viewModel?.popularRestaurants.isEmpty == true {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emptyDataCell", for: indexPath) as? PopularEmptyCell else { return UICollectionViewCell() }
+                return cell
+            } else {
+                if viewModel?.restaurants.isEmpty == true {
+                    switch indexPath.section {
+                    case 0:
+                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
+                        cell.setupData(model: viewModel?.popularRestaurants[indexPath.row])
+                        return cell
+                    case 1:
+                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlaceholderCell", for: indexPath) as? PlaceholderCollectionViewCell else { return UICollectionViewCell() }
+                        return cell
+                    default:
+                        return UICollectionViewCell()
+                    }
+                } else {
+                    switch indexPath.section {
+                    case 0:
+                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
+                        cell.setupData(model: viewModel?.popularRestaurants[indexPath.row])
+                        return cell
+                    case 1:
+                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
+                        cell.setupData(model: viewModel?.restaurants[indexPath.row])
+                        return cell
+                    default:
+                        return UICollectionViewCell()
+                    }
+                }
             }
         }
     }
@@ -408,50 +480,8 @@ extension HomeBottomSheetViewController: FloatingPanelControllerDelegate {
     }
 }
 
-class SortFloatingPanelLayout: FloatingPanelLayout {
-    
-    let position: FloatingPanelPosition = .bottom
-    let initialState: FloatingPanelState = .half
-    
-    var anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring] {
-        return [
-            .half: FloatingPanelLayoutAnchor(absoluteInset: 294, edge: .bottom, referenceGuide: .safeArea)
-        ]
-    }
-    
-    func backdropAlpha(for state: FloatingPanelState) -> CGFloat {
-        return 0.5
-    }
-}
-
-class CategoryFloatingPanelLayout: FloatingPanelLayout {
-    
-    let position: FloatingPanelPosition = .bottom
-    let initialState: FloatingPanelState = .half
-    let anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring] =
-    
-    [
-        .full: FloatingPanelLayoutAnchor(fractionalInset: 0.95, edge: .bottom, referenceGuide: .safeArea),
-        .half: FloatingPanelLayoutAnchor(fractionalInset: 0.5, edge: .bottom, referenceGuide: .safeArea)
-    ]
-    
-    func backdropAlpha(for state: FloatingPanelState) -> CGFloat {
-        return 0.5
-    }
-}
 
 
-class DrinkingFloatingPanelLayout: FloatingPanelLayout {
-    
-    let position: FloatingPanelPosition = .bottom
-    let initialState: FloatingPanelState = .half
-    let anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring] =
-    
-    [
-        .half: FloatingPanelLayoutAnchor(absoluteInset: 240 + 110, edge: .bottom, referenceGuide: .safeArea)
-    ]
-    
-    func backdropAlpha(for state: FloatingPanelState) -> CGFloat {
-        return 0.5
-    }
-}
+
+
+

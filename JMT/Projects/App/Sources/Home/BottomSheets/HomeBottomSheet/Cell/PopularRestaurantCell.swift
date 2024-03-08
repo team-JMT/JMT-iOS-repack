@@ -7,6 +7,7 @@
 
 import UIKit
 import SkeletonView
+import Kingfisher
 
 class PopularRestaurantCell: UICollectionViewCell {
     
@@ -42,11 +43,34 @@ class PopularRestaurantCell: UICollectionViewCell {
         
         self.stopSkeletonAnimation()
         self.hideSkeleton()
+        
+        setupData(model: nil)
     }
     
-    func setupData(model: GroupRestaurantsInfoModel?) {
-        userNicknameLabel.text = model?.userNickName ?? ""
-        restaurantNameLabel.text = model?.name ?? ""
+    func setupData(model: SearchMapRestaurantItems?) {
+    
+        if let model = model {
+            if let url = URL(string: model.restaurantImageUrl ?? "") {
+                restaurantImageView.kf.setImage(with: url)
+            } else {
+                restaurantImageView.image = JMTengAsset.emptyResult.image
+            }
+            
+            if let url = URL(string: model.userProfileImageUrl ?? "") {
+                userProfileImageView.kf.setImage(with: url)
+            } else {
+                userProfileImageView.image = JMTengAsset.emptyResult.image
+            }
+            
+            userNicknameLabel.text = model.userNickName
+            restaurantNameLabel.text = model.name
+        } else {
+            // 모델이 nil일 때 기본 이미지와 텍스트로 초기화
+            restaurantImageView.image = nil // 또는 다른 기본 이미지
+            userProfileImageView.image = nil // 또는 다른 기본 이미지
+            userNicknameLabel.text = ""
+            restaurantNameLabel.text = ""
+        }
     }
 }
 

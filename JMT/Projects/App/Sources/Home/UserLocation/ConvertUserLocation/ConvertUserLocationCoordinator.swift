@@ -7,10 +7,11 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 protocol ConvertUserLocationCoordinator: Coordinator {
     func startWithData(data: SearchLocationModel?)
-    func goToHomeViewController()
+    func goToHomeViewController(lon: Double, lat: Double)
 }
 
 class DefaultConvertUserLocationCoordinator: ConvertUserLocationCoordinator {
@@ -37,8 +38,12 @@ class DefaultConvertUserLocationCoordinator: ConvertUserLocationCoordinator {
         self.navigationController?.pushViewController(convertUserLoctaionViewController, animated: true)
     }
     
-    func goToHomeViewController() {
-        self.navigationController?.popToRootViewController(animated: true)
+    func goToHomeViewController(lon: Double, lat: Double) {
+        if let homeViewController = self.navigationController?.viewControllers[0] as? HomeViewController {
+            homeViewController.viewModel?.location = CLLocationCoordinate2D.init(latitude: lon, longitude: lat)
+            //homeViewController.viewModel?.fetchCurrentAddress()
+            self.navigationController?.popToRootViewController(animated: true)
+        }
     }
     
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {

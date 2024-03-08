@@ -79,9 +79,9 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
         
         photoService.requestAuthorization { result in
             switch result {
-            case .success(let success):
+            case .success(let _):
                 self.navigationController?.present(picker, animated: true)
-            case .failure(let failure):
+            case .failure(let _):
                 if let topViewController = self.navigationController?.topViewController {
                     topViewController.showAccessDeniedAlert(type: .photo)
                 }

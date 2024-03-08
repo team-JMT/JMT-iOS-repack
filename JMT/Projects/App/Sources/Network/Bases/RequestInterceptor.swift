@@ -13,9 +13,6 @@ class DefaultRequestInterceptor: RequestInterceptor {
     
     // 리퀘스트 요청시 호출됨
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
-        
-        print("어뎁트 호출")
-        
         guard urlRequest.url?.absoluteString.hasPrefix("https://api.jmt-matzip.dev/api/v1") == true,
               let accessToken = DefaultKeychainService.shared.accessToken else {
             completion(.success(urlRequest))
