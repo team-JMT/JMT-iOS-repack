@@ -29,6 +29,17 @@ final class LocationManager: CLLocationManager {
         isUpdatingLocation = false
         startUpdatingLocation()
     }
+    
+    func checkAuthorizationStatus() -> Bool {
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined, .restricted, .denied:
+            print("권한 거부")
+            return false
+        case .authorizedAlways, .authorizedWhenInUse:
+            print("권한 허용")
+            return true
+        }
+    }
 }
 
 extension LocationManager: CLLocationManagerDelegate {
