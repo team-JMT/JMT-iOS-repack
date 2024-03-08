@@ -20,6 +20,14 @@ extension PhotoAuthService {
     var isAuthorizationLimited: Bool {
         authorizationStatus == .limited
     }
+    
+//    // 사진 설정 화면으로 이동
+//    fileprivate func goToSetting() {
+//        if let bundleIdentifier = Bundle.main.bundleIdentifier,
+//            let appSettingsURL = URL(string: UIApplication.openSettingsURLString + bundleIdentifier) {
+//            UIApplication.shared.open(appSettingsURL, options: [:], completionHandler: nil)
+//        }
+//    }
 }
 
 final class DefaultPhotoAuthService: PhotoAuthService {
