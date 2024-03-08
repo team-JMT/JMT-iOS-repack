@@ -80,7 +80,7 @@ class AlbumsManager: NSObject, PHPhotoLibraryChangeObserver {
                 }
             }
         }
-        
+        //
         albums = resultAlbums
         completion()
     }

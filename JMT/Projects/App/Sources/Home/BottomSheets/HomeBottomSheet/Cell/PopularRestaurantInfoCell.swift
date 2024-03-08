@@ -7,14 +7,13 @@
 
 import UIKit
 import SkeletonView
-import Kingfisher
 
 class PopularRestaurantInfoCell: UICollectionViewCell {
     
     @IBOutlet weak var userProfileImageView: UIImageView!
     @IBOutlet weak var userNicknameLabel: UILabel!
     
-    @IBOutlet weak var restaurantImageView: UIImageView!
+    @IBOutlet weak var menuImageView: UIImageView!
     
     @IBOutlet weak var restaurantNameLabel: UILabel!
     
@@ -31,7 +30,7 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
         super.awakeFromNib()
         
         userProfileImageView.layer.cornerRadius = userProfileImageView.frame.height / 2
-        restaurantImageView.layer.cornerRadius = 16
+        menuImageView.layer.cornerRadius = 16
         
         reviewUserProfileImageView.layer.cornerRadius = reviewUserProfileImageView.frame.height / 2
         
@@ -53,31 +52,16 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
         self.layoutSkeletonIfNeeded()
     }
     
-    func setupData(model: SearchMapRestaurantItems?) {
+    func setupData(model: GroupRestaurantsInfoModel?) {
+        userNicknameLabel.text = model?.userNickName ?? ""
+        restaurantNameLabel.text = model?.name ?? ""
+        introduceLabel.text = model?.introduce ?? ""
+        likeCountLabel.text = "\(model?.likeCount ?? 0)"
         
-        if let model = model {
-            userNicknameLabel.text = model.userNickName
-            
-            if let url = URL(string: model.userProfileImageUrl) {
-                userProfileImageView.kf.setImage(with: url)
-            } else {
-                userProfileImageView.image = JMTengAsset.defaultProfileImage.image
-            }
-            
-            if let url = URL(string: model.restaurantImageUrl ?? "") {
-                restaurantImageView.kf.setImage(with: url)
-            } else {
-                restaurantImageView.image = JMTengAsset.emptyResult.image
-            }
-            
-            restaurantNameLabel.text = model.name
-            introduceLabel.text = model.introduce
-        } else {
-            userNicknameLabel.text = ""
-            userProfileImageView.image = nil
-            restaurantImageView.image = nil
-            restaurantNameLabel.text = nil
-            introduceLabel.text = nil
+        if model?.comments.isEmpty == false {
+            reviewContainerView.isHidden = false
+            reviewNicknameLabel.text = model?.comments[0].userNickname
+            reviewCommentLabel.text = model?.comments[0].comment
         }
     }
 }
