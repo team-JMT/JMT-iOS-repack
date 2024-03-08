@@ -13,6 +13,7 @@ struct UserDefaultManager {
     private struct Keys {
         static let hasLaunchedBefore = "hasLaunchedBefore"
         static let hasLocationRequstBefore = "hasLocationRequstBefore"
+        static let isJoinGroup = "isJoinGroup"
     }
     
     static var hasLaunchedBefore: Bool {
@@ -23,6 +24,11 @@ struct UserDefaultManager {
     static var hasLocationRequstBefore: Bool {
         get { return defaults.bool(forKey: Keys.hasLocationRequstBefore) }
         set { defaults.set(newValue, forKey: Keys.hasLocationRequstBefore) }
+    }
+    
+    static var isJoinGroup: Bool {
+        get { return defaults.bool(forKey: Keys.isJoinGroup) }
+        set { defaults.set(newValue, forKey: Keys.isJoinGroup) }
     }
 }
 

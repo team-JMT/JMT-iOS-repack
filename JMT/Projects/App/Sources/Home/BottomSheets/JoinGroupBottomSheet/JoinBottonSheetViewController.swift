@@ -24,10 +24,16 @@ class JoinBottonSheetViewController: UIViewController {
         self.dismiss(animated: false)
         viewModel?.coordinator?.showGroupTab()
         
+        let data = GroupData(groupId: 1, groupName: "123123123", groupIntroduce: "", groupProfileImageUrl: "", groupBackgroundImageUrl: "", privateGroup: false)
+        viewModel?.groupList = [data]
     }
     
     @IBAction func didTabSearchGroupButton(_ sender: Any) {
         self.dismiss(animated: false)
+        
+        let data = GroupData(groupId: 1, groupName: "123123123", groupIntroduce: "", groupProfileImageUrl: "", groupBackgroundImageUrl: "", privateGroup: false)
+        viewModel?.groupList = [data]
+        
         viewModel?.coordinator?.showSearchTabWithButton()
     }
 }

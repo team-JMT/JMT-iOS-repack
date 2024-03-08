@@ -32,6 +32,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
     
     var isInitialDataLoaded = false
+    var isShowRestaurantBottomSheet = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,57 +51,70 @@ class HomeViewController: UIViewController {
         
         naverMapView.mapView.addCameraDelegate(delegate: self)
         
-        fetchData()
+        fetchJoinGroup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+     
+    }
+    
+    func fetchJoinGroup() {
+        Task {
+            do {
+                let isGroupJoined = try await viewModel?.fetchJoinGroup() ?? false
+                
+                if isGroupJoined {
+                    setupRestaurantUI()
+                    fetchData()
+                } else {
+                    setupJoinGroupUI()
+                }
+            } catch {
+                print(error)
+            }
+        }
     }
 
-    func fetchData()  {
-    
-        Task {
-            guard !isInitialDataLoaded else { return }
+    func updateViewBasedOnGroupStatus() {
+        if viewModel?.groupList.isEmpty == true {
+        
+            if isShowRestaurantBottomSheet {
+                restaurantListFpc.move(to: .tip, animated: false)
+            }
             
-            do {
-                isInitialDataLoaded = true
-                
-                // 그룹 가입 여부 확인
-                guard let isGroup = try await viewModel?.fetchJoinGroup(), isGroup else {
-                    
-                    // 그룹에 가입되지 않은 경우
-                    showJoinGroupUI()
-                    return
-                }
-                
-                // 그룹에 가입된 경우
-                setupGroupUI()
+            setupJoinGroupUI()
+        } else {
+            if viewModel?.popularRestaurants.isEmpty == true {
+                setupRestaurantUI()
+                fetchData()
+            }
+        }
+    }
 
-                if viewModel?.location == nil {
-                    showAccessDeniedAlert(type: .location)
-                    return
+    func fetchData() {
+        Task {
+            do {
+                if isShowRestaurantBottomSheet {
+                    restaurantListFpc.move(to: .half, animated: false)
                 }
                 
-                let address = try await viewModel?.fetchCurrentAddressAsync() ?? "위치 검색 실패"
-                
-                // 바텀시트에 표시할 데이터 가져오기
+                // 맛집 데이터 가져오기
                 try await fetchSectionAndMapData()
-                
-                // 최종 UI 업데이트
-                updateUI(with: address)
-                
-            } catch RestaurantError.fetchRecentRestaurantsAsyncError {
-                print("첫번째 섹션 로드 데이터 에러")
-            } catch RestaurantError.fetchGroupRestaurantsAsyncError {
-                print("두번째 섹션 로드 데이터 에러")
-            } catch RestaurantError.fetchMapIncludedRestaurantsAsyncError {
-                print("네이버 맵 로드 데이터 에러")
+                // 맛집 바텀시트 업데이트
+                self.viewModel?.didUpdateBottomSheetTableView?()
+                // 지도에 음식점이 포함되어있으면 마커 표시
+                self.refreshMarkersInVisibleRegion()
+                // 스켈레톤뷰 숨기기
+                self.view.hideSkeleton()
+            } catch {
+                print(error)
             }
         }
     }
     
-    func showJoinGroupUI() {
+    func setupJoinGroupUI() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.showJoinGroupBottomSheetVC()
@@ -109,38 +123,29 @@ class HomeViewController: UIViewController {
         }
     }
     
-    func setupGroupUI() {
+    func setupRestaurantUI() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.topDummyView.isHidden = false
             self.topContainerView.isHidden = false
             self.groupNameButton.setTitle(self.viewModel?.groupList.first?.groupName ?? "", for: .normal)
-            self.showRestaurantListBottomSheetVC()
-            self.setTopViewShadow()
-            self.updateLocationButtonBottomConstraint()
-           
+            
+            if !isShowRestaurantBottomSheet {
+                isShowRestaurantBottomSheet = true
+                self.showRestaurantListBottomSheetVC()
+                self.setTopViewShadow()
+                self.updateLocationButtonBottomConstraint()
+            }
         }
     }
     
+    // 맛집 데이터 패치
     func fetchSectionAndMapData() async throws {
         try await viewModel?.fetchRecentRestaurantsAsync()
         try await viewModel?.fetchGroupRestaurantsAsync()
         
         let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
         try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
-    }
-    
-    func updateUI(with address: String) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.updateCamera()
-            self.locationButton.setTitle(address, for: .normal)
-            self.refreshMarkersInVisibleRegion()
-            self.viewModel?.didUpdateBottomSheetTableView?()
-            
-            self.view.stopSkeletonAnimation()
-            self.view.hideSkeleton()
-        }
     }
     
     func updateCamera() {
@@ -207,21 +212,16 @@ class HomeViewController: UIViewController {
         
         viewModel?.locationManager.didUpdateLocations = { [weak self] location in
             guard let self = self else { return }
-            
+            print("----------------------------")
             self.viewModel?.location = location
-            
-            guard self.isInitialDataLoaded  else { return }
             
             if location != nil {
     
                 Task {
-                    
-                    self.viewModel?.didUpdateSkeletonView?()
-                    
                     do {
                         let address = try await self.viewModel?.fetchCurrentAddressAsync() ?? "위치 검색 실패"
-                        try await self.fetchSectionAndMapData()
-                        self.updateUI(with: address)
+                        self.locationButton.setTitle(address, for: .normal)
+                        self.updateCamera()
                     } catch {
                        print(error)
                     }
