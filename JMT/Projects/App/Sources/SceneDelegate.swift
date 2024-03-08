@@ -26,6 +26,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         NMFAuthManager.shared().clientId = "4mc8nybxwl"
         
+        if !UserDefaultManager.hasLaunchedBefore {
+            UserDefaultManager.hasLaunchedBefore = true
+        }
+        
         appCoordinator = DefaultAppCoordinator(navigationController: navigationController)
         
         injector.assemble([SocialLoginDI(),

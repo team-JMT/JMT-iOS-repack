@@ -31,39 +31,150 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
     
+    var isInitialDataLoaded = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(DefaultKeychainService.shared.accessToken)
-//                DefaultKeychainService.shared.accessToken = nil
-        
-        self.view.showAnimatedGradientSkeleton()
+        // 앱 처음 실행시 위치 권한 체크
+        if !UserDefaultManager.hasLocationRequstBefore {
+            UserDefaultManager.hasLocationRequstBefore = true
+            
+            // 위치 권한을 설정하지 않았을때 위치 권한 요청하기
+            viewModel?.locationManager.requestWhenInUseAuthorization()
+        }
         
         setupBind()
+        setupUI()
+        self.view.showAnimatedGradientSkeleton()
         
         naverMapView.mapView.addCameraDelegate(delegate: self)
         
-        setupUI()
-        
-        showRestaurantListBottomSheetVC()
-        updateLocationButtonBottomConstraint()
+        fetchData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-        viewModel?.checkJoinGorup()
     }
 
+    func fetchData()  {
+    
+        
+        
+        Task {
+            guard !isInitialDataLoaded else { return }
+            
+            do {
+                isInitialDataLoaded = true
+                
+                // 그룹 가입 여부 확인
+                guard let isGroup = try await viewModel?.fetchJoinGroup(), isGroup else {
+                    
+                    // 그룹에 가입되지 않은 경우
+                    showJoinGroupUI()
+                    return
+                }
+                
+                // 그룹에 가입된 경우
+                setupGroupUI()
+
+                if viewModel?.location == nil {
+                    showAccessDeniedAlert(type: .location)
+                    return
+                }
+                
+                let address = try await viewModel?.fetchCurrentAddressAsync() ?? "위치 검색 실패"
+                
+                // 바텀시트에 표시할 데이터 가져오기
+                try await fetchSectionAndMapData()
+                
+                // 최종 UI 업데이트
+                updateUI(with: address)
+                
+            } catch RestaurantError.fetchRecentRestaurantsAsyncError {
+                print("첫번째 섹션 로드 데이터 에러")
+            } catch RestaurantError.fetchGroupRestaurantsAsyncError {
+                print("두번째 섹션 로드 데이터 에러")
+            } catch RestaurantError.fetchMapIncludedRestaurantsAsyncError {
+                print("네이버 맵 로드 데이터 에러")
+            }
+        }
+    }
+    
+    func showJoinGroupUI() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.showJoinGroupBottomSheetVC()
+            self.topDummyView.isHidden = true
+            self.topContainerView.isHidden = true
+        }
+    }
+    
+    func setupGroupUI() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.topDummyView.isHidden = false
+            self.topContainerView.isHidden = false
+            self.groupNameButton.setTitle(self.viewModel?.groupList.first?.groupName ?? "", for: .normal)
+            self.showRestaurantListBottomSheetVC()
+            self.setTopViewShadow()
+            self.updateLocationButtonBottomConstraint()
+           
+        }
+    }
+    
+    func fetchSectionAndMapData() async throws {
+        try await viewModel?.fetchRecentRestaurantsAsync()
+        try await viewModel?.fetchGroupRestaurantsAsync()
+        
+        let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
+        try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+    }
+    
+    func updateUI(with address: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.updateCamera()
+            self.locationButton.setTitle(address, for: .normal)
+            self.refreshMarkersInVisibleRegion()
+            self.viewModel?.didUpdateBottomSheetTableView?()
+            
+            self.view.stopSkeletonAnimation()
+            self.view.hideSkeleton()
+        }
+    }
+    
+    func updateCamera() {
+        let lat = viewModel?.location?.latitude ?? 0.0
+        let lon = viewModel?.location?.longitude ?? 0.0
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
+        cameraUpdate.animation = .easeIn
+        self.naverMapView.mapView.moveCamera(cameraUpdate)
+    }
+    
+    
 
     @IBAction func didTabSearchGroupButton(_ sender: Any) {
         viewModel?.coordinator?.showSearchTabWithButton()
     }
     
     @IBAction func didTabRefreshButton(_ sender: Any) {
-        viewModel?.checkLocationAuthorization()
-        viewModel?.refreshCurrentLocation()
+    
+//        if viewModel?.locationManager.checkAuthorizationStatus() == false {
+//            self.showAccessDeniedAlert(type: .location)
+//        } else {
+//          
+//            Task {
+//                do {
+//                    let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
+//                    try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+//                    self.refreshMarkersInVisibleRegion()
+//                } catch {
+//                    print(error)
+//                }
+//            }
+//        }
     }
     
     @IBAction func didTabChangeAddressButton(_ sender: Any) {
@@ -79,53 +190,34 @@ class HomeViewController: UIViewController {
         
         viewModel?.didUpdateGroupName = { index in
             self.groupNameButton.setTitle(self.viewModel?.groupList[index].groupName ?? "", for: .normal)
-            self.viewModel?.fetchRestaurantsData()
         }
-        
-        viewModel?.didCompletedCheckJoinGroup = {
-            
-            if self.viewModel?.groupList.isEmpty == true {
-                self.showJoinGorupBottomSheetVC()
-                self.restaurantListFpc.move(to: .tip, animated: false)
-                self.topDummyView.isHidden = true
-                self.topContainerView.isHidden = true
-            } else {
-                self.restaurantListFpc.move(to: .half, animated: true)
-                self.groupNameButton.setTitle(self.viewModel?.groupList.first?.groupName ?? "", for: .normal)
-                self.topDummyView.isHidden = false
-                self.topContainerView.isHidden = false
-                self.setTopViewShadow()
-                
-                self.view.stopSkeletonAnimation()
-                self.view.hideSkeleton()
-                
-                self.viewModel?.fetchRestaurantsData()
-            }
-        }
-        
+    
         viewModel?.displayAlertHandler = {
             self.showAccessDeniedAlert(type: .location)
         }
         
-        viewModel?.onUpdateCurrentLocation = { lat, lon in
+        viewModel?.locationManager.didUpdateLocations = { [weak self] location in
+            guard let self = self else { return }
+            print("권한 설정 완료", location)
             
-            print(lat, lon)
+            self.viewModel?.location = location
             
-            self.viewModel?.getCurrentLocationAddress(lat: String(lat), lon: String(lon), completed: { address in
-                
-                self.locationButton.setTitle(address, for: .normal)
-                
-                let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
-                cameraUpdate.animation = .easeIn
-                self.naverMapView.mapView.moveCamera(cameraUpdate)
-            })
-        }
-
-        
-        
-        viewModel?.didTest = {
-            DispatchQueue.main.async {
-                self.addMarkersInVisibleRegion()
+            guard self.isInitialDataLoaded  else { return }
+            
+            if location != nil {
+    
+                Task {
+                    
+                    self.viewModel?.didUpdateSkeletonView?()
+                    
+                    do {
+                        let address = try await self.viewModel?.fetchCurrentAddressAsync() ?? "위치 검색 실패"
+                        try await self.fetchSectionAndMapData()
+                        self.updateUI(with: address)
+                    } catch {
+                       print(error)
+                    }
+                }
             }
         }
     }
@@ -147,7 +239,7 @@ extension HomeViewController {
     // 상단 네비게이션뷰의 그림자
     func setTopViewShadow() {
         // 그림자 컬러
-        topContainerView.layer.shadowColor = JMTengAsset.gray400.color.cgColor
+        topContainerView.layer.shadowColor = JMTengAsset.gray500.color.cgColor
         // 그림자 투명도
         topContainerView.layer.shadowOpacity = 1
         // 그림자 퍼짐 정도
@@ -165,7 +257,6 @@ extension HomeViewController {
         shadowPath.close()
 
         topContainerView.layer.shadowPath = shadowPath.cgPath
-        
         
         self.view.bringSubviewToFront(topContainerView)
     }
@@ -235,43 +326,24 @@ extension FloatingPanelController {
 
 // MARK: 지도 마커 설정
 extension HomeViewController {
-    func addMarkersInVisibleRegion() {
+    func refreshMarkersInVisibleRegion() {
         
         removeAllMarkers()
         
-        let visibleRegion = naverMapView.mapView.projection.latlngBounds(fromViewBounds: naverMapView.frame)
-        
-        for data in viewModel!.filterRestaurants {
-            if isCoordinate(NMGLatLng(lat: data.y, lng: data.x), withinBounds: visibleRegion) {
+        if let markerRestaurants = viewModel?.markerRestaurants {
+            for data in markerRestaurants {
                 let marker = NMFMarker(position: NMGLatLng(lat: data.y, lng: data.x))
                 let markerImage = UIImage(named: viewModel?.markerImage(category: data.category) ?? "") ?? UIImage()
                 marker.iconImage = NMFOverlayImage(image: markerImage)
                 marker.captionText = data.name
-                marker.userInfo = ["id": data.id]
-                
-                let handler = { [weak self] (overlay: NMFOverlay) -> Bool in
-                    if let marker = overlay as? NMFMarker {
-                        
-                        let filterIndex = self?.viewModel?.filterRestaurants.firstIndex(where: { $0.id == marker.userInfo["id"] as! Int })
-                        self?.viewModel?.didUpdateIndex?(filterIndex ?? 0)
-                    }
-                    return true
-                }
-                
-                marker.touchHandler = handler
-                
                 marker.mapView = naverMapView.mapView
                 markers.append(marker)
             }
         }
     }
     
+    func addMarkersInVisibleRegion() {
     
-    
-    func isCoordinate(_ coordinate: NMGLatLng, withinBounds bounds: NMGLatLngBounds) -> Bool {
-        let withinLat = coordinate.lat >= bounds.southWest.lat && coordinate.lat <= bounds.northEast.lat
-        let withinLng = coordinate.lng >= bounds.southWest.lng && coordinate.lng <= bounds.northEast.lng
-        return withinLat && withinLng
     }
     
     func removeAllMarkers() {
@@ -281,8 +353,15 @@ extension HomeViewController {
 }
 
 extension HomeViewController: NMFMapViewCameraDelegate {
+    // 카메라 이동완료 후 호출
     func mapViewCameraIdle(_ mapView: NMFMapView) {
-        addMarkersInVisibleRegion()
+        let visibleRegion = naverMapView.mapView.projection.latlngBounds(fromViewBounds: naverMapView.frame)
+    
+        let centerX = (visibleRegion.southWest.lat + visibleRegion.northEast.lat) / 2
+        let centerY = (visibleRegion.southWest.lng + visibleRegion.northEast.lng) / 2
+        
+
+        print(centerX, centerY)
     }
 }
 
@@ -290,7 +369,7 @@ extension HomeViewController: NMFMapViewCameraDelegate {
 
 // MARK: // 바텀 시트
 extension HomeViewController {
-    func showJoinGorupBottomSheetVC() {
+    func showJoinGroupBottomSheetVC() {
         
         let storyboard = UIStoryboard(name: "JoinBottonSheet", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "JoinBottonSheetViewController") as? JoinBottonSheetViewController else { return }
@@ -303,7 +382,7 @@ extension HomeViewController {
         joinGroupFpc.panGestureRecognizer.isEnabled = false
         joinGroupFpc.setPanelStyle(radius: 24, isHidden: true)
 
-        self.present(joinGroupFpc, animated: true)
+        self.present(joinGroupFpc, animated: false)
     }
     
     func showRestaurantListBottomSheetVC() {

@@ -26,3 +26,9 @@ enum NetworkError: Error {
         }
     }
 }
+
+enum RestaurantError: Error {
+    case fetchRecentRestaurantsAsyncError
+    case fetchGroupRestaurantsAsyncError
+    case fetchMapIncludedRestaurantsAsyncError
+}

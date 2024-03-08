@@ -9,6 +9,18 @@ import Foundation
 import Alamofire
 
 struct CurrentLocationAPI {
+    static func fetchCurrentLoctionAsync(request: CurrentLocationRequest) async throws -> CurrentLocationModel {
+        do {
+            let response = try await AF.request(CurrentLocationTarget.getCurrentLocation(request), interceptor: DefaultRequestInterceptor())
+                .validate(statusCode: 200..<300)
+                .serializingDecodable(CurrentLocationResponse.self)
+                .value
+            return response.toDomain
+        } catch {
+            throw NetworkError.custom("fetchCurrentLoctionAsync Error")
+        }
+    }
+    
     static func getCurrentLocation(request: CurrentLocationRequest, completion: @escaping (Result<CurrentLocationModel, NetworkError>) -> ()) {
         
         AF.request(CurrentLocationTarget.getCurrentLocation(request), interceptor: DefaultRequestInterceptor())

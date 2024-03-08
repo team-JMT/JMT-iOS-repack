@@ -17,6 +17,9 @@ protocol HomeCoordinator: Coordinator {
     
     func showSearchTabWithButton()
     func showGroupTab()
+    
+    func setDetailRestaurantCoordinator()
+    func showDetailRestaurantViewController(info: SearchMapRestaurantItems)
 }
 
 class DefaultHomeCoordinator: HomeCoordinator {
@@ -83,6 +86,20 @@ class DefaultHomeCoordinator: HomeCoordinator {
         }
     }
     
+    func setDetailRestaurantCoordinator() {
+        let coordinator = DefaultRestaurantDetailCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showDetailRestaurantViewController(info: SearchMapRestaurantItems) {
+        if getChildCoordinator(.restaurantDetail) == nil {
+            setDetailRestaurantCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.restaurantDetail) as! DefaultRestaurantDetailCoordinator
+        coordinator.start(info: info)
+    }
+    
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil
         
@@ -91,6 +108,8 @@ class DefaultHomeCoordinator: HomeCoordinator {
             childCoordinator = childCoordinators.first(where: { $0 is UserLocationCoordinator })
         case .searchRestaurant:
             childCoordinator = childCoordinators.first(where: { $0 is SearchRestaurantCoordinator })
+        case .restaurantDetail:
+            childCoordinator = childCoordinators.first(where: { $0 is RestaurantDetailCoordinator })
         default:
             break
         }

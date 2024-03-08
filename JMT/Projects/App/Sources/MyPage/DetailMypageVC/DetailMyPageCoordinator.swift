@@ -169,22 +169,7 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
                 }
             }
         }
-    
-//    func showImagePicker() {
-//        
-//        var config = PhotoKitConfiguration()
-//        config.library.defaultMultipleSelection = false
-//        
-//        let picker = PhotoKitNavigationController(configuration: config)
-//        
-//        picker.didFinishCompletion = { photo in
-//        
-//            self.handleImagePickerResult(photo.first, isDefault: false)
-//            picker.dismiss(animated: true)
-//        }
-//
-//        self.navigationController?.present(picker, animated: true)
-//    }
+    }
     
     func handleImagePickerResult(_ image: UIImage?, isDefault: Bool) {
         if let detailMyPageViewController = self.navigationController?.topViewController as? DetailMyPageVC {
