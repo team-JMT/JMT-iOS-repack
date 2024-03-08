@@ -126,8 +126,7 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         let coordinator = getChildCoordinator(.changeNickname) as! MyPageChangeNicknaemCoordinator
         coordinator.start()
     }
-    
-    
+
     //이미지 등록
     func setProfileImagePopupCoordinator() {
         let coordinator = DefaultProfileImagePopupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)

@@ -8,7 +8,6 @@ inhibit_all_warnings!
 workspace 'JMT-iOS.xcworkspace'
 project 'Projects/App/JMTeng.xcodeproj'
 
-
 target 'JMTeng' do
   project 'Projects/App/JMTeng.xcodeproj'
   pod 'NMapsMap'

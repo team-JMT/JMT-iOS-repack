@@ -13,7 +13,9 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     
     
     //weak var coordinator: MyPageCoordinator?
-    var viewModel: MyPageViewModel?
+    var viewModel = MyPageViewModel()
+
+    
     private var fixedSegmentedControl: UISegmentedControl!
     private var currentViewController: UIViewController?
     private var pageViewController: UIPageViewController!
@@ -43,18 +45,31 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
         setupFixedHeaderView()
         switchToViewController(at: MyPageSegment.selectedSegmentIndex)
         
-        viewModel?.onUserInfoLoaded = { [weak self] in
+        viewModel.onUserInfoLoaded = { [weak self] in
             DispatchQueue.main.async {
                 self?.updateUI()
             }
         }
-        viewModel?.fetchUserInfo()
+        viewModel.fetchUserInfo()
+        
+        viewModel.onTotalRestaurantsUpdated = { [weak self] in
+            guard let self = self, let totalRestaurants = self.viewModel.totalRestaurants else { return }
+            DispatchQueue.main.async {
+                self.registerResturant.text = "\(totalRestaurants)"
+                print("==-=-=-==")
+                print("\(self.registerResturant)")
+            }
+        }
+
+        viewModel.fetchTotalRestaurants(userId: 6)
+
+        
     }
     
     private func updateUI() {
-        if let userInfo = viewModel?.userInfo {
+        if let userInfo = viewModel.userInfo {
             NickNameLabel.text = userInfo.data?.nickname
-            //registerResturant.text = userInfo.data?.email
+            //fetchRestaurantInfo.text = userInfo.data?.email
             if let imageUrl = URL(string: userInfo.data?.profileImg ?? "") {
                 DispatchQueue.global().async {
                     if let data = try? Data(contentsOf: imageUrl) {
@@ -145,7 +160,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     
     @IBAction func DetailMyPage(_ sender: Any) {
         print("----- DetailMyPage")
-        viewModel?.coordinator?.showDetailMyPageVieController()
+        viewModel.coordinator?.showDetailMyPageVieController()
         
     }
     
