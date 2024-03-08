@@ -47,17 +47,32 @@ class HomeBottomSheetViewController: UIViewController {
         
         viewModel?.didUpdateBottomSheetTableView = {
             
+            self.viewModel?.isLodingData = false
+            
             DispatchQueue.main.async {
-
                 self.hiddenBottomSheetButton()
                 self.bottomSheetCollectionView.reloadData()
                 self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(1))
             }
         }
         
+        viewModel?.didUpdateFilterRestaurants = {
         
-        viewModel?.didUpdateIndex = { index in
-            self.bottomSheetCollectionView.scrollToItem(at: IndexPath(row: index, section: 1), at: .top, animated: true)
+            self.viewModel?.isLodingData = true
+            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
+            
+            Task {
+                do {
+                    try await self.viewModel?.fetchGroupRestaurantsAsync()
+                    self.viewModel?.isLodingData = false
+                    
+                    self.bottomSheetCollectionView.reloadData()
+                    self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(1))
+                    
+                } catch {
+                    print(error)
+                }
+            }
         }
     }
     
