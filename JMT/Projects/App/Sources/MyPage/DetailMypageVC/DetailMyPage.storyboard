@@ -36,9 +36,8 @@
                                             <constraint firstAttribute="height" constant="1" id="I40-Vm-eXI"/>
                                         </constraints>
                                     </view>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="56" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="yB3-3c-uIT">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="56" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="yB3-3c-uIT">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="759"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <view key="tableHeaderView" contentMode="scaleToFill" id="CXk-5e-oUm">
@@ -171,8 +170,12 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="u1a-qx-xXU" firstAttribute="leading" secondItem="1ck-0v-C3M" secondAttribute="leading" id="1rA-B4-9WT"/>
+                                    <constraint firstAttribute="trailing" secondItem="yB3-3c-uIT" secondAttribute="trailing" id="IVK-Du-YoJ"/>
                                     <constraint firstItem="u1a-qx-xXU" firstAttribute="top" secondItem="1ck-0v-C3M" secondAttribute="top" id="iqI-W0-Ebj"/>
+                                    <constraint firstAttribute="bottom" secondItem="yB3-3c-uIT" secondAttribute="bottom" id="vE1-9p-vNd"/>
                                     <constraint firstAttribute="trailing" secondItem="u1a-qx-xXU" secondAttribute="trailing" id="yDy-Xg-9Ad"/>
+                                    <constraint firstItem="yB3-3c-uIT" firstAttribute="leading" secondItem="1ck-0v-C3M" secondAttribute="leading" id="yiZ-Ig-sez"/>
+                                    <constraint firstItem="yB3-3c-uIT" firstAttribute="top" secondItem="1ck-0v-C3M" secondAttribute="top" id="zoS-Lq-rc7"/>
                                 </constraints>
                             </view>
                         </subviews>

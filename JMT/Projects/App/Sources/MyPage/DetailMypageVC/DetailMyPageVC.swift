@@ -23,12 +23,14 @@ class DetailMyPageVC : UIViewController {
     let cellLable: Array<String> = ["계정관리", "서비스 이용동의", "개인정보 처리방식"," "]
   
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         setCustomNavigationBarBackButton(isSearchVC: false)
+        
+        // 사용자 정보 다시 가져오기
+        viewModel?.fetchUserInfo()
     }
 
     override func viewDidLoad() {
@@ -51,8 +53,10 @@ class DetailMyPageVC : UIViewController {
            viewModel?.fetchUserInfo()
         
         NotificationCenter.default.addObserver(self, selector: #selector(showNicknameUpdateSuccessToast), name: NSNotification.Name("NicknameUpdateSuccess"), object: nil)
-
-
+        //닉네임 변경 노티
+        NotificationCenter.default.addObserver(self, selector: #selector(showNicknameUpdateSuccessToast), name: NSNotification.Name("NicknameUpdateSuccess"), object: nil)
+        //이미지 변경 노티
+        NotificationCenter.default.addObserver(self, selector: #selector(profileImageUpdated), name: NSNotification.Name("ProfileImageUpdated"), object: nil)
     }
     
     
@@ -133,6 +137,12 @@ class DetailMyPageVC : UIViewController {
         showToastWithCustomLayout(message: "닉네임이 성공적으로 변경되었습니다.", duration: 2.0)
     }
 
+    @objc func profileImageUpdated() {
+        // 이미지 변경 성공 토스트 메시지 표시
+        showToastWithCustomLayout(message: "프로필 이미지가 성공적으로 변경되었습니다.", duration: 2.0)
+        viewModel?.fetchUserInfo()
+
+    }
 
     private func navigationItems() {
         // SFSymbol을 사용해서 왼쪽 '뒤로가기' 버튼을 설정합니다.
@@ -213,14 +223,6 @@ class DetailMyPageVC : UIViewController {
         }
     }
     
-    //
-    //    func showImageView(_ sender: UIButton) {
-    //        let imagePicker = UIImagePickerController()
-    //        imagePicker.delegate = self
-    //        imagePicker.sourceType = .photoLibrary
-    //        present(imagePicker, animated: true, completion: nil)
-    //    }
-    //
     //이미지 압축
     func compressImage(_ image: UIImage, toSizeInMB maxSizeInMB: Double) -> Data? {
         let maxSizeInBytes = maxSizeInMB * 1024 * 1024

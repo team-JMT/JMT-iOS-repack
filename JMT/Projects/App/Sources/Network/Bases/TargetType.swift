@@ -38,17 +38,6 @@ extension TargetType {
         case .body(let request):
             let params = request?.toDictionary() ?? [:]
             urlRequest.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
-        case .queryAndBody(let query, let body):
-            let query = query?.toDictionary() ?? [:]
-
-            let queryParams = query.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
-            
-            var components = URLComponents(string: url.appendingPathComponent(path).absoluteString)
-            components?.queryItems = queryParams
-            urlRequest.url = components?.url
-            
-            let body = body?.toDictionary() ?? [:]
-            urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
         }
         
         return urlRequest
@@ -58,7 +47,6 @@ extension TargetType {
 enum RequestParams {
     case qurey(_ parameter: Encodable?)
     case body(_ parameter: Encodable?)
-    case queryAndBody(_ query: Encodable?,_ body: Encodable?)
 }
 
 extension Encodable {

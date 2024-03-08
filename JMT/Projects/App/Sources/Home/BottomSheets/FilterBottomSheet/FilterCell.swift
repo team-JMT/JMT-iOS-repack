@@ -42,6 +42,7 @@ class FilterCell: UITableViewCell {
             switch viewModel?.sortType {
             case .sort:
                 return [("가까운 순", true, nil),
+                        ("좋아요 순", true, nil),
                         ("최신 순", true, nil)]
             case .category:
                 return [("한식", false, JMTengAsset.category1.image),
