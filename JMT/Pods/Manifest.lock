@@ -12,9 +12,9 @@ PODS:
   - GTMAppAuth (2.0.0):
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
-  - GTMSessionFetcher/Core (3.1.1)
+  - GTMSessionFetcher/Core (3.2.0)
   - NMapsGeometry (1.0.1)
-  - NMapsMap (3.16.2):
+  - NMapsMap (3.17.0):
     - NMapsGeometry
 
 DEPENDENCIES:
@@ -34,10 +34,10 @@ SPEC CHECKSUMS:
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
-  GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
+  GTMSessionFetcher: 41b9ef0b4c08a6db4b7eb51a21ae5183ec99a2c8
   NMapsGeometry: 53c573ead66466681cf123f99f698dc8071a4b83
-  NMapsMap: aaa64717249b06ae82c3a3addb3a01f0e33100ab
+  NMapsMap: a5b909a31b6f3d27a670f6eb2ddc913c38975474
 
-PODFILE CHECKSUM: fa180aecad71c258755094a24136122cbbb18247
+PODFILE CHECKSUM: b9d25c7e2442764f96fc5cde65bd84461077ccfa
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

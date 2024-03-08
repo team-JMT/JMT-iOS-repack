@@ -36,7 +36,7 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
     func start() {
         let mypageViewController = MyPageViewController.instantiateFromStoryboard(storyboardName: "MyPage") as MyPageViewController
         
-        mypageViewController.viewModel?.coordinator = self
+        mypageViewController.viewModel.coordinator = self
         self.navigationController?.pushViewController(mypageViewController, animated: true)
     }
     
