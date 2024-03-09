@@ -10,18 +10,16 @@ import UIKit
 class MyPageViewController: UIViewController, UIScrollViewDelegate
 
 {
-    
-    
     //weak var coordinator: MyPageCoordinator?
     var viewModel = MyPageViewModel()
     var restaurants: [Restaurant] = []
-
-
+    
+    
     
     private var fixedSegmentedControl: UISegmentedControl!
     private var currentViewController: UIViewController?
     private var pageViewController: UIPageViewController!
-    private var viewControllerIdentifiers: [String] = ["FirstSegmentViewController", "SecondSegmentViewController", "ThirdSegmentViewController"]
+    private var viewControllerIdentifiers: [String] = ["FirstSegmentViewController", "SecondSegmentViewController"]
     
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var mainScrollView: UIScrollView!
@@ -60,9 +58,9 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
                 print("\(self.registerResturant)")
             }
         }
-
+        
         viewModel.fetchTotalRestaurants(userId: 6)
-
+        
         
     }
     
@@ -98,7 +96,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
         let yPosition = fixedHeaderViewHeight - segmentedControlHeight // Position at the bottom
         
         // Initialize the fixedSegmentedControl with the calculated y position
-        fixedSegmentedControl = UnderlineSegmentedControl(items: ["등록한 맛집", "좋아한 맛집", "나의 후기"])
+        fixedSegmentedControl = UnderlineSegmentedControl(items: ["등록한 맛집", "나의 후기"])
         fixedSegmentedControl.frame = CGRect(x: 10, y: yPosition, width: fixedHeaderView.frame.width - 20, height: segmentedControlHeight)
         fixedSegmentedControl.selectedSegmentIndex = MyPageSegment.selectedSegmentIndex
         fixedSegmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
@@ -159,7 +157,6 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     }
     
     @IBAction func DetailMyPage(_ sender: Any) {
-        print("----- DetailMyPage")
         viewModel.coordinator?.showDetailMyPageVieController()
         
     }
@@ -170,18 +167,4 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
         //   coordinator?.goToDetailView(for: sender.selectedSegmentIndex)
         
     }
-        
 }
-//extension MyPageViewController: UITableViewDataSource {
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return restaurants.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageTableViewCell", for: indexPath)
-//        
-//        let restaurant = restaurants[indexPath.row]
-//        cell.textLabel?.text = restaurant.name
-//        return cell
-//    }
-//}

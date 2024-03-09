@@ -47,8 +47,7 @@
                                                         <rect key="frame" x="10" y="184" width="373" height="32"/>
                                                         <segments>
                                                             <segment title="등록한 맛집"/>
-                                                            <segment title="좋아한 맛집"/>
-                                                            <segment title="나의 후기"/>
+                                                            <segment title="나의후기"/>
                                                         </segments>
                                                         <connections>
                                                             <action selector="segmentChanged:" destination="7ra-iV-2jw" eventType="valueChanged" id="GHI-Vg-KjR"/>
@@ -61,7 +60,7 @@
                                                             <constraint firstAttribute="height" constant="1" id="p5d-f7-XBi"/>
                                                         </constraints>
                                                     </view>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BellMark" translatesAutoresizingMaskIntoConstraints="NO" id="cJK-4J-UH2">
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cJK-4J-UH2">
                                                         <rect key="frame" x="349" y="12" width="24" height="24"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="24" id="23l-Gw-CSF"/>
@@ -231,56 +230,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Nf-uC-k4m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="340" y="-209"/>
-        </scene>
-        <!--Third Segment View Controller-->
-        <scene sceneID="Lrn-kv-0GY">
-            <objects>
-                <viewController storyboardIdentifier="ThirdSegmentViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="A7H-3o-lUv" customClass="ThirdSegmentViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="ea1-wR-OYe">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="45" translatesAutoresizingMaskIntoConstraints="NO" id="QG7-oB-r1P">
-                                <rect key="frame" x="106.66666666666669" y="322.33333333333331" width="180" height="207.66666666666669"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="noService" translatesAutoresizingMaskIntoConstraints="NO" id="x4e-42-b6H">
-                                        <rect key="frame" x="0.0" y="0.0" width="180" height="110"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="110" id="VvM-wN-VaB"/>
-                                            <constraint firstAttribute="width" constant="180" id="jAh-FX-Y7N"/>
-                                        </constraints>
-                                    </imageView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="mQc-Xp-qIF">
-                                        <rect key="frame" x="12.666666666666657" y="155" width="154.66666666666666" height="52.666666666666657"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="앗, 서비스 준비중이에요!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iFs-vd-fnR">
-                                                <rect key="frame" x="0.0" y="0.0" width="154.66666666666666" height="19.333333333333332"/>
-                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
-                                                <color key="textColor" name="gray300"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="조금만 기다려 주세요." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mGX-vk-oEb">
-                                                <rect key="frame" x="9.0000000000000142" y="33.333333333333371" width="136.66666666666669" height="19.333333333333329"/>
-                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
-                                                <color key="textColor" name="gray300"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                            </stackView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="0dZ-wJ-wla"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="QG7-oB-r1P" firstAttribute="centerX" secondItem="ea1-wR-OYe" secondAttribute="centerX" id="fWT-i3-eVY"/>
-                            <constraint firstItem="QG7-oB-r1P" firstAttribute="centerY" secondItem="ea1-wR-OYe" secondAttribute="centerY" id="g0l-om-SUZ"/>
-                        </constraints>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cLO-sM-aix" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2827" y="-209"/>
         </scene>
         <!--Second Segment View Controller-->
         <scene sceneID="Sfe-tS-9rX">
@@ -489,7 +438,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="BellMark" width="24" height="24"/>
         <image name="NextButton" width="14" height="14"/>
         <image name="noProfile Image" width="26.666666030883789" height="26.666666030883789"/>
         <image name="noService" width="161" height="110"/>
