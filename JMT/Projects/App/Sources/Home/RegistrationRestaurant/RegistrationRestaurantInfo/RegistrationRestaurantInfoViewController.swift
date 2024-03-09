@@ -6,62 +6,28 @@
 //
 
 import UIKit
+import FloatingPanel
+import SnapKit
 
 class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent {
 
+    // MARK: - Properties
     var transformView: UIView { return self.view }
     
     var viewModel: RegistrationRestaurantInfoViewModel?
+    var categoryFpc: FloatingPanelController!
     
     @IBOutlet weak var settingInfoCollectionView: UICollectionView!
     @IBOutlet weak var registrationButton: UIButton!
+
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.navigationItem.title = viewModel?.info?.placeName ?? ""
-        settingInfoCollectionView.collectionViewLayout = createLayout()
-        settingInfoCollectionView.keyboardDismissMode = .onDrag
         
-        let typeheaderView = UINib(nibName: "RestaurantTypeHeaderView", bundle: nil)
-        settingInfoCollectionView.register(typeheaderView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "typeHeaderView")
-        
-        setCustomNavigationBarBackButton(isSearchVC: false)
-        registrationButton.layer.cornerRadius = 8
-
-        viewModel?.didCompletedFilterType = {
-            self.updateSection(section: 0)
-        }
-        
-        viewModel?.didCompletedTags = { bool in
-            
-            if let cell = self.settingInfoCollectionView.cellForItem(at: IndexPath(row: 0, section: 3)) as? RecommendedMenuCell {
-                
-                if bool {
-                    cell.tagTextField.text = ""
-                    self.updateSection(section: 4)
-                } else {
-                    cell.tagTextField.text = ""
-                }
-            }
-        }
-        
-        viewModel?.didCompletedDeleteTag = {
-            self.updateSection(section: 4)
-        }
-        
-        viewModel?.didCompletedCheckInfo = { type in
-            switch type {
-            case .filterType:
-                self.settingInfoCollectionView.setContentOffset(CGPoint(x: 0, y: -self.settingInfoCollectionView.contentInset.top), animated: true)
-            case .commentString:
-                self.settingInfoCollectionView.moveToScroll(section: 1, row: 0, margin: 100)
-            case .drinkingComment:
-                self.settingInfoCollectionView.moveToScroll(section: 2, row: 0, margin: 100)
-            case .tags:
-                self.settingInfoCollectionView.moveToScroll(section: 3, row: 0, margin: 100)
-            }
-        }
+        setupBindings()
+        setupUI()
+        setupData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -119,10 +85,59 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         removeKeyboardObserver()
     }
     
-    func updateSection(section: Int) {
-        UIView.performWithoutAnimation {
-            self.settingInfoCollectionView.reloadSections(IndexSet(integer: section))
+    // MARK: - SetupBindings
+    func setupBindings() {
+        viewModel?.didUpdateCategory = {
+            self.updateSection(section: 0)
         }
+        
+        viewModel?.didCompletedTags = { bool in
+            
+            if let cell = self.settingInfoCollectionView.cellForItem(at: IndexPath(row: 0, section: 3)) as? RecommendedMenuCell {
+                
+                if bool {
+                    cell.tagTextField.text = ""
+                    self.updateSection(section: 4)
+                } else {
+                    cell.tagTextField.text = ""
+                }
+            }
+        }
+        
+        viewModel?.didCompletedDeleteTag = {
+            self.updateSection(section: 4)
+        }
+        
+        viewModel?.didCompletedCheckInfo = { type in
+            switch type {
+            case .category:
+                self.settingInfoCollectionView.setContentOffset(CGPoint(x: 0, y: -self.settingInfoCollectionView.contentInset.top), animated: true)
+            case .commentString:
+                self.settingInfoCollectionView.moveToScroll(section: 1, row: 0, margin: 100)
+            case .drinkingComment:
+                self.settingInfoCollectionView.moveToScroll(section: 2, row: 0, margin: 100)
+            case .tags:
+                self.settingInfoCollectionView.moveToScroll(section: 3, row: 0, margin: 100)
+            }
+        }
+    }
+    
+    // MARK: - SetupData
+    func setupData() {
+        viewModel?.categoryData = Utils.getDefaultCategoryData()
+    }
+    
+    // MARK: - SetupUI
+    func setupUI() {
+        setCustomNavigationBarBackButton(isSearchVC: false)
+        self.navigationItem.title = viewModel?.info?.placeName ?? ""
+        settingInfoCollectionView.collectionViewLayout = createLayout()
+        settingInfoCollectionView.keyboardDismissMode = .onDrag
+        
+        let typeheaderView = UINib(nibName: "RestaurantTypeHeaderView", bundle: nil)
+        settingInfoCollectionView.register(typeheaderView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "typeHeaderView")
+        
+        registrationButton.layer.cornerRadius = 8
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -276,24 +291,97 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         
         return section
     }
-    
+    // MARK: - Actions
     @IBAction func didTabRegistrationButton(_ sender: Any) {
         
-        print(viewModel?.info)
+        if viewModel?.checkNotInfo() == true {
+            viewModel?.registrationRestaurantLocation()
+        } else {
+            viewModel?.coordinator?.showButtonPopupViewController()
+        }
         
-        print("------------")
-        
-        viewModel?.coordinator?.showButtonPopupViewController()
-        
-        print(viewModel?.filterType)
+        print(viewModel?.isSelectedCategory)
         print(viewModel?.selectedImages)
         print(viewModel?.commentString)
         print(viewModel?.isDrinking)
         print(viewModel?.drinkingComment)
         print(viewModel?.tags)
     }
+    
+    // MARK: - Helper Methods
+    func updateSection(section: Int) {
+        UIView.performWithoutAnimation {
+            self.settingInfoCollectionView.reloadSections(IndexSet(integer: section))
+        }
+    }
+    
+    func showCategoryBottomSheetView() {
+        let storyboard = UIStoryboard(name: "RegistrationRestaurantCategoryBottomSheet", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "RegistrationRestaurantCategoryBottomSheetViewController") as? RegistrationRestaurantCategoryBottomSheetViewController else { return }
+        
+        vc.viewModel = self.viewModel
+        
+        categoryFpc = FloatingPanelController(delegate: self)
+        categoryFpc.set(contentViewController: vc)
+        categoryFpc.layout = RegistrationRestaurantCategoryBottomSheetFloatingPanelLayout()
+        categoryFpc.setPanelStyle(radius: 24, isHidden: false)
+        
+        categoryFpc.view.addSubview(vc.bottomContainerView)
+        vc.bottomContainerView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+        }
+        
+        self.present(categoryFpc, animated: true)
+    }
 }
 
+extension RegistrationRestaurantInfoViewController: FloatingPanelControllerDelegate {
+    
+}
+
+// MARK: - CollectionView Delegate
+extension RegistrationRestaurantInfoViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            switch indexPath.section {
+            case 0:
+                guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "typeHeaderView", for: indexPath) as? RestaurantTypeHeaderView else { return UICollectionReusableView() }
+                header.delegate = self
+                
+                if let index = viewModel?.categoryData.firstIndex(where: { $0.1 == true }).map({ Int($0) }) {
+                    header.updateHeaderView(category: viewModel?.categoryData[index].0 ?? "", image: viewModel?.categoryData[index].2 ?? UIImage())
+                }
+            
+                return header
+            default:
+                return UICollectionReusableView()
+            }
+        default:
+            return UICollectionReusableView()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0 :
+                viewModel?.coordinator?.showImagePicker()
+            default:
+                if let cell = collectionView.cellForItem(at: indexPath) as? InfoPhotoCell {
+                    print(cell.deleteButton.tag)
+                }
+            }
+        default:
+            return
+        }
+    }
+}
+
+// MARK: - CollectionView DataSource
 extension RegistrationRestaurantInfoViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 5
@@ -354,51 +442,10 @@ extension RegistrationRestaurantInfoViewController: UICollectionViewDataSource {
     }
 }
 
-extension RegistrationRestaurantInfoViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            switch indexPath.section {
-            case 0:
-                guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "typeHeaderView", for: indexPath) as? RestaurantTypeHeaderView else { return UICollectionReusableView() }
-                header.delegate = self
-                
-                if viewModel?.isSelectedFilterType != false {
-                    header.updateTypeLabel(text: viewModel?.typeNames[viewModel?.filterType ?? 0] ?? "")
-                    header.updateTypeHeaderView()
-                }
-                
-                return header
-            default:
-                return UICollectionReusableView()
-            }
-        default:
-            return UICollectionReusableView()
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case 0:
-            switch indexPath.row {
-            case 0 :
-                viewModel?.coordinator?.showImagePicker()
-            default:
-                if let cell = collectionView.cellForItem(at: indexPath) as? InfoPhotoCell {
-                    print(cell.deleteButton.tag)
-                }
-            }
-        default:
-            return
-        }
-    }
-}
-
+// MARK: - Extention
 extension RegistrationRestaurantInfoViewController: RestaurantTypeHeaderViewDelegate {
-    func didTabChangeTypeButton() {
-        viewModel?.coordinator?.showRegistrationRestaurantTypeBottomSheetViewController()
+    func didTabChangeCategoryButton() {
+        showCategoryBottomSheetView()
     }
 }
  

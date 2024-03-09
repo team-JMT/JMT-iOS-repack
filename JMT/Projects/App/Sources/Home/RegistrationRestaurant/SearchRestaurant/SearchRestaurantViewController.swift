@@ -8,24 +8,25 @@
 import UIKit
 import SnapKit
 
+
 class SearchRestaurantViewController: UIViewController {
 
+    // MARK: - Enum
+    
+    // MARK: - Properties
     var viewModel: SearchRestaurantViewModel?
     
     @IBOutlet weak var searchRestaurantResultTableView: UITableView!
     @IBOutlet weak var searchRestaurantTextField: UITextField!
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "맛집 등록"
         setCustomNavigationBarBackButton(isSearchVC: false)
         
-        viewModel?.didUpdateRestaurantsInfo = {
-            self.searchRestaurantResultTableView.reloadData()
-        }
-        
-        updateEmptyBackgroundView()
+        setupBind()
         setupUI()
     }
     
@@ -42,7 +43,37 @@ class SearchRestaurantViewController: UIViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
     
-    func updateEmptyBackgroundView() {
+    // MARK: - SetupBindings
+    func setupBind() {
+        viewModel?.didUpdateRestaurantsInfo = {
+            self.searchRestaurantResultTableView.reloadData()
+        }
+    }
+    
+    // MARK: - SetupData
+    func fetchSearchRestaurantsData() {
+        Task {
+            do {
+                let keyword = searchRestaurantTextField.text ?? ""
+                let location = await viewModel?.getLocationAsync()
+                try await viewModel?.fetchSearchRestaurants(keyword: keyword, x: String(location?.longitude ?? 0.0), y: String(location?.latitude ?? 0.0))
+                self.updateTableView()
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    // MARK: - SetupUI
+    func setupUI() {
+        updateEmptyTableViewBackgroundView()
+        
+        searchRestaurantTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        searchRestaurantResultTableView.keyboardDismissMode = .onDrag
+    }
+    
+    func updateEmptyTableViewBackgroundView() {
         let emptyView = UIView(frame: CGRect(x: 0, y: 0, width: searchRestaurantResultTableView.bounds.width, height: searchRestaurantResultTableView.bounds.height))
         let emptyImageView = UIImageView(image: JMTengAsset.emptyRestaurant.image)
         emptyImageView.contentMode = .scaleAspectFit
@@ -55,21 +86,39 @@ class SearchRestaurantViewController: UIViewController {
         searchRestaurantResultTableView.backgroundView = emptyView
     }
     
-    func setupUI() {
-        searchRestaurantTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        
-        searchRestaurantResultTableView.keyboardDismissMode = .onDrag
+    func updateTableView() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.searchRestaurantResultTableView.reloadData()
+        }
     }
-    
+
+    // MARK: - Actions
     @IBAction func didTabCancelButton(_ sender: Any) {
         searchRestaurantTextField.text = ""
         searchRestaurantTextField.resignFirstResponder()
         
         viewModel?.restaurantsInfo.removeAll()
-        viewModel?.didUpdateRestaurantsInfo?()
+        updateTableView()
+    }
+    
+    // MARK: - Helper Methods
+    
+    // MARK: - CollectionView Delegate
+    
+    // MARK: - CollectionView DataSource
+    
+    // MARK: - Extention
+}
+
+// MARK: - TableView Delegate
+extension SearchRestaurantViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel?.coordinator?.showSearchRestaurantMapViewController(info: viewModel?.restaurantsInfo[indexPath.row])
     }
 }
 
+// MARK: - TableView DataSource
 extension SearchRestaurantViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel?.restaurantsInfo.isEmpty == true ? 0 : viewModel?.restaurantsInfo.count ?? 0
@@ -82,15 +131,11 @@ extension SearchRestaurantViewController: UITableViewDataSource {
     }
 }
 
-extension SearchRestaurantViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel?.coordinator?.showSearchRestaurantMapViewController(info: viewModel?.restaurantsInfo[indexPath.row])
-    }
-}
-
+// MARK: - TextField Delegate
 extension SearchRestaurantViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        viewModel?.fetchRestaurantsInfo(keyword: textField.text ?? "")
+        
+        fetchSearchRestaurantsData()
         return true
     }
 
@@ -101,3 +146,7 @@ extension SearchRestaurantViewController: UITextFieldDelegate {
         viewModel?.didUpdateRestaurantsInfo?()
     }
 }
+
+
+
+

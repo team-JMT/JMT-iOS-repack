@@ -64,7 +64,7 @@ class HomeViewController: UIViewController {
         Task {
             do {
                 let isGroupJoined = try await viewModel?.fetchJoinGroup() ?? false
-                
+            
                 if isGroupJoined {
                     setupRestaurantUI()
                     fetchData()
@@ -99,7 +99,7 @@ class HomeViewController: UIViewController {
                 if isShowRestaurantBottomSheet {
                     restaurantListFpc.move(to: .half, animated: false)
                 }
-                
+            
                 // 맛집 데이터 가져오기
                 try await fetchSectionAndMapData()
                 // 맛집 바텀시트 업데이트
@@ -204,6 +204,9 @@ class HomeViewController: UIViewController {
         
         viewModel?.didUpdateGroupName = { index in
             self.groupNameButton.setTitle(self.viewModel?.groupList[index].groupName ?? "", for: .normal)
+            
+            self.fetchData()
+            
         }
     
         viewModel?.displayAlertHandler = {
@@ -212,7 +215,7 @@ class HomeViewController: UIViewController {
         
         viewModel?.locationManager.didUpdateLocations = { [weak self] location in
             guard let self = self else { return }
-            print("----------------------------")
+            
             self.viewModel?.location = location
             
             if location != nil {

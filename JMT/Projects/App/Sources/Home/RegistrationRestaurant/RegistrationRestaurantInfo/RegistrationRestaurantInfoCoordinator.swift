@@ -9,10 +9,7 @@ import Foundation
 import UIKit
 
 protocol RegistrationRestaurantInfoCoordinator: Coordinator {
-    func start(info: SearchRestaurantsLocationModel?)
-    
-    func setRegistrationRestaurantTypeBottomSheetCoordinator()
-    func showRegistrationRestaurantTypeBottomSheetViewController()
+    func start(info: SearchRestaurantsModel?)
     
     func setButtonPopupCoordinator()
     func showButtonPopupViewController()
@@ -38,25 +35,11 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
     
     func start() { }
     
-    func start(info: SearchRestaurantsLocationModel?) {
+    func start(info: SearchRestaurantsModel?) {
         let registrationRestaurantInfoViewController = RegistrationRestaurantInfoViewController.instantiateFromStoryboard(storyboardName: "RegistrationRestaurantInfo") as RegistrationRestaurantInfoViewController
         registrationRestaurantInfoViewController.viewModel?.coordinator = self
         registrationRestaurantInfoViewController.viewModel?.info = info
         self.navigationController?.pushViewController(registrationRestaurantInfoViewController, animated: true)
-    }
-    
-    func setRegistrationRestaurantTypeBottomSheetCoordinator() {
-        let coordinator = DefaultRegistrationRestaurantTypeBottomSheetCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
-        childCoordinators.append(coordinator)
-    }
-    
-    func showRegistrationRestaurantTypeBottomSheetViewController() {
-        if getChildCoordinator(.searchRestaurantMenuBS) == nil {
-            setRegistrationRestaurantTypeBottomSheetCoordinator()
-        }
-        
-        let coordinator = getChildCoordinator(.searchRestaurantMenuBS) as! RegistrationRestaurantTypeBottomSheetCoordinator
-        coordinator.start()
     }
     
     func showImagePicker() {
@@ -121,8 +104,6 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
         var childCoordinator: Coordinator? = nil
         
         switch type {
-        case .searchRestaurantMenuBS:
-            childCoordinator = childCoordinators.first(where: { $0 is RegistrationRestaurantTypeBottomSheetCoordinator })
         case .buttonPopup:
             childCoordinator = childCoordinators.first(where: { $0 is ButtonPopupCoordinator })
         default:

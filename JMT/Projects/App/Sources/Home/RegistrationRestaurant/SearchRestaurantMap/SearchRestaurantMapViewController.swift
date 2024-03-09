@@ -9,7 +9,8 @@ import UIKit
 import NMapsMap
 
 class SearchRestaurantMapViewController: UIViewController {
-
+    
+    // MARK: - Properties
     var viewModel: SearchRestaurantMapViewModel?
     @IBOutlet weak var naverMapView: NMFNaverMapView!
     
@@ -23,37 +24,48 @@ class SearchRestaurantMapViewController: UIViewController {
     
     @IBOutlet weak var selectedButton: UIButton!
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel?.didUpdateRestaurantRegistration = { isCheck in
-            if isCheck == nil {
-                self.selectedBottomView.isHidden = true
-            } else {
-                self.registeredRestaurantView.isHidden = true
-                self.selectedBottomView.isHidden = false
-            }
-            self.updateMap()
-        }
-
-        viewModel?.checkRestaurantRegistration()
-        
+        setupData()
+        checkRegistrationRestaurant()
         setupUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         self.tabBarController?.tabBar.isHidden = true
     }
     
+    // MARK: - SetupBindings
     
-    @IBAction func didTabSelectedButton(_ sender: Any) {
-        viewModel?.coordinator?.showRegistrationRestaurantInfoViewController(info: viewModel?.info)
+    
+    // MARK: - SetupData
+    func setupData() {
+        placeNameLabel.text = viewModel?.info?.placeName ?? ""
+        distanceLabel.text = "내 위치에서 \(viewModel?.info?.distance.distanceWithUnit() ?? "")"
+        addressLabel.text = viewModel?.info?.addressName ?? ""
     }
     
-    func setupUI() {
+    func checkRegistrationRestaurant() {
         
+        Task {
+            let isRegistration = await viewModel?.checkRegistrationRestaurant()
+            
+            if isRegistration == nil {
+                self.selectedBottomView.isHidden = true
+            } else {
+                self.registeredRestaurantView.isHidden = true
+                self.selectedBottomView.isHidden = false
+            }
+            
+            self.updateMap()
+        }
+    }
+    
+    // MARK: - SetupUI
+    func setupUI() {
         setCustomNavigationBarBackButton(isSearchVC: false)
         
         registeredRestaurantView.layer.cornerRadius = 8
@@ -61,12 +73,14 @@ class SearchRestaurantMapViewController: UIViewController {
         selectedButton.layer.cornerRadius = 8
         
         naverMapView.showZoomControls = false
-            
-        placeNameLabel.text = viewModel?.info?.placeName ?? ""
-        distanceLabel.text = "내 위치에서 \(viewModel?.info?.distance.distanceWithUnit() ?? "")"
-        addressLabel.text = viewModel?.info?.addressName ?? ""
     }
     
+    // MARK: - Actions
+    @IBAction func didTabSelectedButton(_ sender: Any) {
+        viewModel?.coordinator?.showRegistrationRestaurantInfoViewController(info: viewModel?.info)
+    }
+    
+    // MARK: - Helper Methods
     func updateMap() {
         let lat = viewModel?.info?.y ?? 0.0
         let lon = viewModel?.info?.x ?? 0.0
@@ -77,6 +91,18 @@ class SearchRestaurantMapViewController: UIViewController {
         
         let marker = NMFMarker()
         marker.position = NMGLatLng(lat: lat, lng: lon)
+        
+        // 카테고리에 따라서 마커 이미지 변경
         marker.mapView = naverMapView.mapView
     }
 }
+
+// MARK: - TableView Delegate
+
+// MARK: - TableView DataSource
+
+// MARK: - CollectionView Delegate
+
+// MARK: - CollectionView DataSource
+
+// MARK: - Extention

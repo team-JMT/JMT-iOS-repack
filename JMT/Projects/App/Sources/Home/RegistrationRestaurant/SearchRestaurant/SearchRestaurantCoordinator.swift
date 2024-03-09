@@ -10,7 +10,7 @@ import UIKit
 
 protocol SearchRestaurantCoordinator: Coordinator {
     func setSearchRestaurantMapCoordinator()
-    func showSearchRestaurantMapViewController(info: SearchRestaurantsLocationModel?)
+    func showSearchRestaurantMapViewController(info: SearchRestaurantsModel?)
 }
 
 class DefaultSearchRestaurantCoordinator: SearchRestaurantCoordinator {
@@ -40,7 +40,7 @@ class DefaultSearchRestaurantCoordinator: SearchRestaurantCoordinator {
         childCoordinators.append(coordinator)
     }
     
-    func showSearchRestaurantMapViewController(info: SearchRestaurantsLocationModel?) {
+    func showSearchRestaurantMapViewController(info: SearchRestaurantsModel?) {
         if getChildCoordinator(.searchRestaurantMap) == nil {
             setSearchRestaurantMapCoordinator()
         }

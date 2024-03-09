@@ -103,7 +103,7 @@ class HomeViewModel {
 
     var isLodingData: Bool = true
     
-    var groupList: [GroupData] = []
+    var groupList: [MyGroupData] = []
 
     var popularRestaurants: [SearchMapRestaurantItems] = []
     var restaurants: [SearchMapRestaurantItems] = []
@@ -275,7 +275,7 @@ extension HomeViewModel {
     }
 }
 
-// 그룹 가입 여부 분기 처리
+// 그룹 관련 메소드
 extension HomeViewModel {
     
     func fetchJoinGroup() async throws -> Bool {
@@ -286,8 +286,24 @@ extension HomeViewModel {
             return false
         } else {
             self.groupList.append(contentsOf: groupList)
+            self.groupList.append(MyGroupData(groupId: 1, groupName: "123123", groupIntroduce: "123123", groupProfileImageUrl: "123123", groupBackgroundImageUrl: "!23123", privateGroup: false, isSelected: false))
+            let id = groupList.firstIndex(where: { $0.isSelected == true })
+            currentGroupId = id ?? 0
             return true
         }
+    }
+    
+    func updateSelectedGroup(id: Int) async throws {
+        try await GroupAPI.updateSelectedGroupAsync(request: SelectedGroupRequest(groupId: id))
+        
+        for (index, group) in groupList.enumerated() {
+            if group.groupId == id {
+                groupList[index].isSelected = true
+            } else {
+                groupList[index].isSelected = false
+            }
+        }
+        currentGroupId = id
     }
 }
 
