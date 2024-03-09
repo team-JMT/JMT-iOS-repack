@@ -40,24 +40,61 @@ class RegistrationRestaurantInfoViewModel {
     
     // MARK: - Data Fetching
     // 외부 소스나 모델로부터 데이터를 가져오는 메소드들을 모아두는 부분입니다.
-    func registrationRestaurantLocation() {
-        if let info = self.info {
-            let request = RegistrationRestaurantLocationRequest(
-                placeName: info.placeName,
-                distance: String(0),
-                placeUrl: info.placeUrl,
-                categoryName: info.categoryName,
-                addressName: info.addressName,
-                roadAddressName: info.roadAddressName,
-                id: info.id,
-                phone: info.phone,
-                categoryGroupCode: info.categoryGroupCode,
-                categoryGroupName: info.categoryGroupName,
-                x: String(info.x),
-                y: String(info.y))
-            
-            print(request)
+    func registrationRestaurantLocation() async throws -> Int {
+        
+        do {
+            if let info = self.info {
+                let request = RegistrationRestaurantLocationRequest(
+                    placeName: info.placeName,
+                    distance: String(0),
+                    placeUrl: info.placeUrl,
+                    categoryName: info.categoryName,
+                    addressName: info.addressName,
+                    roadAddressName: info.roadAddressName,
+                    id: info.id,
+                    phone: info.phone,
+                    categoryGroupCode: info.categoryGroupCode,
+                    categoryGroupName: info.categoryGroupName,
+                    x: String(info.x),
+                    y: String(info.y))
+                
+                let response = try await RegistrationRestaurantAPI.registrationRestaurantLocationAsync(request: request)
+                return response.data
+            }
+        } catch {
+            print(error)
+            return 0
         }
+        return 0
+    }
+    
+    func registrationRestaurantAsync(restaurantLocationId: Int) async throws {
+        
+        do {
+            if let info = self.info {
+                
+                let categoryId = categoryData.firstIndex(where: {$0.1 == true }).map({Int($0)}) ?? 0
+                
+                let recommendMenu = tags.joined()
+                
+                let request = RegistrationRestaurantRequest(
+                    name: info.placeName,
+                    introduce: commentString,
+                    categoryId: categoryId + 1,
+                    canDrinkLiquor: isDrinking,
+                    goWellWithLiquor: drinkingComment,
+                    recommendMenu: recommendMenu,
+                    restaurantLocationId: restaurantLocationId,
+                    groupId: UserDefaultManager.selectedGroupId)
+                
+                let response = try await RegistrationRestaurantAPI.registrationRestaurantAsync(request: request, images: selectedImages)
+                print(response.data.recommendRestaurantId, response.data.restaurantLocationId)
+            }
+        } catch {
+            print("3333", error)
+        }
+        
+        
     }
     
     
@@ -151,7 +188,6 @@ extension RegistrationRestaurantInfoViewModel {
     func splitString(in text: String) -> [String] {
     
         let strings = text.split(separator: "#").map({ String($0).trimmingCharacters(in: .whitespacesAndNewlines) })
-        print(strings)
         
         let filteredStrings = strings.filter { $0.range(of: "^[가-힣]+$", options: .regularExpression) != nil }
         

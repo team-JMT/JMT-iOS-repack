@@ -53,7 +53,7 @@ class SearchRestaurantMapViewController: UIViewController {
         Task {
             let isRegistration = await viewModel?.checkRegistrationRestaurant()
             
-            if isRegistration == nil {
+            if isRegistration == false {
                 self.selectedBottomView.isHidden = true
             } else {
                 self.registeredRestaurantView.isHidden = true

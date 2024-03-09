@@ -38,6 +38,9 @@ extension TargetType {
         case .body(let request):
             let params = request?.toDictionary() ?? [:]
             urlRequest.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
+            
+            print("123123", urlRequest.httpBody)
+            
         case .queryAndBody(let query, let body):
             let query = query?.toDictionary() ?? [:]
 

@@ -26,12 +26,20 @@ struct FetchRestaurantAPI {
         return response.toDomain
     }
     
-    static func checkRegistrationRestaurant(request: CheckRegistrationRestaurantRequest) async throws -> CheckRegistrationRestaurantResponse {
-        let isCheck = try await AF.request(FetchRestaurantTarget.checkRegistrationRestaurant(request), interceptor: DefaultRequestInterceptor())
+    static func checkRegistrationRestaurantAsync(request: CheckRegistrationRestaurantRequest) async throws -> CheckRegistrationRestaurantResponse {
+        let response = try await AF.request(FetchRestaurantTarget.checkRegistrationRestaurant(request), interceptor: DefaultRequestInterceptor())
             .validate(statusCode: 200..<300)
             .serializingDecodable(CheckRegistrationRestaurantResponse.self)
             .value
-        return isCheck
+        return response
+    }
+    
+    static func fetchDetailRestaurantAsync(request: DetailRestaurantRequest) async throws -> DetailRestaurantResponse {
+        let response = try await AF.request(FetchRestaurantTarget.fetchDetailRestaurant(request), interceptor: DefaultRequestInterceptor())
+            .validate(statusCode: 200..<300)
+            .serializingDecodable(DetailRestaurantResponse.self)
+            .value
+        return response
     }
 }
  

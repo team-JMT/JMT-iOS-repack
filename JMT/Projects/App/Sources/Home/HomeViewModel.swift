@@ -287,8 +287,9 @@ extension HomeViewModel {
         } else {
             self.groupList.append(contentsOf: groupList)
             self.groupList.append(MyGroupData(groupId: 1, groupName: "123123", groupIntroduce: "123123", groupProfileImageUrl: "123123", groupBackgroundImageUrl: "!23123", privateGroup: false, isSelected: false))
-            let id = groupList.firstIndex(where: { $0.isSelected == true })
+            let id = groupList.firstIndex(where: { $0.isSelected == true }).map({Int($0)})
             currentGroupId = id ?? 0
+            UserDefaultManager.selectedGroupId = id ?? 0
             return true
         }
     }
@@ -304,6 +305,7 @@ extension HomeViewModel {
             }
         }
         currentGroupId = id
+        UserDefaultManager.selectedGroupId = id 
     }
 }
 

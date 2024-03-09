@@ -27,10 +27,11 @@ extension FetchRestaurantTarget: TargetType {
     
     var path: String {
         switch self {
-        case .fetchDetailRestaurant(let request): return "restaurant/\(request.recommendRestaurantId)"
+        case .fetchDetailRestaurant(let request): return "/restaurant/\(request.recommendRestaurantId)"
         case .fetchSearchMapRestaurants: return "/restaurant/search/map"
         case .fetchSearchRestaurants: return "/restaurant/location"
         case .checkRegistrationRestaurant(let request): return "/restaurant/registration/\(request.kakaoSubId)"
+       
         }
     }
     

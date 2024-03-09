@@ -15,6 +15,8 @@ protocol RegistrationRestaurantInfoCoordinator: Coordinator {
     func showButtonPopupViewController()
     
     func showImagePicker()
+    
+    
 }
 
 class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCoordinator {

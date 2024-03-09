@@ -26,7 +26,7 @@ class SearchRestaurantMapViewModel {
     func checkRegistrationRestaurant() async -> Bool? {
         
         do {
-            let response = try await FetchRestaurantAPI.checkRegistrationRestaurant(request: CheckRegistrationRestaurantRequest(kakaoSubId: info?.id ?? ""))
+            let response = try await FetchRestaurantAPI.checkRegistrationRestaurantAsync(request: CheckRegistrationRestaurantRequest(kakaoSubId: info?.id ?? ""))
             return response.data ?? false
         } catch {
             print(error)

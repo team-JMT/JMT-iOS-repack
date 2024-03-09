@@ -30,7 +30,8 @@ extension ProfileImageTarget: TargetType {
 
     var parameters: RequestParams {
         switch self {
-        case .saveProfileImage(let request): return .body(request)
+//        case .saveProfileImage(let request): return .body(request)
+        case .saveProfileImage: return .body(nil)
         case .saveDefaultProfileImage: return .qurey(nil)
         }
     }

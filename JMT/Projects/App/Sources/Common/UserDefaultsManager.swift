@@ -14,6 +14,7 @@ struct UserDefaultManager {
         static let hasLaunchedBefore = "hasLaunchedBefore"
         static let hasLocationRequstBefore = "hasLocationRequstBefore"
         static let isJoinGroup = "isJoinGroup"
+        static let selectedGroupId = "selectedGroupId"
     }
     
     static var hasLaunchedBefore: Bool {
@@ -30,5 +31,11 @@ struct UserDefaultManager {
         get { return defaults.bool(forKey: Keys.isJoinGroup) }
         set { defaults.set(newValue, forKey: Keys.isJoinGroup) }
     }
+    
+    static var selectedGroupId: Int {
+        get { return defaults.integer(forKey: Keys.selectedGroupId) }
+        set { defaults.set(newValue, forKey: Keys.selectedGroupId) }
+    }
+    
 }
 

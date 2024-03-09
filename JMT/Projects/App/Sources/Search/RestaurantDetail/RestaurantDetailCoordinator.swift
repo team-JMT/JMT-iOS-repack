@@ -10,7 +10,7 @@ import UIKit
 
 protocol RestaurantDetailCoordinator: Coordinator {
     func showImagePicker()
-    func start(info: SearchMapRestaurantItems)
+    func start(id: Int)
 }
 
 
@@ -30,7 +30,7 @@ class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
     }
     
     func start() { }
-    func start(info: SearchMapRestaurantItems) {
+    func start(id: Int) {
         let restaurantDetailViewController = RestaurantDetailViewController.instantiateFromStoryboard(storyboardName: "RestaurantDetail") as RestaurantDetailViewController
         restaurantDetailViewController.viewModel?.coordinator = self
         
@@ -40,7 +40,7 @@ class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
         let photoViewController = RestaurantDetailPhotoViewController.instantiateFromStoryboard(storyboardName: "RestaurantDetail") as RestaurantDetailPhotoViewController
         let reviewViewController = RestaurantDetailReviewViewController.instantiateFromStoryboard(storyboardName: "RestaurantDetail") as RestaurantDetailReviewViewController
         
-        restaurantDetailViewController.viewModel?.restaurantInfo = info
+        restaurantDetailViewController.viewModel?.restauranId = id
         infoViewController.viewModel?.coordinator = self
         photoViewController.viewModel?.coordinator = self
         reviewViewController.viewModel?.coordinator = self

@@ -10,6 +10,7 @@ import SnapKit
 
 class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     
+    // MARK: - Properties
     var transformView: UIView { return self.view }
     
     var viewModel: RestaurantDetailViewModel?
@@ -24,14 +25,10 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     @IBOutlet weak var userProfileImageView: UIImageView!
     @IBOutlet weak var userNicknameLabel: UILabel!
     
-    
-    
-    
-    
     @IBOutlet weak var pageContainerView: UIView!
     
     @IBOutlet weak var restanurantSegController: UISegmentedControl!
-  
+    
     @IBOutlet weak var photosContainerView: UIView!
     
     @IBOutlet weak var reviewImageView1: UIImageView!
@@ -49,10 +46,14 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     
     var imageViews = [UIImageView]()
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
+        setupBind()
+        
+        setupData()
         
         imageViews = [reviewImageView1, reviewImageView2, reviewImageView3, reviewImageView4, reviewImageView5]
         
@@ -66,12 +67,8 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
             imageView.isUserInteractionEnabled = true
             imageView.tag = index // 태그를 사용하여 각 이미지뷰 식별
         }
-        
-        viewModel?.didUpdateReviewImage = {
-            self.reorderImageViews()
-        }
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -97,12 +94,26 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         removeKeyboardObserver()
     }
     
+    // MARK: - SetupBindings
+    func setupBind() {
+        viewModel?.didUpdateReviewImage = {
+            self.reorderImageViews()
+        }
+    }
+    
+    // MARK: - SetupData
+    func setupData() {
+        print(viewModel?.restauranId)
+    }
+    
+    
+    // MARK: - SetupUI
     func setupUI() {
         let normalTextAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont(name: "Pretendard-Bold", size: 14),
             .foregroundColor: JMTengAsset.gray300.color // 일반 상태에서의 텍스트 색상
         ]
-
+        
         let selectedTextAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont(name: "Pretendard-Bold", size: 14),
             .foregroundColor: JMTengAsset.main500.color // 선택된 상태에서의 텍스트 색상
@@ -133,19 +144,19 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         reviewTextView.layer.borderColor = JMTengAsset.gray300.color.cgColor
         reviewTextView.layer.borderWidth = 1
         
-        placeNameLabel.text = viewModel?.restaurantInfo?.name ?? ""
-        differenceInDistanceLabel.text = "위치에서 \(viewModel?.restaurantInfo?.differenceInDistance ?? "")"
-        categoryLabel.text = viewModel?.restaurantInfo?.category ?? ""
-        addressLabel.text = viewModel?.restaurantInfo?.address ?? ""
-        
-        userNicknameLabel.text = viewModel?.restaurantInfo?.userNickName ?? ""
-        
+        //        placeNameLabel.text = viewModel?.restaurantInfo?.name ?? ""
+        //        differenceInDistanceLabel.text = "위치에서 \(viewModel?.restaurantInfo?.differenceInDistance ?? "")"
+        //        categoryLabel.text = viewModel?.restaurantInfo?.category ?? ""
+        //        addressLabel.text = viewModel?.restaurantInfo?.address ?? ""
+        //
+        //        userNicknameLabel.text = viewModel?.restaurantInfo?.userNickName ?? ""
     }
     
+    // MARK: - Actions
     @IBAction func didTabSegmentedController(_ sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex
         let direction: UIPageViewController.NavigationDirection = viewModel?.currentSegIndex ?? 0 <= index ? .forward : .reverse
-
+        
         if let pageVC = pageViewController {
             pageVC.setViewControllers([pageVC.vcArray[index]], direction: direction, animated: true)
             viewModel?.currentSegIndex = index
@@ -162,13 +173,14 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         guard let tappedImageView = sender.view as? UIImageView else { return }
         
         guard viewModel?.reviewImages.count ?? 0 > tappedImageView.tag else { return }
-    
+        
         viewModel?.reviewImages.remove(at: tappedImageView.tag)
         
         // 남은 이미지로 이미지뷰 재정렬
         reorderImageViews()
     }
     
+    // MARK: - Helper Methods
     func reorderImageViews() {
         photosContainerView.isHidden = viewModel?.reviewImages.isEmpty == true ? true : false
         // 모든 이미지뷰 초기화
@@ -181,6 +193,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     }
 }
 
+// MARK: - Extention
 extension RestaurantDetailViewController: RestaurantDetailPageViewControllerDelegate {
     func updateSegmentIndex(index: Int) {
         restanurantSegController.selectedSegmentIndex = index
