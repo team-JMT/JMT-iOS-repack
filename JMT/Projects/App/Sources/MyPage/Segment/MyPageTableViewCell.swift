@@ -13,7 +13,6 @@ class MyPageTableViewCell: UITableViewCell {
     @IBOutlet weak var myPageImage: UIImageView!
     @IBOutlet weak var maPageResturantName: UILabel!
 
-    @IBOutlet weak var myPage111: UILabel!
     
     
     

@@ -22,6 +22,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     private var viewControllerIdentifiers: [String] = ["FirstSegmentViewController", "SecondSegmentViewController"]
     
     @IBOutlet weak var containerView: UIView!
+    
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var HeaderView: UIView!
@@ -34,7 +35,6 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     
     let fixedHeaderViewHeight: CGFloat = 80
     let triggerOffset: CGFloat = 150
-    
     
     
     override func viewDidLoad() {
@@ -51,17 +51,28 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
         }
         viewModel.fetchUserInfo()
         
+        // 맛집 정보가 업데이트될 때 호출될 클로저 설정
         viewModel.onTotalRestaurantsUpdated = { [weak self] in
             guard let self = self, let totalRestaurants = self.viewModel.totalRestaurants else { return }
             DispatchQueue.main.async {
-                self.registerResturant.text = "\(totalRestaurants)"
-                print("\(self.registerResturant)")
+                self.registerResturant.text = "등록한 맛집 수: \(self.viewModel.numberOfRestaurants ?? 0)"
+            }
+            print("등록맛집개수 \(self.viewModel.numberOfRestaurants)")
+            
+            viewModel.onRestaurantsDataUpdated = { [weak self] in
+                DispatchQueue.main.async {
+                    print(1)
+                }
+                
+                
+                if let userId = self?.viewModel.userId {
+                    self?.viewModel.fetchRestaurants(userId: userId)
+                } else {
+                    print("UserId not available")
+                }
+                
             }
         }
-        
-        viewModel.fetchTotalRestaurants(userId: 6)
-        
-        
     }
     
     private func updateUI() {
@@ -81,6 +92,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
                 }
             }
             print(NickNameLabel)
+            print(registerResturant)
         }
     }
     

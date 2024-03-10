@@ -7,8 +7,6 @@
 
 import Foundation
 
-
-
 struct MyPageUserLogin: Codable {
     let data: UserData?
     let message: String
@@ -21,25 +19,33 @@ struct UserData: Codable {
     let email, nickname, profileImg: String
 }
 
-struct RestaurantSearchResponse: Codable {
-    let data: RestaurantSearchData
+// MARK: - ResturantResponse
+struct ResturantResponse: Codable {
+    let data: DataClass?
+    let message, code: String?
 }
 
-struct RestaurantSearchData: Codable {
-    let restaurants: [Restaurant]
-    let page: Page
+// MARK: - DataClass
+struct DataClass: Codable {
+    let restaurants: [Restaurant]?
+    let page: Page?
 }
 
-struct Restaurant: Codable {
-    
-    
-}
-
+// MARK: - Page
 struct Page: Codable {
-    let totalPages: Int
-    let currentPage: Int
-    let totalElements: Int
-    let size: Int
-    let numberOfElements: Int
-    let empty: Bool
+    let totalPages, currentPage, totalElements, size: Int?
+    let numberOfElements: Int?
+    let empty, pageLast, pageFirst: Bool?
+}
+
+// MARK: - Restaurant
+struct Restaurant: Codable {
+    let id: Int?
+    let name, placeURL, phone, address: String?
+    let roadAddress: String?
+    let x, y: Int?
+    let restaurantImageURL, introduce, category, userNickName: String?
+    let userProfileImageURL: String?
+    let canDrinkLiquor: Bool?
+    let differenceInDistance: String?
 }
