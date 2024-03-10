@@ -55,6 +55,9 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         
         setupData()
         
+        //viewModel?.fetchRestaurantData()
+        
+        
         imageViews = [reviewImageView1, reviewImageView2, reviewImageView3, reviewImageView4, reviewImageView5]
         
         pageViewController?.pageViewDelegate = self
@@ -103,7 +106,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     
     // MARK: - SetupData
     func setupData() {
-        print(viewModel?.restauranId)
+        print("123123", viewModel?.restauranId)
     }
     
     

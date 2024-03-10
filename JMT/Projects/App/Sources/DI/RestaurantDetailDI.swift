@@ -24,9 +24,9 @@ struct RestaurantDetailDI: Assembly {
         
         container.storyboardInitCompleted(RestaurantDetailViewController.self) { r, c in
             let viewModel = r.resolve(RestaurantDetailViewModel.self)!
-            let photoAuthService = r.resolve(DefaultPhotoAuthService.self)!
+//            let photoAuthService = r.resolve(DefaultPhotoAuthService.self)!
             c.viewModel = viewModel
-            c.viewModel?.photoAuthService = photoAuthService
+//            c.viewModel?.photoAuthService = photoAuthService
         }
         
         container.register(RestaurantDetailInfoViewModel.self) { r in

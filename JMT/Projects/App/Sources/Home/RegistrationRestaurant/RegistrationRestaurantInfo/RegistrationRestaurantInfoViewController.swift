@@ -296,8 +296,8 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         Task {
             
             if viewModel?.checkNotInfo() == true {
-                //let id = try await viewModel?.registrationRestaurantLocation() ?? 0
-                try await viewModel?.registrationRestaurantAsync(restaurantLocationId: 22)
+                let restaurantLocationId = try await viewModel?.registrationRestaurantLocation() ?? 0
+                try await viewModel?.registrationRestaurantAsync(restaurantLocationId: restaurantLocationId)
             } else {
                 viewModel?.coordinator?.showButtonPopupViewController()
             }

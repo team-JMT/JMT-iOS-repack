@@ -99,7 +99,7 @@ class HomeViewModel {
     var selectedDrinkingIndex: Int? = nil
     
     var page: Int = 0
-    var currentGroupId: Int = 1
+    var currentGroupId: Int = 0
 
     var isLodingData: Bool = true
     
@@ -286,10 +286,12 @@ extension HomeViewModel {
             return false
         } else {
             self.groupList.append(contentsOf: groupList)
-            self.groupList.append(MyGroupData(groupId: 1, groupName: "123123", groupIntroduce: "123123", groupProfileImageUrl: "123123", groupBackgroundImageUrl: "!23123", privateGroup: false, isSelected: false))
-            let id = groupList.firstIndex(where: { $0.isSelected == true }).map({Int($0)})
-            currentGroupId = id ?? 0
-            UserDefaultManager.selectedGroupId = id ?? 0
+            
+            let index = groupList.firstIndex(where: { $0.isSelected == true }).map({Int($0)}) ?? 0
+            let id = groupList[index].groupId
+            
+            currentGroupId = id
+            UserDefaultManager.selectedGroupId = id
             return true
         }
     }
