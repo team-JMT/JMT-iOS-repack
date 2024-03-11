@@ -152,6 +152,16 @@ class OriginWebViewController: UIViewController, WKUIDelegate, WKScriptMessageHa
         switch request.name {
         case "token":
             handleTokenRequest(request)
+        case "back":
+            handleBackRequest(request)
+        case "navigation":
+            handleNavigationRequest(request)
+        case "share":
+            handleShareRequest()
+        case "navigate":
+            if let route = request.data?.route {
+                loadWebViewWithRoute(route: route)
+            }
         default:
             print("Unhandled bridge request: \(request.name)")
         }
@@ -184,18 +194,43 @@ class OriginWebViewController: UIViewController, WKUIDelegate, WKScriptMessageHa
             }
         }
     }
-
-}
-    struct BridgeRequest: Decodable {
-        let name: String
-        let onSuccess: String?
-        let onFailed: String?
-    }
     
+    
+    // 'back' 이벤트 처리
+    private func handleBackRequest(_ request: BridgeRequest) {
+        if let enable = request.data?.enable {
+            print("'back' request received, enable: \(enable)")
+            // 'back' 액션 실행. 예: navigationController?.popViewController(animated: true)
+        }
+    }
+
+    // 'navigation' 이벤트 처리
+    private func handleNavigationRequest(_ request: BridgeRequest) {
+        if let isVisible = request.data?.isVisible {
+            print("'navigation' request received, isVisible: \(isVisible)")
+            handleTabBarVisibility(isVisible: isVisible)
+        }
+    }
+
+    // 'share' 이벤트 처리
+    private func handleShareRequest() {
+        print("'share' request received")
+        handleShareEvent()
+    }
+
+    
+    
+}
+// BridgeRequest 구조체 수정하여 'data' 필드를 포함하도록 함
+struct BridgeRequest: Decodable {
+    let name: String
+    let data: WebEventData? // 이전 예시에서 누락됐던 'data' 필드 추가
+    let onSuccess: String?
+    let onFailed: String?
+}
 struct WebEventData: Decodable {
     let route: String?
-    let event: String?
-
+    let enable: Bool? // 'back' 이벤트와 'navigation' 이벤트에 사용될 수 있는 필드
+    let isVisible: Bool? // 'navigation' 이벤트에 사용될 수 있는 필드
 }
-
 
