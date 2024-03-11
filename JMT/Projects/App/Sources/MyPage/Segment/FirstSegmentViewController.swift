@@ -34,6 +34,10 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         
         // 여기에서 cell의 레이블 등을 설정
         cell.resturantLabel?.text = "Restaurant \(indexPath.row + 1)"
+        cell.grouplabel?.text = "Group \(indexPath.row + 1)"
+        cell.categoryLable?.text = "Category \(indexPath.row + 1)"
+        cell.MyNickname?.text = "Nickname \(indexPath.row + 1)"
+        
         
         return cell
     }
