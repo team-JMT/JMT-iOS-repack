@@ -37,20 +37,20 @@ class GroupViewController: UIViewController {
     }
     
     @IBAction func goOrginWeb(_ sender: Any) {
-        let accessToken = DefaultKeychainService.shared.accessToken
+        guard let accessToken = DefaultKeychainService.shared.accessToken else {
+            print("Access token is not available")
+            return
+        }
         
-        // 스토리보드에서 웹뷰 컨트롤러 인스턴스화
         let storyboard = UIStoryboard(name: "Group", bundle: nil)
         if let webVc = storyboard.instantiateViewController(withIdentifier: "OriginWebViewController") as? OriginWebViewController {
-            // 웹뷰 컨트롤러에 액세스 토큰 설정
             webVc.accessToken = accessToken
-            // 네비게이션 컨트롤러를 사용하여 화면 전환
             self.navigationController?.pushViewController(webVc, animated: true)
-            print(1)
-            print(accessToken)
+            print("Navigating to OriginWebViewController with access token:", accessToken)
         }
     }
-    
+        
+
     
     @IBAction func goUrl(_ sender: Any) {
         guard let urlText = tf.text, !urlText.isEmpty else { return }
