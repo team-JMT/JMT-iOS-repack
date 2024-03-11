@@ -8,7 +8,7 @@
 import UIKit
 
 
-class MyPageTableViewCell: UITableViewCell {
+class MyPageRegisterResturantTableViewCell: UITableViewCell {
   
  
     @IBOutlet weak var myResturantImage: UIImageView!
