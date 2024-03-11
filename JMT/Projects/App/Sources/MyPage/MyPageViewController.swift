@@ -10,19 +10,19 @@ import UIKit
 class MyPageViewController: UIViewController, UIScrollViewDelegate
 
 {
-    
-    
     //weak var coordinator: MyPageCoordinator?
     var viewModel = MyPageViewModel()
-
+    var restaurants: [Restaurant] = []
+    
+    
     
     private var fixedSegmentedControl: UISegmentedControl!
     private var currentViewController: UIViewController?
     private var pageViewController: UIPageViewController!
-    private var viewControllerIdentifiers: [String] = ["FirstSegmentViewController", "SecondSegmentViewController", "ThirdSegmentViewController"]
+    private var viewControllerIdentifiers: [String] = ["FirstSegmentViewController", "SecondSegmentViewController"]
     
-    //
     @IBOutlet weak var containerView: UIView!
+    
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var HeaderView: UIView!
@@ -35,7 +35,6 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     
     let fixedHeaderViewHeight: CGFloat = 80
     let triggerOffset: CGFloat = 150
-    
     
     
     override func viewDidLoad() {
@@ -52,18 +51,28 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
         }
         viewModel.fetchUserInfo()
         
+        // 맛집 정보가 업데이트될 때 호출될 클로저 설정
         viewModel.onTotalRestaurantsUpdated = { [weak self] in
             guard let self = self, let totalRestaurants = self.viewModel.totalRestaurants else { return }
             DispatchQueue.main.async {
-                self.registerResturant.text = "\(totalRestaurants)"
-                print("==-=-=-==")
-                print("\(self.registerResturant)")
+                self.registerResturant.text = "등록한 맛집 수: \(self.viewModel.numberOfRestaurants ?? 0)"
+            }
+            print("등록맛집개수 \(self.viewModel.numberOfRestaurants)")
+            
+            viewModel.onRestaurantsDataUpdated = { [weak self] in
+                DispatchQueue.main.async {
+                    print(1)
+                }
+                
+                
+                if let userId = self?.viewModel.userId {
+                    self?.viewModel.fetchRestaurants(userId: userId)
+                } else {
+                    print("UserId not available")
+                }
+                
             }
         }
-
-        viewModel.fetchTotalRestaurants(userId: 6)
-
-        
     }
     
     private func updateUI() {
@@ -83,6 +92,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
                 }
             }
             print(NickNameLabel)
+            print(registerResturant)
         }
     }
     
@@ -98,7 +108,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
         let yPosition = fixedHeaderViewHeight - segmentedControlHeight // Position at the bottom
         
         // Initialize the fixedSegmentedControl with the calculated y position
-        fixedSegmentedControl = UnderlineSegmentedControl(items: ["등록한 맛집", "좋아한 맛집", "나의 후기"])
+        fixedSegmentedControl = UnderlineSegmentedControl(items: ["등록한 맛집", "나의 후기"])
         fixedSegmentedControl.frame = CGRect(x: 10, y: yPosition, width: fixedHeaderView.frame.width - 20, height: segmentedControlHeight)
         fixedSegmentedControl.selectedSegmentIndex = MyPageSegment.selectedSegmentIndex
         fixedSegmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
@@ -159,7 +169,6 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     }
     
     @IBAction func DetailMyPage(_ sender: Any) {
-        print("----- DetailMyPage")
         viewModel.coordinator?.showDetailMyPageVieController()
         
     }
@@ -170,6 +179,4 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
         //   coordinator?.goToDetailView(for: sender.selectedSegmentIndex)
         
     }
-    
-    
 }

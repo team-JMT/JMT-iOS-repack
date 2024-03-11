@@ -42,8 +42,7 @@ class DetailMyPageVC : UIViewController {
            mainTable.delegate = self
            mainTable.dataSource = self
 
-           navigationItems()
-           userEmail.lineBreakMode = .byTruncatingMiddle
+        userEmail.lineBreakMode = .byTruncatingMiddle
            mainTable.separatorStyle = .singleLine
 
            viewModel?.onUserInfoLoaded = { [weak self] in
@@ -64,7 +63,7 @@ class DetailMyPageVC : UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     private func updateUI() {
@@ -145,113 +144,6 @@ class DetailMyPageVC : UIViewController {
 
     }
 
-
-    private func navigationItems() {
-        // SFSymbol을 사용해서 왼쪽 '뒤로가기' 버튼을 설정합니다.
-        let leftImage = UIImage(named: "leftArrow")
-        let leftButton = UIButton(type: .custom)
-        
-        // 버튼의 크기와 이미지의 contentMode를 설정
-        leftButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-        leftButton.contentMode = .scaleAspectFit
-        
-        leftButton.setImage(leftImage, for: .normal)
-        leftButton.tintColor = UIColor(named: "gray700")
-        leftButton.addTarget(self, action: #selector(yourSelector1), for: .touchUpInside)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
-    }
-    
-    @objc func yourSelector1() {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    // 구글에 이미지 전송
-    func sendProfileImageToGoogleServer(with imageData: Data) {
-        let url = URL(string: "https://api.jmt-matzip.dev/api/v1/user/profileImg")!
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "CustomAccessToken") ?? "")",
-            "Accept": "*/*"
-        ]
-        
-        AF.upload(multipartFormData: { multipartFormData in
-            multipartFormData.append(imageData, withName: "profileImg", fileName: "profile.png", mimeType: "image/png")
-        }, to: url, method: .post, headers: headers)
-        .validate(statusCode: 200..<300)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                print("Image successfully uploaded to Google server: \(value)")
-            case .failure(let error):
-                print("Failed to upload image to Google server: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    
-    // 애플에 이미지 전송
-    func sendProfileImageToAppleServer(with imageData: Data) {
-        let url = URL(string: "https://api.jmt-matzip.dev/api/v1/user/profileImg")!
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "accessToken") ?? "")",
-            "Accept": "*/*"
-        ]
-        
-        AF.upload(multipartFormData: { multipartFormData in
-            multipartFormData.append(imageData, withName: "profileImg", fileName: "profile.png", mimeType: "image/png")
-        }, to: url, method: .post, headers: headers)
-        .validate(statusCode: 200..<300)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                print("Image successfully uploaded to Apple server: \(value)")
-            case .failure(let error):
-                print("Failed to upload image to Apple server: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    
-    //이미지 전송할곳 분기
-    func sendProfileImageToServer(with imageData: Data) {
-        guard let compressedImageData = compressImage(UIImage(data: imageData)!, toSizeInMB: 1) else {
-            print("Failed to compress image data.")
-            return
-        }
-        
-        if UserDefaults.standard.string(forKey: "loginMethod") == "apple" {
-            sendProfileImageToAppleServer(with: compressedImageData)
-        } else if UserDefaults.standard.string(forKey: "loginMethod") == "google" {
-            sendProfileImageToGoogleServer(with: compressedImageData)
-        }
-    }
-    
-    //이미지 압축
-    func compressImage(_ image: UIImage, toSizeInMB maxSizeInMB: Double) -> Data? {
-        let maxSizeInBytes = maxSizeInMB * 1024 * 1024
-        var compressionQuality: CGFloat = 1.0
-        var imageData: Data?
-        while compressionQuality > 0 {
-            imageData = image.jpegData(compressionQuality: compressionQuality)
-            if let imageData = imageData, Double(imageData.count) <= maxSizeInBytes {
-                break
-            }
-            compressionQuality -= 0.1
-        }
-        return imageData
-    }
-    
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let selectedImage = info[.originalImage] as? UIImage {
-            profileImage.image = selectedImage
-            if let imageData = selectedImage.pngData() {
-                print("Selected image data: \(imageData)")
-                UserDefaults.standard.set(imageData, forKey: "profileImage")
-                sendProfileImageToServer(with: imageData)
-            }
-        }
-        picker.dismiss(animated: true, completion: nil)
-    }
     
     
     

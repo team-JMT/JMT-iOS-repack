@@ -15,6 +15,11 @@ class MyPageViewModel {
     private let keychainAccess: KeychainAccessible
     
     
+    var userId: Int?
+    var numberOfRestaurants: Int?
+
+    
+    
     var userInfo: MyPageUserLogin? {
         didSet {
             self.onUserInfoLoaded?()
@@ -27,12 +32,15 @@ class MyPageViewModel {
             }
         }
     
+    var restaurantsData: [Restaurant] = [] {
+           didSet {
+               self.onRestaurantsDataUpdated?()
+           }
+       }
+    var onRestaurantsDataUpdated: (() -> Void)?
     var onUserInfoLoaded: (() -> Void)?
-        
-    // 맛집 정보가 업데이트될 때 호출될 클로저
     var onTotalRestaurantsUpdated: (() -> Void)?
-    
-    
+    var onDataUpdated: (() -> Void)?
     
     init(keychainAccess: KeychainAccessible = DefaultKeychainAccessible()) {
         self.keychainAccess = keychainAccess
@@ -56,6 +64,7 @@ class MyPageViewModel {
         }
     }
     
+    
     func fetchUserInfo() {
         guard let accessToken = keychainAccess.getToken("accessToken") else {
             print("Access Token is not available")
@@ -77,35 +86,6 @@ class MyPageViewModel {
         }
     }
     
-    func fetchTotalRestaurants(userId: Int) {
-        guard let accessToken = keychainAccess.getToken("accessToken") else {
-            print("Access Token is not available")
-            return
-        }
-
-        let headers: HTTPHeaders = [
-            "accept": "*/*",
-            "Authorization": "Bearer \(accessToken)"
-        ]
-
-        let url = "https://api.jmt-matzip.dev/api/v1/restaurant/search/\(userId)"
-
-        AF.request(url, method: .post, headers: headers).responseDecodable(of: RestaurantSearchResponse.self) { response in
-            switch response.result {
-                   case .success(let responseData):
-                       DispatchQueue.main.async {
-                           self.totalRestaurants = responseData.data.page.numberOfElements
-                           // 성공적으로 데이터를 가져온 후, 클로저 호출
-                           self.onTotalRestaurantsUpdated?()
-                           print("call")
-                       }
-                   case .failure(let error):
-                       print(error)
-                   }
-               }
-    }
-
-
     func getUserInfo() {
         UserInfoAPI.getLoginInfo { response in
             switch response {
@@ -134,30 +114,47 @@ class MyPageViewModel {
         
     func handleLoginSuccess(idToken: String) {
         keychainAccess.saveToken("idToken", idToken)
-        keychainAccess.saveToken("isIdTokenSaved", "true") // 플래그 저장
+        keychainAccess.saveToken("isIdTokenSaved", "true")
         print("ID Token saved: \(idToken)")
     }
     
-    // 로그아웃 처리
-    func logout() {
-        keychainAccess.removeAll()
-        print("Logged out and all tokens removed.")
+    
+    func fetchRestaurants(userId: Int) {
+
+        guard let userId = self.userId else {
+            print("User ID is not available")
+            return
+        }
+
+        guard let accessToken = keychainAccess.getToken("accessToken") else {
+            print("Access Token is not available")
+            return
+        }
+
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+
+        let url = "https://api.jmt-matzip.dev/api/v1/restaurant/search/\(userId)?page=0&size=20"
+
+        AF.request(url, method: .post, headers: headers).responseDecodable(of: ResturantResponse.self) { response in
+            switch response.result {
+                case .success(let responseData):
+                    self.numberOfRestaurants = responseData.data?.page?.numberOfElements
+                    self.onTotalRestaurantsUpdated?()
+                    self.restaurantsData = responseData.data?.restaurants ?? []
+                    DispatchQueue.main.async {
+                        self.onRestaurantsDataUpdated?()
+                    }
+                case .failure(let error):
+                    print("Error fetching restaurants data: \(error)")
+            }
+        }
     }
 
     
-    // 데이터를 저장할 프로퍼티
-    //    var restaurantData: [Restaurant] = [] {
-    //        didSet {
-    //            self.onDataUpdated?()
-    //        }
-    //    }
     
-    // 데이터가 업데이트될 때 호출될 클로저
-    var onDataUpdated: (() -> Void)?
-    
-    
-    
-   
 }
 
-
+        

@@ -140,14 +140,6 @@ class DetailMyPageViewModel {
     }
 
     
-    // 데이터를 저장할 프로퍼티
-    //    var restaurantData: [Restaurant] = [] {
-    //        didSet {
-    //            self.onDataUpdated?()
-    //        }
-    //    }
-    
-    // 데이터가 업데이트될 때 호출될 클로저
     var onDataUpdated: (() -> Void)?
     
     

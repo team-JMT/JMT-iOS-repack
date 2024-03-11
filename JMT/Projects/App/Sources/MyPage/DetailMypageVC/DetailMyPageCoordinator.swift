@@ -34,9 +34,6 @@ protocol DetailMyPageCoordinator: Coordinator {
 
 class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
     
-    
-   
-    
     var parentCoordinator: Coordinator? = nil
     
     var childCoordinators: [Coordinator] = []
@@ -49,13 +46,10 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         self.navigationController = navigationController
     }
     
-    
-    
     func start() {
         let detailMyPageViewController = DetailMyPageVC.instantiateFromStoryboard(storyboardName: "DetailMyPage") as DetailMyPageVC
         detailMyPageViewController.viewModel?.coordinator = self
         self.navigationController?.pushViewController(detailMyPageViewController, animated: true)
-        
     }
     
     
@@ -70,12 +64,12 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         //있는지 예외처리
         if getChildCoordinator(.myPageManage) == nil {
             setMyPageManageCoordinator()
-
+            
         }
-    
+        
         let coordinator = getChildCoordinator(.myPageManage) as! MyPageManageCoordinator
         coordinator.start()
-        }
+    }
 
 
     //서비스 이용동의
@@ -144,7 +138,7 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
     }
     
     func showImagePicker() {
-            
+        
         let photoService = DefaultPhotoAuthService()
         
         var config = PhotoKitConfiguration()
@@ -154,21 +148,32 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         
         picker.didFinishCompletion = { photo in
             
-            self.handleImagePickerResult(photo.first, isDefault: false)
-            picker.dismiss(animated: true)
-        }
-        
-        photoService.requestAuthorization { result in
-            switch result {
-            case .success(_):
-                self.navigationController?.present(picker, animated: true)
-            case .failure(_):
-                if let topViewController = self.navigationController?.topViewController {
-                    topViewController.showAccessDeniedAlert(type: .photo)
+            let photoService = DefaultPhotoAuthService()
+            
+            var config = PhotoKitConfiguration()
+            config.library.defaultMultipleSelection = false
+            
+            let picker = PhotoKitNavigationController(configuration: config)
+            
+            picker.didFinishCompletion = { photo in
+                
+                self.handleImagePickerResult(photo.first, isDefault: false)
+                picker.dismiss(animated: true)
+            }
+            
+            photoService.requestAuthorization { result in
+                switch result {
+                case .success(_):
+                    self.navigationController?.present(picker, animated: true)
+                case .failure(_):
+                    if let topViewController = self.navigationController?.topViewController {
+                        topViewController.showAccessDeniedAlert(type: .photo)
+                    }
                 }
             }
         }
     }
+    
     
     func handleImagePickerResult(_ image: UIImage?, isDefault: Bool) {
         if let detailMyPageViewController = self.navigationController?.topViewController as? DetailMyPageVC {
@@ -222,7 +227,7 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         case .serviceUse:
             childCoordinator = childCoordinators.first(where: { $0 is ServiceUseCoordinator})
         case .profilePopup:
-            childCoordinator = childCoordinators.first(where: { $0 is ProfileImagePopupCoordinator})  
+            childCoordinator = childCoordinators.first(where: { $0 is ProfileImagePopupCoordinator})
         case .changeNickname:
             childCoordinator = childCoordinators.first(where: { $0 is MyPageChangeNicknaemCoordinator})
         default:
@@ -231,9 +236,6 @@ class DefaultDetailMyPageCoordinator: DetailMyPageCoordinator {
         
         return childCoordinator
     }
-
-
-
 }
 
 extension DefaultDetailMyPageCoordinator: CoordinatorFinishDelegate {
