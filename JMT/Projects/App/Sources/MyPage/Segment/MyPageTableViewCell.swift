@@ -10,11 +10,14 @@ import UIKit
 
 class MyPageTableViewCell: UITableViewCell {
   
+ 
+    @IBOutlet weak var myResturantImage: UIImageView!
+    
+    @IBOutlet weak var resturantLabel: UILabel!
+    @IBOutlet weak var grouplabel: UILabel!
+    @IBOutlet weak var categoryLable: UILabel!
+    
     @IBOutlet weak var myPageImage: UIImageView!
-    @IBOutlet weak var maPageResturantName: UILabel!
-
     
-    
-    
-    
+    @IBOutlet weak var MyNickname: UILabel!
 }

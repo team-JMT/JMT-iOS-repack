@@ -33,7 +33,7 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         }
         
         // 여기에서 cell의 레이블 등을 설정
-        cell.maPageResturantName?.text = "Restaurant \(indexPath.row + 1)"
+        cell.resturantLabel?.text = "Restaurant \(indexPath.row + 1)"
         
         return cell
     }
