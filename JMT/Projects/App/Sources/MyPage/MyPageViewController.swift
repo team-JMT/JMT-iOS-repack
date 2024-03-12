@@ -153,6 +153,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
         currentViewController?.view.removeFromSuperview()
         currentViewController?.removeFromParent()
     }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let yOffset = scrollView.contentOffset.y
         if yOffset >= triggerOffset {

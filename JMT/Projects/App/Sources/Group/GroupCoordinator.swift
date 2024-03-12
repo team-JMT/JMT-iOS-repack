@@ -23,6 +23,7 @@ class DefaultGroupCoordinator: GroupCoordinator {
         self.navigationController = navigationController
     }
     
+    
     func start() {
         let groupViewController = GroupViewController.instantiateFromStoryboard(storyboardName: "Group")
         self.navigationController?.pushViewController(groupViewController, animated: true)

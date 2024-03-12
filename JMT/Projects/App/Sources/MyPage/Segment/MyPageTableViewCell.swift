@@ -20,4 +20,5 @@ class MyPageRegisterResturantTableViewCell: UITableViewCell {
     @IBOutlet weak var myPageImage: UIImageView!
     
     @IBOutlet weak var MyNickname: UILabel!
+    
 }
