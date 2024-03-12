@@ -21,6 +21,9 @@ class SecondSegmentTableViewCell: UITableViewCell{
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        mainView.layer.cornerRadius = 12
+        
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal // Set horizontal scroll
         mainCollection.collectionViewLayout = layout

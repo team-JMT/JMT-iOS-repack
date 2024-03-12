@@ -12,15 +12,12 @@ class myPageReviewCollectionViewCell: UICollectionViewCell  {
     @IBOutlet weak var myPageImageView: UIImageView!
     
    // var imageNames: [String] = []
-//
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        
-//        // imagesCollectionView 설정
-//        imagesCollectionView.delegate = self
-//        imagesCollectionView.dataSource = self
-//        imagesCollectionView.register(UINib(nibName: "ImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ImageCollectionViewCell")
-//    }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        myPageImageView.layer.cornerRadius = 4
+    }
     
     func configure(imageName: String) {
             myPageImageView.image = UIImage(named: imageName)
