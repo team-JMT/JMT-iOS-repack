@@ -9,15 +9,87 @@ import UIKit
 
 class RestaurantDetailPhotoViewController: UIViewController {
 
-    var viewModel: RestaurantDetailPhotoViewModel?
+    weak var viewModel: RestaurantDetailViewModel?
+    weak var delegate: RestaurantDetailViewControllerDelegate?
     
     @IBOutlet weak var photoCollectionView: UICollectionView!
-  
+    
+    private var oldContentOffset = CGPoint.zero
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        photoCollectionView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 41 + 56, right: 20)
+        photoCollectionView.collectionViewLayout = createLayout()
+    }
+    
+    func createLayout() -> UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
         
+            switch sectionIndex {
+            case 0:
+                return self.createPhotosColumnSection()
+            default:
+                return nil
+            }
+        }
+        
+        layout.register(CollectionBackgroundView.self, forDecorationViewOfKind: "BackgroundView")
+        layout.register(CollectionBackgroundViewInset.self, forDecorationViewOfKind: "BackgroundViewInset")
+        return layout
+    }
+    
+    func createPhotosColumnSection() -> NSCollectionLayoutSection {
+        
+        if viewModel?.restaurantReviewImages.count == 0 {
+            // Item
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+            
+            // Section
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 20, trailing: 20)
+            
+            // Header
+            section.boundarySupplementaryItems = [
+                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+            ]
+            
+            // Background
+            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundView")
+            section.decorationItems = [sectionBackgroundDecoration]
+            
+            return section
+        } else {
+            let fraction: CGFloat = 1 / 3
+            
+            // Item
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1))
+            
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+            
+            // Group
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(fraction))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            
+            // Section
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 20)
+            
+            // Header
+            section.boundarySupplementaryItems = [
+                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+            ]
+            
+            // Background
+            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundView")
+            section.decorationItems = [sectionBackgroundDecoration]
+            
+            return section
+        }
     }
 }
 
@@ -36,35 +108,53 @@ extension RestaurantDetailPhotoViewController: UICollectionViewDelegate {
             return UICollectionReusableView()
         }
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 37)
-    }
 }
 
 extension RestaurantDetailPhotoViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30
+        return viewModel?.restaurantReviewImages.count == 0 ? 1 : viewModel?.restaurantReviewImages.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        return cell
+        
+        if viewModel?.restaurantReviewImages.count == 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emptyCell", for: indexPath) as? RestaurantEmptyPhotoCell else { return UICollectionViewCell() }
+            cell.setupData(comment: "아직 등록된 사진이 없어요")
+            return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "reviewPhotoCell", for: indexPath) as? RestaurantReviewPhoto2Cell else { return UICollectionViewCell() }
+            cell.setupData(imageUrl: viewModel?.restaurantReviewImages[indexPath.row] ?? "")
+            return cell
+        }
     }
 }
 
-extension RestaurantDetailPhotoViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+extension RestaurantDetailPhotoViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        let numberOfItemsPerRow: CGFloat = 3
-        let spacingBetweenCells: CGFloat = 4 // 셀 사이의 간격을 가정
+        let offsetY = scrollView.contentOffset.y - oldContentOffset.y
         
-        // contentInset과 minimumInteritemSpacing을 고려하여 사용 가능한 총 너비 계산
-        // contentInset 리딩 20, 트레일링 20 및 셀 사이 간격
-        let totalSpacing = (2 * 20) + ((numberOfItemsPerRow - 1) * spacingBetweenCells)
+        let stikcyHeaderViewHeightConstant = delegate?.headerHeight
+    
+        if let stikcyHeaderViewHeightConstant = stikcyHeaderViewHeightConstant {
+            
+            // offsetY가 0 보다 클때 (위로 스크롤)
+            // offsetY = offset과 oldOffset 뺀값
+            // topViewHeightConstraintRange.lowerBound = 0
+            // scrollView.contentOffset.y = 현재 offsetY값
+            if offsetY > 0, stikcyHeaderViewHeightConstant > viewModel!.stickyHeaderViewConfig.heightConstraintRange.lowerBound, scrollView.contentOffset.y > 0 {
+                delegate?.didScroll(y: offsetY)
+                scrollView.contentOffset.y -= offsetY
+            }
+
+            // offsetY가 0 보다 클때 (아래로 스크롤)
+            if offsetY < 0, stikcyHeaderViewHeightConstant < viewModel!.stickyHeaderViewConfig.heightConstraintRange.upperBound, scrollView.contentOffset.y < 0 {
+                delegate?.didScroll(y: offsetY)
+                scrollView.contentOffset.y -= offsetY
+            }
+        }
         
-        let width = (collectionView.frame.width - totalSpacing) / numberOfItemsPerRow
-        // 셀의 높이와 너비를 동일하게 설정하여 정사각형으로 만듦
-        return CGSize(width: width, height: width)
+        oldContentOffset = scrollView.contentOffset
     }
 }

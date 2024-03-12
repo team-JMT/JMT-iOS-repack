@@ -9,20 +9,18 @@ import UIKit
 
 class RestaurantDetailReviewViewController: UIViewController {
 
-    var viewModel: RestaurantDetailReviewViewModel?
+    weak var viewModel: RestaurantDetailViewModel?
+    weak var delegate: RestaurantDetailViewControllerDelegate?
+    
+    private var oldContentOffset = CGPoint.zero
     
     @IBOutlet weak var reviewCollectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        reviewCollectionView.collectionViewLayout = createLayout()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            
-            self.reviewCollectionView.reloadData()
-            
-        }
+        reviewCollectionView.collectionViewLayout = createLayout()
+    
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -60,14 +58,21 @@ class RestaurantDetailReviewViewController: UIViewController {
 
 extension RestaurantDetailReviewViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel?.reviews.count ?? 0
+        return viewModel?.restaurantData?.reviews.count == 0 ? 1 : viewModel?.restaurantData?.reviews.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "reviewCell", for: indexPath) as? RestaurantDetailReviewCell else { return UICollectionViewCell() }
-        cell.configureCell(data: viewModel?.reviews[indexPath.row] ?? "", index: indexPath.row)
-        cell.sizeToFit()
-        return cell
+        
+        if viewModel?.restaurantData?.reviews.count == 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emptyCell", for: indexPath) as? RestaurantEmptyReviewCell else { return UICollectionViewCell() }
+            cell.setupData(comment: "아직 등록된 후기가 없어요")
+            return cell
+            
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "reviewCell", for: indexPath) as? RestaurantReview2Cell else { return UICollectionViewCell() }
+            cell.setupData(reviewData: viewModel?.restaurantData?.reviews[indexPath.row])
+            return cell
+        }
     }
 }
 
@@ -84,3 +89,32 @@ extension RestaurantDetailReviewViewController: UICollectionViewDelegate {
     }
 }
 
+
+extension RestaurantDetailReviewViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let offsetY = scrollView.contentOffset.y - oldContentOffset.y
+        
+        let stikcyHeaderViewHeightConstant = delegate?.headerHeight
+        
+        if let stikcyHeaderViewHeightConstant = stikcyHeaderViewHeightConstant {
+            
+            // offsetY가 0 보다 클때 (위로 스크롤)
+            // offsetY = offset과 oldOffset 뺀값
+            // topViewHeightConstraintRange.lowerBound = 0
+            // scrollView.contentOffset.y = 현재 offsetY값
+            if offsetY > 0, stikcyHeaderViewHeightConstant > viewModel!.stickyHeaderViewConfig.heightConstraintRange.lowerBound, scrollView.contentOffset.y > 0 {
+                delegate?.didScroll(y: offsetY)
+                scrollView.contentOffset.y -= offsetY
+            }
+
+            // offsetY가 0 보다 클때 (아래로 스크롤)
+            if offsetY < 0, stikcyHeaderViewHeightConstant < viewModel!.stickyHeaderViewConfig.heightConstraintRange.upperBound, scrollView.contentOffset.y < 0 {
+                delegate?.didScroll(y: offsetY)
+                scrollView.contentOffset.y -= offsetY
+            }
+        }
+        
+        oldContentOffset = scrollView.contentOffset
+    }
+}

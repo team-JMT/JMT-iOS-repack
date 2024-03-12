@@ -158,8 +158,8 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
             }
         }
         
-        layout.register(GrayBackgroundView.self, forDecorationViewOfKind: "GrayBackgroundView")
-        layout.register(GrayBackgroundViewInset.self, forDecorationViewOfKind: "GrayBackgroundViewInset")
+        layout.register(CollectionBackgroundView.self, forDecorationViewOfKind: "BackgroundView")
+        layout.register(CollectionBackgroundViewInset.self, forDecorationViewOfKind: "BackgroundViewInset")
         return layout
     }
     
@@ -191,7 +191,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         ]
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
 
         return section
@@ -217,7 +217,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 20, bottom: 36, trailing: 20)
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
         
         return section
@@ -243,7 +243,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 20, bottom: 36, trailing: 20)
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
         
         return section
@@ -269,7 +269,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 20, bottom: 24, trailing: 20)
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundView")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundView")
         section.decorationItems = [sectionBackgroundDecoration]
         return section
     }
@@ -286,7 +286,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 100, trailing: 20)
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundView")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundView")
         section.decorationItems = [sectionBackgroundDecoration]
         
         return section

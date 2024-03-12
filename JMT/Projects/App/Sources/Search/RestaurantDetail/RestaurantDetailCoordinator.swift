@@ -12,8 +12,6 @@ protocol RestaurantDetailCoordinator: Coordinator {
     func showImagePicker()
     func start(id: Int)
 }
-
-
 class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
     
     var parentCoordinator: Coordinator?
@@ -36,14 +34,17 @@ class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
         
         guard let pageViewController = UIStoryboard(name: "RestaurantDetail", bundle: nil).instantiateViewController(withIdentifier: "RestaurantDetailPageViewController") as? RestaurantDetailPageViewController else { return }
         
-        let infoViewController = RestaurantDetailInfoViewController.instantiateFromStoryboard(storyboardName: "RestaurantDetail") as RestaurantDetailInfoViewController
-        let photoViewController = RestaurantDetailPhotoViewController.instantiateFromStoryboard(storyboardName: "RestaurantDetail") as RestaurantDetailPhotoViewController
-        let reviewViewController = RestaurantDetailReviewViewController.instantiateFromStoryboard(storyboardName: "RestaurantDetail") as RestaurantDetailReviewViewController
+        guard let infoViewController = UIStoryboard(name: "RestaurantDetail", bundle: nil).instantiateViewController(withIdentifier: "RestaurantDetailInfoViewController") as? RestaurantDetailInfoViewController else { return }
         
-        restaurantDetailViewController.viewModel?.restauranId = id
-        infoViewController.viewModel?.coordinator = self
-        photoViewController.viewModel?.coordinator = self
-        reviewViewController.viewModel?.coordinator = self
+        guard let photoViewController = UIStoryboard(name: "RestaurantDetail", bundle: nil).instantiateViewController(withIdentifier: "RestaurantDetailPhotoViewController") as? RestaurantDetailPhotoViewController else { return }
+        
+        guard let reviewViewController = UIStoryboard(name: "RestaurantDetail", bundle: nil).instantiateViewController(withIdentifier: "RestaurantDetailReviewViewController") as? RestaurantDetailReviewViewController else { return }
+        
+        restaurantDetailViewController.viewModel?.recommendRestaurantId = id
+        
+        infoViewController.viewModel = restaurantDetailViewController.viewModel
+        photoViewController.viewModel = restaurantDetailViewController.viewModel
+        reviewViewController.viewModel = restaurantDetailViewController.viewModel
         
         pageViewController.vcArray = [infoViewController, photoViewController, reviewViewController]
         
@@ -92,5 +93,12 @@ class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
             return restaurantDetailViewController.viewModel?.reviewImages.count ?? 0
         }
         return 0
+    }
+}
+
+extension DefaultRestaurantDetailCoordinator: CoordinatorFinishDelegate {
+    func coordinatorDidFinish(childCoordinator: Coordinator) {
+        print("DefaultRestaurantDetailCoordinator Finish")
+        self.childCoordinators = self.childCoordinators.filter{ $0.type != childCoordinator.type }
     }
 }

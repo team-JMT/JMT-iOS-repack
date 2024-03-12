@@ -18,4 +18,13 @@ class InfoTagCell: UICollectionViewCell {
         self.contentView.layer.borderColor = JMTengAsset.gray200.color.cgColor
         self.contentView.layer.borderWidth = 1
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        tagButton.setTitle("", for: .normal)
+    }
+    
+    func setupData(str: String) {
+        tagButton.setTitle(str, for: .normal)
+    }
 }

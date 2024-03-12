@@ -32,3 +32,27 @@ struct DetailRestaurantData: Decodable {
     let userProfileImageUrl: String
     let differenceInDistance: String
 }
+
+extension DetailRestaurantResponse {
+    var toDomain: DetailRestaurantModel {
+        return DetailRestaurantModel(
+            name: data.name,
+            placeUrl: data.placeUrl,
+            category: data.category,
+            phone: data.phone,
+            address: data.address,
+            roadAddress: data.roadAddress,
+            x: data.x,
+            y: data.y,
+            introduce: data.introduce,
+            canDrinkLiquor: data.canDrinkLiquor,
+            goWellWithLiquor: data.goWellWithLiquor,
+            recommendMenu: data.recommendMenu.splitByHashTag(),
+            pictures: data.pictures,
+            userId: data.userId,
+            userNickName: data.userNickName,
+            userProfileImageUrl: data.userProfileImageUrl,
+            differenceInDistance: data.differenceInDistance,
+            reviews: [])
+    }
+}

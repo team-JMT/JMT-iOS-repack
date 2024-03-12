@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,7 +21,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9kK-lb-UCI">
-                    <rect key="frame" x="0.0" y="20" width="416" height="29"/>
+                    <rect key="frame" x="0.0" y="32" width="416" height="17"/>
                     <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                     <color key="textColor" name="gray700"/>
                     <nil key="highlightedColor"/>
@@ -32,7 +32,7 @@
                 <constraint firstItem="9kK-lb-UCI" firstAttribute="leading" secondItem="VAL-dP-mYc" secondAttribute="leading" id="5MR-7o-WLs"/>
                 <constraint firstItem="i0P-fI-wd7" firstAttribute="bottom" secondItem="9kK-lb-UCI" secondAttribute="bottom" id="Ah9-P5-wri"/>
                 <constraint firstAttribute="trailing" secondItem="9kK-lb-UCI" secondAttribute="trailing" id="e5k-Re-wDC"/>
-                <constraint firstItem="9kK-lb-UCI" firstAttribute="top" secondItem="VAL-dP-mYc" secondAttribute="top" constant="20" id="kxc-mK-nkF"/>
+                <constraint firstItem="9kK-lb-UCI" firstAttribute="top" relation="greaterThanOrEqual" secondItem="VAL-dP-mYc" secondAttribute="top" id="kxc-mK-nkF"/>
             </constraints>
             <connections>
                 <outlet property="titleLabel" destination="9kK-lb-UCI" id="5TX-Ff-BB2"/>

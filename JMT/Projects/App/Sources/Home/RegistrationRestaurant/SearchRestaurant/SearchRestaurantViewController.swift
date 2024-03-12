@@ -52,16 +52,28 @@ class SearchRestaurantViewController: UIViewController {
     
     // MARK: - SetupData
     func fetchSearchRestaurantsData() {
-        Task {
-            do {
-                let keyword = searchRestaurantTextField.text ?? ""
-                let location = await viewModel?.getLocationAsync()
-                try await viewModel?.fetchSearchRestaurants(keyword: keyword, x: String(location?.longitude ?? 0.0), y: String(location?.latitude ?? 0.0))
-                self.updateTableView()
-            } catch {
-                print(error)
+        viewModel?.locationManager.didUpdateLocations = { location in
+            
+            if location == nil {
+                // 위치 데이터가 nil일때
+            } else {
+        
+                let x = location?.longitude ?? 0.0
+                let y = location?.latitude ?? 0.0
+                
+                Task {
+                    do {
+                        let keyword = self.searchRestaurantTextField.text ?? ""
+                        try await self.viewModel?.fetchSearchRestaurants(keyword: keyword, x:"\(x)", y:"\(y)")
+                        self.updateTableView()
+                    } catch {
+                        print(error)
+                    }
+                }
             }
         }
+        
+        viewModel?.locationManager.fetchLocations()
     }
     
     // MARK: - SetupUI

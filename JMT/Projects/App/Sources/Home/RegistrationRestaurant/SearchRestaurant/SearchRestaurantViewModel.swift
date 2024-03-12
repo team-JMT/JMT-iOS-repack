@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 class SearchRestaurantViewModel {
 
@@ -13,8 +14,8 @@ class SearchRestaurantViewModel {
     // 데이터와 관련된 프로퍼티들을 선언하는 부분입니다.
     weak var coordinator: SearchRestaurantCoordinator?
     var locationManager = LocationManager()
+    var location: CLLocationCoordinate2D?
     
-    var filterType: Int = 0
     var restaurantsInfo: [SearchRestaurantsModel] = []
     
     // MARK: - Initialization
@@ -26,18 +27,6 @@ class SearchRestaurantViewModel {
     
     // MARK: - Data Fetching
     // 외부 소스나 모델로부터 데이터를 가져오는 메소드들을 모아두는 부분입니다.
-    func getLocationAsync() async -> (longitude: Double, latitude: Double) {
-        await withCheckedContinuation { continuation in
-            locationManager.didUpdateLocations = { location in
-                let x = location?.longitude ?? 0.0
-                let y = location?.latitude ?? 0.0
-                continuation.resume(returning: (x, y))
-            }
-            
-            locationManager.fetchLocations()
-        }
-    }
-    
     func fetchSearchRestaurants(keyword: String, x: String, y: String) async throws {
         
         let result = try await FetchRestaurantAPI.fetchSearchRestaurantsAsync(request: SearchRestaurantsRequest(query: keyword, page: 1, x: x, y: y))

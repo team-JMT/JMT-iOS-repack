@@ -36,7 +36,7 @@ class GroupResultViewController: UIViewController {
             }
         }
         
-        layout.register(GrayBackgroundViewInset.self, forDecorationViewOfKind: "GrayBackgroundViewInset")
+        layout.register(CollectionBackgroundViewInset.self, forDecorationViewOfKind: "BackgroundViewInset")
         return layout
     }
     
@@ -61,7 +61,7 @@ class GroupResultViewController: UIViewController {
         section.interGroupSpacing = CGFloat(12)
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
 
         return section
@@ -94,7 +94,7 @@ class GroupResultViewController: UIViewController {
         ]
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
 
         return section
@@ -163,7 +163,7 @@ extension GroupResultViewController: UICollectionViewDelegate {
         case UICollectionView.elementKindSectionHeader:
             switch indexPath.section {
             case 1:
-                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "GroupResultTitleHeaderView", for: indexPath) as! GroupResultTitleHeaderView
+                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "ResultTitleHeaderView", for: indexPath) as! GroupResultTitleHeaderView
                 return header
             default:
                 return UICollectionReusableView()

@@ -7,6 +7,14 @@
 
 import UIKit
 
+protocol RestaurantDetailFooterViewDelegate: AnyObject {
+    func goToReviewTap()
+}
+
 class RestaurantDetailFooterView: UICollectionReusableView {
-        
+    weak var delegate: RestaurantDetailFooterViewDelegate?
+    
+    @IBAction func didTabMoreReviewButton(_ sender: Any) {
+        delegate?.goToReviewTap()
+    }
 }

@@ -41,22 +41,12 @@ struct FetchRestaurantAPI {
             .value
         return response
     }
+    
+    static func fetchRestaurantReviews(request: RestaurantReviewRequest) async throws -> RestaurantReviewResponse {
+        let response = try await AF.request(FetchRestaurantTarget.fetchRestaurantReviews(request), interceptor: DefaultRequestInterceptor())
+            .validate(statusCode: 200..<300)
+            .serializingDecodable(RestaurantReviewResponse.self)
+            .value
+        return response
+    }
 }
- 
-
-/*
- static func fetchSearchMapRestaurants(request: SearchMapRestaurantRequest, completion: @escaping (Result<[SearchMapRestaurantItems], NetworkError>) -> ()) {
-     
-     AF.request(FetchRestaurantTarget.fetchSearchMapRestaurants(request), interceptor: DefaultRequestInterceptor())
-         .validate(statusCode: 200..<300)
-         .responseDecodable(of: SearchMapRestaurantResponse.self) { response in
-             switch response.result {
-             case .success(let result):
-                 completion(.success(result.data.restaurants))
-             case .failure(let error):
-                 print(error)
-                 completion(.failure(.custom("fetchSearchMapRestaurants Error")))
-             }
-         }
- }
- */

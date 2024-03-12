@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct GroupRestaurantsInfoReviewRequest: Encodable {
+struct RestaurantReviewRequest: Encodable {
     let recommendRestaurantId: Int
 }

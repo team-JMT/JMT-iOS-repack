@@ -13,6 +13,7 @@ enum FetchRestaurantTarget {
     case fetchSearchMapRestaurants(SearchMapRestaurantRequest)
     case fetchSearchRestaurants(SearchRestaurantsRequest)
     case checkRegistrationRestaurant(CheckRegistrationRestaurantRequest)
+    case fetchRestaurantReviews(RestaurantReviewRequest)
 }
 
 extension FetchRestaurantTarget: TargetType {
@@ -22,6 +23,7 @@ extension FetchRestaurantTarget: TargetType {
         case .fetchSearchMapRestaurants: return .post
         case .fetchSearchRestaurants: return .get
         case .checkRegistrationRestaurant: return .get
+        case .fetchRestaurantReviews: return .get
         }
     }
     
@@ -31,6 +33,7 @@ extension FetchRestaurantTarget: TargetType {
         case .fetchSearchMapRestaurants: return "/restaurant/search/map"
         case .fetchSearchRestaurants: return "/restaurant/location"
         case .checkRegistrationRestaurant(let request): return "/restaurant/registration/\(request.kakaoSubId)"
+        case .fetchRestaurantReviews(let request): return "/restaurant/\(request.recommendRestaurantId)/review"
        
         }
     }
@@ -41,6 +44,7 @@ extension FetchRestaurantTarget: TargetType {
         case .fetchSearchMapRestaurants(let request): return .queryAndBody(request.parameters, request.body)
         case .fetchSearchRestaurants(let request): return .qurey(request)
         case .checkRegistrationRestaurant(let request): return .qurey(request)
+        case .fetchRestaurantReviews(let request): return .qurey(request)
         }
     }
 }

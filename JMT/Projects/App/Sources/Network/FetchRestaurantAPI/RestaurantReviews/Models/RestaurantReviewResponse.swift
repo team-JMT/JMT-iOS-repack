@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GroupRestaurantsInfoReviewResponse: Decodable {
+struct RestaurantReviewResponse: Decodable {
     let data: FindRestaurantReviewResponse
     let message: String
     let code: String
@@ -15,7 +15,7 @@ struct GroupRestaurantsInfoReviewResponse: Decodable {
 
 struct FindRestaurantReviewResponse: Decodable {
     let reviewList: [FindRestaurantReview]
-    let page: PageResponse
+    let page: ReviewPageResponse
 }
 
 struct FindRestaurantReview: Decodable {
@@ -27,7 +27,7 @@ struct FindRestaurantReview: Decodable {
     let reviewerImageUrl: String
 }
 
-struct PageResponse: Decodable {
+struct ReviewPageResponse: Decodable {
     let totalPages: Int
     let currentPage: Int
     let totalElements: Int
@@ -36,4 +36,18 @@ struct PageResponse: Decodable {
     let empty: Bool
     let pageFirst: Bool
     let pageLast: Bool
+}
+
+extension RestaurantReviewResponse {
+    var toDomain: [RestaurantReviewModel] {
+        return data.reviewList.map { review in
+            RestaurantReviewModel(
+                reviewId: review.reviewId,
+                recommendRestaurantId: review.recommendRestaurantId,
+                userName: review.userName,
+                reviewContent: review.reviewContent,
+                reviewImages: review.reviewImages,
+                reviewerImageUrl: review.reviewerImageUrl)
+        }
+    }
 }
