@@ -17,8 +17,8 @@ struct MyGroupData: Decodable {
     let groupId: Int
     let groupName: String
     let groupIntroduce: String
-    let groupProfileImageUrl: String
-    let groupBackgroundImageUrl: String
+    let groupProfileImageUrl: String?
+    let groupBackgroundImageUrl: String?
     let privateGroup: Bool
     var isSelected: Bool
 }

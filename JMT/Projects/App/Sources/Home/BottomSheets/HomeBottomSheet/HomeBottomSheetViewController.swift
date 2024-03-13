@@ -46,14 +46,19 @@ class HomeBottomSheetViewController: UIViewController {
             self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
         }
         
-        viewModel?.didUpdateBottomSheetTableView = {
+        viewModel?.didUpdateGroupRestaurantsData = {
+            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
+            self.viewModel?.isLodingData = true
             
-            self.viewModel?.isLodingData = false
-            
-            DispatchQueue.main.async {
-                self.hiddenBottomSheetButton()
-                self.bottomSheetCollectionView.reloadData()
-                self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(1))
+            Task {
+                do {
+                    try await self.fetchGroupRestaurantData()
+                    self.viewModel?.isLodingData = false
+                    
+                    self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                } catch {
+                    print(error)
+                }
             }
         }
         
@@ -78,6 +83,11 @@ class HomeBottomSheetViewController: UIViewController {
     }
     
     // MARK: - SetupData
+    // 선택한 그룹에 포함된 맛집 정보 가져오기
+    func fetchGroupRestaurantData() async throws {
+        try await viewModel?.fetchRecentRestaurantsAsync()
+        try await viewModel?.fetchGroupRestaurantsAsync()
+    }
     
     // MARK: - SetupUI
     func setupUI() {

@@ -24,7 +24,7 @@ extension DefaultTabBarController: UITabBarControllerDelegate {
             let rootViewController = nvc.viewControllers.first
             
             if let homeVC = rootViewController as? HomeViewController {
-                homeVC.updateViewBasedOnGroupStatus()
+               homeVC.updateViewBasedOnGroupStatus()
             }
         }
     }
