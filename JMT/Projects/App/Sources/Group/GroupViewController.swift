@@ -27,8 +27,8 @@ class GroupViewController: UIViewController {
     //    }
     
     
-
-      
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -53,54 +53,28 @@ class GroupViewController: UIViewController {
             print("Navigating to OriginWebViewController with access token:", accessToken)
         }
     }
-        
-
     
-    @IBAction func goUrl(_ sender: Any) {
-//        guard let text = tf.text, !text.isEmpty,
-//                  let accessToken = DefaultKeychainService.shared.accessToken else {
-//                print("URL text or Access token is not available")
-//                return
-//            }
-//            
-//            // 엑세스 토큰을 URL 쿼리 파라미터로 추가
-//            let urlStringWithToken = text + "?accessToken=\(accessToken)"
-//           
-//            let storyboard = UIStoryboard(name: "Group", bundle: nil)
-//            guard let vc = storyboard.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController else { return }
-//            vc.url = urlStringWithToken 
-//        print("Navigating with URL: \(urlStringWithToken)")
-//        print("==+==")
-//        
-//
-//        
-//            self.navigationController?.pushViewController(vc, animated: true)
-//        print("Navigating with URL: \(urlStringWithToken)")
-//        print("==+==")
-        
-    }
+    
     
     @IBAction func didTabShowCustomURLButton(_ sender: Any) {
-        guard let text = tf.text, !text.isEmpty,
-                  let accessToken = DefaultKeychainService.shared.accessToken else {
-                print("URL text or Access token is not available")
-                return
-            }
-            
-            // 엑세스 토큰을 URL 쿼리 파라미터로 추가
-            let urlStringWithToken = text + "?accessToken=\(accessToken)"
-           
-            let storyboard = UIStoryboard(name: "Group", bundle: nil)
-            guard let vc = storyboard.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController else { return }
-            vc.url = urlStringWithToken
-        print("Navigating with URL: \(urlStringWithToken)")
-        print("==+==")
+        guard let urlString = tf.text, !urlString.isEmpty, let url = URL(string: urlString),
+              let accessToken = DefaultKeychainService.shared.accessToken else {
+            print("URL text or Access token is not available")
+            return
+        }
         
-
+        // URLRequest 객체 생성
+        var request = URLRequest(url: url)
+        // HTTP 헤더에 엑세스 토큰 추가
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
-            self.navigationController?.pushViewController(vc, animated: true)
-        print("Navigating with URL: \(urlStringWithToken)")
-        print("==+==")
-        
+        // WebViewController 인스턴스 생성 및 요청 객체 전달
+        let storyboard = UIStoryboard(name: "Group", bundle: nil)
+        if let webViewController = storyboard.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController {
+            webViewController.request = request // WebViewController에서 request 프로퍼티를 정의해야 함
+            self.navigationController?.pushViewController(webViewController, animated: true)
+            print("Navigating with URL: \(urlString)")
+            print("Access Token: \(accessToken)")
+        }
     }
 }
