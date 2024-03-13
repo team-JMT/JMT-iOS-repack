@@ -111,18 +111,20 @@ class WebViewController: UIViewController {
     var url: String?
     
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupWebView()
-    }
+  override func viewWillAppear(_ animated: Bool) {
+      super.viewWillAppear(animated)
+      
+      self.navigationController?.setNavigationBarHidden(true, animated: true)
+      setCustomNavigationBarBackButton(isSearchVC: false)
+  }
+
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        setCustomNavigationBarBackButton(isSearchVC: false)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-    }
+      override func viewDidLoad() {
+          super.viewDidLoad()
+          
+          setupWebView()
+      }
+  
     
     func setupWebView() {
         let contentController = WKUserContentController()
