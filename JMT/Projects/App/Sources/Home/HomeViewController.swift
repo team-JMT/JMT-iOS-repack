@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
     var joinGroupFpc: FloatingPanelController!
     var groupListFpc: FloatingPanelController!
     var markers: [NMFMarker] = []
-
+    
     @IBOutlet weak var naverMapView: NMFNaverMapView!
     
     @IBOutlet weak var groupImageView: UIImageView!
@@ -37,7 +37,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var locationStackView: UIStackView!
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
-   
+    
     var isFirstApp = true
     
     // MARK: - View Lifecycle
@@ -152,7 +152,7 @@ class HomeViewController: UIViewController {
             } else {
                 self.groupImageView.image = JMTengAsset.defaultProfileImage.image
             }
-        
+            
             Task {
                 do {
                     try await self.fetchGroupRestaurantData()
@@ -161,7 +161,7 @@ class HomeViewController: UIViewController {
                 }
             }
         }
-    
+        
         viewModel?.displayAlertHandler = {
             self.showAccessDeniedAlert(type: .location)
         }
@@ -272,7 +272,7 @@ class HomeViewController: UIViewController {
     
     // 가입된 그룹 가져오기
     func fetchJoinGroup() async throws -> Bool? {
-         return try await viewModel?.fetchJoinGroup()
+        return try await viewModel?.fetchJoinGroup()
     }
     
     // 선택한 그룹에 포함된 맛집 정보 가져오기
@@ -297,7 +297,7 @@ class HomeViewController: UIViewController {
         }
         
     }
-
+    
     // 홈 탭으로 이동했을때 그룹 가입 여부 체크 함수
     func updateViewBasedOnGroupStatus() {
         
@@ -376,14 +376,14 @@ class HomeViewController: UIViewController {
         // 그림자 경로 설정
         let shadowPath = UIBezierPath()
         let shadowHeight: CGFloat = 4.0 // 그림자 높이
-
+        
         // 그림자 경로를 뷰의 바텀에만 위치시키기
         shadowPath.move(to: CGPoint(x: 0, y: topContainerView.bounds.maxY))
         shadowPath.addLine(to: CGPoint(x: topContainerView.bounds.width, y: topContainerView.bounds.maxY))
         shadowPath.addLine(to: CGPoint(x: topContainerView.bounds.width, y: topContainerView.bounds.maxY + shadowHeight))
         shadowPath.addLine(to: CGPoint(x: 0, y: topContainerView.bounds.maxY + shadowHeight))
         shadowPath.close()
-
+        
         topContainerView.layer.shadowPath = shadowPath.cgPath
         
         self.view.bringSubviewToFront(topContainerView)
@@ -427,7 +427,7 @@ class HomeViewController: UIViewController {
     @IBAction func didTabSearchGroupButton(_ sender: Any) {
         viewModel?.coordinator?.showSearchTabWithButton()
     }
-
+    
     @IBAction func didTabMyGroupButton(_ sender: Any) {
         showGorupListBottomSheetVC()
     }
@@ -462,15 +462,15 @@ extension HomeViewController: FloatingPanelControllerDelegate {
         switch fpc.state {
         case .full:
             fpc.setPanelStyle(radius: 0, isHidden: true)
-//            locationStackView.isHidden = true
-
+            //            locationStackView.isHidden = true
+            
         case .half:
             fpc.setPanelStyle(radius: 24, isHidden: false)
-//            locationStackView.isHidden = false
-
-//        case .tip:
-//            locationStackView.isHidden = false
-
+            //            locationStackView.isHidden = false
+            
+            //        case .tip:
+            //            locationStackView.isHidden = false
+            
         default:
             print("")
         }
@@ -495,7 +495,7 @@ extension FloatingPanelController {
         appearance.borderColor = .clear
         appearance.borderWidth = 0
         appearance.shadows = []
-
+        
         surfaceView.grabberHandle.isHidden = isHidden
         surfaceView.grabberHandlePadding = 5.0
         surfaceView.grabberHandleSize = CGSize(width: 40, height: 3)
@@ -523,7 +523,7 @@ extension HomeViewController {
     }
     
     func addMarkersInVisibleRegion() {
-    
+        
     }
     
     func removeAllMarkers() {
@@ -537,7 +537,7 @@ extension HomeViewController: NMFMapViewCameraDelegate {
     // 카메라 이동완료 후 호출
     func mapViewCameraIdle(_ mapView: NMFMapView) {
         let visibleRegion = naverMapView.mapView.projection.latlngBounds(fromViewBounds: naverMapView.frame)
-    
+        
         let centerX = (visibleRegion.southWest.lat + visibleRegion.northEast.lat) / 2
         let centerY = (visibleRegion.southWest.lng + visibleRegion.northEast.lng) / 2
         
@@ -554,20 +554,20 @@ extension HomeViewController {
         guard let vc = storyboard.instantiateViewController(withIdentifier: "JoinBottonSheetViewController") as? JoinBottonSheetViewController else { return }
         
         vc.viewModel = self.viewModel
- 
+        
         joinGroupFpc = FloatingPanelController(delegate: self)
         joinGroupFpc.set(contentViewController: vc)
         joinGroupFpc.layout = JoinBottomSheetFloatingPanelLayout()
         joinGroupFpc.panGestureRecognizer.isEnabled = false
         joinGroupFpc.setPanelStyle(radius: 24, isHidden: true)
-
+        
         self.present(joinGroupFpc, animated: false)
     }
     
     func showRestaurantListBottomSheetVC() {
         let storyboard = UIStoryboard(name: "HomeBottomSheet", bundle: nil)
         guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
-    
+        
         vc.viewModel = self.viewModel
         
         restaurantListFpc = FloatingPanelController(delegate: self)
@@ -576,7 +576,7 @@ extension HomeViewController {
         
         let layout = HomeBottomSheetFloatingPanelLayout()
         restaurantListFpc.setPanelStyle(radius: 24, isHidden: false)
-
+        
         restaurantListFpc.layout = layout
         restaurantListFpc.invalidateLayout()
     }
@@ -587,14 +587,14 @@ extension HomeViewController {
         guard let vc = storyboard.instantiateViewController(withIdentifier: "GroupListBottomSheet") as? GroupListBottomSheet else { return }
         
         vc.viewModel = self.viewModel
- 
+        
         groupListFpc = FloatingPanelController(delegate: self)
         groupListFpc.set(contentViewController: vc)
         groupListFpc.layout = GroupListBottomSheetFloatingPanelLayout()
         groupListFpc.panGestureRecognizer.isEnabled = false
         groupListFpc.backdropView.dismissalTapGestureRecognizer.isEnabled = true
         groupListFpc.setPanelStyle(radius: 24, isHidden: true)
-
+        
         self.present(groupListFpc, animated: true)
     }
 }
