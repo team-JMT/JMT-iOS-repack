@@ -38,14 +38,11 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
     
-    var isFirstApp = true
-    
     // 그룹 가입 여부 플래그
     var isHiddenJoinGroupUI = false
     // 맛집 정보 로드 상태 플래그
     var hasFetchedRestaurants = false
-    
-    
+
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -76,7 +73,6 @@ class HomeViewController: UIViewController {
         locationManager.didUpdateLocations = {
            
             self.view.showAnimatedGradientSkeleton()
-            self.viewModel?.didUpdateSkeletonView?()
             
             Task {
                 do {
@@ -197,57 +193,23 @@ class HomeViewController: UIViewController {
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-    
     // MARK: - SetupBindings
     func setupBind() {
         
         viewModel?.didUpdateGroupName = { index in
             
-            self.groupNameLabel.text = self.viewModel?.groupList[index].groupName ?? ""
-            
-            if let url = URL(string: self.viewModel?.groupList[index].groupProfileImageUrl ?? "")  {
-                self.groupImageView.kf.setImage(with: url)
-            } else {
-                self.groupImageView.image = JMTengAsset.defaultProfileImage.image
-            }
-            
             Task {
                 do {
-                   
+                    self.viewModel?.didUpdateGroupRestaurantsData?()
+                    
+                    self.groupNameLabel.text = self.viewModel?.groupList[index].groupName ?? ""
+                    
+                    if let url = URL(string: self.viewModel?.groupList[index].groupProfileImageUrl ?? "")  {
+                        self.groupImageView.kf.setImage(with: url)
+                    } else {
+                        self.groupImageView.image = JMTengAsset.defaultProfileImage.image
+                    }
                 } catch {
                     print(error)
                 }

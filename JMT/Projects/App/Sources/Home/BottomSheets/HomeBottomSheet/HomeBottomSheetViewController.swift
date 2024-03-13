@@ -42,14 +42,11 @@ class HomeBottomSheetViewController: UIViewController {
     
     // MARK: - SetupBindings
     func setupBind() {
-        viewModel?.didUpdateSkeletonView = {
-            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
-        }
         
         viewModel?.didUpdateGroupRestaurantsData = {
-            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
             self.viewModel?.isLodingData = true
-            
+            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
+    
             Task {
                 do {
                     try await self.fetchGroupRestaurantData()
