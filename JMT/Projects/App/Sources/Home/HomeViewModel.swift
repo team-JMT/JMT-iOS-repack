@@ -68,8 +68,6 @@ class HomeViewModel {
     // 데이터와 관련된 프로퍼티들을 선언하는 부분입니다.
     weak var coordinator: HomeCoordinator?
     
-    var locationManager = LocationManager.shared
-    
     let sortList = ["가까운 순", "최신 순"]
     let categoryList = ["한식", "일식", "중식", "양식", "퓨전", "카페", "주점", "기타"]
     let drinkingList = ["주류 가능", "주류 불가능/모름"]
@@ -176,7 +174,7 @@ extension HomeViewModel {
         if selectedSortIndex == 0 {
             parameters =  SearchMapRestaurantPageRequest(page: 1, size: 20, sort: nil)
             body = SearchMapRestaurantRequestBody(
-                userLocation: SearchMapRestaurantLocation(x: "\(locationManager.coordinate?.longitude ?? 0.0)", y: "\(locationManager.coordinate?.latitude ?? 0.0)"),
+                userLocation: SearchMapRestaurantLocation(x: "\(LocationManager.shared.coordinate?.longitude ?? 0.0)", y: "\(LocationManager.shared.coordinate?.latitude ?? 0.0)"),
                 startLocation: nil,
                 endLocation: nil,
                 filter: SearchMapRestaurantFilter(categoryFilter: SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
@@ -206,7 +204,7 @@ extension HomeViewModel {
         
         let parameters = SearchMapRestaurantPageRequest(page: 1, size: 20, sort: nil)
         let body = SearchMapRestaurantRequestBody(
-            userLocation: SearchMapRestaurantLocation(x: "\(locationManager.coordinate?.longitude ?? 0.0)", y: "\(locationManager.coordinate?.latitude ?? 0.0)"),
+            userLocation: SearchMapRestaurantLocation(x: "\(LocationManager.shared.coordinate?.longitude ?? 0.0)", y: "\(LocationManager.shared.coordinate?.latitude ?? 0.0)"),
             startLocation: SearchMapRestaurantLocation(x: "\(bounds.southWestLng)", y: "\(bounds.southWestLat)"),
             endLocation: SearchMapRestaurantLocation(x: "\(bounds.northEastLng)", y: "\(bounds.northEastLat)"),
             filter: nil,
@@ -223,8 +221,8 @@ extension HomeViewModel {
     // MARK: - 위치 관련 메소드
     func fetchCurrentAddressAsync() async throws -> String? {
         
-        let lon: String = String(locationManager.coordinate?.longitude ?? 0.0)
-        let lat: String = String(locationManager.coordinate?.latitude ?? 0.0)
+        let lon: String = String(LocationManager.shared.coordinate?.longitude ?? 0.0)
+        let lat: String = String(LocationManager.shared.coordinate?.latitude ?? 0.0)
        
         let locationData = try await CurrentLocationAPI.fetchCurrentLoctionAsync(request: CurrentLocationRequest(coords: "\(lon),\(lat)"))
         

@@ -245,16 +245,6 @@ class HomeBottomSheetViewController: UIViewController {
             addButton.isHidden = false
         }
     }
-    
-  
-    
-   
-    
-
-    
-
-    
-
 }
 
 // MARK: - CollectionView Delegate

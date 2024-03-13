@@ -15,6 +15,9 @@ class HomeViewController: UIViewController {
     
     // MARK: - Properties
     var viewModel: HomeViewModel?
+    
+    var locationManager = LocationManager.shared
+    
     var restaurantListFpc: FloatingPanelController!
     var joinGroupFpc: FloatingPanelController!
     var groupListFpc: FloatingPanelController!
@@ -43,12 +46,17 @@ class HomeViewController: UIViewController {
         
         self.view.showAnimatedGradientSkeleton()
         setupUI()
+        setupBind()
         setupRestaurantBottomSheetUI()
         
-        fetchData()
+      
+        checkLocationAuthorizationAndSetup()
         
-        setupBind()
-
+        
+        
+        
+      
+        
         naverMapView.mapView.addCameraDelegate(delegate: self)
     }
     
@@ -57,23 +65,92 @@ class HomeViewController: UIViewController {
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
-<<<<<<< HEAD
+    
+    func checkLocationAuthorizationAndSetup() {
+        let authorizationStatus = CLLocationManager.authorizationStatus()
+        switch authorizationStatus {
+        case .notDetermined:
+            // 권한 상태가 결정되지 않았다면, 권한 요청
+            locationManager.requestWhenInUseAuthorization()
+        case .restricted, .denied:
+            // 권한이 제한되거나 거부된 경우, 사용자에게 설정으로 가서 변경하도록 안내
+            print("권한 11")
+        case .authorizedAlways, .authorizedWhenInUse:
+            // 권한이 허용된 경우, 위치 관리자 설정 및 사용 시작
+            print("권한 22")
+        @unknown default:
+            fatalError("Unhandled authorization status")
+        }
+    }
+    
+//    func fetchData() {
+//        Task {
+//            do {
+//                try await viewModel?.fetchJoinGroup()
+//            } catch {
+//                print(error)
+//            }
+//        }
+//    }
     
     
-   
+    func setupLocationManager() {
+        let locationManager = LocationManager.shared
+        
+        locationManager.didUpdateLocations = {
+            
+            
+            
+        }
+        
+        locationManager.fetchLocations()
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    func fetchData()  {
-=======
->>>>>>> 24754854d21962c7a26bf0ba0a61cdd1f3901a63
     
     // MARK: - SetupBindings
     func setupBind() {
         
         viewModel?.didUpdateGroupName = { index in
-            self.groupNameButton.setTitle(self.viewModel?.groupList[index].groupName ?? "", for: .normal)
+            
+            self.groupNameLabel.text = self.viewModel?.groupList[index].groupName ?? ""
             
             if let url = URL(string: self.viewModel?.groupList[index].groupProfileImageUrl ?? "")  {
                 self.groupImageView.kf.setImage(with: url)
+            } else {
+                self.groupImageView.image = JMTengAsset.defaultProfileImage.image
             }
         
             Task {
@@ -89,28 +166,50 @@ class HomeViewController: UIViewController {
             self.showAccessDeniedAlert(type: .location)
         }
         
-        viewModel?.locationManager.didUpdateLocations = {
-            if self.isFirstApp == true {
-                self.isFirstApp = false
-                return
-            }
-            
-            self.fetchData()
-        }
+//        viewModel?.locationManager.didUpdateLocations = {
+//            if self.isFirstApp == true {
+//                self.isFirstApp = false
+//                return
+//            }
+//            
+//            self.fetchData()
+//        }
     }
     
     // MARK: - FetchData
+    func fetchTest() {
+        Task {
+            do {
+                // 권한이 설정된 경우
+                if LocationManager.shared.checkAuthorizationStatus() == true {
+                    print("123123 11")
+                } else { // 권한이 설정되지 않은 경우
+                    print("123123 22")
+                }
+                
+            } catch {
+                
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     // 전체 데이터 패치 관련 메소드
     func fetchData() {
         Task {
             do {
-                
-                print("권한 최초 실행", viewModel?.locationManager.coordinate)
+                print("권한 최초 실행")
                 // 앱 실행시 첫 데이터 로딩 여부
                 guard viewModel?.isFirstLodingData == true else { return }
                 
                 // 위치 권한이 허용되어있으면
-                if viewModel?.locationManager.checkAuthorizationStatus() == true {
+                if LocationManager.shared.checkAuthorizationStatus() == true {
                     
                     // 현재 위치를 기반으로 위치 정보 업데이트
                     try await fetchNaverMapViewData()
@@ -190,6 +289,13 @@ class HomeViewController: UIViewController {
     func setupGroupData() {
         let index = viewModel?.groupList.firstIndex(where: { $0.isSelected == true }).map({Int($0)}) ?? 0
         groupNameLabel.text = viewModel?.groupList[index].groupName
+        
+        if let url = URL(string: viewModel?.groupList[index].groupProfileImageUrl ?? "") {
+            groupImageView.kf.setImage(with: url)
+        } else {
+            groupImageView.image = JMTengAsset.defaultProfileImage.image
+        }
+        
     }
 
     // 홈 탭으로 이동했을때 그룹 가입 여부 체크 함수
@@ -299,7 +405,7 @@ class HomeViewController: UIViewController {
     
     // MARK: - Actions
     @IBAction func didTabRefreshButton(_ sender: Any) {
-        if viewModel?.locationManager.checkAuthorizationStatus() == false {
+        if LocationManager.shared.checkAuthorizationStatus() == false {
             self.showAccessDeniedAlert(type: .location)
         } else {
             Task {
@@ -329,8 +435,8 @@ class HomeViewController: UIViewController {
     // MARK: - Helper Methods
     // 카메라 위치 업데이트
     func updateCamera() {
-        let lat = viewModel?.locationManager.coordinate?.latitude ?? 0.0
-        let lon = viewModel?.locationManager.coordinate?.longitude ?? 0.0
+        let lat = LocationManager.shared.coordinate?.latitude ?? 0.0
+        let lon = LocationManager.shared.coordinate?.longitude ?? 0.0
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
         cameraUpdate.animation = .easeIn
         naverMapView.mapView.zoomLevel = 18.0

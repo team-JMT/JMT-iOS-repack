@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Map view configurations" minToolsVersion="14.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -71,19 +72,6 @@
                                             <action selector="didTabSearchGroupButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="ODk-Qc-OWq"/>
                                         </connections>
                                     </button>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lvm-VR-ZvW">
-                                        <rect key="frame" x="20" y="10" width="40" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="jNS-eL-oGi"/>
-                                            <constraint firstAttribute="width" constant="40" id="ppU-gE-x3h"/>
-                                        </constraints>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Kby-ey-tDj">
                                         <rect key="frame" x="68" y="13" width="118.33333333333331" height="34"/>
                                         <subviews>
@@ -116,20 +104,29 @@
                                             <action selector="didTabMyGroupButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="gDV-kx-s7M"/>
                                         </connections>
                                     </button>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tuZ-ka-v1F">
+                                        <rect key="frame" x="20" y="10" width="40" height="40"/>
+                                        <color key="backgroundColor" name="gray100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="OuY-w0-KDi"/>
+                                            <constraint firstAttribute="height" constant="40" id="QK7-Hk-84o"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="Lvm-VR-ZvW" firstAttribute="leading" secondItem="srQ-dG-9DL" secondAttribute="leading" constant="20" id="7MY-GE-kfv"/>
+                                    <constraint firstItem="Kby-ey-tDj" firstAttribute="leading" secondItem="tuZ-ka-v1F" secondAttribute="trailing" constant="8" id="2W9-d5-Q0h"/>
                                     <constraint firstAttribute="height" constant="65" id="8Bc-j9-5CX"/>
-                                    <constraint firstAttribute="bottom" secondItem="Lvm-VR-ZvW" secondAttribute="bottom" constant="15" id="Jqx-Ig-nXJ"/>
-                                    <constraint firstItem="Kby-ey-tDj" firstAttribute="centerY" secondItem="Lvm-VR-ZvW" secondAttribute="centerY" id="LjS-Fg-wic"/>
+                                    <constraint firstItem="Le4-u0-NBu" firstAttribute="centerY" secondItem="tuZ-ka-v1F" secondAttribute="centerY" id="E4Z-dv-Nez"/>
+                                    <constraint firstItem="gkf-SV-VfF" firstAttribute="centerY" secondItem="tuZ-ka-v1F" secondAttribute="centerY" id="HGV-Cs-fy4"/>
                                     <constraint firstItem="gkf-SV-VfF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Kby-ey-tDj" secondAttribute="trailing" constant="10" id="QJJ-co-RjV"/>
                                     <constraint firstItem="Le4-u0-NBu" firstAttribute="leading" secondItem="Kby-ey-tDj" secondAttribute="leading" id="VKK-II-ewP"/>
-                                    <constraint firstItem="gkf-SV-VfF" firstAttribute="centerY" secondItem="Lvm-VR-ZvW" secondAttribute="centerY" id="cBs-d7-Cac"/>
+                                    <constraint firstAttribute="bottom" secondItem="tuZ-ka-v1F" secondAttribute="bottom" constant="15" id="hN4-yl-ETj"/>
+                                    <constraint firstItem="tuZ-ka-v1F" firstAttribute="top" secondItem="srQ-dG-9DL" secondAttribute="top" constant="10" id="i8e-LX-N8w"/>
                                     <constraint firstItem="Le4-u0-NBu" firstAttribute="bottom" secondItem="Kby-ey-tDj" secondAttribute="bottom" id="kyj-9R-ab6"/>
+                                    <constraint firstItem="tuZ-ka-v1F" firstAttribute="leading" secondItem="srQ-dG-9DL" secondAttribute="leading" constant="20" id="nRp-6z-sNW"/>
                                     <constraint firstItem="Le4-u0-NBu" firstAttribute="top" secondItem="Kby-ey-tDj" secondAttribute="top" id="p2Q-2v-wfb"/>
                                     <constraint firstAttribute="trailing" secondItem="gkf-SV-VfF" secondAttribute="trailing" constant="20" id="u6Z-DU-fms"/>
-                                    <constraint firstItem="Kby-ey-tDj" firstAttribute="leading" secondItem="Lvm-VR-ZvW" secondAttribute="trailing" constant="8" id="yQa-uD-S6V"/>
                                     <constraint firstItem="Le4-u0-NBu" firstAttribute="trailing" secondItem="Kby-ey-tDj" secondAttribute="trailing" id="zz1-CP-JCz"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -159,7 +156,7 @@
                     </view>
                     <connections>
                         <outlet property="arrowImageView" destination="Tbt-SJ-j0h" id="lYb-F4-ONb"/>
-                        <outlet property="groupImageView" destination="Lvm-VR-ZvW" id="81b-Em-ptS"/>
+                        <outlet property="groupImageView" destination="tuZ-ka-v1F" id="wDn-Iv-Che"/>
                         <outlet property="groupNameButton" destination="Le4-u0-NBu" id="coi-pQ-egk"/>
                         <outlet property="groupNameLabel" destination="dJR-uj-C6w" id="npM-KZ-kji"/>
                         <outlet property="locationButton" destination="SWm-je-XpJ" id="bb7-fw-Rcz"/>
@@ -181,6 +178,9 @@
         <image name="LocationPin1" width="16" height="17"/>
         <image name="RefreshMap" width="36" height="36"/>
         <image name="Search" width="24" height="24"/>
+        <namedColor name="gray100">
+            <color red="0.94499999284744263" green="0.95300000905990601" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

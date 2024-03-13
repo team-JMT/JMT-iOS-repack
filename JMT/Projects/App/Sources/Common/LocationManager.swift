@@ -10,7 +10,6 @@ import CoreLocation
 import UIKit
 
 final class LocationManager: CLLocationManager {
-    
     static let shared = LocationManager()
     
     private override init() {
@@ -20,7 +19,7 @@ final class LocationManager: CLLocationManager {
         // 위치 정확도 (배터리 상황에 따라)
         self.desiredAccuracy = kCLLocationAccuracyBest
     }
-    
+//
     var coordinate: CLLocationCoordinate2D?
 
     var didUpdateLocations: (() -> Void)?
@@ -70,20 +69,20 @@ extension LocationManager: CLLocationManagerDelegate {
         self.stopUpdatingLocation()
     }
     
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        
-        isUpdatingLocation = false
-
-        switch manager.authorizationStatus {
-        case .notDetermined:
-            print("권한 설정 안함")
-            self.stopUpdatingLocation()
-        case .denied, .restricted:
-            print("권한 설정 거부")
-            self.stopUpdatingLocation()
-        case .authorizedAlways, .authorizedWhenInUse:
-            print("권한 설정")
-            self.startUpdatingLocation()
-        }
-    }
+//    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+//        
+//        isUpdatingLocation = false
+//
+//        switch manager.authorizationStatus {
+//        case .notDetermined:
+//            print("권한 설정 안함")
+//            self.stopUpdatingLocation()
+//        case .denied, .restricted:
+//            print("권한 설정 거부")
+//            self.stopUpdatingLocation()
+//        case .authorizedAlways, .authorizedWhenInUse:
+//            print("권한 설정")
+//            self.startUpdatingLocation()
+//        }
+//    }
 }
