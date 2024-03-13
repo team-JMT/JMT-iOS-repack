@@ -14,7 +14,6 @@ class GroupListBottomSheet: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
     }
 }
 
@@ -24,15 +23,22 @@ extension GroupListBottomSheet: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "nameCell", for: indexPath)
-        cell.textLabel?.text = viewModel?.groupList[indexPath.row].groupName ?? ""
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "nameCell", for: indexPath) as? GroupListCell else { return UITableViewCell() }
+        cell.setupData(imageUrl: viewModel?.groupList[indexPath.row].groupProfileImageUrl ?? "", name: viewModel?.groupList[indexPath.row].groupName ?? "", isSelected: viewModel?.groupList[indexPath.row].isSelected ?? false)
         return cell
     }
 }
 
 extension GroupListBottomSheet: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel?.didUpdateGroupName?(indexPath.row)
-        self.dismiss(animated: true)
+        Task {
+            do {
+                try await viewModel?.updateSelectedGroup(id: viewModel?.groupList[indexPath.row].groupId ?? 0)
+                viewModel?.didUpdateGroupName?(indexPath.row)
+                self.dismiss(animated: true)
+            } catch {
+                print(error)
+            }
+        }
     }
 }

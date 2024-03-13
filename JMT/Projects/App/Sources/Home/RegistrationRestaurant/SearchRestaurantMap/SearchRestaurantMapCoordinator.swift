@@ -29,7 +29,7 @@ class DefaultSearchRestaurantMapCoordinator: SearchRestaurantMapCoordinator {
         self.parentCoordinator = parentCoordinator
         self.finishDelegate = finishDelegate
     }
-    
+  
     func start() { }
     
     func start(info: SearchRestaurantsLocationModel?) {

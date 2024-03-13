@@ -9,9 +9,21 @@ import Foundation
 import UIKit
 
 class RegistrationRestaurantInfoViewModel {
-    weak var coordinator: RegistrationRestaurantInfoCoordinator?
     
-    var didCompletedFilterType: (() -> Void)?
+    // MARK: - Properties
+    // 데이터와 관련된 프로퍼티들을 선언하는 부분입니다.
+    weak var coordinator: RegistrationRestaurantInfoCoordinator?
+    var info: SearchRestaurantsLocationModel?
+    
+    var categoryData: [(String, Bool, UIImage)] = []
+    var isSelectedCategory = false
+    var selectedImages = [UIImage]()
+    var commentString: String = ""
+    var isDrinking = false
+    var drinkingComment: String = ""
+    var tags = [String]()
+    
+    var didUpdateCategory: (() -> Void)?
     var didCompletedSelectedImages: (() -> Void)?
     var didCompletedCommentString: (() -> Void)?
     var didCompletedIsDrinking: (() -> Void)?
@@ -20,25 +32,83 @@ class RegistrationRestaurantInfoViewModel {
     var didCompletedDeleteTag: (() -> Void)?
     var didCompletedCheckInfo: ((checkInfoType) -> Void)?
     
-    var info: SearchRestaurantsLocationModel?
+    // MARK: - Initialization
+    // 뷰모델 초기화와 관련된 로직을 담당하는 부분입니다.
     
-    let typeNames = ["한식", "일식", "중식", "양식", "퓨전", "카페", "주점", "기타"]
+    // MARK: - Data Binding
+    // 뷰와 뷰모델 간의 데이터 바인딩을 설정하는 부분입니다.
     
-    var isSelectedFilterType: Bool = false
-    
-    var filterType: Int = 999999
-    var selectedImages = [UIImage]()
-    var commentString: String = ""
-    var isDrinking = false
-    var drinkingComment: String = ""
-    var tags = [String]()
-    
-    func updateIsSelectedFilterType() {
-        isSelectedFilterType = true
+    // MARK: - Data Fetching
+    // 외부 소스나 모델로부터 데이터를 가져오는 메소드들을 모아두는 부분입니다.
+    func registrationRestaurantLocation() async throws -> Int {
+        
+        do {
+            if let info = self.info {
+                let request = RegistrationRestaurantLocationRequest(
+                    placeName: info.placeName,
+                    distance: String(0),
+                    placeUrl: info.placeUrl,
+                    categoryName: info.categoryName,
+                    addressName: info.addressName,
+                    roadAddressName: info.roadAddressName,
+                    id: info.id,
+                    phone: info.phone,
+                    categoryGroupCode: info.categoryGroupCode,
+                    categoryGroupName: info.categoryGroupName,
+                    x: String(info.x),
+                    y: String(info.y))
+                
+                let response = try await RegistrationRestaurantAPI.registrationRestaurantLocationAsync(request: request)
+                return response.data
+            }
+        } catch {
+            print(error)
+            return 0
+        }
+        return 0
     }
     
-    func updateFilterType(type: Int) {
-        self.filterType = type
+    func registrationRestaurantAsync(restaurantLocationId: Int) async throws {
+        
+        do {
+            if let info = self.info {
+                
+                let categoryId = categoryData.firstIndex(where: {$0.1 == true }).map({Int($0)}) ?? 0
+                
+                let recommendMenu = tags.joined()
+                
+                let request = RegistrationRestaurantRequest(
+                    name: info.placeName,
+                    introduce: commentString,
+                    categoryId: categoryId + 1,
+                    canDrinkLiquor: isDrinking,
+                    goWellWithLiquor: drinkingComment,
+                    recommendMenu: recommendMenu,
+                    restaurantLocationId: restaurantLocationId,
+                    groupId: UserDefaultManager.selectedGroupId)
+                
+                let response = try await RegistrationRestaurantAPI.registrationRestaurantAsync(request: request, images: selectedImages)
+                print(response.data.recommendRestaurantId, response.data.restaurantLocationId)
+            }
+        } catch {
+            print("3333", error)
+        }
+        
+        
+    }
+    
+    
+    
+    // MARK: - Utility Methods
+    // 다양한 유틸리티 메소드들을 모아두는 부분입니다. 예를 들어, 날짜 포매팅이나 데이터 검증 등입니다.
+    func updateSelectedCategory(row: Int) {
+        for (index, _) in categoryData.enumerated() {
+            if index == row {
+                categoryData[index].1 = true
+            } else {
+                categoryData[index].1 = false
+            }
+        }
     }
     
     func updateSelectedImages(images: [UIImage]) {
@@ -118,7 +188,6 @@ extension RegistrationRestaurantInfoViewModel {
     func splitString(in text: String) -> [String] {
     
         let strings = text.split(separator: "#").map({ String($0).trimmingCharacters(in: .whitespacesAndNewlines) })
-        print(strings)
         
         let filteredStrings = strings.filter { $0.range(of: "^[가-힣]+$", options: .regularExpression) != nil }
         
@@ -145,33 +214,36 @@ extension RegistrationRestaurantInfoViewModel {
 extension RegistrationRestaurantInfoViewModel {
     
     enum checkInfoType {
-        case filterType
+        case category
         case commentString
         case drinkingComment
         case tags
     }
     
-    func checkNotInfo() {
-        if filterType == 999999 {
-            didCompletedCheckInfo?(.filterType)
-            return
+    func checkNotInfo() -> Bool {
+
+        if isSelectedCategory == false {
+            didCompletedCheckInfo?(.category)
+            return false
         }
         
         if commentString == "" {
             didCompletedCheckInfo?(.commentString)
-            return
+            return false
         }
         
         if isDrinking == true {
             if drinkingComment == "" {
                 didCompletedCheckInfo?(.drinkingComment)
-                return
+                return false
             }
         }
         
         if tags.isEmpty == true {
             didCompletedCheckInfo?(.tags)
-            return
+            return false
         }
+        
+        return true
     }
 }

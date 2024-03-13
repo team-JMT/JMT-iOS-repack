@@ -19,7 +19,7 @@ protocol HomeCoordinator: Coordinator {
     func showGroupTab()
     
     func setDetailRestaurantCoordinator()
-    func showDetailRestaurantViewController(info: SearchMapRestaurantItems)
+    func showDetailRestaurantViewController(id: Int)
 }
 
 class DefaultHomeCoordinator: HomeCoordinator {
@@ -38,7 +38,6 @@ class DefaultHomeCoordinator: HomeCoordinator {
     func start() {
         let homeViewController = HomeViewController.instantiateFromStoryboard(storyboardName: "Home") as HomeViewController
         homeViewController.viewModel?.coordinator = self
-    
         self.navigationController?.pushViewController(homeViewController, animated: true)
     }
     
@@ -91,13 +90,13 @@ class DefaultHomeCoordinator: HomeCoordinator {
         childCoordinators.append(coordinator)
     }
     
-    func showDetailRestaurantViewController(info: SearchMapRestaurantItems) {
+    func showDetailRestaurantViewController(id: Int) {
         if getChildCoordinator(.restaurantDetail) == nil {
             setDetailRestaurantCoordinator()
         }
         
         let coordinator = getChildCoordinator(.restaurantDetail) as! DefaultRestaurantDetailCoordinator
-        coordinator.start(info: info)
+        coordinator.start(id: id)
     }
     
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {

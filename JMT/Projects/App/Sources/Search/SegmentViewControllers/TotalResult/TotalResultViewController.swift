@@ -41,7 +41,7 @@ class TotalResultViewController: UIViewController {
             }
         }
         
-        layout.register(GrayBackgroundViewInset.self, forDecorationViewOfKind: "GrayBackgroundViewInset")
+        layout.register(CollectionBackgroundViewInset.self, forDecorationViewOfKind: "BackgroundViewInset")
         return layout
     }
     
@@ -71,7 +71,7 @@ class TotalResultViewController: UIViewController {
         ]
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
 
         return section
@@ -103,7 +103,7 @@ class TotalResultViewController: UIViewController {
         ]
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundViewInset")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
 
         return section

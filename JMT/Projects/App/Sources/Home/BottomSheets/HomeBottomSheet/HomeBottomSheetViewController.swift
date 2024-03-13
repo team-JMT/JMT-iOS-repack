@@ -11,6 +11,7 @@ import FloatingPanel
 
 class HomeBottomSheetViewController: UIViewController {
     
+    // MARK: - Properties
     var viewModel: HomeViewModel?
     var fpc: FloatingPanelController!
     
@@ -18,15 +19,11 @@ class HomeBottomSheetViewController: UIViewController {
     @IBOutlet weak var moveTopButton: UIButton!
     @IBOutlet weak var addButton: UIButton!
     
-    
     @IBOutlet weak var bottomContainerView: UIView!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var doneButton: UIButton!
     
-    var filterTableViewHight: Double = 0.0
-    
-    var testData = [Int]()
-    
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,6 +37,11 @@ class HomeBottomSheetViewController: UIViewController {
         setupUI()
         self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
         
+        setupBind()
+    }
+    
+    // MARK: - SetupBindings
+    func setupBind() {
         viewModel?.didUpdateSkeletonView = {
             self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
         }
@@ -72,6 +74,29 @@ class HomeBottomSheetViewController: UIViewController {
                     print(error)
                 }
             }
+        }
+    }
+    
+    // MARK: - SetupData
+    
+    // MARK: - SetupUI
+    func setupUI() {
+        moveTopButton.layer.cornerRadius = moveTopButton.frame.height / 2
+        addButton.layer.cornerRadius = addButton.frame.height / 2
+        
+        // 리셋 버튼
+        resetButton.layer.cornerRadius = 8
+        resetButton.layer.borderColor = JMTengAsset.gray200.color.cgColor
+        resetButton.layer.borderWidth = 1
+        
+        // 확인 버튼
+        doneButton.layer.cornerRadius = 8
+    }
+    
+    func setupBottomContainerView() {
+        fpc.view.addSubview(bottomContainerView)
+        bottomContainerView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
     
@@ -189,36 +214,7 @@ class HomeBottomSheetViewController: UIViewController {
         return section
     }
     
-    func setupUI() {
-        moveTopButton.layer.cornerRadius = moveTopButton.frame.height / 2
-        addButton.layer.cornerRadius = addButton.frame.height / 2
-        
-        // 리셋 버튼
-        resetButton.layer.cornerRadius = 8
-        resetButton.layer.borderColor = JMTengAsset.gray200.color.cgColor
-        resetButton.layer.borderWidth = 1
-        
-        // 확인 버튼
-        doneButton.layer.cornerRadius = 8
-    }
-    
-    func setupBottomContainerView() {
-        fpc.view.addSubview(bottomContainerView)
-        bottomContainerView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-        }
-    }
-    
-    func hiddenBottomSheetButton() {
-        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
-            moveTopButton.isHidden = true
-            addButton.isHidden = true
-        } else {
-            moveTopButton.isHidden = false
-            addButton.isHidden = false
-        }
-    }
-    
+    // MARK: - Actions
     @IBAction func didTabMoveTopButton(_ sender: Any) {
         bottomSheetCollectionView.setContentOffset(CGPoint(x: 0, y: -bottomSheetCollectionView.contentInset.top), animated: true)
     }
@@ -238,8 +234,30 @@ class HomeBottomSheetViewController: UIViewController {
         bottomContainerView.removeFromSuperview()
         fpc.dismiss(animated: true)
     }
+    
+    // MARK: - Helper Methods
+    func hiddenBottomSheetButton() {
+        if viewModel?.popularRestaurants.isEmpty == true && viewModel?.restaurants.isEmpty == true {
+            moveTopButton.isHidden = true
+            addButton.isHidden = true
+        } else {
+            moveTopButton.isHidden = false
+            addButton.isHidden = false
+        }
+    }
+    
+  
+    
+   
+    
+
+    
+
+    
+
 }
 
+// MARK: - CollectionView Delegate
 extension HomeBottomSheetViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
@@ -268,13 +286,13 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
             guard viewModel?.popularRestaurants.isEmpty == false else { return }
             
             if let info = viewModel?.popularRestaurants[indexPath.row] {
-                viewModel?.coordinator?.showDetailRestaurantViewController(info: info)
+                viewModel?.coordinator?.showDetailRestaurantViewController(id: viewModel?.popularRestaurants[indexPath.row].id ?? 0)
             }
         case 1:
             guard viewModel?.restaurants.isEmpty == false else { return }
             
             if let info = viewModel?.restaurants[indexPath.row] {
-                viewModel?.coordinator?.showDetailRestaurantViewController(info: info)
+                viewModel?.coordinator?.showDetailRestaurantViewController(id: viewModel?.restaurants[indexPath.row].id ?? 0)
             }
         default:
             return
@@ -282,6 +300,7 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
     }
 }
 
+// MARK: - CollectionView DataSource
 extension HomeBottomSheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if viewModel?.isLodingData == true {
@@ -370,6 +389,7 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - SkeletonCollectionView DataSource
 extension HomeBottomSheetViewController: SkeletonCollectionViewDataSource {
     
     func numSections(in collectionSkeletonView: UICollectionView) -> Int {
@@ -399,6 +419,7 @@ extension HomeBottomSheetViewController: SkeletonCollectionViewDataSource {
     }
 }
 
+// MARK: - HomeFilterHeaderView Delegate
 extension HomeBottomSheetViewController: HomeFilterHeaderViewDelegate {
     func didTabFilter1Button() {
         viewModel?.updateSortType(type: .sort)
@@ -418,13 +439,36 @@ extension HomeBottomSheetViewController: HomeFilterHeaderViewDelegate {
     }
 }
 
+// MARK: - PopularEmptyCell Delegate
 extension HomeBottomSheetViewController: PopularEmptyCellDelegate {
     func registrationRestaurant() {
         viewModel?.coordinator?.showSearchRestaurantViewController()
     }
 }
 
+// MARK: - FloatingPanelController Delegate
+extension HomeBottomSheetViewController: FloatingPanelControllerDelegate {
+    func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
 
+        switch viewModel?.sortType {
+        case .sort:
+            return SortFloatingPanelLayout()
+        case .category:
+            return CategoryFloatingPanelLayout()
+        case .drinking:
+            return DrinkingFloatingPanelLayout()
+        case .none:
+            return SortFloatingPanelLayout()
+        }
+    }
+    
+    // 바텀시트 사라지기 전 지우기
+    func floatingPanelWillRemove(_ fpc: FloatingPanelController) {
+        bottomContainerView.removeFromSuperview()
+    }
+}
+
+// MARK: - Extention
 extension HomeBottomSheetViewController {
     func showBottomSheetView() {
         
@@ -454,26 +498,7 @@ extension HomeBottomSheetViewController {
     }
 }
 
-extension HomeBottomSheetViewController: FloatingPanelControllerDelegate {
-    func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
 
-        switch viewModel?.sortType {
-        case .sort:
-            return SortFloatingPanelLayout()
-        case .category:
-            return CategoryFloatingPanelLayout()
-        case .drinking:
-            return DrinkingFloatingPanelLayout()
-        case .none:
-            return SortFloatingPanelLayout()
-        }
-    }
-    
-    // 바텀시트 사라지기 전 지우기
-    func floatingPanelWillRemove(_ fpc: FloatingPanelController) {
-        bottomContainerView.removeFromSuperview()
-    }
-}
 
 
 

@@ -20,8 +20,12 @@ class DefaultTabBarController: UITabBarController {
 
 extension DefaultTabBarController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        if let viewControllerIndex = tabBarController.viewControllers?.firstIndex(of: viewController) {
-           
+        if let nvc = viewController as? UINavigationController {
+            let rootViewController = nvc.viewControllers.first
+            
+            if let homeVC = rootViewController as? HomeViewController {
+                homeVC.updateViewBasedOnGroupStatus()
+            }
         }
     }
 }

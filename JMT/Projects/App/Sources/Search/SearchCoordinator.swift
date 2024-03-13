@@ -10,6 +10,9 @@ import UIKit
 protocol SearchCoordinator: Coordinator {
     func setRestaurantDetailCoordinator()
     func showRestaurantDetailViewController()
+    
+    func setButtonPopupCoordinator()
+    func showButtonPopupViewController()
 }
 
 class DefaultSearchCoordinator: SearchCoordinator {
@@ -61,10 +64,26 @@ class DefaultSearchCoordinator: SearchCoordinator {
         coordinator.start()
     }
     
+    func setButtonPopupCoordinator() {
+        let coordinator = DefaultButtonPopupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showButtonPopupViewController() {
+        if getChildCoordinator(.buttonPopup) == nil {
+            setButtonPopupCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.buttonPopup) as! ButtonPopupCoordinator
+        coordinator.start()
+    }
+    
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil
         
         switch type {
+        case .buttonPopup:
+            childCoordinator = childCoordinators.first(where: { $0 is ButtonPopupCoordinator })
         case .restaurantDetail:
             childCoordinator = childCoordinators.first(where: { $0 is RestaurantDetailCoordinator })
         default:

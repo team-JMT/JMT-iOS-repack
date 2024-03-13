@@ -21,8 +21,20 @@ class JoinBottonSheetViewController: UIViewController {
     }
     
     @IBAction func didTabCreateGroupButton(_ sender: Any) {
-        self.dismiss(animated: false)
-        viewModel?.coordinator?.showGroupTab()
+//        self.dismiss(animated: false)
+        
+        print("권한 그룹 가입")
+        viewModel?.isFirstLodingData = true
+        viewModel?.groupList.append(MyGroupData(groupId: 5,
+                                                groupName: "테스트 그룹",
+                                                groupIntroduce: "",
+                                                groupProfileImageUrl: "",
+                                                groupBackgroundImageUrl: "",
+                                                privateGroup: false,
+                                                isSelected: true))
+        
+//        viewModel?.coordinator?.showGroupTab()
+        
         
     }
     

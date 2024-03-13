@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Map view configurations" minToolsVersion="14.0"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -72,41 +71,66 @@
                                             <action selector="didTabSearchGroupButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="ODk-Qc-OWq"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hi9-je-wVX">
-                                        <rect key="frame" x="68" y="18" width="92" height="24"/>
-                                        <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="20"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="그룹 이름" image="ArrowRight">
-                                            <color key="titleColor" name="gray900"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" name="gray900"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="didTabMyGroupButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="SdG-Lj-rfi"/>
-                                        </connections>
-                                    </button>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lvm-VR-ZvW">
                                         <rect key="frame" x="20" y="10" width="40" height="40"/>
-                                        <color key="backgroundColor" name="gray100"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="jNS-eL-oGi"/>
                                             <constraint firstAttribute="width" constant="40" id="ppU-gE-x3h"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                                <real key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </imageView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Kby-ey-tDj">
+                                        <rect key="frame" x="68" y="13" width="118.33333333333331" height="34"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="                    " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dJR-uj-C6w">
+                                                <rect key="frame" x="0.0" y="0.0" width="92.333333333333329" height="34"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="20"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                                        <real key="value" value="8"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ArrowRight" translatesAutoresizingMaskIntoConstraints="NO" id="Tbt-SJ-j0h">
+                                                <rect key="frame" x="100.33333333333334" y="0.0" width="18" height="34"/>
+                                            </imageView>
+                                        </subviews>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                                <real key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Le4-u0-NBu">
+                                        <rect key="frame" x="68" y="13" width="118.33333333333331" height="34"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <connections>
+                                            <action selector="didTabMyGroupButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="gDV-kx-s7M"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="Lvm-VR-ZvW" firstAttribute="leading" secondItem="srQ-dG-9DL" secondAttribute="leading" constant="20" id="7MY-GE-kfv"/>
-                                    <constraint firstItem="gkf-SV-VfF" firstAttribute="centerY" secondItem="hi9-je-wVX" secondAttribute="centerY" id="7cX-q5-Y8h"/>
                                     <constraint firstAttribute="height" constant="65" id="8Bc-j9-5CX"/>
                                     <constraint firstAttribute="bottom" secondItem="Lvm-VR-ZvW" secondAttribute="bottom" constant="15" id="Jqx-Ig-nXJ"/>
-                                    <constraint firstItem="hi9-je-wVX" firstAttribute="centerY" secondItem="Lvm-VR-ZvW" secondAttribute="centerY" id="O42-hc-AUz"/>
+                                    <constraint firstItem="Kby-ey-tDj" firstAttribute="centerY" secondItem="Lvm-VR-ZvW" secondAttribute="centerY" id="LjS-Fg-wic"/>
+                                    <constraint firstItem="gkf-SV-VfF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Kby-ey-tDj" secondAttribute="trailing" constant="10" id="QJJ-co-RjV"/>
+                                    <constraint firstItem="Le4-u0-NBu" firstAttribute="leading" secondItem="Kby-ey-tDj" secondAttribute="leading" id="VKK-II-ewP"/>
+                                    <constraint firstItem="gkf-SV-VfF" firstAttribute="centerY" secondItem="Lvm-VR-ZvW" secondAttribute="centerY" id="cBs-d7-Cac"/>
+                                    <constraint firstItem="Le4-u0-NBu" firstAttribute="bottom" secondItem="Kby-ey-tDj" secondAttribute="bottom" id="kyj-9R-ab6"/>
+                                    <constraint firstItem="Le4-u0-NBu" firstAttribute="top" secondItem="Kby-ey-tDj" secondAttribute="top" id="p2Q-2v-wfb"/>
                                     <constraint firstAttribute="trailing" secondItem="gkf-SV-VfF" secondAttribute="trailing" constant="20" id="u6Z-DU-fms"/>
-                                    <constraint firstItem="hi9-je-wVX" firstAttribute="leading" secondItem="Lvm-VR-ZvW" secondAttribute="trailing" constant="8" id="yHv-5H-cXk"/>
+                                    <constraint firstItem="Kby-ey-tDj" firstAttribute="leading" secondItem="Lvm-VR-ZvW" secondAttribute="trailing" constant="8" id="yQa-uD-S6V"/>
+                                    <constraint firstItem="Le4-u0-NBu" firstAttribute="trailing" secondItem="Kby-ey-tDj" secondAttribute="trailing" id="zz1-CP-JCz"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
@@ -134,8 +158,10 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <connections>
+                        <outlet property="arrowImageView" destination="Tbt-SJ-j0h" id="lYb-F4-ONb"/>
                         <outlet property="groupImageView" destination="Lvm-VR-ZvW" id="81b-Em-ptS"/>
-                        <outlet property="groupNameButton" destination="hi9-je-wVX" id="aRm-U5-xjk"/>
+                        <outlet property="groupNameButton" destination="Le4-u0-NBu" id="coi-pQ-egk"/>
+                        <outlet property="groupNameLabel" destination="dJR-uj-C6w" id="npM-KZ-kji"/>
                         <outlet property="locationButton" destination="SWm-je-XpJ" id="bb7-fw-Rcz"/>
                         <outlet property="locationButtonBottom" destination="5TB-hz-1Ev" id="3gr-Z9-apu"/>
                         <outlet property="locationStackView" destination="jEB-fM-TdX" id="dU7-yG-9c6"/>
@@ -155,12 +181,6 @@
         <image name="LocationPin1" width="16" height="17"/>
         <image name="RefreshMap" width="36" height="36"/>
         <image name="Search" width="24" height="24"/>
-        <namedColor name="gray100">
-            <color red="0.94499999284744263" green="0.95300000905990601" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="gray900">
-            <color red="0.086000002920627594" green="0.10199999809265137" blue="0.11400000005960464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

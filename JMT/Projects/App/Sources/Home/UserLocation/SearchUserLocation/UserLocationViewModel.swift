@@ -85,24 +85,24 @@ extension UserLocationViewModel {
 extension UserLocationViewModel {
     
     func fetchRecentLocations() {
-        recentLocations = DefaultUserDefaultService.getRecentSearchKeywords()
+        recentLocations = UserDefaultManager.getRecentSearchKeywords(type: UserDefaultManager.Keys.recenLocationKeywords)
         onSuccess?()
     }
 
     func saveRecentLocation(keyword: String) {
-        DefaultUserDefaultService.saveSearchKeyword(keyword)
+        UserDefaultManager.saveSearchKeyword(keyword, type: UserDefaultManager.Keys.recenLocationKeywords)
     }
     
     func deleteRecentLocation(_ row: Int) {
         let keywoard = recentLocations[row]
         recentLocations.remove(at: row)
-        DefaultUserDefaultService.deleteSearchKeyword(keywoard)
+        UserDefaultManager.deleteSearchKeyword(keywoard, type: UserDefaultManager.Keys.recenLocationKeywords)
         onSuccess?()
     }
     
     func deleteAllRecentLocation() {
         recentLocations.removeAll()
-        DefaultUserDefaultService.removeAllSearchKeywords()
+        UserDefaultManager.removeAllSearchKeywords(type: UserDefaultManager.Keys.recenLocationKeywords)
         onSuccess?()
     }
 }

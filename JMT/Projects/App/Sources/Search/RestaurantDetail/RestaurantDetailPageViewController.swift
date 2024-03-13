@@ -14,6 +14,8 @@ protocol RestaurantDetailPageViewControllerDelegate: AnyObject {
 class RestaurantDetailPageViewController: UIPageViewController {
     
     weak var pageViewDelegate: RestaurantDetailPageViewControllerDelegate?
+    weak var restaurantDetailDelegate: RestaurantDetailViewControllerDelegate?
+    
     var vcArray: [UIViewController] = []
 
     override func viewDidLoad() {
@@ -25,6 +27,18 @@ class RestaurantDetailPageViewController: UIPageViewController {
         if let firstVC = vcArray.first {
             setViewControllers([firstVC], direction: .forward, animated: true)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let infoViewController = vcArray[0] as! RestaurantDetailInfoViewController
+        let photoViewController = vcArray[1] as! RestaurantDetailPhotoViewController
+        let reviewViewController = vcArray[2] as! RestaurantDetailReviewViewController
+        
+        infoViewController.delegate = restaurantDetailDelegate
+        photoViewController.delegate = restaurantDetailDelegate
+        reviewViewController.delegate = restaurantDetailDelegate
     }
 }
 

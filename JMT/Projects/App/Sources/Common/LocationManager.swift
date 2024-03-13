@@ -7,23 +7,24 @@
 
 import Foundation
 import CoreLocation
+import UIKit
 
 final class LocationManager: CLLocationManager {
     
-    var didUpdateLocations: ((CLLocationCoordinate2D?) -> Void)?
-    var isUpdatingLocation = false
+    static let shared = LocationManager()
     
-    override init() {
+    private override init() {
         super.init()
         
         self.delegate = self
-        
-        // 권한 요청
-        self.requestWhenInUseAuthorization()
-        
         // 위치 정확도 (배터리 상황에 따라)
         self.desiredAccuracy = kCLLocationAccuracyBest
     }
+    
+    var coordinate: CLLocationCoordinate2D?
+
+    var didUpdateLocations: (() -> Void)?
+    var isUpdatingLocation = false
     
     func fetchLocations() {
         isUpdatingLocation = false
@@ -32,7 +33,10 @@ final class LocationManager: CLLocationManager {
     
     func checkAuthorizationStatus() -> Bool {
         switch CLLocationManager.authorizationStatus() {
-        case .notDetermined, .restricted, .denied:
+        case .notDetermined:
+            print("권한 설정 안함")
+            return false
+        case .restricted, .denied:
             print("권한 거부")
             return false
         case .authorizedAlways, .authorizedWhenInUse:
@@ -47,11 +51,12 @@ extension LocationManager: CLLocationManagerDelegate {
         
         if !isUpdatingLocation {
             guard let location = locations.first else { return }
-            let coordinate = location.coordinate
+            coordinate = location.coordinate
             
             print("권한 설정 업데이트 ====")
             
-            didUpdateLocations?(coordinate)
+            didUpdateLocations?()
+            
             isUpdatingLocation = true
             self.stopUpdatingLocation()
         }
@@ -61,21 +66,21 @@ extension LocationManager: CLLocationManagerDelegate {
         
         print("권한 설정 업데이트 실패 ====")
 
-        didUpdateLocations?(nil)
+//        didUpdateLocations?(nil)
         self.stopUpdatingLocation()
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         
         isUpdatingLocation = false
-        
+
         switch manager.authorizationStatus {
         case .notDetermined:
             print("권한 설정 안함")
-            self.startUpdatingLocation()
+            self.stopUpdatingLocation()
         case .denied, .restricted:
             print("권한 설정 거부")
-            self.startUpdatingLocation()
+            self.stopUpdatingLocation()
         case .authorizedAlways, .authorizedWhenInUse:
             print("권한 설정")
             self.startUpdatingLocation()

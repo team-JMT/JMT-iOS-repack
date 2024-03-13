@@ -9,6 +9,5 @@ import Foundation
 
 class RestaurantDetailReviewViewModel {
     weak var coordinator: RestaurantDetailCoordinator?
-    
-    var reviews = ["asdasdasdasdasdasdasdsdfasdjflksjdlasjdlkajsldkjaslkdjalskjdlaksjlkasjlfkasjdlkasjflkasjdlkasjdlaksjflaksjflaksjasdasda", "asdasdasafagdfgasdfasdgahfasgasdfasdgasdhasdfasdasdhasdfasdhashasdasdf", "asdasfasdasdasdas", "asdasgsagfdgasdfadsfasdgasdfasdg", "asdasddsfasdgasdgasdfasdfmashdfjkhajwdhkasdhakhdasbfmn,sdas,dfb ,asdfhasdhfkasdfkashdf", "alsdhlkasdhflkjasdhflkjahsdlfkjahsdlkf", "asjkdhladsjfhlkasjdhflkajsdhflkajsdhf","asdflkajhsdlfkjhasdlkfjhalsdkjfhalskdjfhlaksdjfh"]
+
 }
