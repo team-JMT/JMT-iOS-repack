@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 protocol SearchRestaurantMapCoordinator: Coordinator {
-    func start(info: SearchRestaurantsModel?)
+    func start(info: SearchRestaurantsLocationModel?)
     func setRegistrationRestaurantInfoCoordinator()
-    func showRegistrationRestaurantInfoViewController(info: SearchRestaurantsModel?)
+    func showRegistrationRestaurantInfoViewController(info: SearchRestaurantsLocationModel?)
 }
 
 class DefaultSearchRestaurantMapCoordinator: SearchRestaurantMapCoordinator {
@@ -32,7 +32,7 @@ class DefaultSearchRestaurantMapCoordinator: SearchRestaurantMapCoordinator {
   
     func start() { }
     
-    func start(info: SearchRestaurantsModel?) {
+    func start(info: SearchRestaurantsLocationModel?) {
         let searchRestaurantMapViewController = SearchRestaurantMapViewController.instantiateFromStoryboard(storyboardName: "SearchRestaurantMap") as SearchRestaurantMapViewController
         searchRestaurantMapViewController.viewModel?.coordinator = self
         searchRestaurantMapViewController.viewModel?.info = info
@@ -44,7 +44,7 @@ class DefaultSearchRestaurantMapCoordinator: SearchRestaurantMapCoordinator {
         childCoordinators.append(coordinator)
     }
     
-    func showRegistrationRestaurantInfoViewController(info: SearchRestaurantsModel?) {
+    func showRegistrationRestaurantInfoViewController(info: SearchRestaurantsLocationModel?) {
         if getChildCoordinator(.registrationRestaurantInfo) == nil {
             setRegistrationRestaurantInfoCoordinator()
         }

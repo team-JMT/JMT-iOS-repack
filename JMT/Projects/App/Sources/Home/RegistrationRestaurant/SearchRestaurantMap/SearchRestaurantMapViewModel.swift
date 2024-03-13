@@ -12,7 +12,7 @@ class SearchRestaurantMapViewModel {
     // MARK: - Properties
     // 데이터와 관련된 프로퍼티들을 선언하는 부분입니다.
     weak var coordinator: SearchRestaurantMapCoordinator?
-    var info: SearchRestaurantsModel?
+    var info: SearchRestaurantsLocationModel?
     
     // MARK: - Initialization
     // 뷰모델 초기화와 관련된 로직을 담당하는 부분입니다.

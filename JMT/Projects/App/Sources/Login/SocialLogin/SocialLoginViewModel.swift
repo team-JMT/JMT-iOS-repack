@@ -16,12 +16,16 @@ enum UserLoginAction: String {
 
 class SocialLoginViewModel {
     weak var coordinator: SocialLoginCoordinator?
+    var isEnabled = true
     
-   func startGoogleLogin() {
+    func startGoogleLogin() {
+        
+        isEnabled = false
+        
         coordinator?.showGoogleLoginViewController(completion: { result in
             switch result {
             case .success(let idToken):
-                                
+                
                 SocialLoginAPI.googleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
                     case .success(let actionStr):
@@ -34,7 +38,7 @@ class SocialLoginViewModel {
                             case .LOG_IN:
                                 let appCoordinator = self.coordinator?.getTopCoordinator()
                                 appCoordinator?.showTabBarViewController()
-
+                                
                             }
                         }
                     case .failure(let error):
@@ -44,9 +48,11 @@ class SocialLoginViewModel {
             case .failure(let error):
                 print("startGoogleLogin 실패!!", error)
             }
+            
+            self.isEnabled = true
         })
     }
-  
+    
     func startAppleLogin() {
         // 클로저 등록
         coordinator?.onAppleLoginSuccess = { [weak self] result in

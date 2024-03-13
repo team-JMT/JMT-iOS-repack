@@ -1,5 +1,5 @@
 //
-//  SearchRestaurantsModel.swift
+//  SearchRestaurantsOutBoundModel.swift
 //  JMTeng
 //
 //  Created by PKW on 3/12/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SearchRestaurantsModel {
+struct SearchRestaurantsOutBoundModel {
     let id: Int
     let groupName: String?
     let name: String

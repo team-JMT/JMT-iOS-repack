@@ -9,9 +9,11 @@ import UIKit
 import NMapsMap
 import FloatingPanel
 import SkeletonView
+import Kingfisher
 
 class HomeViewController: UIViewController {
     
+    // MARK: - Properties
     var viewModel: HomeViewModel?
     var restaurantListFpc: FloatingPanelController!
     var joinGroupFpc: FloatingPanelController!
@@ -21,8 +23,10 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var naverMapView: NMFNaverMapView!
     
     @IBOutlet weak var groupImageView: UIImageView!
+    @IBOutlet weak var groupNameLabel: UILabel!
     @IBOutlet weak var groupNameButton: UIButton!
- 
+    @IBOutlet weak var arrowImageView: UIImageView!
+    
     @IBOutlet weak var topDummyView: UIView!
     @IBOutlet weak var topContainerView: UIView!
     @IBOutlet weak var topContainerViewHeight: NSLayoutConstraint!
@@ -30,117 +34,142 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var locationStackView: UIStackView!
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
+   
+    var isFirstApp = true
     
-    var isInitialDataLoaded = false
-    var isShowRestaurantBottomSheet = false
-    
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 앱 처음 실행시 위치 권한 체크
-        if !UserDefaultManager.hasLocationRequstBefore {
-            UserDefaultManager.hasLocationRequstBefore = true
-            
-            // 위치 권한을 설정하지 않았을때 위치 권한 요청하기
-            viewModel?.locationManager.requestWhenInUseAuthorization()
-        }
+        self.view.showAnimatedGradientSkeleton()
+        setupUI()
+        setupRestaurantBottomSheetUI()
+        
+        fetchData()
         
         setupBind()
-        setupUI()
-        self.view.showAnimatedGradientSkeleton()
-        
+
         naverMapView.mapView.addCameraDelegate(delegate: self)
-        
-        fetchJoinGroup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-     
     }
     
-    func fetchJoinGroup() {
-        Task {
-            do {
-                let isGroupJoined = try await viewModel?.fetchJoinGroup() ?? false
-            
-                if isGroupJoined {
-                    setupRestaurantUI()
-                    fetchData()
-                } else {
-                    setupJoinGroupUI()
-                }
-            } catch {
-                print(error)
-            }
-        }
-    }
-
-    func updateViewBasedOnGroupStatus() {
-        if viewModel?.groupList.isEmpty == true {
+    // MARK: - SetupBindings
+    func setupBind() {
         
-            if isShowRestaurantBottomSheet {
-                restaurantListFpc.move(to: .tip, animated: false)
-            }
+        viewModel?.didUpdateGroupName = { index in
+            self.groupNameButton.setTitle(self.viewModel?.groupList[index].groupName ?? "", for: .normal)
             
-            setupJoinGroupUI()
-        } else {
-            if viewModel?.popularRestaurants.isEmpty == true {
-                setupRestaurantUI()
-                fetchData()
+            if let url = URL(string: self.viewModel?.groupList[index].groupProfileImageUrl ?? "")  {
+                self.groupImageView.kf.setImage(with: url)
+            }
+        
+            Task {
+                do {
+                    try await self.fetchGroupRestaurantData()
+                } catch {
+                    print(error)
+                }
             }
         }
+    
+        viewModel?.displayAlertHandler = {
+            self.showAccessDeniedAlert(type: .location)
+        }
+        
+        viewModel?.locationManager.didUpdateLocations = {
+            if self.isFirstApp == true {
+                self.isFirstApp = false
+                return
+            }
+            
+            self.fetchData()
+        }
     }
-
+    
+    // MARK: - FetchData
+    // 전체 데이터 패치 관련 메소드
     func fetchData() {
         Task {
             do {
-                if isShowRestaurantBottomSheet {
-                    restaurantListFpc.move(to: .half, animated: false)
+                
+                print("권한 최초 실행", viewModel?.locationManager.coordinate)
+                // 앱 실행시 첫 데이터 로딩 여부
+                guard viewModel?.isFirstLodingData == true else { return }
+                
+                // 위치 권한이 허용되어있으면
+                if viewModel?.locationManager.checkAuthorizationStatus() == true {
+                    
+                    // 현재 위치를 기반으로 위치 정보 업데이트
+                    try await fetchNaverMapViewData()
+                    
+                    // 그룹에 가입되어 있으면
+                    if try await fetchJoinGroup() == true {
+                        
+                        // 그룹 정보 설정
+                        setupGroupData()
+                        
+                        // 그룹 맛집 정보 가져오기
+                        try await fetchGroupRestaurantData()
+                        
+                        // UI 업데이트? 없어도되는지는 확인 필요
+                        //topDummyView.isHidden = false
+                        //topContainerView.isHidden = false
+                        
+                        // 맛집 바텀시트 업데이트
+                        viewModel?.didUpdateBottomSheetTableView?()
+                        // 스켈레톤뷰 해제
+                        self.view.hideSkeleton()
+                        
+                        // 처음 데이터 가져오는지 체크하는 변수 업데이트
+                        viewModel?.isFirstLodingData = false
+                        
+                    }
+                    // 그룹에 가입되어있지 않으면
+                    else {
+                        // 그룹 가입 바텀시트 설정
+                        showJoinGroupBottomSheetVC()
+                        // UI 업데이트
+                        topDummyView.isHidden = true
+                        topContainerView.isHidden = true
+                    }
+                    
                 }
-            
-                // 맛집 데이터 가져오기
-                try await fetchSectionAndMapData()
-                // 맛집 바텀시트 업데이트
-                self.viewModel?.didUpdateBottomSheetTableView?()
-                // 지도에 음식점이 포함되어있으면 마커 표시
-                self.refreshMarkersInVisibleRegion()
-                // 스켈레톤뷰 숨기기
-                self.view.hideSkeleton()
+                // 위치 권한이 허용되어있지 않으면
+                else {
+                    // 패치 종료
+                    return
+                }
             } catch {
                 print(error)
             }
         }
     }
     
-    func setupJoinGroupUI() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.showJoinGroupBottomSheetVC()
-            self.topDummyView.isHidden = true
-            self.topContainerView.isHidden = true
+    
+    // 현재 위치를 기반으로 주소 가져오기
+    func fetchNaverMapViewData() async throws {
+        
+        let address = try await viewModel?.fetchCurrentAddressAsync()
+        if address == nil {
+            locationButton.setTitle("위치 검색 실패", for: .normal)
+        } else {
+            locationButton.setTitle(address, for: .normal)
+            updateCamera()
         }
     }
     
-    func setupRestaurantUI() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.topDummyView.isHidden = false
-            self.topContainerView.isHidden = false
-            self.groupNameButton.setTitle(self.viewModel?.groupList.first?.groupName ?? "", for: .normal)
-            
-            if !isShowRestaurantBottomSheet {
-                isShowRestaurantBottomSheet = true
-                self.showRestaurantListBottomSheetVC()
-                self.setTopViewShadow()
-                self.updateLocationButtonBottomConstraint()
-            }
-        }
+    // 가입된 그룹 가져오기
+    func fetchJoinGroup() async throws -> Bool? {
+         return try await viewModel?.fetchJoinGroup()
     }
     
-    // 맛집 데이터 패치
-    func fetchSectionAndMapData() async throws {
+    // 선택한 그룹에 포함된 맛집 정보 가져오기
+    func fetchGroupRestaurantData() async throws {
         try await viewModel?.fetchRecentRestaurantsAsync()
         try await viewModel?.fetchGroupRestaurantsAsync()
         
@@ -148,42 +177,49 @@ class HomeViewController: UIViewController {
         try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
     }
     
-    func updateCamera() {
-        let lat = viewModel?.location?.latitude ?? 0.0
-        let lon = viewModel?.location?.longitude ?? 0.0
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
-        cameraUpdate.animation = .easeIn
-        naverMapView.mapView.zoomLevel = 18.0
-        self.naverMapView.mapView.moveCamera(cameraUpdate)
+    // MARK: - SetupData
+    // 그룹 정보 표시
+    func setupGroupData() {
+        let index = viewModel?.groupList.firstIndex(where: { $0.isSelected == true }).map({Int($0)}) ?? 0
+        groupNameLabel.text = viewModel?.groupList[index].groupName
     }
-  
-    func updateSearchLocation() {
-        updateCamera()
+
+    // 홈 탭으로 이동했을때 그룹 가입 여부 체크 함수
+    func updateViewBasedOnGroupStatus() {
         
-        Task {
-            do {
-                let address = try await viewModel?.fetchCurrentAddressAsync()
-                self.locationButton.setTitle(address, for: .normal)
-            } catch {
-                print(error)
-            }
+        // 가입된 그룹이 없을때
+        if viewModel?.groupList.isEmpty == true {
+            // 그룹 가입 바텀시트 설정
+            showJoinGroupBottomSheetVC()
+            // UI 업데이트
+            topDummyView.isHidden = true
+            topContainerView.isHidden = true
         }
-    }
-    
-    @IBAction func didTabSearchGroupButton(_ sender: Any) {
-        viewModel?.coordinator?.showSearchTabWithButton()
-    }
-    
-    @IBAction func didTabRefreshButton(_ sender: Any) {
-        
-        if viewModel?.locationManager.checkAuthorizationStatus() == false {
-            self.showAccessDeniedAlert(type: .location)
-        } else {
+        // 가입된 그룹이 있을떄
+        else {
+            
+            // 앱 실행시 첫 데이터 로딩 여부 (가입된 그룹이 하나도 없을땐 true여야함)
+            guard viewModel?.isFirstLodingData == true else { return }
+            
+            // 바텀시트 스켈레톤 뷰 활성화
+            viewModel?.didUpdateSkeletonView?()
+            
             Task {
                 do {
-                    let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
-                    try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
-                    self.refreshMarkersInVisibleRegion()
+                    // 그룹 데이터 설정
+                    setupGroupData()
+                    // 그룹 맛집 데이터 가져오기
+                    try await fetchGroupRestaurantData()
+                    // 바텀시트 업데이트
+                    viewModel?.didUpdateBottomSheetTableView?()
+                    // 첫 데이터 로딩 상태 업데이트
+                    viewModel?.isFirstLodingData = false
+                    
+                    // UI 업데이트
+                    topDummyView.isHidden = false
+                    topContainerView.isHidden = false
+                    self.view.hideSkeleton()
+                    
                 } catch {
                     print(error)
                 }
@@ -191,52 +227,7 @@ class HomeViewController: UIViewController {
         }
     }
     
-    @IBAction func didTabChangeAddressButton(_ sender: Any) {
-        viewModel?.coordinator?.showUserLocationViewController(endPoint: 1)
-    }
-    
-
-    @IBAction func didTabMyGroupButton(_ sender: Any) {
-        showGorupListBottomSheetVC()
-    }
-    
-    func setupBind() {
-        
-        viewModel?.didUpdateGroupName = { index in
-            self.groupNameButton.setTitle(self.viewModel?.groupList[index].groupName ?? "", for: .normal)
-            
-            self.fetchData()
-            
-        }
-    
-        viewModel?.displayAlertHandler = {
-            self.showAccessDeniedAlert(type: .location)
-        }
-        
-        viewModel?.locationManager.didUpdateLocations = { [weak self] location in
-            guard let self = self else { return }
-            
-            self.viewModel?.location = location
-            
-            if location != nil {
-    
-                Task {
-                    do {
-                        let address = try await self.viewModel?.fetchCurrentAddressAsync() ?? "위치 검색 실패"
-                        self.locationButton.setTitle(address, for: .normal)
-                        self.updateCamera()
-                    } catch {
-                       print(error)
-                    }
-                }
-            }
-        }
-    }
-}
-
-// MARK: UI
-extension HomeViewController {
-    
+    // MARK: - SetupUI
     func setupUI() {
         locationButton.layer.cornerRadius = 8
         groupImageView.layer.cornerRadius = 8
@@ -245,6 +236,18 @@ extension HomeViewController {
         naverMapView.showScaleBar = false
         naverMapView.showZoomControls = false
         naverMapView.mapView.positionMode = .direction
+    }
+    
+    // 초기 UI 설정
+    func setupRestaurantBottomSheetUI() {
+        DispatchQueue.main.async {
+            self.topDummyView.isHidden = false
+            self.topContainerView.isHidden = false
+            
+            self.showRestaurantListBottomSheetVC()
+            self.setTopViewShadow()
+            self.updateLocationButtonBottomConstraint()
+        }
     }
     
     // 상단 네비게이션뷰의 그림자
@@ -285,9 +288,61 @@ extension HomeViewController {
                                                constant: -15)
         newConstraint.isActive = true
     }
+    
+    // MARK: - Actions
+    @IBAction func didTabRefreshButton(_ sender: Any) {
+        if viewModel?.locationManager.checkAuthorizationStatus() == false {
+            self.showAccessDeniedAlert(type: .location)
+        } else {
+            Task {
+                do {
+                    let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
+                    try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+                    self.refreshMarkersInVisibleRegion()
+                } catch {
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    @IBAction func didTabChangeAddressButton(_ sender: Any) {
+        viewModel?.coordinator?.showUserLocationViewController(endPoint: 1)
+    }
+    
+    @IBAction func didTabSearchGroupButton(_ sender: Any) {
+        viewModel?.coordinator?.showSearchTabWithButton()
+    }
+
+    @IBAction func didTabMyGroupButton(_ sender: Any) {
+        showGorupListBottomSheetVC()
+    }
+    
+    // MARK: - Helper Methods
+    // 카메라 위치 업데이트
+    func updateCamera() {
+        let lat = viewModel?.locationManager.coordinate?.latitude ?? 0.0
+        let lon = viewModel?.locationManager.coordinate?.longitude ?? 0.0
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
+        cameraUpdate.animation = .easeIn
+        naverMapView.mapView.zoomLevel = 18.0
+        self.naverMapView.mapView.moveCamera(cameraUpdate)
+    }
+    
+    func updateSearchLocation() {
+        Task {
+            do {
+                updateCamera()
+                let address = try await viewModel?.fetchCurrentAddressAsync()
+                self.locationButton.setTitle(address, for: .normal)
+            } catch {
+                print(error)
+            }
+        }
+    }
 }
 
-// MARK: FloatingPanelControllerDelegate
+// MARK: - FloatingPanelControllerDelegate
 extension HomeViewController: FloatingPanelControllerDelegate {
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
         switch fpc.state {
@@ -316,7 +371,7 @@ extension HomeViewController: FloatingPanelControllerDelegate {
     }
 }
 
-// MARK: BottomSheetViewController 핸들바 설정 // 따로 빼야함
+// MARK: - BottomSheetViewController 핸들바 설정 // 따로 빼야함
 extension FloatingPanelController {
     func setPanelStyle(radius: CGFloat, isHidden: Bool) {
         
@@ -335,7 +390,7 @@ extension FloatingPanelController {
     }
 }
 
-// MARK: 지도 마커 설정
+// MARK: - 지도 마커 설정
 extension HomeViewController {
     func refreshMarkersInVisibleRegion() {
         
@@ -363,6 +418,7 @@ extension HomeViewController {
     }
 }
 
+// MARK: - NMFMapViewCameraDelegate
 extension HomeViewController: NMFMapViewCameraDelegate {
     // 카메라 이동완료 후 호출
     func mapViewCameraIdle(_ mapView: NMFMapView) {
@@ -371,14 +427,12 @@ extension HomeViewController: NMFMapViewCameraDelegate {
         let centerX = (visibleRegion.southWest.lat + visibleRegion.northEast.lat) / 2
         let centerY = (visibleRegion.southWest.lng + visibleRegion.northEast.lng) / 2
         
-
         print(centerX, centerY)
     }
 }
 
 
-
-// MARK: // 바텀 시트
+// MARK: - 바텀 시트
 extension HomeViewController {
     func showJoinGroupBottomSheetVC() {
         
@@ -430,3 +484,6 @@ extension HomeViewController {
         self.present(groupListFpc, animated: true)
     }
 }
+
+
+

@@ -1,16 +1,15 @@
 //
-//  SearchRestaurantsLocationRequest.swift
+//  SearchRestaurantsRequest.swift
 //  JMTeng
 //
-//  Created by PKW on 2024/02/20.
+//  Created by PKW on 3/12/24.
 //
 
 import Foundation
 
 struct SearchRestaurantsRequest: Encodable {
-    let query: String
-    let page: Int
-    let x: String
-    let y: String
+    let keyword: String?
+    let x: String?
+    let y: String?
 }
 

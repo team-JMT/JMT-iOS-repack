@@ -38,7 +38,6 @@ class DefaultHomeCoordinator: HomeCoordinator {
     func start() {
         let homeViewController = HomeViewController.instantiateFromStoryboard(storyboardName: "Home") as HomeViewController
         homeViewController.viewModel?.coordinator = self
-    
         self.navigationController?.pushViewController(homeViewController, animated: true)
     }
     

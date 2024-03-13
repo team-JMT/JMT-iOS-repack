@@ -9,27 +9,19 @@ import Foundation
 import Alamofire
 
 struct GroupAPI {
-    static func fetchMyGroupAsync() async throws -> [MyGroupData] {
-        do  {
-            let response = try await AF.request(GroupTarget.fetchMyGroup, interceptor: DefaultRequestInterceptor())
-                .validate(statusCode: 200..<300)
-                .serializingDecodable(MyGroupResponse.self)
-                .value
-            return response.data
-        } catch {
-            throw NetworkError.custom("fetchMyGroupAsync Error")
-        }
+    static func fetchMyGroupAsync() async throws -> MyGroupResponse {
+        let response = try await AF.request(GroupTarget.fetchMyGroup, interceptor: DefaultRequestInterceptor())
+            .validate(statusCode: 200..<300)
+            .serializingDecodable(MyGroupResponse.self)
+            .value
+        return response
     }
     
     static func updateSelectedGroupAsync(request: SelectedGroupRequest) async throws {
-        do {
-            let response = try await AF.request(GroupTarget.updateSelectedGroup(request), interceptor: DefaultRequestInterceptor())
-                .validate(statusCode: 200..<300)
-                .serializingDecodable(SelectedGroupResponse.self)
-                .value
-        } catch {
-            throw NetworkError.custom("updateSelectedGroup Error")
-        }
+        let response = try await AF.request(GroupTarget.updateSelectedGroup(request), interceptor: DefaultRequestInterceptor())
+            .validate(statusCode: 200..<300)
+            .serializingDecodable(SelectedGroupResponse.self)
+            .value
     }
     
     

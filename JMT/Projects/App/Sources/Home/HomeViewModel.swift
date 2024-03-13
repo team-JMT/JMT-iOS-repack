@@ -11,17 +11,21 @@ import CoreLocation
 import NMapsMap
 
 class HomeViewModel {
+    // MARK: - Properties
+    // 필터 타입
     enum SelectedSortType {
         case sort
         case category
         case drinking
     }
     
+    // 위치 기반 정렬 기준 타입
     enum SortRestaurantType {
         case location
         case recent
     }
     
+    // 카테고리 정렬 타입
     enum SortCategoryType: Int {
         case korean = 0
         case japanese
@@ -60,30 +64,11 @@ class HomeViewModel {
         }
     }
     
+    // MARK: - Properties
+    // 데이터와 관련된 프로퍼티들을 선언하는 부분입니다.
     weak var coordinator: HomeCoordinator?
     
-    var locationManager = LocationManager()
-    var location: CLLocationCoordinate2D?
-    
-//    // 위치 관련
-//    var didUpdateCurrentAddress: ((String) -> Void)?
-    var displayAlertHandler: (() -> Void)?
-//    
-//    // 소속 그룹 관련
-//    var didCompletedCheckJoinGroup: (() -> Void)?
-    var didUpdateGroupName: ((Int) -> Void)?
-//    
-//    // 맛집 리스트 관련
-    var didUpdateSkeletonView: (() -> Void)?
-    var didUpdateBottomSheetTableView: (() -> Void)?
-//    var didUpdateSortTypeButton: (() -> Void)?
-
-    // 필터 관련
-    var didUpdateFilterRestaurants: (() -> Void)?
-    var didUpdateFilterTableView: (() -> Void)?
-
-//    // 지도 관련
-//    var didUpdateMapMarker: (() -> Void)?
+    var locationManager = LocationManager.shared
     
     let sortList = ["가까운 순", "최신 순"]
     let categoryList = ["한식", "일식", "중식", "양식", "퓨전", "카페", "주점", "기타"]
@@ -110,12 +95,53 @@ class HomeViewModel {
     var markerRestaurants: [SearchMapRestaurantItems] = []
     
     var reviews: [FindRestaurantReview] = []
+    var isFirstLodingData = true
+    
+    // MARK: - Initialization
+    // 뷰모델 초기화와 관련된 로직을 담당하는 부분입니다.
+    
+    // MARK: - Data Binding
+    // 뷰와 뷰모델 간의 데이터 바인딩을 설정하는 부분입니다.
+    
+   
+ 
+    
+    // MARK: - Utility Methods
+    // 다양한 유틸리티 메소드들을 모아두는 부분입니다. 예를 들어, 날짜 포매팅이나 데이터 검증 등입니다.
+    
+    // MARK: - Error Handling
+    // 에러 처리와 관련된 로직을 담당하는 부분입니다.
+
+   
+    
+    
+//    var location: CLLocationCoordinate2D?
+    
+//    // 위치 관련
+//    var didUpdateCurrentAddress: ((String) -> Void)?
+    var displayAlertHandler: (() -> Void)?
+//    
+//    // 소속 그룹 관련
+//    var didCompletedCheckJoinGroup: (() -> Void)?
+    var didUpdateGroupName: ((Int) -> Void)?
+//    
+//    // 맛집 리스트 관련
+    var didUpdateSkeletonView: (() -> Void)?
+    var didUpdateBottomSheetTableView: (() -> Void)?
+//    var didUpdateSortTypeButton: (() -> Void)?
+
+    // 필터 관련
+    var didUpdateFilterRestaurants: (() -> Void)?
+    var didUpdateFilterTableView: (() -> Void)?
+
+//    // 지도 관련
+//    var didUpdateMapMarker: (() -> Void)?
 }
 
-// 데이터 관련 메소드
+// MARK: - Data Fetching
 extension HomeViewModel {
-    
-    // 바텀치트 1번째 섹션에 보여줄 데이터
+    //  MARK: - 그룹 맛집 정보 관련 메소드
+    // 바텀시트 1번째 섹션에 보여줄 데이터
     func fetchRecentRestaurantsAsync() async throws {
         
         popularRestaurants.removeAll()
@@ -150,7 +176,7 @@ extension HomeViewModel {
         if selectedSortIndex == 0 {
             parameters =  SearchMapRestaurantPageRequest(page: 1, size: 20, sort: nil)
             body = SearchMapRestaurantRequestBody(
-                userLocation: SearchMapRestaurantLocation(x: "\(locationManager.location?.coordinate.longitude ?? 0.0)", y: "\(locationManager.location?.coordinate.latitude ?? 0.0)"),
+                userLocation: SearchMapRestaurantLocation(x: "\(locationManager.coordinate?.longitude ?? 0.0)", y: "\(locationManager.coordinate?.latitude ?? 0.0)"),
                 startLocation: nil,
                 endLocation: nil,
                 filter: SearchMapRestaurantFilter(categoryFilter: SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
@@ -180,7 +206,7 @@ extension HomeViewModel {
         
         let parameters = SearchMapRestaurantPageRequest(page: 1, size: 20, sort: nil)
         let body = SearchMapRestaurantRequestBody(
-            userLocation: SearchMapRestaurantLocation(x: "\(locationManager.location?.coordinate.longitude ?? 0.0)", y: "\(locationManager.location?.coordinate.latitude ?? 0.0)"),
+            userLocation: SearchMapRestaurantLocation(x: "\(locationManager.coordinate?.longitude ?? 0.0)", y: "\(locationManager.coordinate?.latitude ?? 0.0)"),
             startLocation: SearchMapRestaurantLocation(x: "\(bounds.southWestLng)", y: "\(bounds.southWestLat)"),
             endLocation: SearchMapRestaurantLocation(x: "\(bounds.northEastLng)", y: "\(bounds.northEastLat)"),
             filter: nil,
@@ -193,11 +219,19 @@ extension HomeViewModel {
             throw RestaurantError.fetchMapIncludedRestaurantsAsyncError
         }
     }
-}
-
-// 지도 관련 메소드
-extension HomeViewModel {
     
+    // MARK: - 위치 관련 메소드
+    func fetchCurrentAddressAsync() async throws -> String? {
+        
+        let lon: String = String(locationManager.coordinate?.longitude ?? 0.0)
+        let lat: String = String(locationManager.coordinate?.latitude ?? 0.0)
+       
+        let locationData = try await CurrentLocationAPI.fetchCurrentLoctionAsync(request: CurrentLocationRequest(coords: "\(lon),\(lat)"))
+        
+        return locationData.address
+    }
+    
+    // MARK: - 지도 관련 메소드
     func markerImage(category: String) -> String? {
         switch category {
         case "한식":
@@ -221,15 +255,11 @@ extension HomeViewModel {
             return JMTengAsset.marker2.name
         }
     }
-}
-
-// 필터링 관련 메소드
-extension HomeViewModel {
     
+    // MARK: - 필터링 관련 메소드
     // 타입 변경시
     func updateSortType(type: SelectedSortType) {
         sortType = type
-//        didUpdateSortTypeButton?()
     }
     
     // 필터 옵션 변경시
@@ -273,19 +303,16 @@ extension HomeViewModel {
             return
         }
     }
-}
-
-// 그룹 관련 메소드
-extension HomeViewModel {
     
+    // MARK: - 그룹 관련 메소드
     func fetchJoinGroup() async throws -> Bool {
         
-        let groupList = try await GroupAPI.fetchMyGroupAsync()
+        let myGroupList = try await GroupAPI.fetchMyGroupAsync()
         
-        if groupList.isEmpty {
+        if myGroupList.data.isEmpty {
             return false
         } else {
-            self.groupList.append(contentsOf: groupList)
+            self.groupList.append(contentsOf: myGroupList.data)
             
             let index = groupList.firstIndex(where: { $0.isSelected == true }).map({Int($0)}) ?? 0
             let id = groupList[index].groupId
@@ -307,22 +334,6 @@ extension HomeViewModel {
             }
         }
         currentGroupId = id
-        UserDefaultManager.selectedGroupId = id 
-    }
-}
-
-// 위치 관련 메소드
-extension HomeViewModel {
-    
-    func fetchCurrentAddressAsync() async throws -> String? {
-        
-        guard self.location != nil else { return nil }
-        
-        let lat: String = String(self.location?.latitude ?? 0.0)
-        let lon: String = String(self.location?.longitude ?? 0.0)
-        
-        let locationData = try await CurrentLocationAPI.fetchCurrentLoctionAsync(request: CurrentLocationRequest(coords: "\(lon),\(lat)"))
-        return locationData.address
-       
+        UserDefaultManager.selectedGroupId = id
     }
 }

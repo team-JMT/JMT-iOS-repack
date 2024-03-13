@@ -86,7 +86,19 @@ extension UIViewController {
             }
         }
         
-        let cancelAction = UIAlertAction(title: "취소", style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: "취소", style: .default) { _ in
+            switch type {
+            case .location:
+                let locationManager = LocationManager.shared
+                if locationManager.checkAuthorizationStatus() {
+                  return 
+                } else {
+                    self.showAccessDeniedAlert(type: .location)
+                }
+            case .photo:
+                return
+            }
+        }
         
         alertController.addAction(cancelAction)
         alertController.addAction(settingsAction)

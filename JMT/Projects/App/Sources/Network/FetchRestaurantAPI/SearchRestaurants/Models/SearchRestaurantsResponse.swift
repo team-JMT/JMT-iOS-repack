@@ -1,49 +1,44 @@
 //
-//  SearchRestaurantsLocationResponse.swift
+//  SearchRestaurantsResponse.swift
 //  JMTeng
 //
-//  Created by PKW on 2024/02/20.
+//  Created by PKW on 3/12/24.
 //
 
 import Foundation
 
 struct SearchRestaurantsResponse: Decodable {
-    let data: [SearchRestaurantData]
+    let data: [SearchRestaurantsItems]
     let message: String
     let code: String
 }
 
-struct SearchRestaurantData: Decodable {
-    let placeName: String
-    let distance: String
+struct SearchRestaurantsItems: Decodable {
+    let id: Int
+    let name: String
     let placeUrl: String
-    let categoryName: String
-    let addressName: String
-    let roadAddressName: String
-    let id: String
     let phone: String
-    let categoryGroupCode: String
-    let categoryGroupName: String
-    let x: String
-    let y: String
+    let address: String
+    let roadAddress: String
+    let x: Double
+    let y: Double
+    let restaurantImageUrl: String
+    let introduce: String
+    let category: String
+    let userNickName: String
+    let userProfileImageUrl: String
+    let canDrinkLiquor: Bool
+    let differenceInDistance: String
+    let page: SearchRestaurantsPage
 }
 
-extension SearchRestaurantsResponse {
-    var toDomain: [SearchRestaurantsModel] {
-        return data.map { locationData in
-            SearchRestaurantsModel(placeName: locationData.placeName,
-                                           distance: Int(locationData.distance) ?? 0,
-                                           placeUrl: locationData.placeUrl,
-                                           categoryName: locationData.categoryName,
-                                           addressName: locationData.addressName,
-                                           roadAddressName: locationData.roadAddressName,
-                                           id: locationData.id,
-                                           phone: locationData.phone,
-                                           categoryGroupCode: locationData.categoryGroupCode,
-                                           categoryGroupName: locationData.categoryGroupName,
-                                           x: Double(locationData.x) ?? 0.0,
-                                           y: Double(locationData.y) ?? 0.0
-            )
-        }
-    }
+struct SearchRestaurantsPage: Decodable {
+    let totalPages: Int
+    let currentPage: Int
+    let totalElements: Int
+    let size: Int
+    let numberOfElements: Int
+    let empty: Bool
+    let pageFirst: Bool
+    let pageLast: Bool
 }

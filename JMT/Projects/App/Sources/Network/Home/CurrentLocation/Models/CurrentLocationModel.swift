@@ -8,5 +8,5 @@
 import Foundation
 
 struct CurrentLocationModel {
-    let address: String
+    let address: String?
 }

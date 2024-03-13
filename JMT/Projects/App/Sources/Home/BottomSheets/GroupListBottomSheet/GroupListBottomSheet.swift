@@ -31,12 +31,10 @@ extension GroupListBottomSheet: UITableViewDataSource {
 
 extension GroupListBottomSheet: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         Task {
             do {
                 try await viewModel?.updateSelectedGroup(id: viewModel?.groupList[indexPath.row].groupId ?? 0)
                 viewModel?.didUpdateGroupName?(indexPath.row)
-                
                 self.dismiss(animated: true)
             } catch {
                 print(error)

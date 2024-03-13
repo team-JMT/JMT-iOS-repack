@@ -13,7 +13,7 @@ class RegistrationRestaurantInfoViewModel {
     // MARK: - Properties
     // 데이터와 관련된 프로퍼티들을 선언하는 부분입니다.
     weak var coordinator: RegistrationRestaurantInfoCoordinator?
-    var info: SearchRestaurantsModel?
+    var info: SearchRestaurantsLocationModel?
     
     var categoryData: [(String, Bool, UIImage)] = []
     var isSelectedCategory = false

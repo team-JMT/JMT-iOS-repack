@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -69,6 +69,9 @@
                                                 <state key="normal" title="전체삭제">
                                                     <color key="titleColor" name="gray400"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="didTabDeleteRecentKeywordButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Sc9-nP-gsD"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -101,7 +104,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xjM-tY-wZD">
-                                                            <rect key="frame" x="50.666666666666664" y="6" width="73.333333333333343" height="22"/>
+                                                            <rect key="frame" x="50.666666666666664" y="4" width="71.333333333333343" height="26"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" image="TagXmark"/>
                                                             <connections>
@@ -116,12 +119,13 @@
                                                         </label>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="xjM-tY-wZD" firstAttribute="centerY" secondItem="xqH-HK-VkJ" secondAttribute="centerY" id="ArX-xA-MgF"/>
-                                                        <constraint firstAttribute="bottom" secondItem="xqH-HK-VkJ" secondAttribute="bottom" constant="4" id="EMJ-70-XQD"/>
-                                                        <constraint firstItem="xjM-tY-wZD" firstAttribute="leading" secondItem="xqH-HK-VkJ" secondAttribute="trailing" constant="4" id="ENe-PF-5bc"/>
-                                                        <constraint firstItem="xqH-HK-VkJ" firstAttribute="leading" secondItem="V4e-3i-Y3q" secondAttribute="leading" constant="12" id="S8W-wP-nHg"/>
-                                                        <constraint firstItem="xqH-HK-VkJ" firstAttribute="top" secondItem="V4e-3i-Y3q" secondAttribute="top" constant="4" id="UhY-DA-4pS"/>
-                                                        <constraint firstAttribute="trailing" secondItem="xjM-tY-wZD" secondAttribute="trailing" constant="10" id="cyf-2L-fQg"/>
+                                                        <constraint firstItem="xqH-HK-VkJ" firstAttribute="top" secondItem="V4e-3i-Y3q" secondAttribute="top" constant="4" id="6s4-bb-NK1"/>
+                                                        <constraint firstAttribute="trailing" secondItem="xjM-tY-wZD" secondAttribute="trailing" constant="12" id="8Gs-LL-WZI"/>
+                                                        <constraint firstItem="xqH-HK-VkJ" firstAttribute="leading" secondItem="V4e-3i-Y3q" secondAttribute="leading" constant="12" id="Kpq-MZ-fZp"/>
+                                                        <constraint firstAttribute="bottom" secondItem="xqH-HK-VkJ" secondAttribute="bottom" constant="4" id="cvt-Tr-1nv"/>
+                                                        <constraint firstItem="xjM-tY-wZD" firstAttribute="leading" secondItem="xqH-HK-VkJ" secondAttribute="trailing" constant="4" id="d1x-nB-3wm"/>
+                                                        <constraint firstItem="xjM-tY-wZD" firstAttribute="top" secondItem="V4e-3i-Y3q" secondAttribute="top" constant="4" id="n6Q-cT-EQi"/>
+                                                        <constraint firstAttribute="bottom" secondItem="xjM-tY-wZD" secondAttribute="bottom" constant="4" id="xG9-p9-VIF"/>
                                                     </constraints>
                                                 </collectionViewCellContentView>
                                                 <connections>
@@ -130,10 +134,6 @@
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
-                                        <connections>
-                                            <outlet property="dataSource" destination="Y6W-OH-hqX" id="rOL-7J-JR1"/>
-                                            <outlet property="delegate" destination="Y6W-OH-hqX" id="q5i-vQ-QYM"/>
-                                        </connections>
                                     </collectionView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OV1-fh-LAg">
                                         <rect key="frame" x="0.0" y="89" width="393" height="44"/>

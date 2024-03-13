@@ -33,7 +33,7 @@ class RestaurantDetailViewModel {
     weak var coordinator: RestaurantDetailCoordinator?
     
     let stickyHeaderViewConfig = StickyHeaderViewConfig(initialHeight: 200, finalHeight: 0)
-    let locationManager = LocationManager()
+    let locationManager = LocationManager.shared
     var location: CLLocationCoordinate2D?
 
     var recommendRestaurantId: Int?
@@ -57,14 +57,14 @@ class RestaurantDetailViewModel {
     
     // 위치 정보 가져오기
     func fetchCurrentLocationAsync() async {
-        return await withCheckedContinuation { continuation in
-            locationManager.didUpdateLocations = { [weak self] location in
-                self?.location = location
-                continuation.resume()
-            }
-            
-            locationManager.fetchLocations()
-        }
+//        return await withCheckedContinuation { continuation in
+//            locationManager.didUpdateLocations = { [weak self] location in
+//                self?.location = location
+//                continuation.resume()
+//            }
+//            
+//            locationManager.fetchLocations()
+//        }
     }
     
     // 맛집 정보 가져오기

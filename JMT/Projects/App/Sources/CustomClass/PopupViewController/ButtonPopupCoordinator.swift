@@ -51,6 +51,8 @@ class DefaultButtonPopupCoordinator: ButtonPopupCoordinator {
             vc.popupType = .location
         case is RegistrationRestaurantInfoViewController:
             vc.popupType = .registrationRestaurant
+        case is SearchViewController:
+            vc.popupType = .searchRestaurant
         default:
             return
         }

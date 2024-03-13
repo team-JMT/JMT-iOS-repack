@@ -27,17 +27,18 @@ class SocialLoginViewController: UIViewController {
         
         googleLoginView.layer.borderColor = UIColor.gray100?.cgColor
         googleLoginView.layer.borderWidth = 1.5
-        
     }
     
     @IBAction func didTabGoogleLoginButton(_ sender: Any) {
+        guard viewModel?.isEnabled == true else { return }
+        
         viewModel?.startGoogleLogin()
 //       viewModel?.testLogin()
-        
-
     }
     
     @IBAction func didTabAppleLoginButton(_ sender: Any) {
+        guard viewModel?.isEnabled == true else { return }
+        
         viewModel?.startAppleLogin()
     }
 }

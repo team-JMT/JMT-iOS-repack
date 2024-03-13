@@ -10,29 +10,25 @@ import Alamofire
 
 struct CurrentLocationAPI {
     static func fetchCurrentLoctionAsync(request: CurrentLocationRequest) async throws -> CurrentLocationModel {
-        do {
-            let response = try await AF.request(CurrentLocationTarget.getCurrentLocation(request), interceptor: DefaultRequestInterceptor())
-                .validate(statusCode: 200..<300)
-                .serializingDecodable(CurrentLocationResponse.self)
-                .value
-            return response.toDomain
-        } catch {
-            throw NetworkError.custom("fetchCurrentLoctionAsync Error")
-        }
+        let response = try await AF.request(CurrentLocationTarget.getCurrentLocation(request), interceptor: DefaultRequestInterceptor())
+            .validate(statusCode: 200..<300)
+            .serializingDecodable(CurrentLocationResponse.self)
+            .value
+        return response.toDomain
     }
     
-    static func getCurrentLocation(request: CurrentLocationRequest, completion: @escaping (Result<CurrentLocationModel, NetworkError>) -> ()) {
-        
-        AF.request(CurrentLocationTarget.getCurrentLocation(request), interceptor: DefaultRequestInterceptor())
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: CurrentLocationResponse.self) { response in
-                
-                switch response.result {
-                case .success(let response):
-                    completion(.success(response.toDomain))
-                case .failure(_):
-                    completion(.failure(.custom("currentLocation - Error")))
-                }
-            }
-    }
+//    static func getCurrentLocation(request: CurrentLocationRequest, completion: @escaping (Result<CurrentLocationModel, NetworkError>) -> ()) {
+//        
+//        AF.request(CurrentLocationTarget.getCurrentLocation(request), interceptor: DefaultRequestInterceptor())
+//            .validate(statusCode: 200..<300)
+//            .responseDecodable(of: CurrentLocationResponse.self) { response in
+//                
+//                switch response.result {
+//                case .success(let response):
+//                    completion(.success(response.toDomain))
+//                case .failure(_):
+//                    completion(.failure(.custom("currentLocation - Error")))
+//                }
+//            }
+//    }
 }

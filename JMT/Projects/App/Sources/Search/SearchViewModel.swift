@@ -10,6 +10,8 @@ import Foundation
 class SearchViewModel {
     weak var coordinator: SearchCoordinator?
     
+    var recentSearchRestaurants = [String]()
+    
     var onSuccess: (() -> ())?
     
     var tagData = ["1","2","33","444","5555"]
@@ -36,5 +38,27 @@ class SearchViewModel {
         self.workItem = workItem
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
+    }
+}
+
+// 최근 검색 관련 메소드
+extension SearchViewModel {
+    func fetchRecentSearchRestaurants() {
+        recentSearchRestaurants = UserDefaultManager.getRecentSearchKeywords(type: UserDefaultManager.Keys.recentSearchRestaurantKeywords)
+    }
+
+    func saveRecentSearchRestaurants(keyword: String) {
+        UserDefaultManager.saveSearchKeyword(keyword, type: UserDefaultManager.Keys.recentSearchRestaurantKeywords)
+    }
+    
+    func deleteRecentSearchRestaurants(_ row: Int) {
+        let keywoard = recentSearchRestaurants[row]
+        recentSearchRestaurants.remove(at: row)
+        UserDefaultManager.deleteSearchKeyword(keywoard, type: UserDefaultManager.Keys.recentSearchRestaurantKeywords)
+    }
+    
+    func deleteAllRecentSearchRestaurants() {
+        recentSearchRestaurants.removeAll()
+        UserDefaultManager.removeAllSearchKeywords(type: UserDefaultManager.Keys.recentSearchRestaurantKeywords)
     }
 }

@@ -24,7 +24,7 @@ class RestaurantLocationCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setupData(viewModel: SearchRestaurantsModel?) {
+    func setupData(viewModel: SearchRestaurantsLocationModel?) {
         restaurantNameLabel.text = viewModel?.placeName ?? ""
         distanceLabel.text = (viewModel?.distance ?? 0).distanceWithUnit()
         addressLabel.text = viewModel?.addressName ?? ""

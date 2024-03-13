@@ -13,10 +13,10 @@ class SearchRestaurantViewModel {
     // MARK: - Properties
     // 데이터와 관련된 프로퍼티들을 선언하는 부분입니다.
     weak var coordinator: SearchRestaurantCoordinator?
-    var locationManager = LocationManager()
+    var locationManager = LocationManager.shared
     var location: CLLocationCoordinate2D?
     
-    var restaurantsInfo: [SearchRestaurantsModel] = []
+    var restaurantsInfo: [SearchRestaurantsLocationModel] = []
     
     // MARK: - Initialization
     // 뷰모델 초기화와 관련된 로직을 담당하는 부분입니다.
@@ -29,7 +29,7 @@ class SearchRestaurantViewModel {
     // 외부 소스나 모델로부터 데이터를 가져오는 메소드들을 모아두는 부분입니다.
     func fetchSearchRestaurants(keyword: String, x: String, y: String) async throws {
         
-        let result = try await FetchRestaurantAPI.fetchSearchRestaurantsAsync(request: SearchRestaurantsRequest(query: keyword, page: 1, x: x, y: y))
+        let result = try await FetchRestaurantAPI.fetchSearchRestaurantsAsync(request: SearchRestaurantsLocationRequest(query: keyword, page: 1, x: x, y: y))
         restaurantsInfo.append(contentsOf: result)
     }
     

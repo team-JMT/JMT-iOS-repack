@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol RegistrationRestaurantInfoCoordinator: Coordinator {
-    func start(info: SearchRestaurantsModel?)
+    func start(info: SearchRestaurantsLocationModel?)
     
     func setButtonPopupCoordinator()
     func showButtonPopupViewController()
@@ -37,7 +37,7 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
     
     func start() { }
     
-    func start(info: SearchRestaurantsModel?) {
+    func start(info: SearchRestaurantsLocationModel?) {
         let registrationRestaurantInfoViewController = RegistrationRestaurantInfoViewController.instantiateFromStoryboard(storyboardName: "RegistrationRestaurantInfo") as RegistrationRestaurantInfoViewController
         registrationRestaurantInfoViewController.viewModel?.coordinator = self
         registrationRestaurantInfoViewController.viewModel?.info = info
