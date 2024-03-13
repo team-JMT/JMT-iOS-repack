@@ -49,11 +49,9 @@ class HomeViewController: UIViewController {
         setupBind()
         setupRestaurantBottomSheetUI()
         
-      
-        checkLocationAuthorizationAndSetup()
+        setupLocationManager()
         
-        
-        
+    
         
       
         
@@ -65,45 +63,19 @@ class HomeViewController: UIViewController {
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
-    
-    func checkLocationAuthorizationAndSetup() {
-        let authorizationStatus = CLLocationManager.authorizationStatus()
-        switch authorizationStatus {
-        case .notDetermined:
-            // 권한 상태가 결정되지 않았다면, 권한 요청
-            locationManager.requestWhenInUseAuthorization()
-        case .restricted, .denied:
-            // 권한이 제한되거나 거부된 경우, 사용자에게 설정으로 가서 변경하도록 안내
-            print("권한 11")
-        case .authorizedAlways, .authorizedWhenInUse:
-            // 권한이 허용된 경우, 위치 관리자 설정 및 사용 시작
-            print("권한 22")
-        @unknown default:
-            fatalError("Unhandled authorization status")
-        }
-    }
-    
-//    func fetchData() {
-//        Task {
-//            do {
-//                try await viewModel?.fetchJoinGroup()
-//            } catch {
-//                print(error)
-//            }
-//        }
-//    }
+
     
     
     func setupLocationManager() {
+        
         let locationManager = LocationManager.shared
         
         locationManager.didUpdateLocations = {
             
-            
+            print(locationManager.coordinate)
             
         }
         
-        locationManager.fetchLocations()
     }
     
     
@@ -405,19 +377,20 @@ class HomeViewController: UIViewController {
     
     // MARK: - Actions
     @IBAction func didTabRefreshButton(_ sender: Any) {
-        if LocationManager.shared.checkAuthorizationStatus() == false {
-            self.showAccessDeniedAlert(type: .location)
-        } else {
-            Task {
-                do {
-                    let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
-                    try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
-                    self.refreshMarkersInVisibleRegion()
-                } catch {
-                    print(error)
-                }
-            }
-        }
+        locationManager.startUpdateLocation()
+//        if LocationManager.shared.checkAuthorizationStatus() == false {
+//            self.showAccessDeniedAlert(type: .location)
+//        } else {
+//            Task {
+//                do {
+//                    let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
+//                    try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+//                    self.refreshMarkersInVisibleRegion()
+//                } catch {
+//                    print(error)
+//                }
+//            }
+//        }
     }
     
     @IBAction func didTabChangeAddressButton(_ sender: Any) {
@@ -598,6 +571,3 @@ extension HomeViewController {
         self.present(groupListFpc, animated: true)
     }
 }
-
-
-

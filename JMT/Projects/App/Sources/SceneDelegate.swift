@@ -23,10 +23,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if !UserDefaultManager.hasBeenLaunchedBeforeFlag {
             KeychainWrapper.standard.removeAllKeys()
-            locationManager.requestWhenInUseAuthorization()
+            UserDefaultManager.hasBeenLaunchedBeforeFlag = true
+            UserDefaultManager.defaults.synchronize()
         }
     
-    
+        // 포그라운드로 돌아올때 위치 권한 확인
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        
         let navigationController = UINavigationController()
         self.window = UIWindow(windowScene: scene)
         self.window?.rootViewController = navigationController
@@ -54,6 +57,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         appCoordinator?.start()
     }
+    
+    
 
     func sceneDidDisconnect(_ scene: UIScene) {
         
@@ -61,14 +66,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func sceneDidBecomeActive(_ scene: UIScene) {
         
-        if !UserDefaultManager.hasBeenLaunchedBeforeFlag {
-            UserDefaultManager.hasBeenLaunchedBeforeFlag = true
-            UserDefaultManager.defaults.synchronize()
-        } else {
-            if locationManager.checkAuthorizationStatus() == false {
-                self.window?.rootViewController?.showAccessDeniedAlert(type: .location)
-            }
-        }
+//        if !UserDefaultManager.hasBeenLaunchedBeforeFlag {
+//            UserDefaultManager.hasBeenLaunchedBeforeFlag = true
+//            UserDefaultManager.defaults.synchronize()
+//        } else {
+//            if locationManager.checkAuthorizationStatus() == false {
+//                self.window?.rootViewController?.showAccessDeniedAlert(type: .location)
+//            }
+//        }
     }
     
     func sceneWillResignActive(_ scene: UIScene) { 
@@ -82,4 +87,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidEnterBackground(_ scene: UIScene) {
         
     }
+    
+    @objc func appWillEnterForeground() {
+         checkLocationAuthorization()
+    }
+    
+    func checkLocationAuthorization() {
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedWhenInUse, .authorizedAlways:
+            // 권한이 있는 경우
+            break
+        case .denied, .restricted:
+            // 권한이 없는 경우 사용자에게 권한 요청
+            self.window?.rootViewController?.showAccessDeniedAlert(type: .location)
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        @unknown default:
+            fatalError("Unhandled authorization status")
+        }
+    }
 }
+
