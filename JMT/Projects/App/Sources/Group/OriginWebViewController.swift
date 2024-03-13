@@ -57,33 +57,6 @@ class OriginWebViewController: UIViewController, WKUIDelegate, WKScriptMessageHa
     
     
     
-    private enum WebRequest: String {
-        case back = "back"
-        case token = "token"
-        case navigation = "navigation"
-        case share = "share"
-        case navigate = "navigate"
-    }
-    
-    private struct WebEvent: Decodable {
-        let event: String
-        let isEnableBack: Bool?
-        let isTabBarVisible: Bool?
-        let route: String?
-    }
-    
-    private struct WebBridgeEvent: Decodable {
-        let name: String
-        let data: WebEventData
-        let onSuccess: String
-        let onFailed: String
-    }
-    
-    private struct WebEventData: Decodable {
-        let route: String?
-    }
-    
-    
     func fetchAccessToken(completion: @escaping (String?) -> Void) {
         // 키체인에서 액세스 토큰 가져오기
         if let accessToken = keychainAccess.getToken("accessToken") {
@@ -148,6 +121,15 @@ class OriginWebViewController: UIViewController, WKUIDelegate, WKScriptMessageHa
         }
     }
     
+    private enum WebRequest: String {
+        case back = "back"
+        case token = "token"
+        case navigation = "navigation"
+        case share = "share"
+        case navigate = "navigate"
+    }
+
+    
     private func handleBridgeRequest(_ request: BridgeRequest) {
         switch request.name {
         case "token":
@@ -196,15 +178,12 @@ class OriginWebViewController: UIViewController, WKUIDelegate, WKScriptMessageHa
     }
     
     
-    // 'back' 이벤트 처리
     private func handleBackRequest(_ request: BridgeRequest) {
         if let enable = request.data?.enable {
             print("'back' request received, enable: \(enable)")
-            // 'back' 액션 실행. 예: navigationController?.popViewController(animated: true)
         }
     }
 
-    // 'navigation' 이벤트 처리
     private func handleNavigationRequest(_ request: BridgeRequest) {
         if let isVisible = request.data?.isVisible {
             print("'navigation' request received, isVisible: \(isVisible)")
@@ -212,25 +191,38 @@ class OriginWebViewController: UIViewController, WKUIDelegate, WKScriptMessageHa
         }
     }
 
-    // 'share' 이벤트 처리
     private func handleShareRequest() {
         print("'share' request received")
         handleShareEvent()
     }
 
     
-    
 }
-// BridgeRequest 구조체 수정하여 'data' 필드를 포함하도록 함
+
+
 struct BridgeRequest: Decodable {
     let name: String
-    let data: WebEventData? // 이전 예시에서 누락됐던 'data' 필드 추가
+    let data: WebEventData?
     let onSuccess: String?
     let onFailed: String?
 }
 struct WebEventData: Decodable {
     let route: String?
-    let enable: Bool? // 'back' 이벤트와 'navigation' 이벤트에 사용될 수 있는 필드
-    let isVisible: Bool? // 'navigation' 이벤트에 사용될 수 있는 필드
+    let enable: Bool?
+    let isVisible: Bool?
 }
 
+
+ struct WebEvent: Decodable {
+    let event: String
+    let isEnableBack: Bool?
+    let isTabBarVisible: Bool?
+    let route: String?
+}
+
+ struct WebBridgeEvent: Decodable {
+    let name: String
+    let data: WebEventData
+    let onSuccess: String
+    let onFailed: String
+}
