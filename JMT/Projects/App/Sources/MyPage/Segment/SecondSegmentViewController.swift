@@ -55,8 +55,6 @@ class SecondSegmentViewController: UIViewController, UITableViewDelegate, UITabl
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageNames.count
-        print("===")
-        print(imageNames.count)
 
     }
 

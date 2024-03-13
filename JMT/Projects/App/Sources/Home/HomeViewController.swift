@@ -57,6 +57,9 @@ class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
+    
+    
+   
 
     func fetchData()  {
     

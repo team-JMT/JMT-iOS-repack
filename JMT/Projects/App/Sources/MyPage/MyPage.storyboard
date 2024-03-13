@@ -381,42 +381,6 @@
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                     </collectionViewCellContentView>
                                                                 </collectionViewCell>
-                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="beL-Hp-re1">
-                                                                    <rect key="frame" x="290" y="0.0" width="48" height="48"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="zPc-A5-eeE">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
-                                                                        <autoresizingMask key="autoresizingMask"/>
-                                                                    </collectionViewCellContentView>
-                                                                </collectionViewCell>
-                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="v38-dz-FEr">
-                                                                    <rect key="frame" x="348" y="0.0" width="0.0" height="0.0"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="WAm-yY-WQ1">
-                                                                        <autoresizingMask key="autoresizingMask"/>
-                                                                    </collectionViewCellContentView>
-                                                                </collectionViewCell>
-                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="pRR-mQ-Cc6">
-                                                                    <rect key="frame" x="348" y="10" width="0.0" height="0.0"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="DdN-iU-Ign">
-                                                                        <autoresizingMask key="autoresizingMask"/>
-                                                                    </collectionViewCellContentView>
-                                                                </collectionViewCell>
-                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="zKG-gq-fsX">
-                                                                    <rect key="frame" x="348" y="20" width="0.0" height="0.0"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="H5N-a6-0rZ">
-                                                                        <autoresizingMask key="autoresizingMask"/>
-                                                                    </collectionViewCellContentView>
-                                                                </collectionViewCell>
-                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="uok-3b-SjQ">
-                                                                    <rect key="frame" x="348" y="30" width="0.0" height="0.0"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="PDG-Ul-ETH">
-                                                                        <autoresizingMask key="autoresizingMask"/>
-                                                                    </collectionViewCellContentView>
-                                                                </collectionViewCell>
                                                             </cells>
                                                         </collectionView>
                                                     </subviews>
@@ -523,8 +487,8 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="393" height="120"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="XOP-ff-E7i">
-                                                                    <rect key="frame" x="10" y="9" width="286" height="100"/>
+                                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="XOP-ff-E7i">
+                                                                    <rect key="frame" x="10" y="9" width="293" height="100"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dummyIcon" translatesAutoresizingMaskIntoConstraints="NO" id="RoW-oF-ZPS">
                                                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
@@ -534,7 +498,7 @@
                                                                             </constraints>
                                                                         </imageView>
                                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="FUE-AR-YMj">
-                                                                            <rect key="frame" x="109" y="14" width="177" height="72"/>
+                                                                            <rect key="frame" x="116" y="14" width="177" height="72"/>
                                                                             <subviews>
                                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="cpi-6O-fg9">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="177" height="43"/>
@@ -608,6 +572,7 @@
                                                         <connections>
                                                             <outlet property="MyNickname" destination="5Dz-UH-wJa" id="ooo-pX-1Ij"/>
                                                             <outlet property="categoryLable" destination="12w-Xz-rfq" id="qFi-a8-Vio"/>
+                                                            <outlet property="groupView" destination="1RW-pw-Cb7" id="70T-A0-kJX"/>
                                                             <outlet property="grouplabel" destination="Mh9-GS-X6G" id="Yod-mr-pkP"/>
                                                             <outlet property="myPageImage" destination="vyL-fU-YvQ" id="oXn-sO-a8D"/>
                                                             <outlet property="myResturantImage" destination="RoW-oF-ZPS" id="0bz-KV-zWL"/>
