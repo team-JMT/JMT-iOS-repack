@@ -50,17 +50,15 @@ class HomeBottomSheetViewController: UIViewController {
             self?.viewModel?.isLodingData = true
             self?.bottomSheetCollectionView.showAnimatedGradientSkeleton()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                Task {
-                    do {
-                        try await self?.fetchGroupRestaurantData()
-                        self?.viewModel?.isLodingData = false
-                        
-                        self?.bottomSheetCollectionView.stopSkeletonAnimation()
-                        self?.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
-                    } catch {
-                        print(error)
-                    }
+            Task {
+                do {
+                    try await self?.fetchGroupRestaurantData()
+                    self?.viewModel?.isLodingData = false
+                    
+                    self?.bottomSheetCollectionView.stopSkeletonAnimation()
+                    self?.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                } catch {
+                    print(error)
                 }
             }
         }
@@ -319,6 +317,7 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
                 switch indexPath.section {
                 case 0:
                     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "firstCell", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
+                    cell.hideSkeleton()
                     cell.setupData(model: viewModel?.popularRestaurants[indexPath.item])
                     return cell
                 case 1:
@@ -350,7 +349,6 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
 extension HomeBottomSheetViewController: SkeletonCollectionViewDataSource {
     
     func numSections(in collectionSkeletonView: UICollectionView) -> Int {
-        print("123123123123 -- 1")
         return 2
     }
     

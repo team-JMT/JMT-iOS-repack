@@ -20,6 +20,7 @@ class RestaurantDetailPhotoViewController: UIViewController {
         super.viewDidLoad()
 
         photoCollectionView.collectionViewLayout = createLayout()
+        photoCollectionView.keyboardDismissMode = .onDrag
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {

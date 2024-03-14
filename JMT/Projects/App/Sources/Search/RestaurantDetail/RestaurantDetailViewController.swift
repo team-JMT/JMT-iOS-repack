@@ -89,7 +89,6 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         
         setCustomNavigationBarBackButton(isSearchVC: false)
         
-        
         imageViews = [reviewImageView1, reviewImageView2, reviewImageView3, reviewImageView4, reviewImageView5]
         // 각 이미지뷰에 제스처 추가
         for (index, imageView) in imageViews.enumerated() {
@@ -110,6 +109,8 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
             
             self?.bottomContainerStackView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.cgRectValue.height)
+            
+            print(-keyboardFrame.cgRectValue.height)
             
         } keyboardWillHide: { [weak self] noti in
             self?.bottomContainerStackView.transform = .identity
@@ -146,7 +147,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     func setupData() {
         placeNameLabel.text = viewModel?.restaurantData?.name ?? ""
        
-        if viewModel?.location == nil {
+        if viewModel?.locationManager.coordinate == nil {
             differenceInDistanceLabel.text = "알 수 없음"
         } else {
             differenceInDistanceLabel.text = "위치에서 \(viewModel?.restaurantData?.differenceInDistance ?? "")m"
@@ -221,6 +222,11 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     @IBAction func didTabAddPhotoButton(_ sender: Any) {
         viewModel?.coordinator?.showImagePicker()
     }
+    
+    @IBAction func didTabAddReviewButton(_ sender: Any) {
+        print(viewModel?.coordinator?.parentCoordinator)
+    }
+    
     
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
         

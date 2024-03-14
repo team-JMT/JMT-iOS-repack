@@ -15,6 +15,7 @@ class RestaurantDetailInfoViewController: UIViewController {
     
     private var oldContentOffset = CGPoint.zero
     
+    @IBOutlet weak var rootScrollView: UIScrollView!
     @IBOutlet weak var photoCollectionContainerView: UIView!
     @IBOutlet weak var photoCollectionView: UICollectionView!
     
@@ -27,6 +28,7 @@ class RestaurantDetailInfoViewController: UIViewController {
         
         setupUI()
         infoCollectionView.collectionViewLayout = createLayout()
+        rootScrollView.keyboardDismissMode = .onDrag
         
         let restaurantDetailHeaderView = UINib(nibName: "RestaurantDetailTitleHeaderView", bundle: nil)
         infoCollectionView.register(restaurantDetailHeaderView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "RestaurantDetailTitleHeaderView")

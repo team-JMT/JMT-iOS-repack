@@ -20,6 +20,7 @@ class RestaurantDetailReviewViewController: UIViewController {
         super.viewDidLoad()
         
         reviewCollectionView.collectionViewLayout = createLayout()
+        reviewCollectionView.keyboardDismissMode = .onDrag
     
     }
     

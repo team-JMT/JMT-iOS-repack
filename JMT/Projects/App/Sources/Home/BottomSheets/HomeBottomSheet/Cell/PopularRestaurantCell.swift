@@ -39,8 +39,6 @@ class PopularRestaurantCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        print("123123 11 ------- prepareForReuse")
-        
         restaurantImageView.image = nil
         userProfileImageView.image = nil
         userNicknameLabel.text = ""
@@ -48,9 +46,6 @@ class PopularRestaurantCell: UICollectionViewCell {
     }
     
     func setupData(model: SearchMapRestaurantItems?) {
-        
-        print("123123 11 ------- setupData")
-        
         
         if let model = model {
             if let url = URL(string: model.restaurantImageUrl ?? "") {

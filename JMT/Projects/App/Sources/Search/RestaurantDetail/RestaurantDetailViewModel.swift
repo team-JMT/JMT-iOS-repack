@@ -34,7 +34,6 @@ class RestaurantDetailViewModel {
     
     let stickyHeaderViewConfig = StickyHeaderViewConfig(initialHeight: 200, finalHeight: 0)
     let locationManager = LocationManager.shared
-    var location: CLLocationCoordinate2D?
 
     var recommendRestaurantId: Int?
     var restaurantData: DetailRestaurantModel?
@@ -57,20 +56,20 @@ class RestaurantDetailViewModel {
     
     // 위치 정보 가져오기
     func fetchCurrentLocationAsync() async {
-//        return await withCheckedContinuation { continuation in
-//            locationManager.didUpdateLocations = { [weak self] location in
-//                self?.location = location
-//                continuation.resume()
-//            }
-//            
-//            locationManager.fetchLocations()
-//        }
+        
+        return await withCheckedContinuation { continuation in
+            locationManager.didUpdateLocations = {
+                continuation.resume()
+            }
+            
+            locationManager.startUpdateLocation()
+        }
     }
     
     // 맛집 정보 가져오기
     func fetchRestaurantData() async throws {
-        let x = location?.longitude ?? 0.0
-        let y = location?.latitude ?? 0.0
+        let x = locationManager.coordinate?.longitude ?? 0.0
+        let y = locationManager.coordinate?.latitude ?? 0.0
         
         restaurantData = try await FetchRestaurantAPI.fetchDetailRestaurantAsync(request: DetailRestaurantRequest(recommendRestaurantId: recommendRestaurantId ?? 0, coordinator: DetailRestaurantCoordinate(x: "\(x)", y: "\(y)"))).toDomain
     }

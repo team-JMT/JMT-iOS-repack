@@ -130,6 +130,9 @@
                                     <constraint firstAttribute="height" constant="88" id="fzJ-Cw-srK"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L4o-t0-J3y">
+                                <rect key="frame" x="0.0" y="303" width="393" height="461"/>
+                            </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="nBG-hK-fTy">
                                 <rect key="frame" x="0.0" y="764" width="393" height="88"/>
                                 <subviews>
@@ -305,6 +308,9 @@
                                                 <state key="normal" title="등록">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="didTabAddReviewButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="sMI-IZ-nVt"/>
+                                                </connections>
                                             </button>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="입력해주세요." translatesAutoresizingMaskIntoConstraints="NO" id="ijD-1N-iQ3">
                                                 <rect key="frame" x="20" y="14" width="234" height="50"/>
@@ -345,9 +351,6 @@
                                     </view>
                                 </subviews>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L4o-t0-J3y">
-                                <rect key="frame" x="0.0" y="303" width="393" height="461"/>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -1033,6 +1036,7 @@
                         <outlet property="infoCollectionViewHeight" destination="e3H-eJ-tNU" id="6jB-qZ-bvV"/>
                         <outlet property="photoCollectionContainerView" destination="zZl-Ek-YRf" id="OQe-rV-eyX"/>
                         <outlet property="photoCollectionView" destination="TOF-Pd-aNX" id="VzY-Sq-5l0"/>
+                        <outlet property="rootScrollView" destination="GMn-vZ-93E" id="wBd-he-IrY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EP4-CE-dhu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
