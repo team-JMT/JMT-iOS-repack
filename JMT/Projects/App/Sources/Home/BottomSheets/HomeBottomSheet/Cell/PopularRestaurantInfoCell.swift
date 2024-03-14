@@ -20,8 +20,6 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
     
     @IBOutlet weak var introduceLabel: UILabel!
     
-    @IBOutlet weak var likeCountLabel: UILabel!
-    
     @IBOutlet weak var reviewContainerView: UIView!
     @IBOutlet weak var reviewUserProfileImageView: UIImageView!
     @IBOutlet weak var reviewNicknameLabel: UILabel!
@@ -29,6 +27,8 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        self.isSkeletonable = true
         
         userProfileImageView.layer.cornerRadius = userProfileImageView.frame.height / 2
         restaurantImageView.layer.cornerRadius = 16
@@ -41,16 +41,11 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        stopSkeletonAnimation()
-        hideSkeleton()
-        setupData(model: nil)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.layoutIfNeeded()
-        self.layoutSkeletonIfNeeded()
+        userNicknameLabel.text = ""
+        userProfileImageView.image = nil
+        restaurantImageView.image = nil
+        restaurantNameLabel.text = nil
+        introduceLabel.text = nil
     }
     
     func setupData(model: SearchMapRestaurantItems?) {

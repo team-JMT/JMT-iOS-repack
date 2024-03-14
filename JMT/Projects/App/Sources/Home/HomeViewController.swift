@@ -53,6 +53,8 @@ class HomeViewController: UIViewController {
         setupBind()
         setupRestaurantBottomSheetUI()
         
+      
+        
         fetchData()
         
         naverMapView.mapView.addCameraDelegate(delegate: self)
@@ -241,6 +243,8 @@ class HomeViewController: UIViewController {
             self.showRestaurantListBottomSheetVC()
             self.setTopViewShadow()
             self.updateLocationButtonBottomConstraint()
+            
+            self.restaurantListFpc.move(to: .full, animated: false)
         }
     }
     
@@ -441,7 +445,7 @@ extension HomeViewController {
         guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
         
         vc.viewModel = self.viewModel
-        
+       
         restaurantListFpc = FloatingPanelController(delegate: self)
         restaurantListFpc.set(contentViewController: vc)
         restaurantListFpc.addPanel(toParent: self)

@@ -127,7 +127,7 @@ class HomeViewModel {
 //    var didUpdateSortTypeButton: (() -> Void)?
 
     // 필터 관련
-    var didUpdateFilterRestaurants: (() -> Void)?
+//    var didUpdateFilterRestaurants: (() -> Void)?
     var didUpdateFilterTableView: (() -> Void)?
 
 //    // 지도 관련
@@ -263,7 +263,7 @@ extension HomeViewModel {
         switch sortType {
         case .sort:
             selectedSortIndex = row
-            didUpdateFilterRestaurants?()
+            didUpdateGroupRestaurantsData?()
         case .category:
             selectedCategoryIndex = row
         case .drinking:
