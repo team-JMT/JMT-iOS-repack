@@ -353,6 +353,7 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
         } else {
             if viewModel?.popularRestaurants.isEmpty == true {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emptyDataCell", for: indexPath) as? PopularEmptyCell else { return UICollectionViewCell() }
+                cell.delegate = self
                 return cell
             } else {
                 if viewModel?.restaurants.isEmpty == true {

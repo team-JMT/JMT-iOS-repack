@@ -331,21 +331,21 @@ class HomeViewController: UIViewController {
 // MARK: - FloatingPanelControllerDelegate
 extension HomeViewController: FloatingPanelControllerDelegate {
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
-        switch fpc.state {
-        case .full:
-            fpc.setPanelStyle(radius: 0, isHidden: true)
-            //            locationStackView.isHidden = true
-            
-        case .half:
-            fpc.setPanelStyle(radius: 24, isHidden: false)
-            //            locationStackView.isHidden = false
-            
-            //        case .tip:
-            //            locationStackView.isHidden = false
-            
-        default:
-            print("")
-        }
+//        switch fpc.state {
+//        case .full:
+////            fpc.setPanelStyle(radius: 0, isHidden: true)
+//            //            locationStackView.isHidden = true
+//
+//        case .half:
+////            fpc.setPanelStyle(radius: 24, isHidden: false)
+//            //            locationStackView.isHidden = false
+//            
+//            //        case .tip:
+//            //            locationStackView.isHidden = false
+//            
+//        default:
+//            print("")
+//        }
     }
     
     func floatingPanelDidMove(_ fpc: FloatingPanelController) {
