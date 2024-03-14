@@ -25,7 +25,8 @@ extension SocialLoginResponse {
     var toDomain: SocialLoginModel {
         return SocialLoginModel(accessToken: data.accessToken,
                                 refreshToken: data.refreshToken,
-                                userLoginAction: data.userLoginAction)
+                                userLoginAction: data.userLoginAction, 
+                                accessTokenExpiresIn: data.accessTokenExpiresIn)
     }
 }
 

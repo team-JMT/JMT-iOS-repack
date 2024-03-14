@@ -10,19 +10,19 @@ import Alamofire
 
 
 struct SocialLoginAPI {
-    
-    static func googleLogin(request: SocialLoginRequest, completion: @escaping (Result<String,NetworkError>) -> ()) {
+
+    static func googleLogin(request: SocialLoginRequest, completion: @escaping (Result<SocialLoginModel,NetworkError>) -> ()) {
         AF.request(SocialLoginTarget.googleLogin(request))
             .validate(statusCode: 200..<300)
             .responseDecodable(of: SocialLoginResponse.self) { response in
                 switch response.result {
                 case .success(let response):
-                                    
-//                    DefaultKeychainService.shared.accessToken = response.data.accessToken
-//                    DefaultKeychainService.shared.refreshToken = response.data.refreshToken
-//                    DefaultKeychainService.shared.accessTokenExpiresIn = response.data.accessTokenExpiresIn
+                            
+                    DefaultKeychainService.shared.tempAccessToken = response.data.accessToken
+                    DefaultKeychainService.shared.tempRefreshToken = response.data.refreshToken
+                    DefaultKeychainService.shared.tempAccessTokenExpiresIn = response.data.accessTokenExpiresIn
                     
-                    completion(.success(response.toDomain.userLoginAction))
+                    completion(.success(response.toDomain))
                     
                 case .failure(let error):
                     print("googleLogin 실패!!", error)
@@ -30,7 +30,7 @@ struct SocialLoginAPI {
             }
     }
     
-    static func appleLogin(request: SocialLoginRequest, completion: @escaping (Result<String,NetworkError>) -> ()) {
+    static func appleLogin(request: SocialLoginRequest, completion: @escaping (Result<SocialLoginModel,NetworkError>) -> ()) {
         
         AF.request(SocialLoginTarget.appleLogin(request))
             .validate(statusCode: 200..<300)
@@ -38,11 +38,11 @@ struct SocialLoginAPI {
                 switch response.result {
                 case .success(let response):
                     
-//                    DefaultKeychainService.shared.accessToken = response.data.accessToken
-//                    DefaultKeychainService.shared.refreshToken = response.data.refreshToken
-//                    DefaultKeychainService.shared.accessTokenExpiresIn = response.data.accessTokenExpiresIn
+                    DefaultKeychainService.shared.tempAccessToken = response.data.accessToken
+                    DefaultKeychainService.shared.tempRefreshToken = response.data.refreshToken
+                    DefaultKeychainService.shared.tempAccessTokenExpiresIn = response.data.accessTokenExpiresIn
                     
-                    completion(.success(response.toDomain.userLoginAction))
+                    completion(.success(response.toDomain))
                     
                 case .failure(let error):
                     print("appleLogin 실패!!",error)
@@ -51,7 +51,7 @@ struct SocialLoginAPI {
     }
     
     // 테스트 계정
-    static func testLogin(completion: @escaping (Result<String, NetworkError>) -> ()) {
+    static func testLogin(completion: @escaping (Result<SocialLoginModel, NetworkError>) -> ()) {
         AF.request(SocialLoginTarget.testLogin)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: SocialLoginResponse.self) { response in
@@ -62,7 +62,7 @@ struct SocialLoginAPI {
                     DefaultKeychainService.shared.refreshToken = response.data.refreshToken
                     DefaultKeychainService.shared.accessTokenExpiresIn = response.data.accessTokenExpiresIn
                     
-                    completion(.success(response.toDomain.userLoginAction))
+                    completion(.success(response.toDomain))
                 case .failure(let error):
                     print("error")
                 }

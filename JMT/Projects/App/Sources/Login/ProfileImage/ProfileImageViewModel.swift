@@ -50,6 +50,15 @@ class ProfileImageViewModel {
                     case "UNAUTHORIZED":
                         print("인증이 필요하므로 엑세스토큰 갱신 필요")
                     default:
+            
+                        DefaultKeychainService.shared.accessToken = DefaultKeychainService.shared.tempAccessToken
+                        DefaultKeychainService.shared.refreshToken = DefaultKeychainService.shared.tempRefreshToken
+                        DefaultKeychainService.shared.accessTokenExpiresIn = DefaultKeychainService.shared.tempAccessTokenExpiresIn
+                        
+                        DefaultKeychainService.shared.tempAccessToken = nil
+                        DefaultKeychainService.shared.tempRefreshToken = nil
+                        DefaultKeychainService.shared.tempAccessTokenExpiresIn = nil
+                        
                         self.onSuccess?(.saveProfileImage)
                     }
                 case .failure(let error):
@@ -74,6 +83,15 @@ class ProfileImageViewModel {
                 case "UNAUTHORIZED":
                     print("인증이 필요하므로 엑세스토큰 갱신 필요")
                 default:
+                    
+                    DefaultKeychainService.shared.accessToken = DefaultKeychainService.shared.tempAccessToken
+                    DefaultKeychainService.shared.refreshToken = DefaultKeychainService.shared.tempRefreshToken
+                    DefaultKeychainService.shared.accessTokenExpiresIn = DefaultKeychainService.shared.tempAccessTokenExpiresIn
+                    
+                    DefaultKeychainService.shared.tempAccessToken = nil
+                    DefaultKeychainService.shared.tempRefreshToken = nil
+                    DefaultKeychainService.shared.tempAccessTokenExpiresIn = nil
+                    
                     self.onSuccess?(.saveProfileImage)
                 }
             case .failure(let error):

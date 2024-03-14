@@ -28,8 +28,8 @@ class SocialLoginViewModel {
                 
                 SocialLoginAPI.googleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
-                    case .success(let actionStr):
-                        if let action = UserLoginAction(rawValue: actionStr) {
+                    case .success(let response):
+                        if let action = UserLoginAction(rawValue: response.userLoginAction) {
                             switch action {
                             case .SIGN_UP, .NICKNAME_PROCESS:
                                 self.coordinator?.showNicknameViewController()
@@ -61,8 +61,8 @@ class SocialLoginViewModel {
                 
                 SocialLoginAPI.appleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
-                    case .success(let actionStr):
-                        if let action = UserLoginAction(rawValue: actionStr) {
+                    case .success(let response):
+                        if let action = UserLoginAction(rawValue: response.userLoginAction) {
                             switch action {
                             case .SIGN_UP, .NICKNAME_PROCESS:
                                 self?.coordinator?.showNicknameViewController()
@@ -88,8 +88,8 @@ class SocialLoginViewModel {
     func testLogin() {
         SocialLoginAPI.testLogin { response in
             switch response {
-            case .success(let actionStr):
-                if let action = UserLoginAction(rawValue: actionStr) {
+            case .success(let response):
+                if let action = UserLoginAction(rawValue: response.userLoginAction) {
                     switch action {
                     case .SIGN_UP, .NICKNAME_PROCESS:
                         self.coordinator?.showNicknameViewController()

@@ -8,6 +8,7 @@
 import UIKit
 
 protocol NicknameCoordinator: Coordinator {
+    func start()
     func setProfileCoordinator()
     func showProfileViewController()
 }
