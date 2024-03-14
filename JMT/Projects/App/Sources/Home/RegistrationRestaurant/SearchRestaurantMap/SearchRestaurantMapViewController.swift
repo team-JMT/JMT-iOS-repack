@@ -10,6 +10,10 @@ import NMapsMap
 
 class SearchRestaurantMapViewController: UIViewController {
     
+    deinit {
+        print("SearchRestaurantMapViewController Deinit")
+    }
+    
     // MARK: - Properties
     var viewModel: SearchRestaurantMapViewModel?
     @IBOutlet weak var naverMapView: NMFNaverMapView!
@@ -66,7 +70,7 @@ class SearchRestaurantMapViewController: UIViewController {
     
     // MARK: - SetupUI
     func setupUI() {
-        setCustomNavigationBarBackButton(isSearchVC: false)
+        setCustomNavigationBarBackButton(goToViewController: .popVC)
         
         registeredRestaurantView.layer.cornerRadius = 8
         infoView.layer.cornerRadius = 8

@@ -12,34 +12,22 @@ class SearchViewModel {
     
     var recentSearchRestaurants = [String]()
     
-    var onSuccess: (() -> ())?
     
-    var tagData = ["1","2","33","444","5555"]
-    
-    var recentArray = ["식당1","식당2","식당3","음식점1","음식정2","음식점3"]
     
     var recentResults = [String]()
     
-    var isSearch: Bool = false
-    
     var currentSegIndex: Int = 0
     
-    var workItem: DispatchWorkItem?
+    var isEmptyGroup: Bool = false
     
-    func didChangeTextField(text: String) {
-        workItem?.cancel()
+    func fetchGroups() async throws {
         
-        let workItem = DispatchWorkItem {
-            self.recentResults.removeAll()
-            self.recentResults = self.recentArray.filter({$0.contains(text)})
-            self.onSuccess?()
-        }
         
-        self.workItem = workItem
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
     }
+    
 }
+
+// 5 9 12 15 16 17 18
 
 // 최근 검색 관련 메소드
 extension SearchViewModel {

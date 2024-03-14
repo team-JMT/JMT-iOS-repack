@@ -19,16 +19,14 @@ class DefaultGroupCoordinator: GroupCoordinator {
     var finishDelegate: CoordinatorFinishDelegate?
     var type: CoordinatorType = .home
     
-    init(navigationController: UINavigationController?) {
+    init(navigationController: UINavigationController?, parentCoordinator: Coordinator) {
         self.navigationController = navigationController
+        self.parentCoordinator = parentCoordinator
     }
-    
     
     func start() {
         let groupViewController = GroupViewController.instantiateFromStoryboard(storyboardName: "Group")
         self.navigationController?.pushViewController(groupViewController, animated: true)
         
     }
-    
-    
 }

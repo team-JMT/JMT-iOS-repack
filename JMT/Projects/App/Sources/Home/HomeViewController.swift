@@ -53,8 +53,6 @@ class HomeViewController: UIViewController {
         setupBind()
         setupRestaurantBottomSheetUI()
         
-      
-        
         fetchData()
         
         naverMapView.mapView.addCameraDelegate(delegate: self)
@@ -243,8 +241,6 @@ class HomeViewController: UIViewController {
             self.showRestaurantListBottomSheetVC()
             self.setTopViewShadow()
             self.updateLocationButtonBottomConstraint()
-            
-            self.restaurantListFpc.move(to: .full, animated: false)
         }
     }
     

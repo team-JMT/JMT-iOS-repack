@@ -74,8 +74,10 @@ class DefaultHomeCoordinator: HomeCoordinator {
     
     func showSearchTabWithButton() {
         if let coordinator = parentCoordinator as? DefaultTabBarCoordinator {
-            coordinator.tabBarController.isHomeSearchButton = true
-            coordinator.tabBarController.selectedIndex = 1
+            if let searchVC = coordinator.childCoordinators[1].navigationController?.viewControllers.first as? SearchViewController {
+                searchVC.viewModel?.isEmptyGroup = true
+                coordinator.tabBarController.selectedIndex = 1
+            }
         }
     }
     

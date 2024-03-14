@@ -9,17 +9,16 @@ import Foundation
 
 struct SocialLoginResponse: Decodable {
     let data: SocialLoginData
-    
-    struct SocialLoginData: Decodable {
-        let grantType: String
-        let accessToken: String
-        let refreshToken: String
-        let accessTokenExpiresIn: Int
-        let userLoginAction: String
-    }
-    
     let message: String
     let code: String
+}
+
+struct SocialLoginData: Decodable {
+    let grantType: String
+    let accessToken: String
+    let refreshToken: String
+    let accessTokenExpiresIn: Int
+    let userLoginAction: String
 }
 
 extension SocialLoginResponse {

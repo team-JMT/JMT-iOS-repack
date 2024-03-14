@@ -43,7 +43,7 @@ class ProfileImageViewController: UIViewController {
     }
     
     func setupUI() {
-        setCustomNavigationBarBackButton(isSearchVC: false)
+        setCustomNavigationBarBackButton(goToViewController: .popVC)
         profileImageView.layer.cornerRadius = 154 / 2
         doneButton.layer.cornerRadius = 8
     }

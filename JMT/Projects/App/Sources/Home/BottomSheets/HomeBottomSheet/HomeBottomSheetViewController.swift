@@ -47,18 +47,22 @@ class HomeBottomSheetViewController: UIViewController {
         
         viewModel?.didUpdateGroupRestaurantsData = { [weak self] in
             
+            print("호출 !!!!!")
+            
             self?.viewModel?.isLodingData = true
             self?.bottomSheetCollectionView.showAnimatedGradientSkeleton()
             
-            Task {
-                do {
-                    try await self?.fetchGroupRestaurantData()
-                    self?.viewModel?.isLodingData = false
-                    
-                    self?.bottomSheetCollectionView.stopSkeletonAnimation()
-                    self?.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
-                } catch {
-                    print(error)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                Task {
+                    do {
+                        try await self?.fetchGroupRestaurantData()
+                        self?.viewModel?.isLodingData = false
+                        
+                        self?.bottomSheetCollectionView.stopSkeletonAnimation()
+                        self?.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                    } catch {
+                        print(error)
+                    }
                 }
             }
         }
@@ -284,7 +288,6 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
 // MARK: - CollectionView DataSource
 extension HomeBottomSheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        print("123123123123 -- 2")
         if viewModel?.popularRestaurants.isEmpty == true {
             return 1
         } else {

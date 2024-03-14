@@ -87,8 +87,6 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         pageViewController?.pageViewDelegate = self
         pageViewController?.restaurantDetailDelegate = self
         
-        setCustomNavigationBarBackButton(isSearchVC: false)
-        
         imageViews = [reviewImageView1, reviewImageView2, reviewImageView3, reviewImageView4, reviewImageView5]
         // 각 이미지뷰에 제스처 추가
         for (index, imageView) in imageViews.enumerated() {
@@ -105,6 +103,12 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.tabBarController?.tabBar.isHidden = true
         
+        if viewModel?.coordinator?.parentCoordinator is DefaultHomeCoordinator {
+            setCustomNavigationBarBackButton(goToViewController: .popVC)
+        } else if viewModel?.coordinator?.parentCoordinator is DefaultRegistrationRestaurantInfoCoordinator {
+            setCustomNavigationBarBackButton(goToViewController: .popToRootVC)
+        }
+        
         setupKeyboardEvent { [weak self] noti in
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
             
@@ -119,6 +123,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.tabBarController?.tabBar.isHidden = false
@@ -224,9 +229,8 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     }
     
     @IBAction func didTabAddReviewButton(_ sender: Any) {
-        print(viewModel?.coordinator?.parentCoordinator)
+       
     }
-    
     
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
         

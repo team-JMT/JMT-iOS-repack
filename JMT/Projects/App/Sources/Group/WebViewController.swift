@@ -25,7 +25,7 @@ class WebViewController: UIViewController {
       super.viewWillAppear(animated)
       
       self.navigationController?.setNavigationBarHidden(true, animated: true)
-      setCustomNavigationBarBackButton(isSearchVC: false)
+      setCustomNavigationBarBackButton(goToViewController: .popVC)
   }
 
     

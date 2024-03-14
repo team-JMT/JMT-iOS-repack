@@ -9,7 +9,7 @@ import UIKit
 
 class DefaultTabBarController: UITabBarController {
     
-    var isHomeSearchButton: Bool = false
+//    var isHomeSearchButton: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -11,7 +11,9 @@ import SnapKit
 
 class SearchRestaurantViewController: UIViewController {
 
-    // MARK: - Enum
+    deinit {
+        print("SearchRestaurantViewController Deinit")
+    }
     
     // MARK: - Properties
     var viewModel: SearchRestaurantViewModel?
@@ -24,7 +26,7 @@ class SearchRestaurantViewController: UIViewController {
         super.viewDidLoad()
         
         self.navigationItem.title = "맛집 등록"
-        setCustomNavigationBarBackButton(isSearchVC: false)
+        setCustomNavigationBarBackButton(goToViewController: .popVC)
         
         setupBind()
         setupUI()
@@ -45,24 +47,24 @@ class SearchRestaurantViewController: UIViewController {
     
     // MARK: - SetupBindings
     func setupBind() {
-        viewModel?.didUpdateRestaurantsInfo = {
-            self.searchRestaurantResultTableView.reloadData()
+        viewModel?.didUpdateRestaurantsInfo = { [weak self] in
+            self?.searchRestaurantResultTableView.reloadData()
         }
     }
     
     // MARK: - SetupData
     func fetchSearchRestaurantsData() {
         
-        viewModel?.locationManager.didUpdateLocations = {
+        viewModel?.locationManager.didUpdateLocations = { [weak self] in
             
-            let x = self.viewModel?.locationManager.coordinate?.longitude ?? 0.0
-            let y = self.viewModel?.locationManager.coordinate?.latitude ?? 0.0
+            let x = self?.viewModel?.locationManager.coordinate?.longitude ?? 0.0
+            let y = self?.viewModel?.locationManager.coordinate?.latitude ?? 0.0
             
             Task {
                 do {
-                    let keyword = self.searchRestaurantTextField.text ?? ""
-                    try await self.viewModel?.fetchSearchRestaurants(keyword: keyword, x:"\(x)", y:"\(y)")
-                    self.updateTableView()
+                    let keyword = self?.searchRestaurantTextField.text ?? ""
+                    try await self?.viewModel?.fetchSearchRestaurants(keyword: keyword, x:"\(x)", y:"\(y)")
+                    self?.updateTableView()
                 } catch {
                     print(error)
                 }

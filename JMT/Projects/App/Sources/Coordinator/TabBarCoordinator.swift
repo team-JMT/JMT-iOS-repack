@@ -107,7 +107,7 @@ class DefaultTabBarCoordinator: TabBarCoordinator {
             coordinator.start()
             childCoordinators.append(coordinator)
         case .group:
-            let coordinator = DefaultGroupCoordinator(navigationController: tabNavigationController)
+            let coordinator = DefaultGroupCoordinator(navigationController: tabNavigationController, parentCoordinator: self)
             coordinator.start()
             childCoordinators.append(coordinator)
         case .mypage:

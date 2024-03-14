@@ -91,13 +91,9 @@ class RegistrationRestaurantInfoViewModel {
                 print(response.data.recommendRestaurantId, response.data.restaurantLocationId)
             }
         } catch {
-            print("3333", error)
+            print(error)
         }
-        
-        
     }
-    
-    
     
     // MARK: - Utility Methods
     // 다양한 유틸리티 메소드들을 모아두는 부분입니다. 예를 들어, 날짜 포매팅이나 데이터 검증 등입니다.

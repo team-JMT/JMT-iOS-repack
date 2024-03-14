@@ -18,9 +18,9 @@ struct SocialLoginAPI {
                 switch response.result {
                 case .success(let response):
                                     
-                    DefaultKeychainService.shared.accessToken = response.data.accessToken
-                    DefaultKeychainService.shared.refreshToken = response.data.refreshToken
-                    DefaultKeychainService.shared.accessTokenExpiresIn = response.data.accessTokenExpiresIn
+//                    DefaultKeychainService.shared.accessToken = response.data.accessToken
+//                    DefaultKeychainService.shared.refreshToken = response.data.refreshToken
+//                    DefaultKeychainService.shared.accessTokenExpiresIn = response.data.accessTokenExpiresIn
                     
                     completion(.success(response.toDomain.userLoginAction))
                     
@@ -38,9 +38,9 @@ struct SocialLoginAPI {
                 switch response.result {
                 case .success(let response):
                     
-                    DefaultKeychainService.shared.accessToken = response.data.accessToken
-                    DefaultKeychainService.shared.refreshToken = response.data.refreshToken
-                    DefaultKeychainService.shared.accessTokenExpiresIn = response.data.accessTokenExpiresIn
+//                    DefaultKeychainService.shared.accessToken = response.data.accessToken
+//                    DefaultKeychainService.shared.refreshToken = response.data.refreshToken
+//                    DefaultKeychainService.shared.accessTokenExpiresIn = response.data.accessTokenExpiresIn
                     
                     completion(.success(response.toDomain.userLoginAction))
                     
