@@ -32,7 +32,10 @@ class SearchRestaurantViewModel {
     // MARK: - Data Fetching
     // 외부 소스나 모델로부터 데이터를 가져오는 메소드들을 모아두는 부분입니다.
     func fetchSearchRestaurantsData(keyword: String) async throws {
-        guard !isFetching && !isEnd else { return }
+        
+        print(isFetching, isEnd)
+        
+        guard isFetching == false && isEnd == false else { return }
         isFetching = true
         
         do {

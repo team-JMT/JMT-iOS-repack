@@ -162,10 +162,11 @@ extension SearchRestaurantViewController: UITextFieldDelegate {
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
-        guard viewModel?.restaurantsInfo.isEmpty == false else { return }
 
         viewModel?.currentPage = 1
         viewModel?.isSearch = false
+        viewModel?.isEnd = false
+        viewModel?.isFetching = false
         viewModel?.restaurantsInfo.removeAll()
         searchRestaurantResultTableView.reloadData()
     }

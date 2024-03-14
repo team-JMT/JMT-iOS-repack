@@ -68,7 +68,7 @@ class RegistrationRestaurantInfoViewModel {
         return 0
     }
     
-    func registrationRestaurantAsync(restaurantLocationId: Int) async throws {
+    func registrationRestaurantAsync(restaurantLocationId: Int) async throws -> Int {
         
         do {
             if let info = self.info {
@@ -88,10 +88,15 @@ class RegistrationRestaurantInfoViewModel {
                     groupId: UserDefaultManager.selectedGroupId)
                 
                 let response = try await RegistrationRestaurantAPI.registrationRestaurantAsync(request: request, images: selectedImages)
+                return response.data.recommendRestaurantId
+                
                 print(response.data.recommendRestaurantId, response.data.restaurantLocationId)
+            } else {
+                return 0
             }
         } catch {
             print(error)
+            return 0
         }
     }
     

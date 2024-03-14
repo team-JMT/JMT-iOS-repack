@@ -299,23 +299,17 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     // MARK: - Actions
     @IBAction func didTabRegistrationButton(_ sender: Any) {
         
-        viewModel?.coordinator?.showDetailRestaurantViewController(id: 13)
+       
         
-//        Task {
-//            if viewModel?.checkNotInfo() == true {
-//                let restaurantLocationId = try await viewModel?.registrationRestaurantLocation() ?? 0
-//                try await viewModel?.registrationRestaurantAsync(restaurantLocationId: restaurantLocationId)
-//            } else {
-//                viewModel?.coordinator?.showButtonPopupViewController()
-//            }
-//            
-//            print(viewModel?.isSelectedCategory)
-//            print(viewModel?.selectedImages)
-//            print(viewModel?.commentString)
-//            print(viewModel?.isDrinking)
-//            print(viewModel?.drinkingComment)
-//            print(viewModel?.tags)
-//        }
+        Task {
+            if viewModel?.checkNotInfo() == true {
+                let restaurantLocationId = try await viewModel?.registrationRestaurantLocation() ?? 0
+                let recommendRestaurantId = try await viewModel?.registrationRestaurantAsync(restaurantLocationId: restaurantLocationId)
+                viewModel?.coordinator?.showDetailRestaurantViewController(id: recommendRestaurantId ?? 0)
+            } else {
+                viewModel?.coordinator?.showButtonPopupViewController()
+            }
+        }
     }   
     
     // MARK: - Helper Methods

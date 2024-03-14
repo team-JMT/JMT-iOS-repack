@@ -47,12 +47,10 @@ class HomeBottomSheetViewController: UIViewController {
         
         viewModel?.didUpdateGroupRestaurantsData = { [weak self] in
             
-            print("호출 !!!!!")
-            
             self?.viewModel?.isLodingData = true
             self?.bottomSheetCollectionView.showAnimatedGradientSkeleton()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 Task {
                     do {
                         try await self?.fetchGroupRestaurantData()

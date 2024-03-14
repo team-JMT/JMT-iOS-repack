@@ -175,7 +175,7 @@ extension HomeViewModel {
                 userLocation: SearchMapRestaurantLocation(x: "\(LocationManager.shared.coordinate?.longitude ?? 0.0)", y: "\(LocationManager.shared.coordinate?.latitude ?? 0.0)"),
                 startLocation: nil,
                 endLocation: nil,
-                filter: SearchMapRestaurantFilter(categoryFilter: SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
+                filter: SearchMapRestaurantFilter(categoryFilter: categoryFilter == nil ? nil : SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
                 groupId: currentGroupId)
         } else {
             parameters = SearchMapRestaurantPageRequest(page: 1, size: 20, sort: "id,desc")
@@ -183,7 +183,7 @@ extension HomeViewModel {
                 userLocation: nil,
                 startLocation: nil,
                 endLocation: nil,
-                filter: SearchMapRestaurantFilter(categoryFilter: SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
+                filter: SearchMapRestaurantFilter(categoryFilter: categoryFilter == nil ? nil : SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
                 groupId: currentGroupId)
         }
         
