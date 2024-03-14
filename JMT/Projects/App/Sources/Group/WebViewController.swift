@@ -16,7 +16,9 @@ class WebViewController: UIViewController {
     
     var webView: WKWebView!
     var url: String?
-    var request: URLRequest? // URLRequest 객체를 받을 프로퍼티
+    var request: URLRequest? 
+    
+    var webViewBottomConstraint: Constraint?
 
     
   override func viewWillAppear(_ animated: Bool) {
@@ -56,6 +58,12 @@ class WebViewController: UIViewController {
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
             webView.load(request)
         }
+        
+        webView.snp.makeConstraints { make in
+                    make.top.leading.trailing.equalToSuperview()
+                    // webViewBottomConstraint를 사용하여 하단 제약을 설정
+                    self.webViewBottomConstraint = make.bottom.equalToSuperview().constraint
+                }
     }
     
     
@@ -67,6 +75,32 @@ class WebViewController: UIViewController {
         
         webView.load(request)
     }
+    
+    func setupKeyboardObservers() {
+           NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+           NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+       }
+       
+       @objc func keyboardWillShow(notification: NSNotification) {
+           if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+               let keyboardRectangle = keyboardFrame.cgRectValue
+               let keyboardHeight = keyboardRectangle.height
+               // 키보드 높이만큼 webViewBottomConstraint 조정
+               webViewBottomConstraint?.update(inset: keyboardHeight)
+               view.layoutIfNeeded()
+           }
+       }
+
+       @objc func keyboardWillHide(notification: NSNotification) {
+           // 키보드가 숨겨질 때 하단 제약을 원래대로 조정
+           webViewBottomConstraint?.update(inset: 0)
+           view.layoutIfNeeded()
+       }
+       
+       deinit {
+           // 옵저버 제거
+           NotificationCenter.default.removeObserver(self)
+       }
     
 }
 

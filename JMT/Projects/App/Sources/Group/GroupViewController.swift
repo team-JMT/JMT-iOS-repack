@@ -57,21 +57,21 @@ class GroupViewController: UIViewController {
     
     
     @IBAction func didTabShowCustomURLButton(_ sender: Any) {
-        guard let urlString = tf.text, !urlString.isEmpty, let url = URL(string: urlString),
+        guard let urlString = tf.text, !urlString.isEmpty,
+              let url = URL(string: urlString),
               let accessToken = DefaultKeychainService.shared.accessToken else {
             print("URL text or Access token is not available")
             return
         }
         
-        // URLRequest 객체 생성
+        // URLRequest 객체 생성 및 HTTP 헤더에 엑세스 토큰 추가
         var request = URLRequest(url: url)
-        // HTTP 헤더에 엑세스 토큰 추가
-        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
         // WebViewController 인스턴스 생성 및 요청 객체 전달
         let storyboard = UIStoryboard(name: "Group", bundle: nil)
         if let webViewController = storyboard.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController {
-            webViewController.request = request // WebViewController에서 request 프로퍼티를 정의해야 함
+            webViewController.request = request // 여기서 수정된 부분
             self.navigationController?.pushViewController(webViewController, animated: true)
             print("Navigating with URL: \(urlString)")
             print("Access Token: \(accessToken)")
