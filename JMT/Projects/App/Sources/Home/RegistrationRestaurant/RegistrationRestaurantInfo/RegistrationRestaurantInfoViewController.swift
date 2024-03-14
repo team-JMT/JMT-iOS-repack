@@ -309,7 +309,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
             print(viewModel?.drinkingComment)
             print(viewModel?.tags)
         }
-    }
+    }   
     
     // MARK: - Helper Methods
     func updateSection(section: Int) {
