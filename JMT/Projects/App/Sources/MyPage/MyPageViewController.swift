@@ -66,7 +66,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
                 
                 
                 if let userId = self?.viewModel.userId {
-                    self?.viewModel.fetchRestaurants(userId: userId)
+                    self?.viewModel.fetchRestaurants()
                 } else {
                     print("UserId not available")
                 }
