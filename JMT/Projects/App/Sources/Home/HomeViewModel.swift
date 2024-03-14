@@ -111,9 +111,7 @@ class HomeViewModel {
     // 에러 처리와 관련된 로직을 담당하는 부분입니다.
 
    
-    
-    
-//    var location: CLLocationCoordinate2D?
+    var didUpdateGroupRestaurantsData: (() -> Void)?
     
 //    // 위치 관련
 //    var didUpdateCurrentAddress: ((String) -> Void)?
@@ -303,21 +301,14 @@ extension HomeViewModel {
     }
     
     // MARK: - 그룹 관련 메소드
-    func fetchJoinGroup() async throws -> Bool {
+    func fetchJoinGroup() async throws {
         
-        let myGroupList = try await GroupAPI.fetchMyGroupAsync()
+        groupList = try await GroupAPI.fetchMyGroupAsync().data
         
-        if myGroupList.data.isEmpty {
-            return false
-        } else {
-            self.groupList.append(contentsOf: myGroupList.data)
-            
+        if groupList.isEmpty == false {
             let index = groupList.firstIndex(where: { $0.isSelected == true }).map({Int($0)}) ?? 0
-            let id = groupList[index].groupId
-            
-            currentGroupId = id
-            UserDefaultManager.selectedGroupId = id
-            return true
+            currentGroupId = groupList[index].groupId
+            UserDefaultManager.selectedGroupId = currentGroupId
         }
     }
     
