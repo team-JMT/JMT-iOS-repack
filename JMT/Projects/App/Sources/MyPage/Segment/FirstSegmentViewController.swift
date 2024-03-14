@@ -13,6 +13,7 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
     //따로 뷰모델을 만들지않고 참조만 하기
    lazy var viewModel = MyPageViewModel()
 
+    @IBOutlet weak var registerHeaderView: UIView!
     
     @IBOutlet weak var mainTable: UITableView!
     
@@ -20,7 +21,6 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(1)
         mainTable.delegate = self
         mainTable.dataSource = self
         
@@ -60,6 +60,7 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
             return UITableViewCell()
         }
         
+        cell.MyNickname?.text = viewModel.userInfo?.data?.nickname
         // ViewModel에서 사용자 정보 가져와서 설정
         if let userInfo = viewModel.userInfo?.data {
             // userInfo를 통해 이미지 URL에 접근

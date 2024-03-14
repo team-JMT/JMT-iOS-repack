@@ -28,7 +28,8 @@ class MyPageRegisterResturantTableViewCell: UITableViewCell {
         super.awakeFromNib()
         
         myResturantImage.layer.cornerRadius = 12
-
+        myPageImage.layer.cornerRadius = myPageImage.frame.size.width / 2
+        myPageImage.clipsToBounds = true
         groupView.layer.cornerRadius = 4
 
     }
