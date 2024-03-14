@@ -41,6 +41,8 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        print("123123 22 ------- prepareForReuse")
+        
         userNicknameLabel.text = ""
         userProfileImageView.image = nil
         restaurantImageView.image = nil
@@ -49,6 +51,8 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
     }
     
     func setupData(model: SearchMapRestaurantItems?) {
+        
+        print("123123 22 ------- setupData")
         
         if let model = model {
             userNicknameLabel.text = model.userNickName

@@ -21,10 +21,7 @@ class PopularRestaurantCell: UICollectionViewCell {
         super.awakeFromNib()
         
         isSkeletonable = true
-        restaurantImageView.isSkeletonable = true
-        userProfileImageView.isSkeletonable = true
-        userNicknameLabel.isSkeletonable = true
-        restaurantNameLabel.isSkeletonable = true
+        skeletonCornerRadius = 20
         
         userProfileImageView.layer.cornerRadius = userProfileImageView.frame.height / 2
         
@@ -37,14 +34,12 @@ class PopularRestaurantCell: UICollectionViewCell {
         layer.masksToBounds = false
         contentView.layer.cornerRadius = 20
         contentView.layer.masksToBounds = true // 콘텐츠 뷰 내부의 콘텐츠는 마스크 적용
-        
-        // 성능 최적화를 위한 레스터라이제이션
-        layer.shouldRasterize = true
-        layer.rasterizationScale = UIScreen.main.scale
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        print("123123 11 ------- prepareForReuse")
         
         restaurantImageView.image = nil
         userProfileImageView.image = nil
@@ -54,8 +49,9 @@ class PopularRestaurantCell: UICollectionViewCell {
     
     func setupData(model: SearchMapRestaurantItems?) {
         
-        print(model)
-    
+        print("123123 11 ------- setupData")
+        
+        
         if let model = model {
             if let url = URL(string: model.restaurantImageUrl ?? "") {
                 restaurantImageView.kf.setImage(with: url)
@@ -68,11 +64,11 @@ class PopularRestaurantCell: UICollectionViewCell {
             } else {
                 userProfileImageView.image = JMTengAsset.emptyResult.image
             }
-            
-            print(model.userNickName, model.name)
-            
+
             userNicknameLabel.text = model.userNickName
             restaurantNameLabel.text = model.name
+            
+            
         } else {
             // 모델이 nil일 때 기본 이미지와 텍스트로 초기화
             restaurantImageView.image = nil // 또는 다른 기본 이미지

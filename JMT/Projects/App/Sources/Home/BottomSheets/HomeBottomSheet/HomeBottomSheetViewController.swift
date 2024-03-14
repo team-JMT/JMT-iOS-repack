@@ -45,18 +45,19 @@ class HomeBottomSheetViewController: UIViewController {
     // MARK: - SetupBindings
     func setupBind() {
         
-        viewModel?.didUpdateGroupRestaurantsData = {
-            print(" ------------------------------- 콜백 ")
-            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
-            self.viewModel?.isLodingData = true
+        viewModel?.didUpdateGroupRestaurantsData = { [weak self] in
+            
+            self?.viewModel?.isLodingData = true
+            self?.bottomSheetCollectionView.showAnimatedGradientSkeleton()
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 Task {
                     do {
-                        try await self.fetchGroupRestaurantData()
-                        self.viewModel?.isLodingData = false
+                        try await self?.fetchGroupRestaurantData()
+                        self?.viewModel?.isLodingData = false
                         
-                        self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                        self?.bottomSheetCollectionView.stopSkeletonAnimation()
+                        self?.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
                     } catch {
                         print(error)
                     }
@@ -169,9 +170,8 @@ class HomeBottomSheetViewController: UIViewController {
             heightDimension: .estimated(1)
         )
         
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-     
-
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+    
         // Section
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 20, bottom: 32, trailing: 20)
@@ -286,6 +286,7 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
 // MARK: - CollectionView DataSource
 extension HomeBottomSheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        print("123123123123 -- 2")
         if viewModel?.popularRestaurants.isEmpty == true {
             return 1
         } else {
@@ -318,7 +319,6 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
                 switch indexPath.section {
                 case 0:
                     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "firstCell", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
-                    cell.hideSkeleton()
                     cell.setupData(model: viewModel?.popularRestaurants[indexPath.item])
                     return cell
                 case 1:
@@ -336,7 +336,6 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
                     return cell
                 case 1:
                     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "secondCell", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
-                    cell.hideSkeleton()
                     cell.setupData(model: viewModel?.restaurants[indexPath.item])
                     return cell
                 default:
@@ -351,6 +350,7 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
 extension HomeBottomSheetViewController: SkeletonCollectionViewDataSource {
     
     func numSections(in collectionSkeletonView: UICollectionView) -> Int {
+        print("123123123123 -- 1")
         return 2
     }
     
