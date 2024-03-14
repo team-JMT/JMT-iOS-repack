@@ -42,18 +42,20 @@ class HomeBottomSheetViewController: UIViewController {
     
     // MARK: - SetupBindings
     func setupBind() {
-        viewModel?.didUpdateSkeletonView = {
-            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
-        }
         
-        viewModel?.didUpdateBottomSheetTableView = {
-            
-            self.viewModel?.isLodingData = false
-            
-            DispatchQueue.main.async {
-                self.hiddenBottomSheetButton()
-                self.bottomSheetCollectionView.reloadData()
-                self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(1))
+        viewModel?.didUpdateGroupRestaurantsData = {
+            self.viewModel?.isLodingData = true
+            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
+    
+            Task {
+                do {
+                    try await self.fetchGroupRestaurantData()
+                    self.viewModel?.isLodingData = false
+                    
+                    self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                } catch {
+                    print(error)
+                }
             }
         }
         
@@ -78,6 +80,11 @@ class HomeBottomSheetViewController: UIViewController {
     }
     
     // MARK: - SetupData
+    // 선택한 그룹에 포함된 맛집 정보 가져오기
+    func fetchGroupRestaurantData() async throws {
+        try await viewModel?.fetchRecentRestaurantsAsync()
+        try await viewModel?.fetchGroupRestaurantsAsync()
+    }
     
     // MARK: - SetupUI
     func setupUI() {
@@ -346,6 +353,7 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
         } else {
             if viewModel?.popularRestaurants.isEmpty == true {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emptyDataCell", for: indexPath) as? PopularEmptyCell else { return UICollectionViewCell() }
+                cell.delegate = self
                 return cell
             } else {
                 if viewModel?.restaurants.isEmpty == true {

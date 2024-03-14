@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import CoreLocation
 
 class SearchViewController: UIViewController {
     
@@ -275,3 +276,4 @@ extension SearchViewController: ButtonPopupDelegate {
     
     func didTabCloseButton() { }
 }
+
