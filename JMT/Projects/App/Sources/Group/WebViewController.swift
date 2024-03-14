@@ -16,8 +16,7 @@ class WebViewController: UIViewController {
     
     var webView: WKWebView!
     var url: String?
-    var request: URLRequest? // URLRequest 객체를 받을 프로퍼티
-
+    var request: URLRequest? 
     
   override func viewWillAppear(_ animated: Bool) {
       super.viewWillAppear(animated)
