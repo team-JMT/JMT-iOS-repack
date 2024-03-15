@@ -9,7 +9,7 @@ import UIKit
 
 class GroupResultViewController: UIViewController {
     
-    var viewModel: GroupResultViewModel?
+    var viewModel: SearchViewModel?
 
     @IBOutlet weak var groupCollectionView: UICollectionView!
     
@@ -17,6 +17,7 @@ class GroupResultViewController: UIViewController {
         super.viewDidLoad()
         
         groupCollectionView.collectionViewLayout = createLayout()
+        groupCollectionView.keyboardDismissMode = .onDrag
         
         let groupResultTitleHeaderView = UINib(nibName: "GroupResultTitleHeaderView", bundle: nil)
         groupCollectionView.register(groupResultTitleHeaderView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "GroupResultTitleHeaderView")

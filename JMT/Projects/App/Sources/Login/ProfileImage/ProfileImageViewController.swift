@@ -54,11 +54,14 @@ class ProfileImageViewController: UIViewController {
              return
         }
         
-        if let isDefault = viewModel?.isDefaultProfileImage {
-            if isDefault {
+        if profileImageView.image == nil {
+            viewModel?.saveDefaultProfileImage()
+        } else {
+            if viewModel?.isDefaultProfileImage == true {
                 viewModel?.saveDefaultProfileImage()
             } else {
-                viewModel?.saveProfileImage(imageData: profileImageView.image?.pngData())
+                self.viewModel?.saveProfileImage(imageData: profileImageView.image?.pngData())
+                
             }
         }
     }

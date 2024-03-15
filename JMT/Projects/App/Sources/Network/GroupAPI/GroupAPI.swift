@@ -25,6 +25,7 @@ struct GroupAPI {
         return response
     }
     
+    @discardableResult
     static func updateSelectedGroupAsync(request: SelectedGroupRequest) async throws -> SelectedGroupResponse {
         let response = try await AF.request(GroupTarget.updateSelectedGroup(request), interceptor: DefaultRequestInterceptor())
             .validate(statusCode: 200..<300)

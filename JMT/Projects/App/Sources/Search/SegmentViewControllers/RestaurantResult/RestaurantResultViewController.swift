@@ -9,7 +9,7 @@ import UIKit
 
 class RestaurantResultViewController: UIViewController {
     
-    var viewModel: RestaurantResultViewModel?
+    var viewModel: SearchViewModel?
 
     @IBOutlet weak var restaurantCollectionView: UICollectionView!
     
@@ -17,7 +17,7 @@ class RestaurantResultViewController: UIViewController {
         super.viewDidLoad()
         
         restaurantCollectionView.collectionViewLayout = createLayout()
-        
+        restaurantCollectionView.keyboardDismissMode = .onDrag
         
         let filterHeaderView = UINib(nibName: "RestaurantFilterHeaderView", bundle: nil)
         restaurantCollectionView.register(filterHeaderView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "filterHeader")

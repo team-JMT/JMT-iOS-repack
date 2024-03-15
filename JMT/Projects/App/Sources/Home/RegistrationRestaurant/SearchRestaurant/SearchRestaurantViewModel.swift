@@ -42,7 +42,7 @@ class SearchRestaurantViewModel {
             let x = locationManager.coordinate?.longitude ?? 0.0
             let y = locationManager.coordinate?.latitude ?? 0.0
             
-            let newRestaurants = try await FetchRestaurantAPI.fetchSearchRestaurantsAsync(request: SearchRestaurantsLocationRequest(query: keyword,
+            let newRestaurants = try await FetchRestaurantAPI.fetchSearchRestaurantLocationsAsync(request: SearchRestaurantsLocationRequest(query: keyword,
                                                                                                                                     page: currentPage,
                                                                                                                                     x: "\(x)",
                                                                                                                                     y: "\(y)"))

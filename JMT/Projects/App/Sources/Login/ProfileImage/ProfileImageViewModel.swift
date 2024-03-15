@@ -20,7 +20,7 @@ class ProfileImageViewModel {
     var onFailure: (() -> ())?
     
     var nickname: String?
-    var isDefaultProfileImage: Bool = false
+    var isDefaultProfileImage: Bool = true
     var preventButtonTouch: Bool = false
     
     func getUserInfo() {

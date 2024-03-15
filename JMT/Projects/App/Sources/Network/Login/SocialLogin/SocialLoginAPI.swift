@@ -72,6 +72,7 @@ struct SocialLoginAPI {
     static func logout(completion: @escaping (Result<LogoutResponse, NetworkError>) -> ()) {
         let accessToken = DefaultKeychainService.shared.accessToken ?? ""
         let refreshToken = DefaultKeychainService.shared.refreshToken ?? ""
+        
         let request = LogoutRequest(accessToken: accessToken, refreshToken: refreshToken)
     
         AF.request(SocialLoginTarget.logout(request))
@@ -83,7 +84,7 @@ struct SocialLoginAPI {
                     completion(.success(response))
                     
                 case .failure(let error):
-                    print("logout Error")
+                    print("logout Error", error)
                     completion(.failure(.custom("logout Error")))
                 }
             }

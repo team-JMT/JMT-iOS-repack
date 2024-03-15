@@ -77,6 +77,10 @@ class RegistrationRestaurantInfoViewModel {
                 
                 let recommendMenu = tags.joined()
                 
+                let selectedGroupId = UserDefaultManager.selectedGroupId == nil ? 0 : UserDefaultManager.selectedGroupId
+                
+                print(selectedGroupId)
+                
                 let request = RegistrationRestaurantRequest(
                     name: info.placeName,
                     introduce: commentString,
@@ -85,7 +89,7 @@ class RegistrationRestaurantInfoViewModel {
                     goWellWithLiquor: drinkingComment,
                     recommendMenu: recommendMenu,
                     restaurantLocationId: restaurantLocationId,
-                    groupId: UserDefaultManager.selectedGroupId)
+                    groupId: selectedGroupId ?? 0)
                 
                 let response = try await RegistrationRestaurantAPI.registrationRestaurantAsync(request: request, images: selectedImages)
                 return response.data.recommendRestaurantId

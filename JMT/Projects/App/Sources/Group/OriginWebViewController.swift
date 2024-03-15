@@ -206,6 +206,7 @@ struct BridgeRequest: Decodable {
     let onSuccess: String?
     let onFailed: String?
 }
+
 struct WebEventData: Decodable {
     let route: String?
     let enable: Bool?

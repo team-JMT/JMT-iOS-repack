@@ -36,6 +36,15 @@ class SocialLoginViewModel {
                             case .PROFILE_IMAGE_PROCESS:
                                 self.coordinator?.showProfileViewController()
                             case .LOG_IN:
+                                
+                                DefaultKeychainService.shared.accessToken = DefaultKeychainService.shared.tempAccessToken
+                                DefaultKeychainService.shared.refreshToken = DefaultKeychainService.shared.tempRefreshToken
+                                DefaultKeychainService.shared.accessTokenExpiresIn = DefaultKeychainService.shared.tempAccessTokenExpiresIn
+                                
+                                DefaultKeychainService.shared.tempAccessToken = nil
+                                DefaultKeychainService.shared.tempRefreshToken = nil
+                                DefaultKeychainService.shared.tempAccessTokenExpiresIn = nil
+                                
                                 let appCoordinator = self.coordinator?.getTopCoordinator()
                                 appCoordinator?.showTabBarViewController()
                                 
@@ -69,6 +78,15 @@ class SocialLoginViewModel {
                             case .PROFILE_IMAGE_PROCESS:
                                 self?.coordinator?.showProfileViewController()
                             case .LOG_IN:
+                                
+                                DefaultKeychainService.shared.accessToken = DefaultKeychainService.shared.tempAccessToken
+                                DefaultKeychainService.shared.refreshToken = DefaultKeychainService.shared.tempRefreshToken
+                                DefaultKeychainService.shared.accessTokenExpiresIn = DefaultKeychainService.shared.tempAccessTokenExpiresIn
+                                
+                                DefaultKeychainService.shared.tempAccessToken = nil
+                                DefaultKeychainService.shared.tempRefreshToken = nil
+                                DefaultKeychainService.shared.tempAccessTokenExpiresIn = nil
+                                
                                 let appCoordinator = self?.coordinator?.getTopCoordinator()
                                 appCoordinator?.showTabBarViewController()
                             }
@@ -96,6 +114,11 @@ class SocialLoginViewModel {
                     case .PROFILE_IMAGE_PROCESS:
                         self.coordinator?.showProfileViewController()
                     case .LOG_IN:
+                        
+                        DefaultKeychainService.shared.accessToken = response.refreshToken
+                        DefaultKeychainService.shared.refreshToken = response.refreshToken
+                        DefaultKeychainService.shared.accessTokenExpiresIn = response.accessTokenExpiresIn
+                        
                         let appCoordinator = self.coordinator?.getTopCoordinator()
                         appCoordinator?.showTabBarViewController()
                     }

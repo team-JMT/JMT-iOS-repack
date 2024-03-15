@@ -306,13 +306,14 @@ extension HomeViewModel {
         groupList = try await GroupAPI.fetchMyGroupAsync().data
         
         if groupList.isEmpty == false {
-            let index = groupList.firstIndex(where: { $0.isSelected == true }).map({Int($0)}) ?? 0
+            let index = groupList.firstIndex(where: { $0.isSelected == true }) ?? 0
             currentGroupId = groupList[index].groupId
             UserDefaultManager.selectedGroupId = currentGroupId
         }
     }
     
     func updateSelectedGroup(id: Int) async throws {
+       
         try await GroupAPI.updateSelectedGroupAsync(request: SelectedGroupRequest(groupId: id))
         
         for (index, group) in groupList.enumerated() {

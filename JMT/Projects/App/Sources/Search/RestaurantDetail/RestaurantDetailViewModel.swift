@@ -71,7 +71,7 @@ class RestaurantDetailViewModel {
     }
     
     func fetchRestaurantReviewData() async throws {
-        restaurantData?.reviews = try await FetchRestaurantAPI.fetchRestaurantReviews(request: RestaurantReviewRequest(recommendRestaurantId: recommendRestaurantId ?? 0)).toDomain
+        restaurantData?.reviews = try await FetchRestaurantAPI.fetchRestaurantReviewsAsync(request: RestaurantReviewRequest(recommendRestaurantId: recommendRestaurantId ?? 0)).toDomain
         
         if let reviews = restaurantData?.reviews {
             reviews.map({ review in

@@ -8,7 +8,7 @@
 import Foundation
 
 struct SearchGroupResponse: Decodable {
-    let data: [SearchGroupData]
+    let data: SearchGroupData
     let message: String
     let code: String
 }

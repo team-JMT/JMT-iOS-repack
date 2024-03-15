@@ -9,7 +9,7 @@ import UIKit
 
 class TotalResultViewController: UIViewController {
     
-    var viewModel: TotalResultViewModel?
+    var viewModel: SearchViewModel?
     
     @IBOutlet weak var totalResultCollectionView: UICollectionView!
     
@@ -18,26 +18,36 @@ class TotalResultViewController: UIViewController {
         
     
         totalResultCollectionView.collectionViewLayout = createLayout()
+        totalResultCollectionView.keyboardDismissMode = .onDrag
         
         let header1 = UINib(nibName: "TitleHeaderView", bundle: nil)
         totalResultCollectionView.register(header1, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "titleHeaderView")
         let differentGroupHeader = UINib(nibName: "DifferentGroupHeader", bundle: nil)
         totalResultCollectionView.register(differentGroupHeader, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "DifferentGroupHeader")
         
-        
+        viewModel?.didUpdateGroup = {
+            DispatchQueue.main.async {
+                self.totalResultCollectionView.reloadData()
+            }
+        }
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
-            switch sectionIndex {
-            case 0:
-                return self.createFirstColumnSection()
-            case 1:
+            
+            if self.viewModel?.isEmptyGroup == true {
                 return self.createSecondColumnSection()
-            case 2:
-                return self.createThirdColumnSection()
-            default:
-                return nil
+            } else {
+                switch sectionIndex {
+                case 0:
+                    return self.createFirstColumnSection()
+                case 1:
+                    return self.createSecondColumnSection()
+                case 2:
+                    return self.createThirdColumnSection()
+                default:
+                    return nil
+                }
             }
         }
         
@@ -99,7 +109,7 @@ class TotalResultViewController: UIViewController {
         
         // Header
         section.boundarySupplementaryItems = [
-            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         ]
         
         // Background
@@ -140,37 +150,52 @@ class TotalResultViewController: UIViewController {
 
 extension TotalResultViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        if viewModel?.isEmptyGroup == true {
+            return 1
+        } else {
+            return 3
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        switch section {
-        case 0:
-            return 3
-        case 1:
-            return 3
-        case 2:
-            return 3
-        default:
-            return 0
+        if viewModel?.isEmptyGroup == true {
+            return viewModel?.groupList.count ?? 0
+        } else {
+            switch section {
+            case 0:
+                return 3
+            case 1:
+                return 3
+            case 2:
+                return 3
+            default:
+                return 0
+            }
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        switch indexPath.section {
-        case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "restaurantCell", for: indexPath)
+        print(viewModel?.groupList)
+        if viewModel?.isEmptyGroup == true {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupCell", for: indexPath) as? GroupInfoCell else { return UICollectionViewCell() }
+            cell.setupData(groupData: viewModel?.groupList[indexPath.row])
             return cell
-        case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupCell", for: indexPath)
-            return cell
-        case 2:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "restaurantCell", for: indexPath)
-            return cell
-        default:
-            return UICollectionViewCell()
+        } else {
+            switch indexPath.section {
+            case 0:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "restaurantCell", for: indexPath)
+                return cell
+            case 1:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupCell", for: indexPath)
+                return cell
+            case 2:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "restaurantCell", for: indexPath)
+                return cell
+            default:
+                return UICollectionViewCell()
+            }
         }
     }
 }
@@ -182,9 +207,15 @@ extension TotalResultViewController: UICollectionViewDelegate {
             switch indexPath.section {
             case 0:
                 let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "titleHeaderView", for: indexPath) as! TitleHeaderView
+                if viewModel?.isEmptyGroup == true {
+                    header.setupTitle(title: "그룹")
+                } else {
+                    header.setupTitle(title: "맛집")
+                }
                 return header
             case 1:
                 let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "titleHeaderView", for: indexPath) as! TitleHeaderView
+                header.setupTitle(title: "그룹")
                 return header
             case 2:
                 let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "DifferentGroupHeader", for: indexPath) as! DifferentGroupHeader
@@ -198,15 +229,37 @@ extension TotalResultViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case 0:
-            viewModel?.coordinator?.showRestaurantDetailViewController()
-        case 1:
-            return
-        case 2:
-            viewModel?.coordinator?.showRestaurantDetailViewController()
-        default:
-            return
+        print("1231231231", viewModel?.isEmptyGroup)
+        if viewModel?.isEmptyGroup == true {
+            
+            let groupId = viewModel?.groupList[indexPath.row].groupId ?? 0
+            
+            let urlString = "https://jmt-frontend-ad7b8.web.app/group-detail/\(groupId)/"
+            if let url = URL(string: urlString) {
+                var request = URLRequest(url: url)
+                request.addValue("Bearer \(DefaultKeychainService.shared.accessToken)", forHTTPHeaderField: "Authorization")
+                
+                let storyboard = UIStoryboard(name: "Group", bundle: nil)
+                guard let vc = storyboard.instantiateViewController(withIdentifier: "OriginWebViewController") as? OriginWebViewController else { return }
+                vc.loadWebViewWithRoute(route: "group")
+                
+            } else {
+                print("123123123123")
+            }
+
+        } else {
+            switch indexPath.section {
+            case 0:
+                viewModel?.coordinator?.showRestaurantDetailViewController()
+            case 1:
+                return
+            case 2:
+                viewModel?.coordinator?.showRestaurantDetailViewController()
+            default:
+                return
+            }
         }
+        
+      
     }
 }

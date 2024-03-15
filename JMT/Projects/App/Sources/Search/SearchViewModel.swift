@@ -9,22 +9,40 @@ import Foundation
 
 class SearchViewModel {
     weak var coordinator: SearchCoordinator?
+    let locationManager = LocationManager.shared
     
     var recentSearchRestaurants = [String]()
-    
-    
-    
-    var recentResults = [String]()
-    
     var currentSegIndex: Int = 0
+    var isEmptyGroup: Bool = UserDefaultManager.selectedGroupId == nil ? true : false
     
-    var isEmptyGroup: Bool = false
+    var groupList = [SearchGroupItems]()
+    var restaurants = [SearchRestaurantsItems]()
+    var outBoundrestaurants = [SearchRestaurantsOutBoundItems]()
     
-    func fetchGroups() async throws {
-        
-        
+    var didUpdateGroup: (() -> Void)?
+    
+    
+    func fetchGroups(keyword: String) async throws {
+        groupList.removeAll()
+        let data = try await GroupAPI.fetchGroups(request: SearchGroupRequest(keyword: keyword)).data.groupList
+        groupList.append(contentsOf: data)
     }
     
+    func fetchRestaurants(keyword: String) async throws {
+        restaurants.removeAll()
+        let x = locationManager.coordinate?.longitude ?? 0.0
+        let y = locationManager.coordinate?.latitude ?? 0.0
+        let data = try await FetchRestaurantAPI.fetchSearchRestaurantsAsync(request: SearchRestaurantsRequest(keyword: keyword, x: "\(x)", y: "\(y)")).data
+        
+        restaurants.append(contentsOf: data)
+    }
+    
+    func fetchOutBoundRestaurants(keyword: String) async throws {
+        outBoundrestaurants.removeAll()
+        let data = try await FetchRestaurantAPI.fetchSearchRestaurantsOutBoundAsync(request: SearchRestaurantsOutBoundRequest(keyword: keyword, currentGroupId: nil)).data
+        
+        outBoundrestaurants.append(contentsOf: data)
+    }
 }
 
 // 5 9 12 15 16 17 18

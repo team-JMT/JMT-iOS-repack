@@ -18,7 +18,7 @@ struct FetchRestaurantAPI {
         return response.data.restaurants
     }
 
-    static func fetchSearchRestaurantsAsync(request: SearchRestaurantsLocationRequest) async throws -> [SearchRestaurantsLocationModel] {
+    static func fetchSearchRestaurantLocationsAsync(request: SearchRestaurantsLocationRequest) async throws -> [SearchRestaurantsLocationModel] {
         let response = try await AF.request(FetchRestaurantTarget.fetchSearchRestaurantsLocation(request), interceptor: DefaultRequestInterceptor())
             .validate(statusCode: 200..<300)
             .serializingDecodable(SearchRestaurantsLocationResponse.self)
@@ -42,7 +42,7 @@ struct FetchRestaurantAPI {
         return response
     }
     
-    static func fetchRestaurantReviews(request: RestaurantReviewRequest) async throws -> RestaurantReviewResponse {
+    static func fetchRestaurantReviewsAsync(request: RestaurantReviewRequest) async throws -> RestaurantReviewResponse {
         let response = try await AF.request(FetchRestaurantTarget.fetchRestaurantReviews(request), interceptor: DefaultRequestInterceptor())
             .validate(statusCode: 200..<300)
             .serializingDecodable(RestaurantReviewResponse.self)
@@ -50,7 +50,7 @@ struct FetchRestaurantAPI {
         return response
     }
     
-    static func fetchSearchRestaurants(request: SearchRestaurantsRequest) async throws -> SearchRestaurantsResponse {
+    static func fetchSearchRestaurantsAsync(request: SearchRestaurantsRequest) async throws -> SearchRestaurantsResponse {
         let response = try await AF.request(FetchRestaurantTarget.fetchSearchRestaurants(request), interceptor: DefaultRequestInterceptor())
             .validate(statusCode: 200..<300)
             .serializingDecodable(SearchRestaurantsResponse.self)
@@ -58,7 +58,7 @@ struct FetchRestaurantAPI {
         return response
     }
     
-    static func fetchSearchRestaurantsOutBound(request: SearchRestaurantsOutBoundRequest) async throws -> SearchRestaurantsOutBoundResponse {
+    static func fetchSearchRestaurantsOutBoundAsync(request: SearchRestaurantsOutBoundRequest) async throws -> SearchRestaurantsOutBoundResponse {
         let response = try await AF.request(FetchRestaurantTarget.fetchRestaurantsOutBound(request), interceptor: DefaultRequestInterceptor())
             .validate(statusCode: 200..<300)
             .serializingDecodable(SearchRestaurantsOutBoundResponse.self)

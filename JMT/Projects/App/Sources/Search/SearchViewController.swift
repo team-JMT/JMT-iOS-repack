@@ -86,6 +86,8 @@ class SearchViewController: UIViewController {
                 make.leading.trailing.top.bottom.equalToSuperview()
             }
         }
+        
+        searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
     // MARK: - Actions
@@ -100,6 +102,7 @@ class SearchViewController: UIViewController {
     }
     
     @IBAction func didTabCancelButton(_ sender: Any) {
+        
         DispatchQueue.main.async {
             self.searchTextField.text = ""
             self.searchTextField.resignFirstResponder()
@@ -116,7 +119,18 @@ class SearchViewController: UIViewController {
     
     
     // MARK: - Helper Methods
+    func fetchIsEmptyGroupData() async throws {
+        try await viewModel?.fetchGroups(keyword: searchTextField.text ?? "")
+        viewModel?.didUpdateGroup?()
+    }
     
+    func fetchIsNotEmptyGroupData() async throws{
+        let keyword = searchTextField.text ?? ""
+        try await viewModel?.fetchRestaurants(keyword: keyword)
+        try await viewModel?.fetchGroups(keyword: keyword)
+        try await viewModel?.fetchOutBoundRestaurants(keyword: keyword)
+        viewModel?.didUpdateGroup?()
+    }
 
     
 
@@ -134,16 +148,30 @@ class SearchViewController: UIViewController {
 // MARK: - CollectionView Delegate
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        DispatchQueue.main.async {
-            self.searchTextField.text = self.viewModel?.recentSearchRestaurants[indexPath.item] ?? ""
-            self.searchTextField.resignFirstResponder()
+        Task {
+            do {
+                self.searchTextField.text = self.viewModel?.recentSearchRestaurants[indexPath.item] ?? ""
+                self.viewModel?.saveRecentSearchRestaurants(keyword: self.viewModel?.recentSearchRestaurants[indexPath.item] ?? "")
+                self.viewModel?.fetchRecentSearchRestaurants()
+                try await fetchIsEmptyGroupData()
+                
+                DispatchQueue.main.async {
             
-            self.recentContainerView.isHidden = true
-            self.tagCollectionView.isHidden = true
-            
-            self.segmentedControllerContainerView.isHidden = false
-            self.pageVCContainerView.isHidden = false
+                    self.searchTextField.resignFirstResponder()
+                    self.tagCollectionView.reloadData()
+                    self.recentContainerView.isHidden = true
+                    self.tagCollectionView.isHidden = true
+                    self.pageVCContainerView.isHidden = false
+                    
+                    self.segmentedControllerContainerView.isHidden = self.viewModel?.isEmptyGroup == true ? true : false
+                }
+                
+            } catch {
+                print(error)
+            }
         }
+        
+        
     }
 }
 
@@ -178,15 +206,36 @@ extension SearchViewController: UITextFieldDelegate {
         viewModel?.saveRecentSearchRestaurants(keyword: textField.text ?? "")
         viewModel?.fetchRecentSearchRestaurants()
         
+        Task {
+            do {
+               try await fetchIsEmptyGroupData()
+            } catch {
+                print(error)
+            }
+        }
+        
         DispatchQueue.main.async {
+            
+            self.searchTextField.resignFirstResponder()
             self.tagCollectionView.reloadData()
             self.recentContainerView.isHidden = true
             self.tagCollectionView.isHidden = true
-            self.segmentedControllerContainerView.isHidden = false
             self.pageVCContainerView.isHidden = false
+            
+            self.segmentedControllerContainerView.isHidden = self.viewModel?.isEmptyGroup == true ? true : false
         }
-    
         return true
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        
+        DispatchQueue.main.async {
+            self.recentContainerView.isHidden = false
+            self.tagCollectionView.isHidden = false
+            self.pageVCContainerView.isHidden = true
+            
+            self.segmentedControllerContainerView.isHidden = true
+        }
     }
 }
 
