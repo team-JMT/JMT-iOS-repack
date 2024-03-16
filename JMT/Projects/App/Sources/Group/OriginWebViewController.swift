@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 
 
-class OriginWebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
+class OriginWebViewController: UIViewController, WKUIDelegate {
     
     
     var keychainAccess: KeychainAccessible = DefaultKeychainAccessible()
@@ -36,13 +36,17 @@ class OriginWebViewController: UIViewController, WKUIDelegate, WKScriptMessageHa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.webView.navigationDelegate = self
+        
         // 액세스 토큰이 있을 경우, 해당 토큰을 사용하여 요청
         if let accessToken = accessToken {
             // 웹뷰에 로드할 URL 설정. 예시 URL을 실제 사용하는 URL로 변경해야 함
-            let url = URL(string: "https://jmt-frontend-ad7b8.web.app/")!
+            let url = URL(string: "https://jmt-frontend-ad7b8.web.app/group-detail/5/")! // URL(string: "https://jmt-frontend-ad7b8.web.app/")! //
             var request = URLRequest(url: url)
             // HTTP 헤더에 Authorization 토큰 추가
             request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            
+            print(request.allHTTPHeaderFields)
             webView.load(request)
         } else {
             // 액세스 토큰이 없을 경우, 기본 URL 로드
@@ -53,10 +57,7 @@ class OriginWebViewController: UIViewController, WKUIDelegate, WKScriptMessageHa
         }
     }
     
-    
-    
-    
-    
+
     func fetchAccessToken(completion: @escaping (String?) -> Void) {
         // 키체인에서 액세스 토큰 가져오기
         if let accessToken = keychainAccess.getToken("accessToken") {
@@ -102,24 +103,10 @@ class OriginWebViewController: UIViewController, WKUIDelegate, WKScriptMessageHa
         }
     }
     
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        // 메시지 이름이 "webviewBridge"인지 확인
-        guard message.name == "webviewBridge",
-              let bodyString = message.body as? String,
-              let data = bodyString.data(using: .utf8) else {
-            print("Unable to decode the bridge request")
-            return
-        }
+   
+   
         
-        // 메시지 내용을 BridgeRequest로 디코딩
-        let decoder = JSONDecoder()
-        if let bridgeRequest = try? decoder.decode(BridgeRequest.self, from: data) {
-            // 이벤트 이름에 따라 처리
-            handleBridgeRequest(bridgeRequest)
-        } else {
-            print("Error decoding BridgeRequest")
-        }
-    }
+
     
     private enum WebRequest: String {
         case back = "back"
@@ -226,4 +213,37 @@ struct WebEventData: Decodable {
     let data: WebEventData
     let onSuccess: String
     let onFailed: String
+}
+
+extension OriginWebViewController: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        
+        print("123123123", message.name)
+        
+        // 메시지 이름이 "webviewBridge"인지 확인
+        guard message.name == "webviewBridge",
+              let bodyString = message.body as? String,
+              let data = bodyString.data(using: .utf8) else {
+            print("Unable to decode the bridge request")
+            return
+        }
+        // 메시지 내용을 BridgeRequest로 디코딩
+        let decoder = JSONDecoder()
+        if let bridgeRequest = try? decoder.decode(BridgeRequest.self, from: data) {
+            // 이벤트 이름에 따라 처리
+            handleBridgeRequest(bridgeRequest)
+        } else {
+            print("Error decoding BridgeRequest")
+        }
+    }
+}
+
+extension OriginWebViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        print(navigation)
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        print(navigation)
+    }
 }

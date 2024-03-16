@@ -229,24 +229,11 @@ extension TotalResultViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("1231231231", viewModel?.isEmptyGroup)
+        
         if viewModel?.isEmptyGroup == true {
-            
-            let groupId = viewModel?.groupList[indexPath.row].groupId ?? 0
-            
-            let urlString = "https://jmt-frontend-ad7b8.web.app/group-detail/\(groupId)/"
-            if let url = URL(string: urlString) {
-                var request = URLRequest(url: url)
-                request.addValue("Bearer \(DefaultKeychainService.shared.accessToken)", forHTTPHeaderField: "Authorization")
-                
-                let storyboard = UIStoryboard(name: "Group", bundle: nil)
-                guard let vc = storyboard.instantiateViewController(withIdentifier: "OriginWebViewController") as? OriginWebViewController else { return }
-                vc.loadWebViewWithRoute(route: "group")
-                
-            } else {
-                print("123123123123")
+            if let groupId = viewModel?.groupList[indexPath.row].groupId {
+                viewModel?.coordinator?.showWebViewGroupDetilPage(groupId: groupId)
             }
-
         } else {
             switch indexPath.section {
             case 0:

@@ -13,6 +13,8 @@ protocol SearchCoordinator: Coordinator {
     
     func setButtonPopupCoordinator()
     func showButtonPopupViewController()
+    
+    func showWebViewGroupDetilPage(groupId: Int)
 }
 
 class DefaultSearchCoordinator: SearchCoordinator {
@@ -78,6 +80,16 @@ class DefaultSearchCoordinator: SearchCoordinator {
         let coordinator = getChildCoordinator(.buttonPopup) as! ButtonPopupCoordinator
         coordinator.start()
     }
+    
+    func showWebViewGroupDetilPage(groupId: Int) {
+        if let tabVC = self.navigationController?.parent as? UITabBarController {
+            tabVC.selectedIndex = 2
+            let groupCoordinator = parentCoordinator?.childCoordinators[2] as! DefaultGroupCoordinator
+            groupCoordinator.showDetailGroupPage(groupId: groupId)
+        }
+
+    }
+ 
     
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil

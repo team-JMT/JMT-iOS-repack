@@ -20,8 +20,7 @@ class SearchViewModel {
     var outBoundrestaurants = [SearchRestaurantsOutBoundItems]()
     
     var didUpdateGroup: (() -> Void)?
-    
-    
+
     func fetchGroups(keyword: String) async throws {
         groupList.removeAll()
         let data = try await GroupAPI.fetchGroups(request: SearchGroupRequest(keyword: keyword)).data.groupList
