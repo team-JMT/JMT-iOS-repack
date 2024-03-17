@@ -36,10 +36,10 @@ class WebViewController: UIViewController {
           loadRequest()
       }
   
-    
     func setupWebView() {
         let contentController = WKUserContentController()
-        contentController.add(self, name: "bridge")
+        // "bridge"에서 "webviewBridge"로 이름 변경
+        contentController.add(self, name: "webviewBridge")
         
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
@@ -52,19 +52,21 @@ class WebViewController: UIViewController {
             make.top.bottom.leading.trailing.equalToSuperview()
         }
         
-        if let url = URL(string: url ?? "") {
+        loadInitialRequest()
+    }
+
+    func loadInitialRequest() {
+        if let urlString = self.url, let url = URL(string: urlString) {
             var request = URLRequest(url: url)
-            let accessToken = DefaultKeychainService.shared.accessToken ?? ""
-            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            // 여기에서 액세스 토큰을 추가
+            if let accessToken = DefaultKeychainService.shared.accessToken {
+                request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+                print("==")
+            }
             webView.load(request)
         }
-        
-        webView.snp.makeConstraints { make in
-                    make.top.leading.trailing.equalToSuperview()
-                    // webViewBottomConstraint를 사용하여 하단 제약을 설정
-                    self.webViewBottomConstraint = make.bottom.equalToSuperview().constraint
-                }
     }
+
     
     
     func loadRequest() {
@@ -104,8 +106,36 @@ class WebViewController: UIViewController {
     
 }
 
+
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        print(message)
+        if message.name == "bridge" {
+            handleBridgeMessage(message)
+        }
+    }
+    
+    private func handleBridgeMessage(_ message: WKScriptMessage) {
+        guard let body = message.body as? [String: AnyObject],
+              let action = body["name"] as? String else {
+            print("Invalid message format")
+            return
+        }
+        
+        switch action {
+        case "token":
+            if let token = body["data"] as? String {
+                handleReceivedToken(token)
+            }
+        // 다른 메시지 유형에 따른 처리를 여기에 추가
+        default:
+            print("Unhandled action: \(action)")
+        }
+    }
+    
+    private func handleReceivedToken(_ token: String) {
+        // 토큰을 처리하는 로직, 예를 들어 Keychain에 저장
+        print("Received token: \(token)")
+        DefaultKeychainService.shared.accessToken = token
+        // 필요한 경우 서버로 토큰 전송 등의 추가 작업 수행
     }
 }
