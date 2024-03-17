@@ -125,7 +125,10 @@ class MyPageViewModel {
             case .success(let responseData):
                 print("Successfully fetched restaurants data: \(responseData)")
                 self.restaurantsData = responseData.data?.restaurants ?? []
+                self.totalRestaurants = responseData.data?.page?.totalElements // 올바른 접근 방식
+
                 self.onRestaurantsDataUpdated?() // 데이터 업데이트 이벤트 호출
+                
             case .failure(let error):
                 print("Error fetching restaurants data: \(error)")
             }

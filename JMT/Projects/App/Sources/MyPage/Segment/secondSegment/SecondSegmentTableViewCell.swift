@@ -16,8 +16,8 @@ class SecondSegmentTableViewCell: UITableViewCell{
     
     
     private var imageViews: [UIImageView] = []
-    var imageNames: [String] = []
-    
+    var imageUrls: [String] = [] // 이미지 URL 배열
+
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,13 +34,15 @@ class SecondSegmentTableViewCell: UITableViewCell{
         self.mainCollection.dataSource = self
         self.mainCollection.reloadData()
     }
-
-
-    func configure(with data: RestaurantData) {
-        Resturantexplanation.text = data.description
-        imageNames = data.imageName
-        mainCollection.reloadData() // Refresh the collection view with new data
+    
+    
+    
+    func configure(with review: Review) {
+        Resturantexplanation.text = review.reviewContent
+        imageUrls = review.reviewImages
+        mainCollection.reloadData()
     }
+
 }
 
 
@@ -49,14 +51,14 @@ extension SecondSegmentTableViewCell: UICollectionViewDelegate, UICollectionView
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imageNames.count
+        return imageUrls.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "myPageReviewCollectionViewCell", for: indexPath) as? myPageReviewCollectionViewCell else {
             fatalError("Unable to dequeue myPageReviewCollectionViewCell")
         }
-        let imageName = imageNames[indexPath.row]
+        let imageName = imageUrls[indexPath.row]
         cell.configure(imageName: imageName)
         return cell
     }

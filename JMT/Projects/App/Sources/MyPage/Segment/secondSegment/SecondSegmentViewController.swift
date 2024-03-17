@@ -6,26 +6,22 @@
 //
 
 import UIKit
-
-struct RestaurantData {
-    var imageName: [String]
-    var description: String
-}
-
-let dummyData = [
-    RestaurantData(imageName: ["dummyIcon","dummyIcon","dummyIcon","Xmark","dummyIcon","dummyIcon","Xmark","dummyIcon","Xmark","Xmark"], description: "알겠습니다! 이번엔 정확히 100글자가 되도록 문장을 준비해 보았습니다: 행복은 멀리 있는 것이 아니라, 우리가 살아가는 순간순간 속에서 찾을 수 있는 것. 매일을 감사하며 살아가는 것이 진정한 행복의 비결입니다. 확인해 보시고, 필요하시면 언제든지 조정 요청해주세요!ㅇㅇ"),
-    RestaurantData(imageName: ["Xmark", "Xmark", "Xmark", "Xmark", "Xmark", "Xmark", "Xmark", "XmarkXmark", "Xmark", "Xmark"], description: "알겠습니다! 이번엔 정확히 100글자가 ..."),
-    RestaurantData(imageName: ["restaurant3"], description: "A lovely place for dinner."),
-    RestaurantData(imageName: ["restaurant4"], description: "Famous for its cozy atmosphere."),
-    RestaurantData(imageName: ["restaurant5"], description: "Don't miss our special dishes!")
-]
+import Alamofire
 
 
 class SecondSegmentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource , UICollectionViewDelegate, UICollectionViewDataSource {
    
+    private let keychainAccess: KeychainAccessible
+
     var imageNames: [String] = [] // 이미지 이름 배열을 저장할 프로퍼티 추가
+    var reviews: [Review] = [] // 서버에서 받아온 리뷰 데이터를 저장할 배열
+
 
     @IBOutlet weak var likedReply: UITableView!
+    
+    @IBOutlet weak var nearfilterView: UIView!
+    @IBOutlet weak var typeFilterView: UIView!
+    @IBOutlet weak var alcholrFilterView: UIView!
     
     
     override func viewDidLoad() {
@@ -33,39 +29,105 @@ class SecondSegmentViewController: UIViewController, UITableViewDelegate, UITabl
         
         likedReply.delegate = self
         likedReply.dataSource = self
+        layout()
+        fetchReviews()
 
     }
     
-        
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dummyData.count
+    // DI를 통한 초기화
+    init(keychainAccess: KeychainAccessible = DefaultKeychainAccessible()) {
+        self.keychainAccess = keychainAccess
+        super.init(nibName: nil, bundle: nil)
     }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
+    required init?(coder: NSCoder) {
+        self.keychainAccess = DefaultKeychainAccessible()
+        super.init(coder: coder)
+    }
+    
+    
+    func layout() {
+        nearfilterView.layer.cornerRadius = nearfilterView.frame.height / 2
+        nearfilterView.clipsToBounds = true
         
+        typeFilterView.layer.cornerRadius = typeFilterView.frame.height / 2
+        typeFilterView.clipsToBounds = true
+        
+        alcholrFilterView.layer.cornerRadius = alcholrFilterView.frame.height / 2
+        alcholrFilterView.clipsToBounds = true
+    }
+    
+    
+    func fetchReviews() {
+            let url = "https://api.jmt-matzip.dev/api/v1/restaurant/my/review?page=0&size=20"
+            
+            guard let accessToken = keychainAccess.getToken("accessToken") else {
+                print("Access Token is not available")
+                return
+            }
+            
+            let headers: HTTPHeaders = [
+                "Authorization": "Bearer \(accessToken)",
+                "Content-Type": "application/json"
+            ]
+            
+            let parameters: [String: Any] = [
+                "userLocation": ["x": "127.0596", "y": "37.6633"],
+                "filter": ["categoryFilter": "string", "isCanDrinkLiquor": true]
+            ]
+            
+            AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseData { response in
+                switch response.result {
+                case .success(let data):
+                    do {
+                        let reviewResponse = try JSONDecoder().decode(ReviewResponse.self, from: data)
+                        // 여기서 받아온 데이터를 처리합니다.
+                        self.updateUI(with: reviewResponse.data.reviewList)
+                    } catch {
+                        print("Decoding error: \(error)")
+                    }
+                case .failure(let error):
+                    print("Request error: \(error)")
+                }
+            }
+        }
+    
+    func updateUI(with reviews: [Review]) {
+            self.reviews = reviews
+            self.likedReply.reloadData()
+        }
+
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return reviews.count // 서버로부터 받아온 리뷰의 수를 반환
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "SecondSegmentTableViewCell", for: indexPath) as? SecondSegmentTableViewCell else {
             fatalError("Cell not found")
         }
-        let data = dummyData[indexPath.row]
-        cell.configure(with: data)
+        let review = reviews[indexPath.row]
+        cell.configure(with: review)
         return cell
-        
     }
+
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageNames.count
 
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "myPageReviewCollectionViewCell", for: indexPath) as? myPageReviewCollectionViewCell else {
             fatalError("Unable to dequeue myPageReviewCollectionViewCell")
         }
-        let imageName = imageNames[indexPath.row]
-        cell.configure(imageName: imageName)
+
+        let review = reviews[indexPath.section]
+        let imageUrl = review.reviewImages[indexPath.item]
+
         return cell
     }
-    
+
 }
 

@@ -85,48 +85,15 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         return viewModel.restaurantsData.count
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageRegisterResturantTableViewCell", for: indexPath) as? MyPageRegisterResturantTableViewCell else {
-            
-            
             return UITableViewCell()
-            
         }
         
         let restaurant = viewModel.restaurantsData[indexPath.row]
-        cell.resturantLabel?.text = restaurant.name
-        cell.grouplabel?.text = restaurant.groupName
-        cell.categoryLable?.text = restaurant.category
-        
-        
-        
-        if let imageUrl = URL(string: restaurant.restaurantImageURL ?? "") {
-            AF.request(imageUrl).responseData { response in
-                switch response.result {
-                case .success(let data):
-                    DispatchQueue.main.async {
-                        cell.myResturantImage?.image = UIImage(data: data)
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-        
-        if let userImageUrl = URL(string: restaurant.userProfileImageURL ?? "") {
-            AF.request(userImageUrl).responseData { response in
-                switch response.result {
-                case .success(let data):
-                    DispatchQueue.main.async {
-                        cell.myPageImage?.image = UIImage(data: data)
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
+        cell.configure(with: restaurant)
         
         return cell
     }
+
 }

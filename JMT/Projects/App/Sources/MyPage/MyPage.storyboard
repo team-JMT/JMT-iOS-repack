@@ -575,7 +575,10 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="alcholrFilterView" destination="UXZ-xn-9Fn" id="fxi-bM-OGK"/>
                         <outlet property="likedReply" destination="sBQ-4V-ESn" id="Rj4-OY-0aX"/>
+                        <outlet property="nearfilterView" destination="8g7-ek-svC" id="Szc-Ka-8nZ"/>
+                        <outlet property="typeFilterView" destination="E3z-hn-ELI" id="Nmq-CI-hKc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uph-Wj-GDU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

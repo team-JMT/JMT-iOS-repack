@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import Alamofire
 
 class MyPageRegisterResturantTableViewCell: UITableViewCell {
   
@@ -35,5 +35,36 @@ class MyPageRegisterResturantTableViewCell: UITableViewCell {
     }
     
     
-    
+    // 새로운 메소드 추가
+    func configure(with restaurant: Restaurant) {
+//        resturantLabel?.text = restaurant.name
+//        grouplabel?.text = restaurant.groupName
+//        categoryLable?.text = restaurant.category
+        MyNickname?.text = restaurant.userNickName
+        
+        if let imageUrl = URL(string: restaurant.restaurantImageURL ?? "") {
+            AF.request(imageUrl).responseData { [weak self] response in
+                guard let self = self else { return }
+                if case .success(let data) = response.result {
+                    DispatchQueue.main.async {
+                        self.myResturantImage?.image = UIImage(data: data)
+                    }
+                }
+            }
+        }
+        
+        if let userImageUrl = URL(string: restaurant.userProfileImageURL ?? "") {
+            AF.request(userImageUrl).responseData { [weak self] response in
+                guard let self = self else { return }
+                if case .success(let data) = response.result {
+                    DispatchQueue.main.async {
+                        self.myPageImage?.image = UIImage(data: data)
+                    }
+                }
+            }
+        }
+    }
 }
+    
+    
+
