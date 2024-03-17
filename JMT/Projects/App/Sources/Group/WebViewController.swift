@@ -18,7 +18,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
     
     var webViewBottomConstraint: Constraint?
     var keychainAccess: KeychainAccessible = DefaultKeychainAccessible()
-
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,6 +102,42 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
             
             decodeAndHandleMessage(messageData)
         }
+        if message.name == "callbackHandler" {
+            // 메시지 내용 파싱
+            guard let messageBody = message.body as? String,
+                  let messageData = messageBody.data(using: .utf8),
+                  let jsonObject = try? JSONSerialization.jsonObject(with: messageData, options: []) as? [String: AnyObject],
+                  let event = jsonObject["event"] as? String else {
+                print("Invalid message format")
+                return
+            }
+            
+            // 라우트 이벤트 처리
+            switch event {
+            case "navigate":
+                if let route = jsonObject["route"] as? String {
+                    navigateToRoute(route: route, params: jsonObject)
+                }
+            default:
+                print("Unhandled event: \(event)")
+                
+            }
+        }
+        
+        
+        // 라우트에 따른 이동 로직
+        func navigateToRoute(route: String, params: [String: AnyObject]) {
+            // 예시: 라우트 이름에 따라 다른 ViewController로 이동
+            switch route {
+            case "editRestaurant":
+                if let restaurantId = params["restaurantId"] as? String {
+                    // `restaurantId`를 사용하여 레스토랑 수정 페이지로 이동하는 로직 구현
+                    print("Navigate to editRestaurant with ID: \(restaurantId)")
+                }
+            default:
+                print("Unknown route: \(route)")
+            }
+        }
     }
     
     private func decodeAndHandleMessage(_ messageData: Data) {
@@ -112,18 +148,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
             print("Error decoding bridge request")
         }
     }
-//    
-//    private func callJavaScriptFunction(functionName: String) {
-//        let script = "\(functionName)();" // 예: setAccessToken() 형태로 JavaScript 함수 호출
-//        webView.evaluateJavaScript(script, completionHandler: { (result, error) in
-//            if let error = error {
-//                print("JavaScript 실행 오류: \(error.localizedDescription)")
-//            } else {
-//                print("JavaScript 함수 실행 결과: \(String(describing: result))")
-//            }
-//        })
-//    }
-//    
+    
     private func handleTokenRequest(_ request: WebBridgeRequest) {
         if let token = keychainAccess.getToken("accessToken") {
             guard let onSuccess = request.onSuccess else {
@@ -151,7 +176,19 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
             }
         }
     }
-
+    
+    
+    private func navigateToRoute(route: String, groupId: Int) {
+        // 'PlaceAdd' 라우트에 대한 처리
+        if route == "PlaceAdd" {
+            // groupId를 사용하여 맛집 등록 페이지로 이동하는 로직을 구현합니다.
+            print("Navigate to PlaceAdd with groupId: \(groupId)")
+            // 예시: `PlaceAddViewController`로의 이동 로직을 구현할 수 있습니다.
+        } else {
+            print("Unknown route: \(route)")
+        }
+    }
+    
     // handleBridgeRequest 함수 내에서 handleTokenRequest 함수 호출
     private func handleBridgeRequest(_ request: WebBridgeRequest) {
         switch request.name {
@@ -161,10 +198,10 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
             if let enable = request.data?.enable {
                 handleBackAction(enable: enable)
             }
-        case "navigation":
-            if let isVisible = request.data?.isVisible {
-                handleNavigationVisibility(isVisible: isVisible)
-            }
+        case "navigate":
+               if let route = request.data?.route, let groupId = request.data?.groupId {
+                   navigateToRoute(route: route, groupId: groupId)
+               }
         case "share":
             handleShareEvent()
         case "navigate":
@@ -175,7 +212,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
             print("Unhandled action: \(request.name)")
         }
     }
-
+    
     
     
     
@@ -226,6 +263,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         }
         print("Navigate to route: \(route)")
     }
+    
 }
 
 struct WebBridgeRequest: Decodable {
@@ -237,6 +275,7 @@ struct WebBridgeRequest: Decodable {
 
 
 struct BridgeEventData: Decodable {
+    let groupId: Int?  
     let enable: Bool?
     let isVisible: Bool?
     let route: String?
