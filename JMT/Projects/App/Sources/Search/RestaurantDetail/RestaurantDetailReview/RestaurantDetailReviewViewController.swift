@@ -92,6 +92,11 @@ extension RestaurantDetailReviewViewController: UICollectionViewDelegate {
 
 
 extension RestaurantDetailReviewViewController: UIScrollViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        viewModel?.onScrollBeginDismissKeyboard?()
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         let offsetY = scrollView.contentOffset.y - oldContentOffset.y

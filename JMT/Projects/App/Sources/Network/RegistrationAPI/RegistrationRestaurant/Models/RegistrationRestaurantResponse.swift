@@ -7,11 +7,6 @@
 
 import Foundation
 
-//enum RestaurantData: Decodable {
-//    case object(RegistrationRestaurantResponse)
-//    case string(String)
-//}
-
 struct RegistrationRestaurantResponse: Decodable {
     let data: CreatedRestaurantResponse
     let message: String

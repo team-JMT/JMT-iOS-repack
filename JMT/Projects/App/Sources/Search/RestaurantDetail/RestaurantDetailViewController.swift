@@ -44,22 +44,29 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     
     @IBOutlet weak var restaurantInfoSegController: UISegmentedControl!
     
-    @IBOutlet weak var photosContainerView: UIView!
-    
-    @IBOutlet weak var reviewImageView1: UIImageView!
-    @IBOutlet weak var reviewImageView2: UIImageView!
-    @IBOutlet weak var reviewImageView3: UIImageView!
-    @IBOutlet weak var reviewImageView4: UIImageView!
-    @IBOutlet weak var reviewImageView5: UIImageView!
-    
-    @IBOutlet weak var bottomContainerStackView: UIStackView!
-    @IBOutlet weak var addReviewImageButton: UIButton!
-    @IBOutlet weak var doneReviewButton: UIButton!
+    @IBOutlet weak var reviewContainerView: UIView!
+    @IBOutlet weak var reviewContainerViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var reviewTextView: UITextView!
-    @IBOutlet weak var reviewTextViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var reviewTextViewHeight: NSLayoutConstraint!
     
-    var imageViews = [UIImageView]()
+    @IBOutlet weak var reviewPhotoCollectionView: UICollectionView!
+    
+    @IBOutlet weak var addReviewPhotosButton: UIButton!
+    @IBOutlet weak var doneReviewButton: UIButton!
+    
+    
+//    @IBOutlet weak var reviewImageView1: UIImageView!
+//    @IBOutlet weak var reviewImageView2: UIImageView!
+//    @IBOutlet weak var reviewImageView3: UIImageView!
+//    @IBOutlet weak var reviewImageView4: UIImageView!
+//    @IBOutlet weak var reviewImageView5: UIImageView!
+//    
+//    @IBOutlet weak var bottomContainerStackView: UIStackView!
+
+//    
+
+//    @IBOutlet weak var reviewTextViewHeightConstraint: NSLayoutConstraint!
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -82,19 +89,9 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
                 print(error)
             }
         }
-        
 
         pageViewController?.pageViewDelegate = self
         pageViewController?.restaurantDetailDelegate = self
-        
-        imageViews = [reviewImageView1, reviewImageView2, reviewImageView3, reviewImageView4, reviewImageView5]
-        // 각 이미지뷰에 제스처 추가
-        for (index, imageView) in imageViews.enumerated() {
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-            imageView.addGestureRecognizer(tapGesture)
-            imageView.isUserInteractionEnabled = true
-            imageView.tag = index // 태그를 사용하여 각 이미지뷰 식별
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,12 +109,11 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         setupKeyboardEvent { [weak self] noti in
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
             
-            self?.bottomContainerStackView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.cgRectValue.height)
-            
-            print(-keyboardFrame.cgRectValue.height)
+            self?.reviewContainerView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.cgRectValue.height)
+         
             
         } keyboardWillHide: { [weak self] noti in
-            self?.bottomContainerStackView.transform = .identity
+            self?.reviewContainerView.transform = .identity
         }
     }
     
@@ -138,13 +134,19 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     func setupBind() {
         viewModel?.didUpdateReviewImage = { [weak self] in
             guard let self = self else { return }
-            self.reorderImageViews()
+            
+            self.reviewPhotoCollectionView.reloadData()
         }
         
         viewModel?.didUpdateSeg = { [weak self] index in
             guard let self = self else { return }
             changePage(to: index)
             restaurantInfoSegController.selectedSegmentIndex = index
+        }
+        
+        viewModel?.onScrollBeginDismissKeyboard = { [weak self] in
+            guard let self = self else { return }
+            self.reviewTextView.resignFirstResponder()
         }
     }
     
@@ -205,18 +207,15 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         // 닉네임 이미지 성정
         userProfileImageView.layer.cornerRadius = 10
         
-        // 후기 입력 뷰 설정
+        
+        reviewTextView.text = "방문 후기를 작성해보세요!"
+        reviewTextView.textColor = UIColor.lightGray
+        
+        reviewTextView.textContainerInset = .zero
+        reviewTextView.textContainer.lineFragmentPadding = 0
         reviewTextView.alignTextVerticallyInContainer()
         
-        addReviewImageButton.layer.cornerRadius = 8
-        addReviewImageButton.layer.borderColor = JMTengAsset.main500.color.cgColor
-        addReviewImageButton.layer.borderWidth = 1
-        
         doneReviewButton.layer.cornerRadius = 8
-        
-        reviewTextView.layer.cornerRadius = 8
-        reviewTextView.layer.borderColor = JMTengAsset.gray300.color.cgColor
-        reviewTextView.layer.borderWidth = 1
     }
     
     // MARK: - Actions
@@ -229,19 +228,22 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     }
     
     @IBAction func didTabAddReviewButton(_ sender: Any) {
-       print("리뷰 등록!")
-    }
-    
-    @objc func handleTap(_ sender: UITapGestureRecognizer) {
-        
-        guard let tappedImageView = sender.view as? UIImageView else { return }
-        
-        guard viewModel?.reviewImages.count ?? 0 > tappedImageView.tag else { return }
-        
-        viewModel?.reviewImages.remove(at: tappedImageView.tag)
-        
-        // 남은 이미지로 이미지뷰 재정렬
-        reorderImageViews()
+        Task {
+            do {
+                try await viewModel?.registrationReview(content: reviewTextView.text ?? "")
+                try await viewModel?.fetchRestaurantReviewData()
+                viewModel?.didupdateReviewData?()
+                
+                reviewTextView.text = "방문 후기를 작성해보세요!"
+                reviewTextView.textColor = UIColor.lightGray
+                
+                viewModel?.reviewImages.removeAll()
+                reviewPhotoCollectionView.reloadData()
+                
+            } catch {
+                print(error)
+            }
+        }
     }
     
     // MARK: - Helper Methods
@@ -254,34 +256,88 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         }
     }
     
-    func reorderImageViews() {
-        photosContainerView.isHidden = viewModel?.reviewImages.isEmpty == true ? true : false
-        // 모든 이미지뷰 초기화
-        imageViews.forEach { $0.image = nil }
-        
-        // 이미지를 다시 이미지뷰에 할당
-        for (index, image) in (viewModel?.reviewImages ?? []).enumerated() {
-            imageViews[index].image = image
-        }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.reviewTextView.resignFirstResponder()
     }
 }
 
 // MARK: - Extention
+extension RestaurantDetailViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel?.reviewImages.count ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ReviewPhotoCell", for: indexPath) as? ReviewPhotoCell else { return UICollectionViewCell() }
+        cell.delegate = self
+        cell.setupReviewPhoto(image: viewModel?.reviewImages[indexPath.row] ?? UIImage())
+        return cell
+    }
+}
+
+extension RestaurantDetailViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        // 셀의 너비와 높이를 설정합니다.
+        let cellWidth = 44 // 예시 너비
+        let cellHeight = 44 // 예시 높이
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+}
+
 extension RestaurantDetailViewController: RestaurantDetailPageViewControllerDelegate {
     func updateSegmentIndex(index: Int) {
         restaurantInfoSegController.selectedSegmentIndex = index
     }
 }
 
+extension RestaurantDetailViewController: ReviewPhotoCellDelegate {
+    func didTabDeleteButton(in cell: UICollectionViewCell) {
+        guard let indexPath = reviewPhotoCollectionView.indexPath(for: cell) else { return  }
+        
+        viewModel?.reviewImages.remove(at: indexPath.item)
+        
+        reviewPhotoCollectionView.performBatchUpdates {
+            reviewPhotoCollectionView.deleteItems(at: [indexPath])
+        }
+    }
+}
+
+
 extension RestaurantDetailViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-
-        let contentHeight = textView.contentSize.height
+        let maxHeight: CGFloat = 42.0 // 2줄일 때의 최대 높이
+        let minHeight: CGFloat = 21.0 // 1줄일 때의 최소 높이
+        
+        if textView.numberOfLines == 1 {
+            // 라인 수가 2줄 이하일 때, 높이를 42로 고정합니다.
+            reviewTextViewHeight.constant = minHeight
+        } else if textView.numberOfLines == 2 {
+            // 라인 수가 2줄을 초과할 때는 스크롤을 허용하거나 다른 로직을 적용합니다.
+            reviewTextViewHeight.constant = maxHeight
+        } else {
+            return
+        }
+        
+        // 감싸고 있는 뷰의 높이를 조절합니다.
+        let extraSpace = 107.0 - 21.0 // 텍스트뷰 외의 추가 공간을 계산합니다.
+        reviewContainerViewHeight.constant = reviewTextViewHeight.constant + extraSpace
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded() // 레이아웃을 애니메이션과 함께 업데이트합니다.
+        }
+    }
     
-        if contentHeight <= 100 {
-            reviewTextViewHeightConstraint.constant = contentHeight + 8.5 + 8.5 // 상하 여백 포함
-            textView.centerVertically() // 수직 가운데 정렬
-            textView.layoutIfNeeded() // 레이아웃 즉시 업데이트
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "방문 후기를 작성해보세요!" {
+            textView.text = "" // 텍스트를 비웁니다.
+            textView.textColor = UIColor.black // 입력 텍스트 색상을 변경합니다.
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "방문 후기를 작성해보세요!" // 기본 가이드 메시지를 표시합니다.
+            textView.textColor = UIColor.lightGray // 가이드 메시지 색상을 변경합니다.
         }
     }
 }

@@ -30,8 +30,6 @@ class SearchViewModel {
             let y = locationManager.coordinate?.latitude ?? 0.0
             let response = try await FetchRestaurantAPI.fetchSearchRestaurantsAsync(request: SearchRestaurantsRequest(keyword: keyword, x: "\(x)", y: "\(y)"))
             
-            print("------",response.data.restaurants)
-            
             restaurants.append(contentsOf: response.data.restaurants)
         } catch {
             print(error)

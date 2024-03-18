@@ -49,6 +49,16 @@ class RestaurantDetailInfoViewController: UIViewController {
                 self.infoCollectionViewHeight.constant = self.infoCollectionView.contentSize.height
             }
         }
+        
+        viewModel?.didupdateReviewData = { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.infoCollectionView.reloadData()
+                
+                self.infoCollectionView.layoutIfNeeded()
+                self.infoCollectionViewHeight.constant = self.infoCollectionView.contentSize.height
+            }
+        }
     }
     
     // MARK: - FetchData
@@ -378,6 +388,11 @@ extension RestaurantDetailInfoViewController: RestaurantDetailFooterViewDelegate
 }
 
 extension RestaurantDetailInfoViewController: UIScrollViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        viewModel?.onScrollBeginDismissKeyboard?()
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         let offsetY = scrollView.contentOffset.y - oldContentOffset.y

@@ -41,4 +41,10 @@ enum RestaurantError: Error {
     case fetchGroupsAsyncError
     case fetchRestaurantsAsyncError
     case fetchOutBoundRestaurantsAsyncError
+    
+    // RestaurantDetailViewModel Error
+    case fetchCurrentLocationAsyncError
+    case fetchRestaurantDataError
+    case fetchRestaurantReviewDataError
+    case registrationReviewError
 }

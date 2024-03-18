@@ -11,6 +11,7 @@ import Alamofire
 enum RegistrationRestaurantTarget {
     case registrationRestaurantLocation(RegistrationRestaurantLocationRequest)
     case registrationRestaurant(RegistrationRestaurantRequest)
+    case registrationReview(RegistrationReviewRequest)
 }
 
 extension RegistrationRestaurantTarget: TargetType {
@@ -18,6 +19,7 @@ extension RegistrationRestaurantTarget: TargetType {
         switch self {
         case .registrationRestaurantLocation: return .post
         case .registrationRestaurant: return .post
+        case .registrationReview: return .post
         }
     }
     
@@ -25,6 +27,7 @@ extension RegistrationRestaurantTarget: TargetType {
         switch self {
         case .registrationRestaurantLocation: return "/restaurant/location"
         case .registrationRestaurant: return "/restaurant"
+        case .registrationReview(let request): return "/restaurant/\(request.recommendRestaurantId)/review"
         }
     }
     
@@ -32,6 +35,7 @@ extension RegistrationRestaurantTarget: TargetType {
         switch self {
         case .registrationRestaurantLocation(let request): return .body(request)
         case .registrationRestaurant: return .body(nil)
+        case .registrationReview(let request): return .qurey(request)
         }
     }
 }

@@ -47,4 +47,28 @@ struct RegistrationRestaurantAPI {
         
         return response
     }
+    
+    static func registrationReviewAsync(request: RegistrationReviewRequest, reviewContent: String, images: [UIImage]) async throws -> RegistrationReviewResponse {
+        
+        let response = try await AF.upload(multipartFormData: { formData in
+            formData.append(Data(reviewContent.utf8), withName: "reviewContent")
+            
+            for (index, image) in images.enumerated() {
+                let resizeImage = image.resizeImage(widthSize: 300)
+                let resultImage = resizeImage?.jpegData(compressionQuality: 0.5)
+                
+                if let imageData = resultImage {
+                    formData.append(imageData, withName: "reviewImages", fileName: "\(index).jpg", mimeType: "image/jpeg")
+                }
+            }
+            
+            print("--------", request, images)
+            
+        }, with: RegistrationRestaurantTarget.registrationReview(request), interceptor: DefaultRequestInterceptor())
+            .validate(statusCode: 200..<300)
+            .serializingDecodable(RegistrationReviewResponse.self)
+            .value
+        
+        return response
+    }
 }
