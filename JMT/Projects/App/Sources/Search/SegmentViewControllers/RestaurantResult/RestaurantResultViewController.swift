@@ -33,7 +33,14 @@ class RestaurantResultViewController: UIViewController {
         
         let restaurantNib = UINib(nibName: "RestaurantInfoCell", bundle: nil)
         restaurantCollectionView.register(restaurantNib, forCellWithReuseIdentifier: "RestaurantInfoCell")
-        
+
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDataUpdate), name: .didUpdateGroup, object: nil)
+    }
+    
+    @objc func handleDataUpdate() {
+        DispatchQueue.main.async {
+            self.restaurantCollectionView.reloadData()
+        }
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {

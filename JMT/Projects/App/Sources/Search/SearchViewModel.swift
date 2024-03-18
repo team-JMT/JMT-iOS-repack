@@ -23,14 +23,15 @@ class SearchViewModel {
 
     // 맛집 검색하기
     func fetchRestaurantsAsync(keyword: String) async throws {
-        restaurants.removeAll()
-
         do {
+            restaurants.removeAll()
+            
             let x = locationManager.coordinate?.longitude ?? 0.0
             let y = locationManager.coordinate?.latitude ?? 0.0
             let response = try await FetchRestaurantAPI.fetchSearchRestaurantsAsync(request: SearchRestaurantsRequest(keyword: keyword, x: "\(x)", y: "\(y)"))
             
-            restaurants.append(contentsOf: response.data.restaurants)
+//            restaurants.append(contentsOf: response.data.restaurants)
+            restaurants = response.data.restaurants
         } catch {
             print(error)
             throw RestaurantError.fetchRestaurantsAsyncError
@@ -39,11 +40,13 @@ class SearchViewModel {
     
     // 그룹 검색하기
     func fetchGroupsAsync(keyword: String) async throws {
-        groupList.removeAll()
-
+    
         do {
+            groupList.removeAll()
+            
             let response = try await GroupAPI.fetchGroups(request: SearchGroupRequest(keyword: keyword))
-            groupList.append(contentsOf: response.data.groupList)
+//            groupList.append(contentsOf: response.data.groupList)
+            groupList = response.data.groupList
         } catch {
             print(error)
             throw RestaurantError.fetchGroupsAsyncError
@@ -52,11 +55,13 @@ class SearchViewModel {
 
     // 다른 그룹 맛집 데이터 검색하기
     func fetchOutBoundRestaurantsAsync(keyword: String) async throws {
-        outBoundrestaurants.removeAll()
         
         do {
+            outBoundrestaurants.removeAll()
+            
             let response = try await FetchRestaurantAPI.fetchSearchRestaurantsOutBoundAsync(request: SearchRestaurantsOutBoundRequest(keyword: keyword, currentGroupId: nil))
-            outBoundrestaurants.append(contentsOf: response.toDomain)
+//            outBoundrestaurants.append(contentsOf: response.toDomain)
+            outBoundrestaurants = response.toDomain
         } catch {
             print(error)
             throw RestaurantError.fetchOutBoundRestaurantsAsyncError

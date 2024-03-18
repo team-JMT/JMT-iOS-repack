@@ -107,7 +107,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
             setCustomNavigationBarBackButton(goToViewController: .popVC)
         } else if viewModel?.coordinator?.parentCoordinator is DefaultRegistrationRestaurantInfoCoordinator {
             setCustomNavigationBarBackButton(goToViewController: .popToRootVC)
-        }
+        } 
         
         setupKeyboardEvent { [weak self] noti in
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }

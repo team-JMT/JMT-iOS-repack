@@ -34,12 +34,15 @@ class TotalResultViewController: UIViewController {
         let restaurantNib = UINib(nibName: "RestaurantInfoCell", bundle: nil)
         totalResultCollectionView.register(restaurantNib, forCellWithReuseIdentifier: "RestaurantInfoCell")
         
-        viewModel?.didUpdateGroup = {
-            DispatchQueue.main.async {
-                self.totalResultCollectionView.reloadData()
-            }
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDataUpdate), name: .didUpdateGroup, object: nil)
+    }
+    
+    @objc func handleDataUpdate() {
+        DispatchQueue.main.async {
+            self.totalResultCollectionView.reloadData()
         }
     }
+    
     
     func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in

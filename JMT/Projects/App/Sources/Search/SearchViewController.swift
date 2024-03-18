@@ -102,6 +102,9 @@ class SearchViewController: UIViewController {
     }
     
     @IBAction func didTabCancelButton(_ sender: Any) {
+        viewModel?.restaurants.removeAll()
+        viewModel?.groupList.removeAll()
+        viewModel?.outBoundrestaurants.removeAll()
         
         DispatchQueue.main.async {
             self.searchTextField.text = ""
@@ -212,11 +215,11 @@ extension SearchViewController: UITextFieldDelegate {
         Task {
             do {
                 if viewModel?.isEmptyGroup == true {
-                    print("11111")
+
                     // 그룹 데이터, 다른 그룹 맛집 데이터
                     try await viewModel?.fetchGroupsAsync(keyword: keyword)
                     try await viewModel?.fetchOutBoundRestaurantsAsync(keyword: keyword)
-                    self.viewModel?.didUpdateGroup?()
+                    NotificationCenter.default.post(name: .didUpdateGroup, object: nil)
                     
                     self.searchTextField.resignFirstResponder()
                     self.tagCollectionView.reloadData()
@@ -226,13 +229,13 @@ extension SearchViewController: UITextFieldDelegate {
                     self.segmentedControllerContainerView.isHidden = false
                     
                 } else  {
-                    print("22222")
+                    
                     // 가입된 그룹들 맛집 데이터, 그룹 데이터, 다른 그룹 맛집 데이터
                     try await viewModel?.fetchRestaurantsAsync(keyword: keyword)
                     try await viewModel?.fetchGroupsAsync(keyword: keyword)
                     try await viewModel?.fetchOutBoundRestaurantsAsync(keyword: keyword)
-                    self.viewModel?.didUpdateGroup?()
-                    
+                    NotificationCenter.default.post(name: .didUpdateGroup, object: nil)
+                                    
                     self.searchTextField.resignFirstResponder()
                     self.tagCollectionView.reloadData()
                     self.recentContainerView.isHidden = true
@@ -244,30 +247,6 @@ extension SearchViewController: UITextFieldDelegate {
                 print(error)
             }
         }
-        
-      
-        
-        
-        
-        
-//        Task {
-//            do {
-//               try await fetchIsEmptyGroupData()
-//            } catch {
-//                print(error)
-//            }
-//        }
-//        
-//        DispatchQueue.main.async {
-//            
-//            self.searchTextField.resignFirstResponder()
-//            self.tagCollectionView.reloadData()
-//            self.recentContainerView.isHidden = true
-//            self.tagCollectionView.isHidden = true
-//            self.pageVCContainerView.isHidden = false
-//            
-//            self.segmentedControllerContainerView.isHidden = self.viewModel?.isEmptyGroup == true ? true : false
-//        }
         return true
     }
     

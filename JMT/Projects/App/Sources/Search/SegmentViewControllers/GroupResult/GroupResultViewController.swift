@@ -27,8 +27,16 @@ class GroupResultViewController: UIViewController {
         
         let groupInfoNib = UINib(nibName: "GroupInfoCell", bundle: nil)
         groupCollectionView.register(groupInfoNib, forCellWithReuseIdentifier: "GroupInfoCell")
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDataUpdate), name: .didUpdateGroup, object: nil)
     }
     
+    @objc func handleDataUpdate() {
+        DispatchQueue.main.async {
+            self.groupCollectionView.reloadData()
+        }
+    }
+
     func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
             switch sectionIndex {
