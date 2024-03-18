@@ -60,8 +60,10 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         self.view.bringSubviewToFront(distanceButton)
 
         viewModel.fetchUserInfo()
-        print("123123")
+
         
+        setupMenus() // 이 함수를 viewDidLoad에 추가합니다.
+
         // 탭 제스처 인식기를 추가하여 뷰를 탭했을 때 UIMenu를 표시하도록 설정
         addTapGestureToView(distanceLabel, action: #selector(showDistanceMenuAction))
         addTapGestureToView(typeLabel, action: #selector(showTypeMenuAction))
@@ -87,6 +89,36 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         }
     }
     
+    func setupMenus() {
+        // 거리 필터 메뉴 설정
+        let distanceActions = [
+            UIAction(title: "가까운순", handler: { [weak self] _ in self?.handleDistanceFilterChange("가까운순") }),
+            UIAction(title: "좋아요", handler: { [weak self] _ in self?.handleDistanceFilterChange("좋아요") }),
+            UIAction(title: "최신순", handler: { [weak self] _ in self?.handleDistanceFilterChange("최신순") })
+        ]
+        distanceButton.menu = UIMenu(title: "", children: distanceActions)
+        distanceButton.showsMenuAsPrimaryAction = true
+
+//        // 음식 종류 필터 메뉴 설정
+//        let typeActions = FoodType.allCases.map { foodType in
+//            UIAction(title: foodType.name, image: nil) { [weak self] _ in
+//                self?.selectedType = foodType.filter.rawValue
+//                self?.typeLabel.text = foodType.name
+//                self?.fetchRestaurants()
+//            }
+//        }
+//        typeBtn.menu = UIMenu(title: "", children: typeActions)
+//        typeBtn.showsMenuAsPrimaryAction = true
+
+        // 알코올 필터 메뉴 설정
+        let alcoholActions = [
+            UIAction(title: "주류가능", handler: { [weak self] _ in self?.handleAlcoholFilterChange(true) }),
+            UIAction(title: "주류불가능/모름", handler: { [weak self] _ in self?.handleAlcoholFilterChange(false) })
+        ]
+        alcholBtn.menu = UIMenu(title: "", children: alcoholActions)
+        alcholBtn.showsMenuAsPrimaryAction = true
+    }
+
     
     func layout() {
         nearFilterView.layer.cornerRadius = nearFilterView.frame.height / 2
@@ -101,28 +133,26 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
     
     func fetchRestaurants() {
         print("Fetching restaurants with selectedType: \(selectedType), selectedAlcohol: \(selectedAlcohol)")
-        
         guard let accessToken = keychainAccess.getToken("accessToken") else {
             print("Access Token is not available")
             return
         }
-        
+
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
             "Content-Type": "application/json"
         ]
-        
+
         let url = "https://api.jmt-matzip.dev/api/v1/restaurant/search?page=0&size=20"
+        var filterParameters: [String: Any] = [:]
+        if !selectedType.isEmpty {
+            filterParameters["categoryFilter"] = selectedType
+        }
+        filterParameters["isCanDrinkLiquor"] = selectedAlcohol
         
         let parameters: [String: Any] = [
-            "userLocation": [
-                "x": "127.0596",
-                "y": "37.6633"
-            ],
-            "filter": [
-                "categoryFilter": selectedType, // 이제 선택된 타입을 사용합니다.
-                "isCanDrinkLiquor": selectedAlcohol // 선택된 알코올 정보를 사용합니다.
-            ]
+            "userLocation": ["x": "127.0596", "y": "37.6633"],
+            "filter": filterParameters
         ]
         
         AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: ResturantResponse.self) { [weak self] response in
@@ -131,17 +161,23 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
             switch response.result {
             case .success(let responseData):
                 print("Successfully fetched restaurants data")
-                self.viewModel.restaurantsData = responseData.data?.restaurants ?? []
+                // 필터링 로직을 여기에 추가합니다. 예: responseData.data?.restaurants.filter { ... }
+                let filteredData = responseData.data?.restaurants?.filter { restaurant in
+                    // 필터 조건에 맞는 데이터만 반환합니다. 예시입니다.
+                    // return restaurant.category == self.selectedType && restaurant.canDrinkAlcohol == self.selectedAlcohol
+                    true // 실제 조건에 맞는 로직으로 대체해야 합니다.
+                } ?? []
+                self.viewModel.restaurantsData = filteredData
                 DispatchQueue.main.async {
-                    self.mainTable.reloadData()
+                    self.mainTable.reloadData() // 확실하게 메인 스레드에서 호출
                 }
             case .failure(let error):
                 print("Error fetching restaurants data: \(error)")
             }
         }
     }
-    
-    
+
+
     
     //가까운순 필터링
     
@@ -153,7 +189,6 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         ]
         distanceButton.menu = UIMenu(title: "", children: actions)
         distanceButton.showsMenuAsPrimaryAction = true
-        print(1)
     }
     
     @objc func showTypeMenuAction() {

@@ -27,11 +27,11 @@ platform :ios do
     )
     
     # Increment the build number
-    increment_build_number(workspace: "JMT-iOS.xcworkspace")
+increment_build_number(xcodeproj: "/Users/hoon/Desktop/JMT-Repack/JMT-iOS-repack/JMT-iOS-repack/JMT/Projects/App/JMTeng.xcodeproj")
 
 
     # Build the app
-    build_app(workspace: "JMT-iOS.xcworkspace", scheme: "Jmteng")
+    build_app(workspace: "JMT-iOS.xcworkspace", scheme: "JMTeng")
 
     # Upload the app to TestFlight
     upload_to_testflight
