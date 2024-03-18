@@ -6,38 +6,77 @@
 //
 
 import UIKit
+import Kingfisher
 
 class RestaurantInfoCell: UICollectionViewCell {
     
-    @IBOutlet weak var groupProfileImageView: UIImageView!
+    @IBOutlet weak var restaurantProfileImageView: UIImageView!
     @IBOutlet weak var groupNameLabel: UILabel!
-    @IBOutlet weak var memberCountLabel: UILabel!
-    @IBOutlet weak var restaurantCountLabel: UILabel!
-    @IBOutlet weak var groupIntroduceLabel: UILabel!
+    @IBOutlet weak var restaurantNameLabel: UILabel!
+    
+    @IBOutlet weak var userProfileImageView: UIImageView!
+    @IBOutlet weak var userNameLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        groupProfileImageView.layer.cornerRadius = 8
-        
-        
+        restaurantProfileImageView.layer.cornerRadius = 8
+        userProfileImageView.layer.cornerRadius = 10
+
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        groupProfileImageView.image = nil
+        restaurantProfileImageView.image = nil
         groupNameLabel.text = nil
-        memberCountLabel.text = nil
-        restaurantCountLabel.text = nil
-        groupIntroduceLabel.text = nil
+        restaurantNameLabel.text = nil
+        userProfileImageView.image = nil
+        userNameLabel.text = nil
     }
     
-    func setupData(groupData: SearchGroupItems?) {
-        groupProfileImageView.image = JMTengAsset.defaultProfileImage.image
-        groupNameLabel.text = groupData?.groupName ?? ""
-        memberCountLabel.text = "멤버 \(groupData?.memberCnt ?? 0)"
-        restaurantCountLabel.text = "맛집 \(groupData?.restaurantCnt ?? 0)"
-        groupIntroduceLabel.text = groupData?.groupIntroduce ?? ""
+    func setupRestaurantData(restaurantData: SearchRestaurantsItems?) {
+        if let data = restaurantData {
+            
+            if let restaurantImageUrl = URL(string: data.restaurantImageUrl ?? "") {
+                restaurantProfileImageView.kf.setImage(with: restaurantImageUrl)
+            } else {
+                restaurantProfileImageView.image = JMTengAsset.defaultProfileImage.image
+            }
+            
+            if let userProfileImageUrl = URL(string: data.userProfileImageUrl ?? "") {
+                userProfileImageView.kf.setImage(with: userProfileImageUrl)
+            } else {
+                userProfileImageView.image = JMTengAsset.defaultProfileImage.image
+            }
+            
+            groupNameLabel.text = data.groupName
+            restaurantNameLabel.text = data.name
+            userNameLabel.text = data.userNickName
+        }
+    }
+    
+    func setupOutBoundrestaurantData(outBoundrestaurantData: SearchRestaurantsOutBoundModel?) {
+        if let data = outBoundrestaurantData {
+            
+            print(data)
+            
+            if let restaurantImageUrl = URL(string: data.restaurantImageUrl ?? "") {
+                restaurantProfileImageView.kf.setImage(with: restaurantImageUrl)
+            } else {
+                restaurantProfileImageView.image = JMTengAsset.defaultProfileImage.image
+            }
+            
+            if let userProfileImageUrl = URL(string: data.userProfileImageUrl ?? "") {
+                userProfileImageView.kf.setImage(with: userProfileImageUrl)
+            } else {
+                userProfileImageView.image = JMTengAsset.defaultProfileImage.image
+            }
+            
+            groupNameLabel.text = data.groupName
+            restaurantNameLabel.text = data.name
+            userNameLabel.text = data.userNickName
+
+        }
     }
 }

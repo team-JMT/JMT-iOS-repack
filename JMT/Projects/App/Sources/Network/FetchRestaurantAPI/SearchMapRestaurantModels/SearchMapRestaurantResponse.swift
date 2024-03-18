@@ -30,8 +30,8 @@ struct SearchMapRestaurantItems: Decodable {
     let restaurantImageUrl: String?
     let introduce: String
     let category: String
-    let userNickName: String
-    let userProfileImageUrl: String
+    let userNickName: String?
+    let userProfileImageUrl: String?
     let canDrinkLiquor: Bool
     let differenceInDistance: String
 }

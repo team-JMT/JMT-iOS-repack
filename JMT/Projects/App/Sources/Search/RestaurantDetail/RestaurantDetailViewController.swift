@@ -229,7 +229,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     }
     
     @IBAction func didTabAddReviewButton(_ sender: Any) {
-       
+       print("리뷰 등록!")
     }
     
     @objc func handleTap(_ sender: UITapGestureRecognizer) {

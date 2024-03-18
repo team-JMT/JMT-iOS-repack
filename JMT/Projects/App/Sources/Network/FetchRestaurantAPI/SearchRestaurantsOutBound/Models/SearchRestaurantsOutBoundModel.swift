@@ -9,7 +9,8 @@ import Foundation
 
 struct SearchRestaurantsOutBoundModel {
     let id: Int
-    let groupName: String?
+    let groupId: Int
+    let groupName: String
     let name: String
     let userProfileImageUrl: String
     let userNickName: String

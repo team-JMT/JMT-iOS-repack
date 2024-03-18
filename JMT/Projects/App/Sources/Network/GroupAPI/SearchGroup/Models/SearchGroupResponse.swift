@@ -21,6 +21,7 @@ struct SearchGroupData: Decodable {
 struct SearchGroupItems: Decodable {
     let groupId: Int
     let groupName: String
+    let groupProfileImageUrl: String?
     let groupIntroduce: String
     let memberCnt: Int
     let restaurantCnt: Int

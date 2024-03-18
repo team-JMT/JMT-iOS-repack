@@ -8,9 +8,14 @@
 import Foundation
 
 struct SearchRestaurantsOutBoundResponse: Decodable {
-    let data: [SearchRestaurantsOutBoundItems]
+    let data: SearchRestaurantsOutBoundData
     let message: String
     let code: String
+}
+
+struct SearchRestaurantsOutBoundData: Decodable {
+    let restaurants: [SearchRestaurantsOutBoundItems]
+    let page: SearchRestaurantsOutBoundPage
 }
 
 struct SearchRestaurantsOutBoundItems: Decodable {
@@ -22,14 +27,15 @@ struct SearchRestaurantsOutBoundItems: Decodable {
     let roadAddress: String
     let x: Double
     let y: Double
-    let restaurantImageUrl: String
+    let restaurantImageUrl: String?
     let introduce: String
     let category: String
     let userNickName: String
-    let userProfileImageUrl: String
+    let userProfileImageUrl: String?
     let canDrinkLiquor: Bool
     let differenceInDistance: String
-    let page: SearchRestaurantsOutBoundPage
+    let groupId: Int
+    let groupName: String
 }
 
 struct SearchRestaurantsOutBoundPage: Decodable {
@@ -46,14 +52,15 @@ struct SearchRestaurantsOutBoundPage: Decodable {
 
 extension SearchRestaurantsOutBoundResponse {
     var toDomain: [SearchRestaurantsOutBoundModel] {
-        return data.map { data in
+        return data.restaurants.map { data in
             SearchRestaurantsOutBoundModel(
                 id: data.id,
-                groupName: nil,
+                groupId: data.groupId,
+                groupName: data.groupName,
                 name: data.name,
-                userProfileImageUrl: data.userProfileImageUrl,
+                userProfileImageUrl: data.userProfileImageUrl ?? "",
                 userNickName: data.userNickName,
-                restaurantImageUrl: data.restaurantImageUrl,
+                restaurantImageUrl: data.restaurantImageUrl ?? "",
                 category: data.category,
                 canDrinkLiquor: data.canDrinkLiquor,
                 differenceInDistance: data.differenceInDistance)

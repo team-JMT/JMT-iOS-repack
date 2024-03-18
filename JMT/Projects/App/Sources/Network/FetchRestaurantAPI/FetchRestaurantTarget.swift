@@ -56,7 +56,7 @@ extension FetchRestaurantTarget: TargetType {
         case .fetchRestaurantReviews(let request): return .qurey(request)
             
         case .fetchSearchRestaurants(let request): return .body(request)
-        case .fetchRestaurantsOutBound(let request): return .qurey(request)
+        case .fetchRestaurantsOutBound(let request): return .body(request)
         }
     }
 }

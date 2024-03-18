@@ -120,15 +120,15 @@ class SearchViewController: UIViewController {
     
     // MARK: - Helper Methods
     func fetchIsEmptyGroupData() async throws {
-        try await viewModel?.fetchGroups(keyword: searchTextField.text ?? "")
+        try await viewModel?.fetchGroupsAsync(keyword: searchTextField.text ?? "")
         viewModel?.didUpdateGroup?()
     }
     
     func fetchIsNotEmptyGroupData() async throws{
         let keyword = searchTextField.text ?? ""
-        try await viewModel?.fetchRestaurants(keyword: keyword)
-        try await viewModel?.fetchGroups(keyword: keyword)
-        try await viewModel?.fetchOutBoundRestaurants(keyword: keyword)
+        try await viewModel?.fetchRestaurantsAsync(keyword: keyword)
+        try await viewModel?.fetchGroupsAsync(keyword: keyword)
+        try await viewModel?.fetchOutBoundRestaurantsAsync(keyword: keyword)
         viewModel?.didUpdateGroup?()
     }
 
@@ -148,28 +148,28 @@ class SearchViewController: UIViewController {
 // MARK: - CollectionView Delegate
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        Task {
-            do {
-                self.searchTextField.text = self.viewModel?.recentSearchRestaurants[indexPath.item] ?? ""
-                self.viewModel?.saveRecentSearchRestaurants(keyword: self.viewModel?.recentSearchRestaurants[indexPath.item] ?? "")
-                self.viewModel?.fetchRecentSearchRestaurants()
-                try await fetchIsEmptyGroupData()
-                
-                DispatchQueue.main.async {
-            
-                    self.searchTextField.resignFirstResponder()
-                    self.tagCollectionView.reloadData()
-                    self.recentContainerView.isHidden = true
-                    self.tagCollectionView.isHidden = true
-                    self.pageVCContainerView.isHidden = false
-                    
-                    self.segmentedControllerContainerView.isHidden = self.viewModel?.isEmptyGroup == true ? true : false
-                }
-                
-            } catch {
-                print(error)
-            }
-        }
+//        Task {
+//            do {
+//                self.searchTextField.text = self.viewModel?.recentSearchRestaurants[indexPath.item] ?? ""
+//                self.viewModel?.saveRecentSearchRestaurants(keyword: self.viewModel?.recentSearchRestaurants[indexPath.item] ?? "")
+//                self.viewModel?.fetchRecentSearchRestaurants()
+//                try await fetchIsEmptyGroupData()
+//                
+//                DispatchQueue.main.async {
+//            
+//                    self.searchTextField.resignFirstResponder()
+//                    self.tagCollectionView.reloadData()
+//                    self.recentContainerView.isHidden = true
+//                    self.tagCollectionView.isHidden = true
+//                    self.pageVCContainerView.isHidden = false
+//                    
+//                    self.segmentedControllerContainerView.isHidden = self.viewModel?.isEmptyGroup == true ? true : false
+//                }
+//                
+//            } catch {
+//                print(error)
+//            }
+//        }
         
         
     }
@@ -199,31 +199,75 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - UITextField Delegate
 extension SearchViewController: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
-        guard textField.text != "" else { return false }
+        guard let keyword = textField.text, keyword != "" else { return false }
         
         viewModel?.saveRecentSearchRestaurants(keyword: textField.text ?? "")
         viewModel?.fetchRecentSearchRestaurants()
+    
+        viewModel?.isEmptyGroup = UserDefaultManager.selectedGroupId == nil ? true : false
         
         Task {
             do {
-               try await fetchIsEmptyGroupData()
+                if viewModel?.isEmptyGroup == true {
+                    print("11111")
+                    // 그룹 데이터, 다른 그룹 맛집 데이터
+                    try await viewModel?.fetchGroupsAsync(keyword: keyword)
+                    try await viewModel?.fetchOutBoundRestaurantsAsync(keyword: keyword)
+                    self.viewModel?.didUpdateGroup?()
+                    
+                    self.searchTextField.resignFirstResponder()
+                    self.tagCollectionView.reloadData()
+                    self.recentContainerView.isHidden = true
+                    self.tagCollectionView.isHidden = true
+                    self.pageVCContainerView.isHidden = false
+                    self.segmentedControllerContainerView.isHidden = false
+                    
+                } else  {
+                    print("22222")
+                    // 가입된 그룹들 맛집 데이터, 그룹 데이터, 다른 그룹 맛집 데이터
+                    try await viewModel?.fetchRestaurantsAsync(keyword: keyword)
+                    try await viewModel?.fetchGroupsAsync(keyword: keyword)
+                    try await viewModel?.fetchOutBoundRestaurantsAsync(keyword: keyword)
+                    self.viewModel?.didUpdateGroup?()
+                    
+                    self.searchTextField.resignFirstResponder()
+                    self.tagCollectionView.reloadData()
+                    self.recentContainerView.isHidden = true
+                    self.tagCollectionView.isHidden = true
+                    self.pageVCContainerView.isHidden = false
+                    self.segmentedControllerContainerView.isHidden = false
+                }
             } catch {
                 print(error)
             }
         }
         
-        DispatchQueue.main.async {
-            
-            self.searchTextField.resignFirstResponder()
-            self.tagCollectionView.reloadData()
-            self.recentContainerView.isHidden = true
-            self.tagCollectionView.isHidden = true
-            self.pageVCContainerView.isHidden = false
-            
-            self.segmentedControllerContainerView.isHidden = self.viewModel?.isEmptyGroup == true ? true : false
-        }
+      
+        
+        
+        
+        
+//        Task {
+//            do {
+//               try await fetchIsEmptyGroupData()
+//            } catch {
+//                print(error)
+//            }
+//        }
+//        
+//        DispatchQueue.main.async {
+//            
+//            self.searchTextField.resignFirstResponder()
+//            self.tagCollectionView.reloadData()
+//            self.recentContainerView.isHidden = true
+//            self.tagCollectionView.isHidden = true
+//            self.pageVCContainerView.isHidden = false
+//            
+//            self.segmentedControllerContainerView.isHidden = self.viewModel?.isEmptyGroup == true ? true : false
+//        }
         return true
     }
     

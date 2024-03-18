@@ -13,39 +13,61 @@ class SearchViewModel {
     
     var recentSearchRestaurants = [String]()
     var currentSegIndex: Int = 0
-    var isEmptyGroup: Bool = UserDefaultManager.selectedGroupId == nil ? true : false
+    var isEmptyGroup: Bool?
     
-    var groupList = [SearchGroupItems]()
     var restaurants = [SearchRestaurantsItems]()
-    var outBoundrestaurants = [SearchRestaurantsOutBoundItems]()
+    var groupList = [SearchGroupItems]()
+    var outBoundrestaurants = [SearchRestaurantsOutBoundModel]()
     
     var didUpdateGroup: (() -> Void)?
 
-    func fetchGroups(keyword: String) async throws {
-        groupList.removeAll()
-        let data = try await GroupAPI.fetchGroups(request: SearchGroupRequest(keyword: keyword)).data.groupList
-        groupList.append(contentsOf: data)
-    }
-    
-    func fetchRestaurants(keyword: String) async throws {
+    // 맛집 검색하기
+    func fetchRestaurantsAsync(keyword: String) async throws {
         restaurants.removeAll()
-        let x = locationManager.coordinate?.longitude ?? 0.0
-        let y = locationManager.coordinate?.latitude ?? 0.0
-        let data = try await FetchRestaurantAPI.fetchSearchRestaurantsAsync(request: SearchRestaurantsRequest(keyword: keyword, x: "\(x)", y: "\(y)")).data
-        
-        restaurants.append(contentsOf: data)
+
+        do {
+            let x = locationManager.coordinate?.longitude ?? 0.0
+            let y = locationManager.coordinate?.latitude ?? 0.0
+            let response = try await FetchRestaurantAPI.fetchSearchRestaurantsAsync(request: SearchRestaurantsRequest(keyword: keyword, x: "\(x)", y: "\(y)"))
+            
+            print("------",response.data.restaurants)
+            
+            restaurants.append(contentsOf: response.data.restaurants)
+        } catch {
+            print(error)
+            throw RestaurantError.fetchRestaurantsAsyncError
+        }
     }
     
-    func fetchOutBoundRestaurants(keyword: String) async throws {
+    // 그룹 검색하기
+    func fetchGroupsAsync(keyword: String) async throws {
+        groupList.removeAll()
+
+        do {
+            let response = try await GroupAPI.fetchGroups(request: SearchGroupRequest(keyword: keyword))
+            groupList.append(contentsOf: response.data.groupList)
+        } catch {
+            print(error)
+            throw RestaurantError.fetchGroupsAsyncError
+        }
+    }
+
+    // 다른 그룹 맛집 데이터 검색하기
+    func fetchOutBoundRestaurantsAsync(keyword: String) async throws {
         outBoundrestaurants.removeAll()
-        let data = try await FetchRestaurantAPI.fetchSearchRestaurantsOutBoundAsync(request: SearchRestaurantsOutBoundRequest(keyword: keyword, currentGroupId: nil)).data
         
-        outBoundrestaurants.append(contentsOf: data)
+        do {
+            let response = try await FetchRestaurantAPI.fetchSearchRestaurantsOutBoundAsync(request: SearchRestaurantsOutBoundRequest(keyword: keyword, currentGroupId: nil))
+            outBoundrestaurants.append(contentsOf: response.toDomain)
+        } catch {
+            print(error)
+            throw RestaurantError.fetchOutBoundRestaurantsAsyncError
+        }
     }
 }
 
-// 5 9 12 15 16 17 18
 
+// 35 36 37 38
 // 최근 검색 관련 메소드
 extension SearchViewModel {
     func fetchRecentSearchRestaurants() {

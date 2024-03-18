@@ -33,16 +33,25 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
     var viewModel: GroupViewModel?
     var groupId: Int?
     var webViewUrlType: WebViewUrl = .base
-    var webViewHeightConstraint: Constraint?
-
-    private var webView: WKWebView!
+    
+    private lazy var webView: WKWebView = {
+        let contentController = WKUserContentController()
+        contentController.add(self, name: "webviewBridge")
+        
+        let webViewConfiguration = WKWebViewConfiguration()
+        webViewConfiguration.userContentController = contentController
+    
+        webView = WKWebView(frame: .zero, configuration: webViewConfiguration)
+        webView.allowsBackForwardNavigationGestures = true
+        webView.navigationDelegate = self
+        webView.uiDelegate = self
+        
+        return webView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
         setupWebView()
-        loadWebPage()
-       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,23 +86,10 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
     }
     
     func setupWebView() {
-        let contentController = WKUserContentController()
-        contentController.add(self, name: "webviewBridge")
-        
-        let webViewConfiguration = WKWebViewConfiguration()
-        webViewConfiguration.userContentController = contentController
-        
-      
-        webView = WKWebView(frame: .zero, configuration: webViewConfiguration)
-//        webView.allowsBackForwardNavigationGestures = true
-        webView.navigationDelegate = self
-        webView.uiDelegate = self
-        
         view.addSubview(webView)
-        
+    
         webView.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
-//            webViewHeightConstraint = make.height.equalToSuperview().constraint
         }
     }
     
@@ -149,9 +145,15 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
             case "navigation":
                 // 네비게이션 관련 처리
                 if let data = dictionary["data"] as? [String: Any], let isVisible = data["isVisible"] as? Bool {
-                
-                    self.tabBarController?.tabBar.isHidden = !isVisible
+                    self.tabBarController?.tabBar.isHidden = isVisible
                 }
+            case "navigate":
+                
+                if let data = dictionary["data"] as? [String: Any], let groupId = data["groupId"] as? Int, let route = data["route"] as? String {
+                   print(groupId, route)
+                    print(viewModel?.coordinator)
+                    viewModel?.coordinator?.showSearchRestaurantViewController()
+               }
             case "back":
                 // 뒤로가기 관련 처리
                 if let data = dictionary["data"] as? [String: Any], let enable = data["enable"] as? Bool {
@@ -182,7 +184,7 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
 
 extension GroupWebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        
+        print(message.body)
         handleJSONDataBasedOnName(jsonString: message.body as? String ?? "")
     }
     
@@ -195,6 +197,14 @@ extension GroupWebViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("22222")
+    }
+    
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        print("웹뷰 로드 실패: \(error.localizedDescription)")
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        print("웹뷰 네비게이션 실패: \(error.localizedDescription)")
     }
 }
 

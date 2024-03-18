@@ -8,9 +8,14 @@
 import Foundation
 
 struct SearchRestaurantsResponse: Decodable {
-    let data: [SearchRestaurantsItems]
+    let data: SearchRestaurantsData
     let message: String
     let code: String
+}
+
+struct SearchRestaurantsData: Decodable {
+    let restaurants: [SearchRestaurantsItems]
+    let page: SearchRestaurantsPage
 }
 
 struct SearchRestaurantsItems: Decodable {
@@ -25,11 +30,12 @@ struct SearchRestaurantsItems: Decodable {
     let restaurantImageUrl: String
     let introduce: String
     let category: String
-    let userNickName: String
-    let userProfileImageUrl: String
+    let userNickName: String?
+    let userProfileImageUrl: String?
     let canDrinkLiquor: Bool
     let differenceInDistance: String
-    let page: SearchRestaurantsPage
+    let groupId: Int
+    let groupName: String
 }
 
 struct SearchRestaurantsPage: Decodable {

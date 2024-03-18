@@ -100,7 +100,7 @@ class HomeViewController: UIViewController {
                         self.viewModel?.didUpdateGroupRestaurantsData?()
                     }
                 } catch {
-                    print(error)
+                    print("11111", error)
                 }
             }
         }
@@ -189,7 +189,7 @@ class HomeViewController: UIViewController {
                     }
                 }
             } catch {
-                print(error)
+                print("123123", error)
             }
         }
     }

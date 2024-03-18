@@ -28,8 +28,8 @@ struct DetailRestaurantData: Decodable {
     let recommendMenu: String
     let pictures: [String]
     let userId: Int
-    let userNickName: String
-    let userProfileImageUrl: String
+    let userNickName: String?
+    let userProfileImageUrl: String?
     let differenceInDistance: String
 }
 
@@ -50,8 +50,8 @@ extension DetailRestaurantResponse {
             recommendMenu: data.recommendMenu.splitByHashTag(),
             pictures: data.pictures,
             userId: data.userId,
-            userNickName: data.userNickName,
-            userProfileImageUrl: data.userProfileImageUrl,
+            userNickName: data.userNickName ?? "",
+            userProfileImageUrl: data.userProfileImageUrl ?? "",
             differenceInDistance: data.differenceInDistance,
             reviews: [])
     }

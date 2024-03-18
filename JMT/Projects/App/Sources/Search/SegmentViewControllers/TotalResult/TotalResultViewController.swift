@@ -25,6 +25,15 @@ class TotalResultViewController: UIViewController {
         let differentGroupHeader = UINib(nibName: "DifferentGroupHeader", bundle: nil)
         totalResultCollectionView.register(differentGroupHeader, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "DifferentGroupHeader")
         
+        let emptyNib = UINib(nibName: "SearchResultEmptyCell", bundle: nil)
+        totalResultCollectionView.register(emptyNib, forCellWithReuseIdentifier: "SearchResultEmptyCell")
+        
+        let groupInfoNib = UINib(nibName: "GroupInfoCell", bundle: nil)
+        totalResultCollectionView.register(groupInfoNib, forCellWithReuseIdentifier: "GroupInfoCell")
+        
+        let restaurantNib = UINib(nibName: "RestaurantInfoCell", bundle: nil)
+        totalResultCollectionView.register(restaurantNib, forCellWithReuseIdentifier: "RestaurantInfoCell")
+        
         viewModel?.didUpdateGroup = {
             DispatchQueue.main.async {
                 self.totalResultCollectionView.reloadData()
@@ -35,19 +44,15 @@ class TotalResultViewController: UIViewController {
     func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
             
-            if self.viewModel?.isEmptyGroup == true {
+            switch sectionIndex {
+            case 0:
+                return self.createFirstColumnSection()
+            case 1:
                 return self.createSecondColumnSection()
-            } else {
-                switch sectionIndex {
-                case 0:
-                    return self.createFirstColumnSection()
-                case 1:
-                    return self.createSecondColumnSection()
-                case 2:
-                    return self.createThirdColumnSection()
-                default:
-                    return nil
-                }
+            case 2:
+                return self.createThirdColumnSection()
+            default:
+                return nil
             }
         }
         
@@ -56,35 +61,67 @@ class TotalResultViewController: UIViewController {
     }
     
     func createFirstColumnSection() -> NSCollectionLayoutSection {
-        // Item
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(100)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-      
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0), // .fractionalWidth(0.6675),
-            heightDimension: .estimated(100) // .fractionalHeight(0.4215)
-        )
-        
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        if viewModel?.restaurants.isEmpty == true {
+            // Item
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(100)
+            )
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+          
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0), // .fractionalWidth(0.6675),
+                heightDimension: .estimated(100) // .fractionalHeight(0.4215)
+            )
+            
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
-        // Section
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 52, trailing: 20)
-        section.interGroupSpacing = CGFloat(12)
-        
-        // Header
-        section.boundarySupplementaryItems = [
-            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-        ]
-        
-        // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
-        section.decorationItems = [sectionBackgroundDecoration]
+            // Section
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 52, trailing: 20)
+            section.interGroupSpacing = CGFloat(12)
+            
+            // Header
+            section.boundarySupplementaryItems = [
+                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+            ]
+            
+            // Background
+            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
+            section.decorationItems = [sectionBackgroundDecoration]
 
-        return section
+            return section
+        } else {
+            // Item
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(100)
+            )
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+          
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0), // .fractionalWidth(0.6675),
+                heightDimension: .absolute(100) // .fractionalHeight(0.4215)
+            )
+            
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+
+            // Section
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 52, trailing: 20)
+            section.interGroupSpacing = CGFloat(12)
+            
+            // Header
+            section.boundarySupplementaryItems = [
+                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+            ]
+            
+            // Background
+            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
+            section.decorationItems = [sectionBackgroundDecoration]
+
+            return section
+        }
     }
     
     func createSecondColumnSection() -> NSCollectionLayoutSection {
@@ -122,7 +159,7 @@ class TotalResultViewController: UIViewController {
     func createThirdColumnSection() -> NSCollectionLayoutSection {
         // Item
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
+            widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(100)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -150,52 +187,71 @@ class TotalResultViewController: UIViewController {
 
 extension TotalResultViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if viewModel?.isEmptyGroup == true {
-            return 1
-        } else {
-            return 3
-        }
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if viewModel?.isEmptyGroup == true {
-            return viewModel?.groupList.count ?? 0
-        } else {
-            switch section {
-            case 0:
-                return 3
-            case 1:
-                return 3
-            case 2:
-                return 3
-            default:
-                return 0
+        switch section {
+        case 0:
+            if viewModel?.restaurants.isEmpty == true {
+                return 1
+            } else {
+                return viewModel?.restaurants.count ?? 0 > 3 ? 3 : viewModel?.restaurants.count ?? 0
             }
+        case 1:
+            if viewModel?.groupList.isEmpty == true {
+                return 1
+            } else {
+                return viewModel?.groupList.count ?? 0 > 3 ? 3 : viewModel?.groupList.count ?? 0
+            }
+        case 2:
+            if viewModel?.outBoundrestaurants.isEmpty == true {
+                return 1
+            } else {
+                return viewModel?.outBoundrestaurants.count ?? 0 > 3 ? 3 : viewModel?.outBoundrestaurants.count ?? 0
+            }
+        default:
+            return 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        print(viewModel?.groupList)
-        if viewModel?.isEmptyGroup == true {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupCell", for: indexPath) as? GroupInfoCell else { return UICollectionViewCell() }
-            cell.setupData(groupData: viewModel?.groupList[indexPath.row])
-            return cell
-        } else {
-            switch indexPath.section {
-            case 0:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "restaurantCell", for: indexPath)
+        switch indexPath.section {
+        case 0:
+            if viewModel?.restaurants.isEmpty == true {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultEmptyCell", for: indexPath) as? SearchResultEmptyCell else { return UICollectionViewCell() }
+                cell.setupCommentLabel(str: "맛집 목록은 그룹 멤버만 볼 수 있어요", isHideButton: true)
                 return cell
-            case 1:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupCell", for: indexPath)
+            } else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RestaurantInfoCell", for: indexPath) as? RestaurantInfoCell else { return UICollectionViewCell() }
+                cell.setupRestaurantData(restaurantData: viewModel?.restaurants[indexPath.row])
                 return cell
-            case 2:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "restaurantCell", for: indexPath)
-                return cell
-            default:
-                return UICollectionViewCell()
             }
+        case 1:
+            if viewModel?.groupList.isEmpty == true {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultEmptyCell", for: indexPath) as? SearchResultEmptyCell else { return UICollectionViewCell() }
+                cell.setupCommentLabel(str: "아직 등록된 그룹이 없어요", isHideButton: false)
+                return cell
+            } else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GroupInfoCell", for: indexPath) as? GroupInfoCell else { return UICollectionViewCell() }
+                cell.setupData(groupData: viewModel?.groupList[indexPath.row])
+                return cell
+            }
+        case 2:
+            if viewModel?.outBoundrestaurants.isEmpty == true {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultEmptyCell", for: indexPath) as? SearchResultEmptyCell else { return UICollectionViewCell() }
+                cell.setupCommentLabel(str: "다른 그룹에 등록된 맛집이 없어요", isHideButton: true)
+                return cell
+            } else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RestaurantInfoCell", for: indexPath) as? RestaurantInfoCell else { return UICollectionViewCell() }
+                cell.setupOutBoundrestaurantData(outBoundrestaurantData: viewModel?.outBoundrestaurants[indexPath.row])
+                
+                return cell
+            }
+        default:
+            return UICollectionViewCell()
         }
     }
 }
@@ -207,11 +263,7 @@ extension TotalResultViewController: UICollectionViewDelegate {
             switch indexPath.section {
             case 0:
                 let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "titleHeaderView", for: indexPath) as! TitleHeaderView
-                if viewModel?.isEmptyGroup == true {
-                    header.setupTitle(title: "그룹")
-                } else {
-                    header.setupTitle(title: "맛집")
-                }
+                header.setupTitle(title: "맛집")
                 return header
             case 1:
                 let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "titleHeaderView", for: indexPath) as! TitleHeaderView

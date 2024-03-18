@@ -44,7 +44,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="315" height="282"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V9t-4t-Mdo">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V9t-4t-Mdo">
                                                     <rect key="frame" x="0.0" y="0.0" width="315" height="197"/>
                                                     <color key="backgroundColor" name="gray100"/>
                                                     <constraints>
@@ -126,7 +126,7 @@
                                                         <constraint firstAttribute="width" constant="24" id="bGi-1N-s79"/>
                                                     </constraints>
                                                 </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pC9-dK-Evg">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pC9-dK-Evg">
                                                     <rect key="frame" x="0.0" y="36" width="315" height="197"/>
                                                     <color key="backgroundColor" name="gray100"/>
                                                     <constraints>

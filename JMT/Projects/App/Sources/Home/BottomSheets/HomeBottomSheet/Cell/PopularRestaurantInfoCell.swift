@@ -51,9 +51,9 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
     func setupData(model: SearchMapRestaurantItems?) {
         
         if let model = model {
-            userNicknameLabel.text = model.userNickName
+            userNicknameLabel.text = model.userNickName ?? "이름 없음"
             
-            if let url = URL(string: model.userProfileImageUrl) {
+            if let url = URL(string: model.userProfileImageUrl ?? "") {
                 userProfileImageView.kf.setImage(with: url)
             } else {
                 userProfileImageView.image = JMTengAsset.defaultProfileImage.image

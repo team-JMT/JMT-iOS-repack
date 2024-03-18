@@ -37,6 +37,8 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        
         setupKeyboardEvent(keyboardWillShow: { [weak self] noti in
             
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
@@ -85,6 +87,8 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         removeKeyboardObserver()
     }
@@ -299,15 +303,18 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     // MARK: - Actions
     @IBAction func didTabRegistrationButton(_ sender: Any) {
         
-       
-        
         Task {
-            if viewModel?.checkNotInfo() == true {
-                let restaurantLocationId = try await viewModel?.registrationRestaurantLocation() ?? 0
-                let recommendRestaurantId = try await viewModel?.registrationRestaurantAsync(restaurantLocationId: restaurantLocationId)
-                viewModel?.coordinator?.showDetailRestaurantViewController(id: recommendRestaurantId ?? 0)
-            } else {
-                viewModel?.coordinator?.showButtonPopupViewController()
+            do {
+                if viewModel?.checkNotInfo() == true {
+                    try await viewModel?.registrationRestaurantLocation()
+                    try await viewModel?.registrationRestaurantAsync()
+                    viewModel?.coordinator?.showDetailRestaurantViewController(id: viewModel?.recommendRestaurantId ?? 0)
+                } else {
+                    viewModel?.coordinator?.showButtonPopupViewController()
+                }
+            } catch {
+                print("123123123", error)
+                // 실패했을때
             }
         }
     }   

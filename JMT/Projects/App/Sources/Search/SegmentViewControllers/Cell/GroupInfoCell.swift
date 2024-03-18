@@ -20,8 +20,6 @@ class GroupInfoCell: UICollectionViewCell {
         super.awakeFromNib()
         
         groupProfileImageView.layer.cornerRadius = 8
-        
-        
     }
     
     override func prepareForReuse() {
@@ -35,11 +33,17 @@ class GroupInfoCell: UICollectionViewCell {
     }
     
     func setupData(groupData: SearchGroupItems?) {
-        groupProfileImageView.image = JMTengAsset.defaultProfileImage.image
-        groupNameLabel.text = groupData?.groupName ?? ""
-        memberCountLabel.text = "멤버 \(groupData?.memberCnt ?? 0)"
-        restaurantCountLabel.text = "맛집 \(groupData?.restaurantCnt ?? 0)"
-        groupIntroduceLabel.text = groupData?.groupIntroduce ?? ""
+        if let data = groupData {
+            if let url = URL(string: data.groupProfileImageUrl ?? "") {
+                groupProfileImageView.kf.setImage(with: url)
+            } else {
+                groupProfileImageView.image = JMTengAsset.defaultProfileImage.image
+            }
+            
+            groupNameLabel.text = groupData?.groupName ?? ""
+            memberCountLabel.text = "멤버 \(groupData?.memberCnt ?? 0)"
+            restaurantCountLabel.text = "맛집 \(groupData?.restaurantCnt ?? 0)"
+            groupIntroduceLabel.text = groupData?.groupIntroduce ?? ""
+        }
     }
-    
 }
