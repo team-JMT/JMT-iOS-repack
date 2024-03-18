@@ -199,20 +199,14 @@ class HomeViewController: UIViewController {
         
         viewModel?.didUpdateGroupName = { index in
             
-            Task {
-                do {
-                    self.viewModel?.didUpdateGroupRestaurantsData?()
-                    
-                    self.groupNameLabel.text = self.viewModel?.groupList[index].groupName ?? ""
-                    
-                    if let url = URL(string: self.viewModel?.groupList[index].groupProfileImageUrl ?? "")  {
-                        self.groupImageView.kf.setImage(with: url)
-                    } else {
-                        self.groupImageView.image = JMTengAsset.defaultProfileImage.image
-                    }
-                } catch {
-                    print(error)
-                }
+            self.viewModel?.didUpdateGroupRestaurantsData?()
+            
+            self.groupNameLabel.text = self.viewModel?.groupList[index].groupName ?? ""
+            
+            if let url = URL(string: self.viewModel?.groupList[index].groupProfileImageUrl ?? "")  {
+                self.groupImageView.kf.setImage(with: url)
+            } else {
+                self.groupImageView.image = JMTengAsset.defaultProfileImage.image
             }
         }
     }

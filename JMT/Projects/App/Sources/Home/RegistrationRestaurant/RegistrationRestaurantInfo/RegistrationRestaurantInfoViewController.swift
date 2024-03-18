@@ -48,7 +48,21 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
                 case let textField as UITextField:
                     switch textField.tag {
                     case 0:
-                        self?.settingInfoCollectionView.moveToScroll(section: 2, row: 0, margin: 100)
+                        // Y축으로 키보드의 상단 위치
+                        let keyboardTopY = keyboardFrame.cgRectValue.origin.y
+                        // 현재 선택한 텍스트 필드의 Frame 값
+                        let convertedTextFieldFrame = self?.settingInfoCollectionView.convert(textField.frame,
+                                                                   from: textField.superview)
+                        // Y축으로 현재 텍스트 필드의 하단 위치
+                        let textFieldBottomY = (convertedTextFieldFrame?.origin.y ?? 0.0) + (convertedTextFieldFrame?.size.height ?? 0.0)
+                        
+                        // Y축으로 텍스트필드 하단 위치가 키보드 상단 위치보다 클 때
+                        if textFieldBottomY > keyboardTopY {
+                            let newFrame = keyboardFrame.cgRectValue.height - 110
+                            let insets = UIEdgeInsets(top: 0, left: 0, bottom: newFrame, right: 0)
+                            self?.settingInfoCollectionView.contentInset = insets
+                            self?.settingInfoCollectionView.moveToScroll(section: 2, row: 0, margin: 100)
+                        }
                     case 1:
                         // Y축으로 키보드의 상단 위치
                         let keyboardTopY = keyboardFrame.cgRectValue.origin.y

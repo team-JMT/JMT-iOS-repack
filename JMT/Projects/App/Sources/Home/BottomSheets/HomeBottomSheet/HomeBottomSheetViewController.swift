@@ -45,32 +45,35 @@ class HomeBottomSheetViewController: UIViewController {
     // MARK: - SetupBindings
     func setupBind() {
         
-        viewModel?.didUpdateGroupRestaurantsData = { [weak self] in
+        viewModel?.didUpdateGroupRestaurantsData = {
             
-            self?.viewModel?.isLodingData = true
-            self?.bottomSheetCollectionView.showAnimatedGradientSkeleton()
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                Task {
-                    do {
-                        try await self?.fetchGroupRestaurantData()
-                        self?.viewModel?.isLodingData = false
-                        
-                        self?.bottomSheetCollectionView.stopSkeletonAnimation()
-                        self?.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
-                    } catch {
-                        print(error)
-                    }
-                }
+            DispatchQueue.main.async {
+                self.viewModel?.isLodingData = true
+                self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
+                self.fetchGroupRestaurantData()
             }
         }
     }
     
     // MARK: - SetupData
     // 선택한 그룹에 포함된 맛집 정보 가져오기
-    func fetchGroupRestaurantData() async throws {
-        try await viewModel?.fetchRecentRestaurantsAsync()
-        try await viewModel?.fetchGroupRestaurantsAsync()
+    func fetchGroupRestaurantData() {
+        Task {
+            do {
+                try await viewModel?.fetchRecentRestaurantsAsync()
+                try await viewModel?.fetchGroupRestaurantsAsync()
+                
+                DispatchQueue.main.async {
+                    self.viewModel?.isLodingData = false
+                    self.bottomSheetCollectionView.reloadData()
+                    self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                }
+                
+            } catch {
+                print(error)
+            }
+        }
+        
     }
     
     // MARK: - SetupUI
@@ -99,7 +102,8 @@ class HomeBottomSheetViewController: UIViewController {
            
            guard let self = self else { return nil }
         
-           if viewModel?.isLodingData == true {
+           if self.viewModel?.isLodingData == true {
+               print("------------------------- 1")
                switch sectionIndex {
                case 0:
                    return self.createFirstColumnSection()
@@ -109,6 +113,7 @@ class HomeBottomSheetViewController: UIViewController {
                    return nil
                }
            } else {
+               print("------------------------- 2")
                let isPopularRestaurantsEmpty = self.viewModel?.popularRestaurants.isEmpty ?? true
                let isRestaurantsEmpty = self.viewModel?.restaurants.isEmpty ?? true
 

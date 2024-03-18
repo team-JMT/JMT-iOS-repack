@@ -150,7 +150,7 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
             case "navigate":
                 
                 if let data = dictionary["data"] as? [String: Any], let groupId = data["groupId"] as? Int, let route = data["route"] as? String {
-                   print(groupId, route)
+                    print(groupId, route)
                     print(viewModel?.coordinator)
                     viewModel?.coordinator?.showSearchRestaurantViewController()
                }
@@ -195,16 +195,20 @@ extension GroupWebViewController: WKNavigationDelegate {
         print("11111")
     }
     
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print("22222")
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        print("웹뷰가 콘텐츠를 로드하기 시작했습니다.")
     }
-    
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        print("웹뷰 로드 실패: \(error.localizedDescription)")
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        print("웹뷰가 콘텐츠 로드를 완료했습니다.")
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        print("웹뷰 네비게이션 실패: \(error.localizedDescription)")
+        print("웹뷰 로드 중 오류가 발생했습니다: \(error.localizedDescription)")
+    }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        print("웹뷰 콘텐츠 로드 시작 중 오류가 발생했습니다: \(error.localizedDescription)")
     }
 }
 
