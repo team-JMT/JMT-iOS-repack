@@ -78,6 +78,9 @@ class RestaurantDetailViewModel {
     
     func fetchRestaurantReviewData() async throws {
         
+        restaurantData?.reviews.removeAll()
+        restaurantReviewImages.removeAll()
+        
         do {
             restaurantData?.reviews = try await FetchRestaurantAPI.fetchRestaurantReviewsAsync(request: RestaurantReviewRequest(recommendRestaurantId: recommendRestaurantId ?? 0)).toDomain
             

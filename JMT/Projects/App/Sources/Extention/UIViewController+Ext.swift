@@ -25,6 +25,15 @@ extension UIViewController {
         case popToRootVC
     }
     
+    func setCustomNavigationMoreButton() {
+        var moreButton = UIBarButtonItem(image: JMTengAsset.more.image, style: .plain, target: self, action: #selector(editMenu))
+        self.navigationItem.rightBarButtonItem = moreButton
+    }
+    
+    @objc private func editMenu() {
+        print("123123123123")
+    }
+    
     func setCustomNavigationBarBackButton(goToViewController: GoToViewControllerType) {
         
         var backButton = UIBarButtonItem()

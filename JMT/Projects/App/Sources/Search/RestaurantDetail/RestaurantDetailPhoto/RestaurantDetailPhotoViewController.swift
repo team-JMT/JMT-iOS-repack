@@ -21,6 +21,8 @@ class RestaurantDetailPhotoViewController: UIViewController {
 
         photoCollectionView.collectionViewLayout = createLayout()
         photoCollectionView.keyboardDismissMode = .onDrag
+        
+        setupBind()
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -90,6 +92,15 @@ class RestaurantDetailPhotoViewController: UIViewController {
             section.decorationItems = [sectionBackgroundDecoration]
             
             return section
+        }
+    }
+    
+    func setupBind() {
+        viewModel?.didupdateReviewData = { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.photoCollectionView.reloadData()
+            }
         }
     }
 }
