@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -26,9 +26,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="8M8-rY-Cpl">
-                                <rect key="frame" x="131" y="251" width="113.5" height="154"/>
-                            </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="DKb-i2-fkp">
                                 <rect key="frame" x="20" y="569" width="335" height="132"/>
                                 <subviews>
@@ -114,14 +111,21 @@
                                     </view>
                                 </subviews>
                             </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="JMTLogin" translatesAutoresizingMaskIntoConstraints="NO" id="8M8-rY-Cpl">
+                                <rect key="frame" x="122.5" y="188" width="130" height="190"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="190" id="YuZ-kQ-91M"/>
+                                    <constraint firstAttribute="width" constant="130" id="d5E-ex-TCj"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="8M8-rY-Cpl" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="51w-TW-2Bz"/>
+                            <constraint firstItem="8M8-rY-Cpl" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="140" id="BTE-Jn-RqV"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="DKb-i2-fkp" secondAttribute="bottom" constant="77" id="NeO-j6-6DQ"/>
-                            <constraint firstItem="8M8-rY-Cpl" firstAttribute="centerX" secondItem="vDu-zF-Fre" secondAttribute="centerX" id="VCz-aE-Gpb"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="DKb-i2-fkp" secondAttribute="trailing" constant="20" id="ajd-r7-XiX"/>
-                            <constraint firstItem="8M8-rY-Cpl" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" multiplier="0.8075" id="b7w-Qc-V0H"/>
                             <constraint firstItem="DKb-i2-fkp" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="wL7-WX-8Co"/>
                         </constraints>
                     </view>
@@ -448,7 +452,7 @@
         <image name="Apple" width="24" height="24"/>
         <image name="CheckMark" width="16" height="16.5"/>
         <image name="Google" width="24" height="24"/>
-        <image name="Logo" width="113.5" height="154"/>
+        <image name="JMTLogin" width="455" height="569"/>
         <image name="Photo" width="40" height="40"/>
         <namedColor name="gray100">
             <color red="0.94499999284744263" green="0.95300000905990601" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
