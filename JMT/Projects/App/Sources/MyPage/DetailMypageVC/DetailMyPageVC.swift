@@ -27,7 +27,7 @@ class DetailMyPageVC : UIViewController {
         super.viewWillAppear(animated)
         
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        setCustomNavigationBarBackButton(isSearchVC: false)
+        setCustomNavigationBarBackButton(goToViewController: .popVC)
         
         // 사용자 정보 다시 가져오기
         viewModel?.fetchUserInfo()

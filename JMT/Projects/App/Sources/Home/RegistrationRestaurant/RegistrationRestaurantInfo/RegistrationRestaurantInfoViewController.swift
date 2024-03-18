@@ -10,6 +10,10 @@ import FloatingPanel
 import SnapKit
 
 class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent {
+    
+    deinit {
+        print("RegistrationRestaurantInfoViewController Deinit")
+    }
 
     // MARK: - Properties
     var transformView: UIView { return self.view }
@@ -33,7 +37,9 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        setupKeyboardEvent(keyboardWillShow: { noti in
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        
+        setupKeyboardEvent(keyboardWillShow: { [weak self] noti in
             
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
             
@@ -42,22 +48,22 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
                 case let textField as UITextField:
                     switch textField.tag {
                     case 0:
-                        self.settingInfoCollectionView.moveToScroll(section: 2, row: 0, margin: 100)
+                        self?.settingInfoCollectionView.moveToScroll(section: 2, row: 0, margin: 100)
                     case 1:
                         // Y축으로 키보드의 상단 위치
                         let keyboardTopY = keyboardFrame.cgRectValue.origin.y
                         // 현재 선택한 텍스트 필드의 Frame 값
-                        let convertedTextFieldFrame = self.settingInfoCollectionView.convert(textField.frame,
+                        let convertedTextFieldFrame = self?.settingInfoCollectionView.convert(textField.frame,
                                                                    from: textField.superview)
                         // Y축으로 현재 텍스트 필드의 하단 위치
-                        let textFieldBottomY = convertedTextFieldFrame.origin.y + convertedTextFieldFrame.size.height
+                        let textFieldBottomY = (convertedTextFieldFrame?.origin.y ?? 0.0) + (convertedTextFieldFrame?.size.height ?? 0.0)
                         
                         // Y축으로 텍스트필드 하단 위치가 키보드 상단 위치보다 클 때
                         if textFieldBottomY > keyboardTopY {
                             let newFrame = keyboardFrame.cgRectValue.height - 110
                             let insets = UIEdgeInsets(top: 0, left: 0, bottom: newFrame, right: 0)
-                            self.settingInfoCollectionView.contentInset = insets
-                            self.settingInfoCollectionView.moveToScroll(section: 3, row: 0, margin: 100)
+                            self?.settingInfoCollectionView.contentInset = insets
+                            self?.settingInfoCollectionView.moveToScroll(section: 3, row: 0, margin: 100)
                         }
                     default:
                         print("default")
@@ -65,7 +71,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
                 case let textView as UITextView:
                     switch textView.tag {
                     case 0:
-                        self.settingInfoCollectionView.moveToScroll(section: 1, row: 0, margin: 100)
+                        self?.settingInfoCollectionView.moveToScroll(section: 1, row: 0, margin: 100)
                     default:
                         print("default")
                     }
@@ -73,51 +79,54 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
                     break // 다른 타입의 응답자인 경우 처리하지 않음
                 }
             }
-        }, keyboardWillHide: { noti in
+        }, keyboardWillHide: { [weak self] noti in
             let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            self.settingInfoCollectionView.contentInset = insets
+            self?.settingInfoCollectionView.contentInset = insets
         })
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
         removeKeyboardObserver()
     }
     
     // MARK: - SetupBindings
     func setupBindings() {
-        viewModel?.didUpdateCategory = {
-            self.updateSection(section: 0)
+        viewModel?.didUpdateCategory = { [weak self] in
+            
+            self?.updateSection(section: 0)
         }
         
-        viewModel?.didCompletedTags = { bool in
+        viewModel?.didCompletedTags = { [weak self] bool in
             
-            if let cell = self.settingInfoCollectionView.cellForItem(at: IndexPath(row: 0, section: 3)) as? RecommendedMenuCell {
+            if let cell = self?.settingInfoCollectionView.cellForItem(at: IndexPath(row: 0, section: 3)) as? RecommendedMenuCell {
                 
                 if bool {
                     cell.tagTextField.text = ""
-                    self.updateSection(section: 4)
+                    self?.updateSection(section: 4)
                 } else {
                     cell.tagTextField.text = ""
                 }
             }
         }
         
-        viewModel?.didCompletedDeleteTag = {
-            self.updateSection(section: 4)
+        viewModel?.didCompletedDeleteTag = { [weak self] in
+            self?.updateSection(section: 4)
         }
         
-        viewModel?.didCompletedCheckInfo = { type in
+        viewModel?.didCompletedCheckInfo = { [weak self] type in
             switch type {
             case .category:
-                self.settingInfoCollectionView.setContentOffset(CGPoint(x: 0, y: -self.settingInfoCollectionView.contentInset.top), animated: true)
+                self?.settingInfoCollectionView.setContentOffset(CGPoint(x: 0, y: -(self?.settingInfoCollectionView.contentInset.top ?? 0.0)), animated: true)
             case .commentString:
-                self.settingInfoCollectionView.moveToScroll(section: 1, row: 0, margin: 100)
+                self?.settingInfoCollectionView.moveToScroll(section: 1, row: 0, margin: 100)
             case .drinkingComment:
-                self.settingInfoCollectionView.moveToScroll(section: 2, row: 0, margin: 100)
+                self?.settingInfoCollectionView.moveToScroll(section: 2, row: 0, margin: 100)
             case .tags:
-                self.settingInfoCollectionView.moveToScroll(section: 3, row: 0, margin: 100)
+                self?.settingInfoCollectionView.moveToScroll(section: 3, row: 0, margin: 100)
             }
         }
     }
@@ -129,7 +138,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     
     // MARK: - SetupUI
     func setupUI() {
-        setCustomNavigationBarBackButton(isSearchVC: false)
+        setCustomNavigationBarBackButton(goToViewController: .popVC)
         self.navigationItem.title = viewModel?.info?.placeName ?? ""
         settingInfoCollectionView.collectionViewLayout = createLayout()
         settingInfoCollectionView.keyboardDismissMode = .onDrag
@@ -293,21 +302,20 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     }
     // MARK: - Actions
     @IBAction func didTabRegistrationButton(_ sender: Any) {
+        
         Task {
-            
-            if viewModel?.checkNotInfo() == true {
-                let restaurantLocationId = try await viewModel?.registrationRestaurantLocation() ?? 0
-                try await viewModel?.registrationRestaurantAsync(restaurantLocationId: restaurantLocationId)
-            } else {
-                viewModel?.coordinator?.showButtonPopupViewController()
+            do {
+                if viewModel?.checkNotInfo() == true {
+                    try await viewModel?.registrationRestaurantLocation()
+                    try await viewModel?.registrationRestaurantAsync()
+                    viewModel?.coordinator?.showDetailRestaurantViewController(id: viewModel?.recommendRestaurantId ?? 0)
+                } else {
+                    viewModel?.coordinator?.showButtonPopupViewController()
+                }
+            } catch {
+                print("123123123", error)
+                // 실패했을때
             }
-            
-            print(viewModel?.isSelectedCategory)
-            print(viewModel?.selectedImages)
-            print(viewModel?.commentString)
-            print(viewModel?.isDrinking)
-            print(viewModel?.drinkingComment)
-            print(viewModel?.tags)
         }
     }   
     

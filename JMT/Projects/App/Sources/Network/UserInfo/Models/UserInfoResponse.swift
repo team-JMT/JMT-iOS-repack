@@ -17,12 +17,12 @@ struct UserInfoData: Decodable {
     let id: Int
     let email: String
     let nickname: String
-    let profileImg: String
+    let profileImg: String?
 }
 
 extension UserInfoResponse {
     var toDomain: UserInfoModel {
         let model = data as! UserInfoData
-        return UserInfoModel(id: model.id , nickname: model.nickname, profileImg: model.profileImg)
+        return UserInfoModel(id: model.id , nickname: model.nickname, profileImg: model.profileImg ?? "")
     }
 }

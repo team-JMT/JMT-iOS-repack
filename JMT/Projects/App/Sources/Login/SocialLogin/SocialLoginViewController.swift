@@ -10,6 +10,10 @@ import AuthenticationServices
 
 class SocialLoginViewController: UIViewController {
     
+    deinit {
+        print("SocialLoginViewController Deinit")
+    }
+    
     @IBOutlet weak var appleLoginView: UIView!
     @IBOutlet weak var googleLoginView: UIView!
     

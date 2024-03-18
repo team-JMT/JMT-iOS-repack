@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,13 +20,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="맛집" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6oo-XF-CbJ">
-                    <rect key="frame" x="0.0" y="20" width="34.666666666666664" height="64"/>
+                    <rect key="frame" x="0.0" y="12" width="34.666666666666664" height="72"/>
                     <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="20"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1ko-qc-8ST">
-                    <rect key="frame" x="398" y="40" width="24" height="24"/>
+                    <rect key="frame" x="398" y="36" width="24" height="24"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                     <state key="normal" image="SectionArrow"/>
                 </button>
@@ -38,8 +38,12 @@
                 <constraint firstItem="1ko-qc-8ST" firstAttribute="centerY" secondItem="6oo-XF-CbJ" secondAttribute="centerY" id="lYm-WI-AgI"/>
                 <constraint firstAttribute="trailing" secondItem="1ko-qc-8ST" secondAttribute="trailing" id="o1D-iY-Q7u"/>
                 <constraint firstItem="6oo-XF-CbJ" firstAttribute="leading" secondItem="dxQ-gg-cz3" secondAttribute="leading" id="q77-P9-RXe"/>
-                <constraint firstItem="6oo-XF-CbJ" firstAttribute="top" secondItem="9Nn-ev-PeQ" secondAttribute="top" constant="20" id="yxm-d9-v2C"/>
+                <constraint firstItem="6oo-XF-CbJ" firstAttribute="top" secondItem="9Nn-ev-PeQ" secondAttribute="top" constant="12" id="yxm-d9-v2C"/>
             </constraints>
+            <connections>
+                <outlet property="arrowButton" destination="1ko-qc-8ST" id="bdb-SL-eTn"/>
+                <outlet property="titleLabel" destination="6oo-XF-CbJ" id="o0B-bA-fLe"/>
+            </connections>
             <point key="canvasLocation" x="-151.14503816793894" y="-20.422535211267608"/>
         </collectionReusableView>
     </objects>

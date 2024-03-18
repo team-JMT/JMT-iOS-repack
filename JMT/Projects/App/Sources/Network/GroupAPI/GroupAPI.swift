@@ -17,11 +17,21 @@ struct GroupAPI {
         return response
     }
     
-    static func updateSelectedGroupAsync(request: SelectedGroupRequest) async throws {
+    static func fetchGroups(request: SearchGroupRequest) async throws -> SearchGroupResponse {
+        let response = try await AF.request(GroupTarget.fetchGroups(request), interceptor: DefaultRequestInterceptor())
+            .validate(statusCode: 200..<300)
+            .serializingDecodable(SearchGroupResponse.self)
+            .value
+        return response
+    }
+    
+    @discardableResult
+    static func updateSelectedGroupAsync(request: SelectedGroupRequest) async throws -> SelectedGroupResponse {
         let response = try await AF.request(GroupTarget.updateSelectedGroup(request), interceptor: DefaultRequestInterceptor())
             .validate(statusCode: 200..<300)
             .serializingDecodable(SelectedGroupResponse.self)
             .value
+        return response
     }
     
     

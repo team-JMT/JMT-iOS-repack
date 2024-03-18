@@ -8,6 +8,9 @@
 import UIKit
 
 protocol ProfileImageCoordinator: Coordinator {
+    
+    func start()
+    
     func showTabBarViewController()
     func showImagePicker()
     

@@ -21,8 +21,6 @@ class UserLocationViewModel {
     var isFetching = false
     var isEnd = false
     
-    var workItem: DispatchWorkItem?
-    
     var onSuccess: (() -> Void)?
 }
 

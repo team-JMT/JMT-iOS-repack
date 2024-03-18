@@ -28,8 +28,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     
         // 포그라운드로 돌아올때 위치 권한 확인
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
-        
+       
+        NotificationCenter.default.addObserver(self, selector: #selector(self.appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+      
         let navigationController = UINavigationController()
         self.window = UIWindow(windowScene: scene)
         self.window?.rootViewController = navigationController
@@ -54,8 +55,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                            MyPageDI(),
                            
                           ])
-
-        appCoordinator?.start()
+        self.appCoordinator?.start()
+        
     }
     
     

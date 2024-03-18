@@ -20,6 +20,9 @@ class RestaurantDetailPhotoViewController: UIViewController {
         super.viewDidLoad()
 
         photoCollectionView.collectionViewLayout = createLayout()
+        photoCollectionView.keyboardDismissMode = .onDrag
+        
+        setupBind()
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -91,6 +94,15 @@ class RestaurantDetailPhotoViewController: UIViewController {
             return section
         }
     }
+    
+    func setupBind() {
+        viewModel?.didupdateReviewData = { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.photoCollectionView.reloadData()
+            }
+        }
+    }
 }
 
 extension RestaurantDetailPhotoViewController: UICollectionViewDelegate {
@@ -130,6 +142,10 @@ extension RestaurantDetailPhotoViewController: UICollectionViewDataSource {
 }
 
 extension RestaurantDetailPhotoViewController: UIScrollViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        viewModel?.onScrollBeginDismissKeyboard?()
+    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         

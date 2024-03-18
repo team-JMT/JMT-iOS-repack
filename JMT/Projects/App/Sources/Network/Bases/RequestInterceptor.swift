@@ -13,12 +13,19 @@ class DefaultRequestInterceptor: RequestInterceptor {
     
     // 리퀘스트 요청시 호출됨
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
-        guard urlRequest.url?.absoluteString.hasPrefix("https://api.jmt-matzip.dev/api/v1") == true,
-              let accessToken = DefaultKeychainService.shared.accessToken else {
+        guard urlRequest.url?.absoluteString.hasPrefix("https://api.jmt-matzip.dev/api/v1") == true else {
             completion(.success(urlRequest))
             return
         }
         
+        var accessToken = ""
+        
+        if let tempAccessToken = DefaultKeychainService.shared.tempAccessToken {
+            accessToken = tempAccessToken
+        } else {
+            accessToken = DefaultKeychainService.shared.accessToken ?? ""
+        }
+       
         var resultUrlRequest = urlRequest
         resultUrlRequest.headers.add(.authorization(bearerToken: accessToken))
         
@@ -44,9 +51,16 @@ class DefaultRequestInterceptor: RequestInterceptor {
             switch response {
             case .success(let response):
                 
-                DefaultKeychainService.shared.accessToken = response.accessToken
-                DefaultKeychainService.shared.refreshToken = response.refreshToken
-                DefaultKeychainService.shared.accessTokenExpiresIn = response.accessTokenExpiresIn
+                if let accessToken = DefaultKeychainService.shared.tempAccessToken {
+                    DefaultKeychainService.shared.tempAccessToken = response.accessToken
+                    DefaultKeychainService.shared.tempRefreshToken = response.refreshToken
+                    DefaultKeychainService.shared.tempAccessTokenExpiresIn = response.accessTokenExpiresIn
+                } else {
+                    DefaultKeychainService.shared.accessToken = response.accessToken
+                    DefaultKeychainService.shared.refreshToken = response.refreshToken
+                    DefaultKeychainService.shared.accessTokenExpiresIn = response.accessTokenExpiresIn
+                }
+        
                 
                 completion(.retry)
             case .failure(let error):
