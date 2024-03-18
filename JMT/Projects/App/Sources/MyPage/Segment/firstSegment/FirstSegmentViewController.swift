@@ -56,15 +56,24 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
             }
         }
         
+        distanceButton.layer.zPosition = 1
+        self.view.bringSubviewToFront(distanceButton)
+
         viewModel.fetchUserInfo()
         print("123123")
         
-        distanceButton.addTarget(self, action: #selector(showDistanceMenuAction), for: .touchUpInside)
-        typeBtn.addTarget(self, action: #selector(showTypeMenuAction), for: .touchUpInside)
-        alcholBtn.addTarget(self, action: #selector(showAlcoholMenuAction), for: .touchUpInside)
-        
+        // 탭 제스처 인식기를 추가하여 뷰를 탭했을 때 UIMenu를 표시하도록 설정
+        addTapGestureToView(distanceLabel, action: #selector(showDistanceMenuAction))
+        addTapGestureToView(typeLabel, action: #selector(showTypeMenuAction))
+        addTapGestureToView(alcholLabel, action: #selector(showAlcoholMenuAction))
     }
-    
+
+    // 뷰에 탭 제스처 인식기를 추가하는 메서드
+    private func addTapGestureToView(_ view: UIView, action: Selector) {
+        let tapGesture = UITapGestureRecognizer(target: self, action: action)
+        view.addGestureRecognizer(tapGesture)
+        view.isUserInteractionEnabled = true // 뷰의 사용자 인터랙션 활성화
+    }
     
     func getUserInfo() {
         UserInfoAPI.getLoginInfo { response in
@@ -228,5 +237,20 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         
         return cell
     }
+    
+    
+    @IBAction func didtapDistance(_ sender: Any) {
+            showDistanceMenuAction()
+        }
+    
+    
+    @IBAction func typeBtn(_ sender: Any) {
+        showTypeMenuAction()
+    }
+    
+    @IBAction func alcholBtn(_ sender: Any) {
+        showAlcoholMenuAction()
+    }
+    
 }
 
