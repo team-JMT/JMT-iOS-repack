@@ -80,8 +80,6 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        print(viewModel.restaurantsData.count)
-        print("---")
         return viewModel.restaurantsData.count
     }
     
@@ -92,6 +90,22 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         
         let restaurant = viewModel.restaurantsData[indexPath.row]
         cell.configure(with: restaurant)
+        
+        
+        if let userInfo = viewModel.userInfo?.data {
+                    if let imageUrl = URL(string: userInfo.profileImg) {
+                        AF.request(imageUrl).responseData { [weak cell] response in
+                            switch response.result {
+                            case .success(let data):
+                                DispatchQueue.main.async {
+                                    cell?.myPageImage?.image = UIImage(data: data)
+                                }
+                            case .failure(let error):
+                                print(error)
+                            }
+                        }
+                    }
+                }
         
         return cell
     }
