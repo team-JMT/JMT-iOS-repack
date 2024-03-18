@@ -9,7 +9,7 @@ import UIKit
 
 class RestaurantResultViewController: UIViewController {
     
-    var viewModel: RestaurantResultViewModel?
+    var viewModel: SearchViewModel?
 
     @IBOutlet weak var restaurantCollectionView: UICollectionView!
     
@@ -17,7 +17,7 @@ class RestaurantResultViewController: UIViewController {
         super.viewDidLoad()
         
         restaurantCollectionView.collectionViewLayout = createLayout()
-        
+        restaurantCollectionView.keyboardDismissMode = .onDrag
         
         let filterHeaderView = UINib(nibName: "RestaurantFilterHeaderView", bundle: nil)
         restaurantCollectionView.register(filterHeaderView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "filterHeader")
@@ -28,18 +28,21 @@ class RestaurantResultViewController: UIViewController {
         let title2HeaderView = UINib(nibName: "RestaurantTitle2HeaderView", bundle: nil)
         restaurantCollectionView.register(title2HeaderView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "title2Header")
         
+        let nib = UINib(nibName: "SearchResultEmptyCell", bundle: nil)
+        restaurantCollectionView.register(nib, forCellWithReuseIdentifier: "SearchResultEmptyCell")
+        
+        let restaurantNib = UINib(nibName: "RestaurantInfoCell", bundle: nil)
+        restaurantCollectionView.register(restaurantNib, forCellWithReuseIdentifier: "RestaurantInfoCell")
+        
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
+            
             switch sectionIndex {
             case 0:
                 return self.createFirstColumnSection()
             case 1:
-                return self.createSecondColumnSection()
-            case 2:
-                return self.createThirdColumnSection()
-            case 3:
                 return self.createFourthColumnSection()
             default:
                 return nil
@@ -71,9 +74,9 @@ class RestaurantResultViewController: UIViewController {
         section.interGroupSpacing = CGFloat(12)
         
         // Header
-        section.boundarySupplementaryItems = [
-            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(58)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-        ]
+//        section.boundarySupplementaryItems = [
+//            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(58)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+//        ]
         
         // Background
         let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
@@ -173,19 +176,24 @@ class RestaurantResultViewController: UIViewController {
 
 extension RestaurantResultViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 4
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 12
+            if viewModel?.restaurants.isEmpty == true {
+                return 1
+            } else {
+                return viewModel?.restaurants.count ?? 0
+            }
+           
         case 1:
-            return 12
-        case 2:
-            return 12
-        case 3:
-            return 3
+            if viewModel?.outBoundrestaurants.isEmpty == true {
+                return 1
+            } else {
+                return viewModel?.outBoundrestaurants.count ?? 0 > 3 ? 3 : viewModel?.outBoundrestaurants.count ?? 0
+            }
         default:
             return 0
         }
@@ -194,17 +202,26 @@ extension RestaurantResultViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.section {
         case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "vCell", for: indexPath)
-            return cell
+            if viewModel?.restaurants.isEmpty == true {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultEmptyCell", for: indexPath) as? SearchResultEmptyCell else { return UICollectionViewCell() }
+                cell.setupCommentLabel(str: "맛집 목록은 그룹 멤버만 볼 수 있어요", isHideButton: true)
+                return cell
+            } else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RestaurantInfoCell", for: indexPath) as? RestaurantInfoCell else { return UICollectionViewCell() }
+                cell.setupRestaurantData(restaurantData: viewModel?.restaurants[indexPath.row])
+                return cell
+            }
         case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "hCell", for: indexPath)
-            return cell
-        case 2:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "vCell", for: indexPath)
-            return cell
-        case 3:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "vCell", for: indexPath)
-            return cell
+            
+            if viewModel?.outBoundrestaurants.isEmpty == true {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultEmptyCell", for: indexPath) as? SearchResultEmptyCell else { return UICollectionViewCell() }
+                cell.setupCommentLabel(str: "다른 그룹에 등록된 맛집이 없어요", isHideButton: true)
+                return cell
+            } else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RestaurantInfoCell", for: indexPath) as? RestaurantInfoCell else { return UICollectionViewCell() }
+                cell.setupOutBoundrestaurantData(outBoundrestaurantData: viewModel?.outBoundrestaurants[indexPath.row])
+                return cell
+            }
         default:
             return UICollectionViewCell()
         }

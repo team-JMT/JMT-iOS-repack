@@ -23,6 +23,9 @@ class RegistrationRestaurantInfoViewModel {
     var drinkingComment: String = ""
     var tags = [String]()
     
+    var restaurantLocationId: Int?
+    var recommendRestaurantId: Int?
+    
     var didUpdateCategory: (() -> Void)?
     var didCompletedSelectedImages: (() -> Void)?
     var didCompletedCommentString: (() -> Void)?
@@ -40,7 +43,7 @@ class RegistrationRestaurantInfoViewModel {
     
     // MARK: - Data Fetching
     // 외부 소스나 모델로부터 데이터를 가져오는 메소드들을 모아두는 부분입니다.
-    func registrationRestaurantLocation() async throws -> Int {
+    func registrationRestaurantLocation() async throws {
         
         do {
             if let info = self.info {
@@ -59,16 +62,16 @@ class RegistrationRestaurantInfoViewModel {
                     y: String(info.y))
                 
                 let response = try await RegistrationRestaurantAPI.registrationRestaurantLocationAsync(request: request)
-                return response.data
+                print(response)
+                restaurantLocationId = response.data
             }
         } catch {
             print(error)
-            return 0
+            throw RestaurantError.registrationRestaurantLocationError
         }
-        return 0
     }
     
-    func registrationRestaurantAsync(restaurantLocationId: Int) async throws {
+    func registrationRestaurantAsync() async throws {
         
         do {
             if let info = self.info {
@@ -77,6 +80,8 @@ class RegistrationRestaurantInfoViewModel {
                 
                 let recommendMenu = tags.joined()
                 
+                let selectedGroupId = UserDefaultManager.selectedGroupId == nil ? 0 : UserDefaultManager.selectedGroupId
+                
                 let request = RegistrationRestaurantRequest(
                     name: info.placeName,
                     introduce: commentString,
@@ -84,20 +89,17 @@ class RegistrationRestaurantInfoViewModel {
                     canDrinkLiquor: isDrinking,
                     goWellWithLiquor: drinkingComment,
                     recommendMenu: recommendMenu,
-                    restaurantLocationId: restaurantLocationId,
-                    groupId: UserDefaultManager.selectedGroupId)
-                
+                    restaurantLocationId: self.restaurantLocationId ?? 0,
+                    groupId: selectedGroupId ?? 0)
+ 
                 let response = try await RegistrationRestaurantAPI.registrationRestaurantAsync(request: request, images: selectedImages)
-                print(response.data.recommendRestaurantId, response.data.restaurantLocationId)
+                recommendRestaurantId = response.data.recommendRestaurantId
             }
         } catch {
-            print("3333", error)
+            print(error)
+            throw RestaurantError.registrationRestaurantAsyncError
         }
-        
-        
     }
-    
-    
     
     // MARK: - Utility Methods
     // 다양한 유틸리티 메소드들을 모아두는 부분입니다. 예를 들어, 날짜 포매팅이나 데이터 검증 등입니다.

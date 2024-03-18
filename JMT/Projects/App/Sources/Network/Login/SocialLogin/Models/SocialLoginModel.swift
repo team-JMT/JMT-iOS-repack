@@ -11,4 +11,5 @@ struct SocialLoginModel {
     let accessToken: String
     let refreshToken: String
     let userLoginAction: String
+    let accessTokenExpiresIn: Int
 }

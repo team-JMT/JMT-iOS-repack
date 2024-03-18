@@ -9,38 +9,63 @@ import Foundation
 
 class SearchViewModel {
     weak var coordinator: SearchCoordinator?
+    let locationManager = LocationManager.shared
     
     var recentSearchRestaurants = [String]()
-    
-    var onSuccess: (() -> ())?
-    
-    var tagData = ["1","2","33","444","5555"]
-    
-    var recentArray = ["식당1","식당2","식당3","음식점1","음식정2","음식점3"]
-    
-    var recentResults = [String]()
-    
-    var isSearch: Bool = false
-    
     var currentSegIndex: Int = 0
+    var isEmptyGroup: Bool?
     
-    var workItem: DispatchWorkItem?
+    var restaurants = [SearchRestaurantsItems]()
+    var groupList = [SearchGroupItems]()
+    var outBoundrestaurants = [SearchRestaurantsOutBoundModel]()
     
-    func didChangeTextField(text: String) {
-        workItem?.cancel()
-        
-        let workItem = DispatchWorkItem {
-            self.recentResults.removeAll()
-            self.recentResults = self.recentArray.filter({$0.contains(text)})
-            self.onSuccess?()
+    var didUpdateGroup: (() -> Void)?
+
+    // 맛집 검색하기
+    func fetchRestaurantsAsync(keyword: String) async throws {
+        restaurants.removeAll()
+
+        do {
+            let x = locationManager.coordinate?.longitude ?? 0.0
+            let y = locationManager.coordinate?.latitude ?? 0.0
+            let response = try await FetchRestaurantAPI.fetchSearchRestaurantsAsync(request: SearchRestaurantsRequest(keyword: keyword, x: "\(x)", y: "\(y)"))
+            
+            restaurants.append(contentsOf: response.data.restaurants)
+        } catch {
+            print(error)
+            throw RestaurantError.fetchRestaurantsAsyncError
         }
+    }
+    
+    // 그룹 검색하기
+    func fetchGroupsAsync(keyword: String) async throws {
+        groupList.removeAll()
+
+        do {
+            let response = try await GroupAPI.fetchGroups(request: SearchGroupRequest(keyword: keyword))
+            groupList.append(contentsOf: response.data.groupList)
+        } catch {
+            print(error)
+            throw RestaurantError.fetchGroupsAsyncError
+        }
+    }
+
+    // 다른 그룹 맛집 데이터 검색하기
+    func fetchOutBoundRestaurantsAsync(keyword: String) async throws {
+        outBoundrestaurants.removeAll()
         
-        self.workItem = workItem
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
+        do {
+            let response = try await FetchRestaurantAPI.fetchSearchRestaurantsOutBoundAsync(request: SearchRestaurantsOutBoundRequest(keyword: keyword, currentGroupId: nil))
+            outBoundrestaurants.append(contentsOf: response.toDomain)
+        } catch {
+            print(error)
+            throw RestaurantError.fetchOutBoundRestaurantsAsyncError
+        }
     }
 }
 
+
+// 35 36 37 38
 // 최근 검색 관련 메소드
 extension SearchViewModel {
     func fetchRecentSearchRestaurants() {

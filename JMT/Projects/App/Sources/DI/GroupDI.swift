@@ -19,5 +19,10 @@ struct GroupDI: Assembly {
             let viewModel = r.resolve(GroupViewModel.self)!
             c.viewModel = viewModel
         }
+        
+        container.storyboardInitCompleted(GroupWebViewController.self) { r, c in
+            let viewModel = r.resolve(GroupViewModel.self)!
+            c.viewModel = viewModel
+        }
     }
 }

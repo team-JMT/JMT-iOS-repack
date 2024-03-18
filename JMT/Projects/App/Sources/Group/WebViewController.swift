@@ -25,7 +25,7 @@ class WebViewController: UIViewController {
       super.viewWillAppear(animated)
       
       self.navigationController?.setNavigationBarHidden(true, animated: true)
-      setCustomNavigationBarBackButton(isSearchVC: false)
+      setCustomNavigationBarBackButton(goToViewController: .popVC)
   }
 
     
@@ -52,12 +52,12 @@ class WebViewController: UIViewController {
             make.top.bottom.leading.trailing.equalToSuperview()
         }
         
-        if let url = URL(string: url ?? "") {
-            var request = URLRequest(url: url)
-            let accessToken = DefaultKeychainService.shared.accessToken ?? ""
-            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-            webView.load(request)
-        }
+//        if let url = URL(string: url ?? "") {
+//            var request = URLRequest(url: url)
+//            let accessToken = DefaultKeychainService.shared.accessToken ?? ""
+//            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+//            webView.load(request)
+//        }
         
         webView.snp.makeConstraints { make in
                     make.top.leading.trailing.equalToSuperview()

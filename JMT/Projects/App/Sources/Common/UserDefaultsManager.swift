@@ -28,9 +28,23 @@ struct UserDefaultManager {
         set { defaults.set(newValue, forKey: Keys.isJoinGroup) }
     }
     
-    static var selectedGroupId: Int {
-        get { return defaults.integer(forKey: Keys.selectedGroupId) }
-        set { defaults.set(newValue, forKey: Keys.selectedGroupId) }
+    static var selectedGroupId: Int? {
+        get {
+            // 값이 없는 경우 nil 반환
+            if let value = defaults.value(forKey: Keys.selectedGroupId) as? Int {
+                return value
+            } else {
+                return nil
+            }
+        }
+        set {
+            // newValue가 nil이면 UserDefaults에서 해당 키를 제거
+            if let newValue = newValue {
+                defaults.set(newValue, forKey: Keys.selectedGroupId)
+            } else {
+                defaults.removeObject(forKey: Keys.selectedGroupId)
+            }
+        }
     }
 }
 

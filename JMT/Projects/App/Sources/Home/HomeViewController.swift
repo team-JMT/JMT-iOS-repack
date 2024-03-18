@@ -100,7 +100,7 @@ class HomeViewController: UIViewController {
                         self.viewModel?.didUpdateGroupRestaurantsData?()
                     }
                 } catch {
-                    print(error)
+                    print("11111", error)
                 }
             }
         }
@@ -189,7 +189,7 @@ class HomeViewController: UIViewController {
                     }
                 }
             } catch {
-                print(error)
+                print("123123", error)
             }
         }
     }
@@ -441,7 +441,7 @@ extension HomeViewController {
         guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
         
         vc.viewModel = self.viewModel
-        
+       
         restaurantListFpc = FloatingPanelController(delegate: self)
         restaurantListFpc.set(contentViewController: vc)
         restaurantListFpc.addPanel(toParent: self)

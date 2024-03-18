@@ -14,41 +14,39 @@ class PopularRestaurantCell: UICollectionViewCell {
     @IBOutlet weak var restaurantImageView: UIImageView!
     @IBOutlet weak var userProfileImageView: UIImageView!
     
-    @IBOutlet weak var userInfoView: UIView!
     @IBOutlet weak var userNicknameLabel: UILabel!
     @IBOutlet weak var restaurantNameLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        restaurantImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        restaurantImageView.layer.cornerRadius = 20
+        isSkeletonable = true
+        skeletonCornerRadius = 20
         
         userProfileImageView.layer.cornerRadius = userProfileImageView.frame.height / 2
         
-        userInfoView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-        userInfoView.layer.cornerRadius = 20
+        // 셀의 레이아웃이 결정된 후 그림자 속성 설정
+        layer.shadowColor = JMTengAsset.gray200.color.cgColor // 그림자 색상
+        layer.shadowOpacity = 1 // 그림자 투명도
+        layer.shadowOffset = CGSize(width: 0, height: 4) // 그림자 오프셋
+        layer.shadowRadius = 16 // 그림자 블러 반경
         
-        self.layer.shadowColor = UIColor(red: 0.086, green: 0.102, blue: 0.114, alpha: 0.08).cgColor
-        self.layer.shadowOffset = CGSize(width: 0, height: 4)
-        self.layer.shadowOpacity = 1
-        self.layer.shadowRadius = 16
-        self.layer.masksToBounds = false
-        
-        self.contentView.clipsToBounds = true
+        layer.masksToBounds = false
+        contentView.layer.cornerRadius = 20
+        contentView.layer.masksToBounds = true // 콘텐츠 뷰 내부의 콘텐츠는 마스크 적용
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        self.stopSkeletonAnimation()
-        self.hideSkeleton()
-        
-        setupData(model: nil)
+        restaurantImageView.image = nil
+        userProfileImageView.image = nil
+        userNicknameLabel.text = ""
+        restaurantNameLabel.text = ""
     }
     
     func setupData(model: SearchMapRestaurantItems?) {
-    
+        
         if let model = model {
             if let url = URL(string: model.restaurantImageUrl ?? "") {
                 restaurantImageView.kf.setImage(with: url)
@@ -61,9 +59,11 @@ class PopularRestaurantCell: UICollectionViewCell {
             } else {
                 userProfileImageView.image = JMTengAsset.emptyResult.image
             }
-            
+
             userNicknameLabel.text = model.userNickName
             restaurantNameLabel.text = model.name
+            
+            
         } else {
             // 모델이 nil일 때 기본 이미지와 텍스트로 초기화
             restaurantImageView.image = nil // 또는 다른 기본 이미지

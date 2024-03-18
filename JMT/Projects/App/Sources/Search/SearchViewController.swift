@@ -19,8 +19,6 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var recentContainerView: UIView!
     @IBOutlet weak var tagCollectionView: UICollectionView!
     
-    @IBOutlet weak var searchResultTableView: UITableView!
-    
     @IBOutlet weak var segmentedControllerContainerView: UIView!
     @IBOutlet weak var segmentedController: CustomSegmentedControl!
     
@@ -41,7 +39,6 @@ class SearchViewController: UIViewController {
         tagCollectionView.dataSource = self
         
         viewModel?.fetchRecentSearchRestaurants()
-        print(viewModel?.recentSearchRestaurants)
         
         pageViewController?.searchPVDelegate = self
     }
@@ -51,38 +48,20 @@ class SearchViewController: UIViewController {
         
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationController?.setupBarAppearance(alpha: 1)
-        
-//        if let coordinator = viewModel?.coordinator?.parentCoordinator as? DefaultTabBarCoordinator {
-//            if coordinator.tabBarController.isHomeSearchButton {
-//                self.navigationController?.setNavigationBarHidden(false, animated: false)
-//            } else {
-//                self.navigationController?.setNavigationBarHidden(true, animated: false)
-//            }
-//        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-//        if let coordinator = viewModel?.coordinator?.parentCoordinator as? DefaultTabBarCoordinator {
-//            coordinator.tabBarController.isHomeSearchButton = false
-//        }
     }
 
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
     
     // MARK: - SetupBindings
     func setupBind() {
-        viewModel?.onSuccess = {
-            if self.viewModel?.recentResults.isEmpty == true {
-                self.recentContainerView.isHidden = false
-                self.tagCollectionView.isHidden = false
-            } else {
-                self.recentContainerView.isHidden = true
-                self.tagCollectionView.isHidden = true
-            }
-            
-            self.searchResultTableView.reloadData()
-        }
+
     }
     
     // MARK: - FetchData
@@ -108,11 +87,7 @@ class SearchViewController: UIViewController {
             }
         }
         
-        if viewModel?.tagData.isEmpty == true {
-            tagCollectionView.isHidden = true
-        } else {
-            tagCollectionView.isHidden = false
-        }
+        searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
     // MARK: - Actions
@@ -127,22 +102,15 @@ class SearchViewController: UIViewController {
     }
     
     @IBAction func didTabCancelButton(_ sender: Any) {
+        
         DispatchQueue.main.async {
             self.searchTextField.text = ""
+            self.searchTextField.resignFirstResponder()
             self.recentContainerView.isHidden = false
             self.tagCollectionView.isHidden = false
             self.segmentedControllerContainerView.isHidden = true
             self.pageVCContainerView.isHidden = true
         }
-        
-//        viewModel?.recentResults.removeAll()
-//        
-//        searchTextField.text = ""
-//        searchTextField.becomeFirstResponder()
-//        recentContainerView.isHidden = false
-//        tagCollectionView.isHidden = false
-//        segmentedControllerContainerView.isHidden = true
-//        pageVCContainerView.isHidden = true
     }
     
     @IBAction func didTabDeleteRecentKeywordButton(_ sender: Any) {
@@ -151,7 +119,18 @@ class SearchViewController: UIViewController {
     
     
     // MARK: - Helper Methods
+    func fetchIsEmptyGroupData() async throws {
+        try await viewModel?.fetchGroupsAsync(keyword: searchTextField.text ?? "")
+        viewModel?.didUpdateGroup?()
+    }
     
+    func fetchIsNotEmptyGroupData() async throws{
+        let keyword = searchTextField.text ?? ""
+        try await viewModel?.fetchRestaurantsAsync(keyword: keyword)
+        try await viewModel?.fetchGroupsAsync(keyword: keyword)
+        try await viewModel?.fetchOutBoundRestaurantsAsync(keyword: keyword)
+        viewModel?.didUpdateGroup?()
+    }
 
     
 
@@ -166,35 +145,33 @@ class SearchViewController: UIViewController {
     
 }
 
-// MARK: - TableView Delegate
-extension SearchViewController: UITableViewDelegate { }
-
-// MARK: - TableView DataSource
-extension SearchViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.recentResults.count ?? 0
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "resultCell", for: indexPath) as? SearchResultCell else { return UITableViewCell() }
-        cell.searchResultLabel.text = viewModel?.recentResults[indexPath.row]
-        return cell
-    }
-}
-
 // MARK: - CollectionView Delegate
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        DispatchQueue.main.async {
-            self.searchTextField.text = self.viewModel?.recentSearchRestaurants[indexPath.item] ?? ""
-            self.searchTextField.resignFirstResponder()
-            
-            self.recentContainerView.isHidden = true
-            self.tagCollectionView.isHidden = true
-            
-            self.segmentedControllerContainerView.isHidden = false
-            self.pageVCContainerView.isHidden = false
-        }
+//        Task {
+//            do {
+//                self.searchTextField.text = self.viewModel?.recentSearchRestaurants[indexPath.item] ?? ""
+//                self.viewModel?.saveRecentSearchRestaurants(keyword: self.viewModel?.recentSearchRestaurants[indexPath.item] ?? "")
+//                self.viewModel?.fetchRecentSearchRestaurants()
+//                try await fetchIsEmptyGroupData()
+//                
+//                DispatchQueue.main.async {
+//            
+//                    self.searchTextField.resignFirstResponder()
+//                    self.tagCollectionView.reloadData()
+//                    self.recentContainerView.isHidden = true
+//                    self.tagCollectionView.isHidden = true
+//                    self.pageVCContainerView.isHidden = false
+//                    
+//                    self.segmentedControllerContainerView.isHidden = self.viewModel?.isEmptyGroup == true ? true : false
+//                }
+//                
+//            } catch {
+//                print(error)
+//            }
+//        }
+        
+        
     }
 }
 
@@ -216,31 +193,94 @@ extension SearchViewController: UICollectionViewDataSource {
 // MARK: - CollectionView Delegate FlowLayout
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (viewModel?.recentSearchRestaurants[indexPath.item].size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)]).width)! + 46, height: 29)
+        return CGSize(width: (viewModel?.recentSearchRestaurants[indexPath.item].size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)]).width)! + 48, height: 29)
     }
 }
 
 // MARK: - UITextField Delegate
 extension SearchViewController: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        guard let keyword = textField.text, keyword != "" else { return false }
+        
         viewModel?.saveRecentSearchRestaurants(keyword: textField.text ?? "")
         viewModel?.fetchRecentSearchRestaurants()
+    
+        viewModel?.isEmptyGroup = UserDefaultManager.selectedGroupId == nil ? true : false
         
-        DispatchQueue.main.async {
-            self.tagCollectionView.reloadData()
-            self.recentContainerView.isHidden = true
-            self.tagCollectionView.isHidden = true
-            self.segmentedControllerContainerView.isHidden = false
-            self.pageVCContainerView.isHidden = false
+        Task {
+            do {
+                if viewModel?.isEmptyGroup == true {
+                    print("11111")
+                    // 그룹 데이터, 다른 그룹 맛집 데이터
+                    try await viewModel?.fetchGroupsAsync(keyword: keyword)
+                    try await viewModel?.fetchOutBoundRestaurantsAsync(keyword: keyword)
+                    self.viewModel?.didUpdateGroup?()
+                    
+                    self.searchTextField.resignFirstResponder()
+                    self.tagCollectionView.reloadData()
+                    self.recentContainerView.isHidden = true
+                    self.tagCollectionView.isHidden = true
+                    self.pageVCContainerView.isHidden = false
+                    self.segmentedControllerContainerView.isHidden = false
+                    
+                } else  {
+                    print("22222")
+                    // 가입된 그룹들 맛집 데이터, 그룹 데이터, 다른 그룹 맛집 데이터
+                    try await viewModel?.fetchRestaurantsAsync(keyword: keyword)
+                    try await viewModel?.fetchGroupsAsync(keyword: keyword)
+                    try await viewModel?.fetchOutBoundRestaurantsAsync(keyword: keyword)
+                    self.viewModel?.didUpdateGroup?()
+                    
+                    self.searchTextField.resignFirstResponder()
+                    self.tagCollectionView.reloadData()
+                    self.recentContainerView.isHidden = true
+                    self.tagCollectionView.isHidden = true
+                    self.pageVCContainerView.isHidden = false
+                    self.segmentedControllerContainerView.isHidden = false
+                }
+            } catch {
+                print(error)
+            }
         }
         
+      
         
+        
+        
+        
+//        Task {
+//            do {
+//               try await fetchIsEmptyGroupData()
+//            } catch {
+//                print(error)
+//            }
+//        }
+//        
+//        DispatchQueue.main.async {
+//            
+//            self.searchTextField.resignFirstResponder()
+//            self.tagCollectionView.reloadData()
+//            self.recentContainerView.isHidden = true
+//            self.tagCollectionView.isHidden = true
+//            self.pageVCContainerView.isHidden = false
+//            
+//            self.segmentedControllerContainerView.isHidden = self.viewModel?.isEmptyGroup == true ? true : false
+//        }
         return true
     }
     
-//    func textFieldDidChangeSelection(_ textField: UITextField) {
-//        viewModel?.didChangeTextField(text: textField.text ?? "")
-//    }
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        
+        DispatchQueue.main.async {
+            self.recentContainerView.isHidden = false
+            self.tagCollectionView.isHidden = false
+            self.pageVCContainerView.isHidden = true
+            
+            self.segmentedControllerContainerView.isHidden = true
+        }
+    }
 }
 
 // MARK: - SearchPageViewController Delegate

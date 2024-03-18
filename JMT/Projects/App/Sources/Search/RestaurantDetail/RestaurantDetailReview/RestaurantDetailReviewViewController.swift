@@ -20,7 +20,9 @@ class RestaurantDetailReviewViewController: UIViewController {
         super.viewDidLoad()
         
         reviewCollectionView.collectionViewLayout = createLayout()
+        reviewCollectionView.keyboardDismissMode = .onDrag
     
+        setupBind()
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -53,6 +55,15 @@ class RestaurantDetailReviewViewController: UIViewController {
         ]
         
         return section
+    }
+    
+    func setupBind() {
+        viewModel?.didupdateReviewData = { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.reviewCollectionView.reloadData()
+            }
+        }
     }
 }
 
@@ -91,6 +102,11 @@ extension RestaurantDetailReviewViewController: UICollectionViewDelegate {
 
 
 extension RestaurantDetailReviewViewController: UIScrollViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        viewModel?.onScrollBeginDismissKeyboard?()
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         let offsetY = scrollView.contentOffset.y - oldContentOffset.y

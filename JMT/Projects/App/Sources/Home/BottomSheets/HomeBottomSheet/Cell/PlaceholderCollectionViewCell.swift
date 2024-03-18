@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import SkeletonView
 
 class PlaceholderCollectionViewCell: UICollectionViewCell {
-    
-   
-   
+
     override func awakeFromNib() {
-       
+        
+        isSkeletonable = true
+        
     }
 }

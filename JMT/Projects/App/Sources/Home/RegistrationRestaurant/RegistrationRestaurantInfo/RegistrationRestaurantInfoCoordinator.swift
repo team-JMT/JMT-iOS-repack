@@ -16,7 +16,8 @@ protocol RegistrationRestaurantInfoCoordinator: Coordinator {
     
     func showImagePicker()
     
-    
+    func setDetailRestaurantCoordinator()
+    func showDetailRestaurantViewController(id: Int)
 }
 
 class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCoordinator {
@@ -102,12 +103,28 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
         coordinator.start()
     }
     
+    func setDetailRestaurantCoordinator() {
+        let coordinator = DefaultRestaurantDetailCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showDetailRestaurantViewController(id: Int) {
+        if getChildCoordinator(.restaurantDetail) == nil {
+            setDetailRestaurantCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.restaurantDetail) as! DefaultRestaurantDetailCoordinator
+        coordinator.start(id: id)
+    }
+    
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
         var childCoordinator: Coordinator? = nil
         
         switch type {
         case .buttonPopup:
             childCoordinator = childCoordinators.first(where: { $0 is ButtonPopupCoordinator })
+        case .restaurantDetail:
+            childCoordinator = childCoordinators.first(where: { $0 is RestaurantDetailCoordinator })
         default:
             break
         }

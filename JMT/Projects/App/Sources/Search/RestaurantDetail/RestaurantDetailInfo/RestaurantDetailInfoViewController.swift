@@ -15,6 +15,7 @@ class RestaurantDetailInfoViewController: UIViewController {
     
     private var oldContentOffset = CGPoint.zero
     
+    @IBOutlet weak var rootScrollView: UIScrollView!
     @IBOutlet weak var photoCollectionContainerView: UIView!
     @IBOutlet weak var photoCollectionView: UICollectionView!
     
@@ -27,6 +28,7 @@ class RestaurantDetailInfoViewController: UIViewController {
         
         setupUI()
         infoCollectionView.collectionViewLayout = createLayout()
+        rootScrollView.keyboardDismissMode = .onDrag
         
         let restaurantDetailHeaderView = UINib(nibName: "RestaurantDetailTitleHeaderView", bundle: nil)
         infoCollectionView.register(restaurantDetailHeaderView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "RestaurantDetailTitleHeaderView")
@@ -41,6 +43,16 @@ class RestaurantDetailInfoViewController: UIViewController {
         viewModel?.didCompletedRestaurant = {
             DispatchQueue.main.async {
                 self.photoCollectionView.reloadData()
+                self.infoCollectionView.reloadData()
+                
+                self.infoCollectionView.layoutIfNeeded()
+                self.infoCollectionViewHeight.constant = self.infoCollectionView.contentSize.height
+            }
+        }
+        
+        viewModel?.didupdateReviewData = { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
                 self.infoCollectionView.reloadData()
                 
                 self.infoCollectionView.layoutIfNeeded()
@@ -376,6 +388,11 @@ extension RestaurantDetailInfoViewController: RestaurantDetailFooterViewDelegate
 }
 
 extension RestaurantDetailInfoViewController: UIScrollViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        viewModel?.onScrollBeginDismissKeyboard?()
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         let offsetY = scrollView.contentOffset.y - oldContentOffset.y

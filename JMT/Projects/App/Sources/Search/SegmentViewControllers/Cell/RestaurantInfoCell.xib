@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Pretendard-Bold.otf">
+            <string>Pretendard-Bold</string>
+        </array>
+        <array key="Pretendard-Medium.otf">
+            <string>Pretendard-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RestaurantInfoCell" id="drc-w0-GNn" customClass="RestaurantInfoCell" customModule="JMTeng" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="340" height="128"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="cK3-fj-ErI">
+                <rect key="frame" x="0.0" y="0.0" width="340" height="128"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pGO-Ph-8xL">
+                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="100" id="NlA-jC-bKw"/>
+                            <constraint firstAttribute="height" constant="100" id="enB-aJ-la7"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="버거대지도" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2L4-Kg-Lbn">
+                        <rect key="frame" x="116" y="13.666666666666664" width="208" height="17"/>
+                        <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
+                        <color key="textColor" name="gray700"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="여기가 진짜 수제버거 노원점" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJa-WP-Yh2">
+                        <rect key="frame" x="116" y="40.666666666666664" width="208" height="18.666666666666664"/>
+                        <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                        <color key="textColor" name="gray900"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Wa3-IN-EkJ">
+                        <rect key="frame" x="116" y="69.333333333333329" width="20" height="20"/>
+                        <color key="backgroundColor" name="gray100"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="TD8-wX-gKp"/>
+                            <constraint firstAttribute="width" constant="20" id="heN-gT-bpH"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Treenamu" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iy9-6H-6cB">
+                        <rect key="frame" x="140" y="72.333333333333329" width="184" height="14"/>
+                        <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
+                        <color key="textColor" name="gray900"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="2L4-Kg-Lbn" secondAttribute="trailing" constant="16" id="1rT-k7-gNj"/>
+                    <constraint firstItem="Iy9-6H-6cB" firstAttribute="centerY" secondItem="Wa3-IN-EkJ" secondAttribute="centerY" id="4mf-1d-sgM"/>
+                    <constraint firstAttribute="trailing" secondItem="IJa-WP-Yh2" secondAttribute="trailing" constant="16" id="5wt-JF-69d"/>
+                    <constraint firstItem="2L4-Kg-Lbn" firstAttribute="leading" secondItem="pGO-Ph-8xL" secondAttribute="trailing" constant="16" id="7TS-di-I8p"/>
+                    <constraint firstItem="Wa3-IN-EkJ" firstAttribute="top" secondItem="IJa-WP-Yh2" secondAttribute="bottom" constant="10" id="Bdg-DP-sx4"/>
+                    <constraint firstItem="Wa3-IN-EkJ" firstAttribute="leading" secondItem="pGO-Ph-8xL" secondAttribute="trailing" constant="16" id="EaB-Om-znx"/>
+                    <constraint firstItem="pGO-Ph-8xL" firstAttribute="leading" secondItem="cK3-fj-ErI" secondAttribute="leading" id="HEk-jO-gsE"/>
+                    <constraint firstItem="IJa-WP-Yh2" firstAttribute="centerY" secondItem="pGO-Ph-8xL" secondAttribute="centerY" id="L4K-3h-y3W"/>
+                    <constraint firstAttribute="trailing" secondItem="Iy9-6H-6cB" secondAttribute="trailing" constant="16" id="P7k-A7-0Gf"/>
+                    <constraint firstItem="IJa-WP-Yh2" firstAttribute="leading" secondItem="pGO-Ph-8xL" secondAttribute="trailing" constant="16" id="fPv-8s-vtC"/>
+                    <constraint firstAttribute="bottom" secondItem="pGO-Ph-8xL" secondAttribute="bottom" id="j3A-IM-hBs"/>
+                    <constraint firstItem="pGO-Ph-8xL" firstAttribute="top" secondItem="cK3-fj-ErI" secondAttribute="top" id="tqU-a1-PRg"/>
+                    <constraint firstItem="Iy9-6H-6cB" firstAttribute="leading" secondItem="Wa3-IN-EkJ" secondAttribute="trailing" constant="4" id="vrC-Ha-7yz"/>
+                    <constraint firstItem="IJa-WP-Yh2" firstAttribute="top" secondItem="2L4-Kg-Lbn" secondAttribute="bottom" constant="10" id="xbB-PG-hio"/>
+                </constraints>
+            </collectionViewCellContentView>
+            <size key="customSize" width="340" height="128"/>
+            <connections>
+                <outlet property="groupNameLabel" destination="2L4-Kg-Lbn" id="l0d-fg-7Kl"/>
+                <outlet property="restaurantNameLabel" destination="IJa-WP-Yh2" id="TGL-rz-mqK"/>
+                <outlet property="restaurantProfileImageView" destination="pGO-Ph-8xL" id="7xx-MG-QLH"/>
+                <outlet property="userNameLabel" destination="Iy9-6H-6cB" id="yqS-3V-C6c"/>
+                <outlet property="userProfileImageView" destination="Wa3-IN-EkJ" id="d8B-45-M2e"/>
+            </connections>
+            <point key="canvasLocation" x="418.32061068702291" y="-205.63380281690141"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="gray100">
+            <color red="0.94499999284744263" green="0.95300000905990601" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="gray700">
+            <color red="0.30199998617172241" green="0.36100000143051147" blue="0.39599999785423279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="gray900">
+            <color red="0.086000002920627594" green="0.10199999809265137" blue="0.11400000005960464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
