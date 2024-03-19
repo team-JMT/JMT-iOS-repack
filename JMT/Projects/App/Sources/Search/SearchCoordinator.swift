@@ -13,6 +13,9 @@ protocol SearchCoordinator: Coordinator {
     
     func setButtonPopupCoordinator()
     func showButtonPopupViewController()
+    
+    func showWebViewGroupDetilPage(groupId: Int)
+   
 }
 
 class DefaultSearchCoordinator: SearchCoordinator {
@@ -33,16 +36,17 @@ class DefaultSearchCoordinator: SearchCoordinator {
         let searchViewController = SearchViewController.instantiateFromStoryboard(storyboardName: "Search") as SearchViewController
         searchViewController.viewModel?.coordinator = self
 
-        guard let pageViewController = UIStoryboard(name: "Search", bundle: nil).instantiateViewController(withIdentifier: "SearchPageViewController") as? SearchPageViewController else { return }
+        let storyboard = UIStoryboard(name: "Search", bundle: nil)
+        guard let pageViewController = storyboard.instantiateViewController(withIdentifier: "SearchPageViewController") as? SearchPageViewController else { return }
         
-        let totalResultViewController = TotalResultViewController.instantiateFromStoryboard(storyboardName: "Search") as TotalResultViewController
-        let restaurantResultViewController = RestaurantResultViewController.instantiateFromStoryboard(storyboardName: "Search") as RestaurantResultViewController
-        let groupResultViewController = GroupResultViewController.instantiateFromStoryboard(storyboardName: "Search") as GroupResultViewController
+        guard let totalResultViewController = storyboard.instantiateViewController(withIdentifier: "TotalResultViewController") as? TotalResultViewController else { return }
+        guard let restaurantResultViewController = storyboard.instantiateViewController(withIdentifier: "RestaurantResultViewController") as? RestaurantResultViewController else { return }
+        guard let groupResultViewController = storyboard.instantiateViewController(withIdentifier: "GroupResultViewController") as? GroupResultViewController else { return }
         
-        totalResultViewController.viewModel?.coordinator = self
-        restaurantResultViewController.viewModel?.coordinator = self
-        groupResultViewController.viewModel?.coordinator = self
-    
+        totalResultViewController.viewModel = searchViewController.viewModel
+        restaurantResultViewController.viewModel = searchViewController.viewModel
+        groupResultViewController.viewModel = searchViewController.viewModel
+        
         pageViewController.vcArray = [totalResultViewController, restaurantResultViewController, groupResultViewController]
         
         searchViewController.pageViewController = pageViewController
@@ -76,6 +80,11 @@ class DefaultSearchCoordinator: SearchCoordinator {
         
         let coordinator = getChildCoordinator(.buttonPopup) as! ButtonPopupCoordinator
         coordinator.start()
+    }
+    
+    func showWebViewGroupDetilPage(groupId: Int) {
+        let coordinator = parentCoordinator?.childCoordinators[2] as! DefaultGroupCoordinator
+        coordinator.showDetailGroupPage(groupId: groupId)
     }
     
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {

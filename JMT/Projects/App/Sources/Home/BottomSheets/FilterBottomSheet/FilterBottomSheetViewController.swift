@@ -9,13 +9,8 @@ import UIKit
 import FloatingPanel
 import SnapKit
 
-protocol FilterBottomSheetViewControllerDelegate: AnyObject {
-    
-}
-
 class FilterBottomSheetViewController: UIViewController {
     
-    weak var delegate: FilterBottomSheetViewControllerDelegate?
     var viewModel: HomeViewModel?
     
     @IBOutlet weak var filterTableView: UITableView!
@@ -85,10 +80,11 @@ extension FilterBottomSheetViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel?.updateIndex(row: indexPath.row)
+        
         
         DispatchQueue.main.async {
             self.filterTableView.reloadData()
+            self.viewModel?.updateIndex(row: indexPath.row)
             
             if self.viewModel?.sortType == .sort {
                 self.dismiss(animated: true)

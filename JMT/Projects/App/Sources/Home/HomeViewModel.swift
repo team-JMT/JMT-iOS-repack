@@ -82,7 +82,7 @@ class HomeViewModel {
     var selectedDrinkingIndex: Int? = nil
     
     var page: Int = 0
-    var currentGroupId: Int = 0
+    var currentGroupId: Int? = 0
 
     var isLodingData: Bool = true
     
@@ -127,7 +127,7 @@ class HomeViewModel {
 //    var didUpdateSortTypeButton: (() -> Void)?
 
     // 필터 관련
-    var didUpdateFilterRestaurants: (() -> Void)?
+//    var didUpdateFilterRestaurants: (() -> Void)?
     var didUpdateFilterTableView: (() -> Void)?
 
 //    // 지도 관련
@@ -148,12 +148,13 @@ extension HomeViewModel {
             startLocation: nil,
             endLocation: nil,
             filter: nil,
-            groupId: currentGroupId) // 그룹 아이디 변경해야함
+            groupId: currentGroupId ?? -1) // 그룹 아이디 변경해야함
         
         do {
             let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
             self.popularRestaurants.append(contentsOf: data)
         } catch {
+            print(error)
             throw RestaurantError.fetchRecentRestaurantsAsyncError
         }
     }
@@ -175,22 +176,23 @@ extension HomeViewModel {
                 userLocation: SearchMapRestaurantLocation(x: "\(LocationManager.shared.coordinate?.longitude ?? 0.0)", y: "\(LocationManager.shared.coordinate?.latitude ?? 0.0)"),
                 startLocation: nil,
                 endLocation: nil,
-                filter: SearchMapRestaurantFilter(categoryFilter: SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
-                groupId: currentGroupId)
+                filter: SearchMapRestaurantFilter(categoryFilter: categoryFilter == nil ? nil : SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
+                groupId: currentGroupId ?? -1)
         } else {
             parameters = SearchMapRestaurantPageRequest(page: 1, size: 20, sort: "id,desc")
             body = SearchMapRestaurantRequestBody(
                 userLocation: nil,
                 startLocation: nil,
                 endLocation: nil,
-                filter: SearchMapRestaurantFilter(categoryFilter: SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
-                groupId: currentGroupId)
+                filter: SearchMapRestaurantFilter(categoryFilter: categoryFilter == nil ? nil : SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
+                groupId: currentGroupId ?? -1)
         }
         
         do {
             let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
             self.restaurants.append(contentsOf: data)
         } catch {
+            print(error)
             throw RestaurantError.fetchGroupRestaurantsAsyncError
         }
     }
@@ -206,14 +208,19 @@ extension HomeViewModel {
             startLocation: SearchMapRestaurantLocation(x: "\(bounds.southWestLng)", y: "\(bounds.southWestLat)"),
             endLocation: SearchMapRestaurantLocation(x: "\(bounds.northEastLng)", y: "\(bounds.northEastLat)"),
             filter: nil,
-            groupId: currentGroupId)
+            groupId: currentGroupId ?? -1)
         
         do {
             let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
             self.markerRestaurants.append(contentsOf: data)
         } catch {
+            print(error)
             throw RestaurantError.fetchMapIncludedRestaurantsAsyncError
         }
+    }
+    
+    func fetchRestaurantsReviewsAsync() {
+        
     }
     
     // MARK: - 위치 관련 메소드
@@ -224,7 +231,12 @@ extension HomeViewModel {
        
         let locationData = try await CurrentLocationAPI.fetchCurrentLoctionAsync(request: CurrentLocationRequest(coords: "\(lon),\(lat)"))
         
-        return locationData.address
+        do {
+            return locationData.address
+        } catch {
+            throw RestaurantError.fetchCurrentAddressAsyncError
+        }
+        
     }
     
     // MARK: - 지도 관련 메소드
@@ -263,7 +275,7 @@ extension HomeViewModel {
         switch sortType {
         case .sort:
             selectedSortIndex = row
-            didUpdateFilterRestaurants?()
+            didUpdateGroupRestaurantsData?()
         case .category:
             selectedCategoryIndex = row
         case .drinking:
@@ -302,27 +314,38 @@ extension HomeViewModel {
     
     // MARK: - 그룹 관련 메소드
     func fetchJoinGroup() async throws {
-        
-        groupList = try await GroupAPI.fetchMyGroupAsync().data
-        
-        if groupList.isEmpty == false {
-            let index = groupList.firstIndex(where: { $0.isSelected == true }).map({Int($0)}) ?? 0
-            currentGroupId = groupList[index].groupId
-            UserDefaultManager.selectedGroupId = currentGroupId
+        do {
+            groupList = try await GroupAPI.fetchMyGroupAsync().data
+            
+            if groupList.isEmpty == false {
+                let index = groupList.firstIndex(where: { $0.isSelected == true }) ?? 0
+                currentGroupId = groupList[index].groupId
+                UserDefaultManager.selectedGroupId = currentGroupId
+            } else {
+                currentGroupId = nil
+                UserDefaultManager.selectedGroupId = nil
+            }
+        } catch {
+            print(error)
+            throw RestaurantError.fetchJoinGroupError
         }
     }
     
     func updateSelectedGroup(id: Int) async throws {
-        try await GroupAPI.updateSelectedGroupAsync(request: SelectedGroupRequest(groupId: id))
-        
-        for (index, group) in groupList.enumerated() {
-            if group.groupId == id {
-                groupList[index].isSelected = true
-            } else {
-                groupList[index].isSelected = false
+        do {
+            try await GroupAPI.updateSelectedGroupAsync(request: SelectedGroupRequest(groupId: id))
+            
+            for (index, group) in groupList.enumerated() {
+                if group.groupId == id {
+                    groupList[index].isSelected = true
+                } else {
+                    groupList[index].isSelected = false
+                }
             }
+            currentGroupId = id
+            UserDefaultManager.selectedGroupId = id
+        } catch {
+            throw RestaurantError.updateSelectedGroupError
         }
-        currentGroupId = id
-        UserDefaultManager.selectedGroupId = id
     }
 }

@@ -11,7 +11,9 @@ import SnapKit
 
 class SearchRestaurantViewController: UIViewController {
 
-    // MARK: - Enum
+    deinit {
+        print("SearchRestaurantViewController Deinit")
+    }
     
     // MARK: - Properties
     var viewModel: SearchRestaurantViewModel?
@@ -24,7 +26,7 @@ class SearchRestaurantViewController: UIViewController {
         super.viewDidLoad()
         
         self.navigationItem.title = "맛집 등록"
-        setCustomNavigationBarBackButton(isSearchVC: false)
+        setCustomNavigationBarBackButton(goToViewController: .popVC)
         
         setupBind()
         setupUI()
@@ -33,36 +35,35 @@ class SearchRestaurantViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.tabBarController?.tabBar.isHidden = false
     }
     
     // MARK: - SetupBindings
     func setupBind() {
-        viewModel?.didUpdateRestaurantsInfo = {
-            self.searchRestaurantResultTableView.reloadData()
+        viewModel?.onRestaurantsFetched = { [weak self] newIndexPaths in
+            DispatchQueue.main.async {
+                self?.searchRestaurantResultTableView.insertRows(at: newIndexPaths, with: .automatic)
+            }
         }
     }
     
     // MARK: - SetupData
     func fetchSearchRestaurantsData() {
         
-        viewModel?.locationManager.didUpdateLocations = {
-            
-            let x = self.viewModel?.locationManager.coordinate?.longitude ?? 0.0
-            let y = self.viewModel?.locationManager.coordinate?.latitude ?? 0.0
-            
+        viewModel?.locationManager.didUpdateLocations = { [weak self] in
+        
             Task {
                 do {
-                    let keyword = self.searchRestaurantTextField.text ?? ""
-                    try await self.viewModel?.fetchSearchRestaurants(keyword: keyword, x:"\(x)", y:"\(y)")
-                    self.updateTableView()
+                    let keyword = self?.searchRestaurantTextField.text ?? ""
+                    try await self?.viewModel?.fetchSearchRestaurantsData(keyword: keyword)
+                    self?.updateTableView()
                 } catch {
                     print(error)
                 }
@@ -139,19 +140,35 @@ extension SearchRestaurantViewController: UITableViewDataSource {
     }
 }
 
+extension SearchRestaurantViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+    
+        guard !viewModel!.isFetching, let maxIndexPath = indexPaths.max(), maxIndexPath.row >= viewModel!.restaurantsInfo.count - 1 else { return }
+               
+        Task {
+            try await viewModel?.fetchSearchRestaurantsData(keyword: searchRestaurantTextField.text ?? "" )
+        }
+    }
+}
+
 // MARK: - TextField Delegate
 extension SearchRestaurantViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard textField.text != "" else { return true }
         
+        viewModel?.isSearch = true
         fetchSearchRestaurantsData()
         return true
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
-        guard viewModel?.restaurantsInfo.isEmpty == false else { return }
 
+        viewModel?.currentPage = 1
+        viewModel?.isSearch = false
+        viewModel?.isEnd = false
+        viewModel?.isFetching = false
         viewModel?.restaurantsInfo.removeAll()
-        viewModel?.didUpdateRestaurantsInfo?()
+        searchRestaurantResultTableView.reloadData()
     }
 }
 

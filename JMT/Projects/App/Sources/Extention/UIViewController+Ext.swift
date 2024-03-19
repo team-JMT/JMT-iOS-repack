@@ -18,15 +18,33 @@ extension UIViewController {
 
 // 네비게이션 컨트롤러 백버튼
 extension UIViewController {
-    func setCustomNavigationBarBackButton(isSearchVC: Bool) {
+    
+    enum GoToViewControllerType {
+        case homeTap
+        case popVC
+        case popToRootVC
+    }
+    
+    func setCustomNavigationMoreButton() {
+        var moreButton = UIBarButtonItem(image: JMTengAsset.more.image, style: .plain, target: self, action: #selector(editMenu))
+        self.navigationItem.rightBarButtonItem = moreButton
+    }
+    
+    @objc private func editMenu() {
+        print("123123123123")
+    }
+    
+    func setCustomNavigationBarBackButton(goToViewController: GoToViewControllerType) {
         
         var backButton = UIBarButtonItem()
         
-        // 커스텀 백 버튼 생성
-        if isSearchVC {
+        switch goToViewController {
+        case .homeTap:
             backButton = UIBarButtonItem(image: UIImage(named: "BackButton"), style: .plain, target: self, action: #selector(goToHomeTab))
-        } else {
+        case .popVC:
             backButton = UIBarButtonItem(image: UIImage(named: "BackButton"), style: .plain, target: self, action: #selector(popViewController))
+        case .popToRootVC:
+            backButton = UIBarButtonItem(image: UIImage(named: "BackButton"), style: .plain, target: self, action: #selector(popToRootViewController))
         }
         
         backButton.tintColor = .black
@@ -44,6 +62,15 @@ extension UIViewController {
     
     @objc private func goToHomeTab() {
         self.tabBarController?.selectedIndex = 0
+    }
+    
+    @objc private func popToRootViewController() {
+        
+        if let homeViewController = self.navigationController?.viewControllers[0] as? HomeViewController {
+            homeViewController.viewModel?.didUpdateGroupRestaurantsData?()
+        }
+    
+        navigationController?.popToRootViewController(animated: true)
     }
 }
 

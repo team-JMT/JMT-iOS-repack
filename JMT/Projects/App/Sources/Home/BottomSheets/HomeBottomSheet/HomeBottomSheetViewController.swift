@@ -32,58 +32,48 @@ class HomeBottomSheetViewController: UIViewController {
         let header2 = UINib(nibName: "HomeFilterHeaderView", bundle: nil)
         bottomSheetCollectionView.register(header2, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView2")
         
-        self.bottomSheetCollectionView.collectionViewLayout = self.createLayout()
-        
-        setupUI()
+
+        self.bottomSheetCollectionView.collectionViewLayout = createLayout()
         self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
-        
+    
+        setupUI()
+    
         setupBind()
     }
+
     
     // MARK: - SetupBindings
     func setupBind() {
         
         viewModel?.didUpdateGroupRestaurantsData = {
-            self.viewModel?.isLodingData = true
-            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
-    
-            Task {
-                do {
-                    try await self.fetchGroupRestaurantData()
-                    self.viewModel?.isLodingData = false
-                    
-                    self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
-                } catch {
-                    print(error)
-                }
-            }
-        }
-        
-        viewModel?.didUpdateFilterRestaurants = {
-        
-            self.viewModel?.isLodingData = true
-            self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
             
-            Task {
-                do {
-                    try await self.viewModel?.fetchGroupRestaurantsAsync()
-                    self.viewModel?.isLodingData = false
-                    
-                    self.bottomSheetCollectionView.reloadData()
-                    self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(1))
-                    
-                } catch {
-                    print(error)
-                }
+            DispatchQueue.main.async {
+                self.viewModel?.isLodingData = true
+                self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
+                self.fetchGroupRestaurantData()
             }
         }
     }
     
     // MARK: - SetupData
     // 선택한 그룹에 포함된 맛집 정보 가져오기
-    func fetchGroupRestaurantData() async throws {
-        try await viewModel?.fetchRecentRestaurantsAsync()
-        try await viewModel?.fetchGroupRestaurantsAsync()
+    func fetchGroupRestaurantData() {
+        Task {
+            do {
+                try await viewModel?.fetchRecentRestaurantsAsync()
+                try await viewModel?.fetchGroupRestaurantsAsync()
+                
+                DispatchQueue.main.async {
+                    self.viewModel?.isLodingData = false
+                    self.bottomSheetCollectionView.reloadData()
+                    self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                }
+                
+            } catch {
+                print(error)
+            }
+        }
+        
     }
     
     // MARK: - SetupUI
@@ -112,7 +102,8 @@ class HomeBottomSheetViewController: UIViewController {
            
            guard let self = self else { return nil }
         
-           if viewModel?.isLodingData == true {
+           if self.viewModel?.isLodingData == true {
+               print("------------------------- 1")
                switch sectionIndex {
                case 0:
                    return self.createFirstColumnSection()
@@ -122,6 +113,7 @@ class HomeBottomSheetViewController: UIViewController {
                    return nil
                }
            } else {
+               print("------------------------- 2")
                let isPopularRestaurantsEmpty = self.viewModel?.popularRestaurants.isEmpty ?? true
                let isRestaurantsEmpty = self.viewModel?.restaurants.isEmpty ?? true
 
@@ -183,9 +175,8 @@ class HomeBottomSheetViewController: UIViewController {
             heightDimension: .estimated(1)
         )
         
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-     
-
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+    
         // Section
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 20, bottom: 32, trailing: 20)
@@ -237,7 +228,7 @@ class HomeBottomSheetViewController: UIViewController {
     
     @IBAction func didTabDoneButton(_ sender: Any) {
         viewModel?.saveUpdateIndex()
-        viewModel?.didUpdateFilterRestaurants?()
+        viewModel?.didUpdateGroupRestaurantsData?()
         bottomContainerView.removeFromSuperview()
         fpc.dismiss(animated: true)
     }
@@ -300,87 +291,60 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
 // MARK: - CollectionView DataSource
 extension HomeBottomSheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if viewModel?.isLodingData == true {
-            return 2
+        if viewModel?.popularRestaurants.isEmpty == true {
+            return 1
         } else {
-            if viewModel?.popularRestaurants.isEmpty == true {
-                return 1
-            } else{
-                return 2
-            }
+            return 2
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        if viewModel?.isLodingData == true {
+        if viewModel?.popularRestaurants.isEmpty == true {
+            return 1
+        } else {
             switch section {
             case 0:
-                return 5
+                return viewModel?.restaurants.count ?? 0 >= 10 ? 10 : viewModel?.popularRestaurants.count ?? 0
             case 1:
-                return 5
+                return viewModel?.restaurants.isEmpty == true ? 1 : viewModel?.restaurants.count ?? 0
             default:
                 return 0
-            }
-        } else {
-            if viewModel?.popularRestaurants.isEmpty == true {
-                return 1
-            } else {
-                switch section {
-                case 0:
-                    return viewModel?.restaurants.count ?? 0 >= 10 ? 10 : viewModel?.popularRestaurants.count ?? 0
-                case 1:
-                    return viewModel?.restaurants.isEmpty == true ? 1 : viewModel?.restaurants.count ?? 0
-                default:
-                    return 0
-                }
             }
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if viewModel?.isLodingData == true {
-            switch indexPath.section {
-            case 0:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
-                return cell
-            case 1:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
-                return cell
-            default:
-                return UICollectionViewCell()
-            }
+        if viewModel?.popularRestaurants.isEmpty == true {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emptyDataCell", for: indexPath) as? PopularEmptyCell else { return UICollectionViewCell() }
+            cell.delegate = self
+            return cell
         } else {
-            if viewModel?.popularRestaurants.isEmpty == true {
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emptyDataCell", for: indexPath) as? PopularEmptyCell else { return UICollectionViewCell() }
-                cell.delegate = self
-                return cell
+            if viewModel?.restaurants.isEmpty == true {
+                switch indexPath.section {
+                case 0:
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "firstCell", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
+                    cell.hideSkeleton()
+                    cell.setupData(model: viewModel?.popularRestaurants[indexPath.item])
+                    return cell
+                case 1:
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlaceholderCell", for: indexPath) as? PlaceholderCollectionViewCell else { return UICollectionViewCell() }
+                    return cell
+                default:
+                    return UICollectionViewCell()
+                }
             } else {
-                if viewModel?.restaurants.isEmpty == true {
-                    switch indexPath.section {
-                    case 0:
-                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
-                        cell.setupData(model: viewModel?.popularRestaurants[indexPath.row])
-                        return cell
-                    case 1:
-                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlaceholderCell", for: indexPath) as? PlaceholderCollectionViewCell else { return UICollectionViewCell() }
-                        return cell
-                    default:
-                        return UICollectionViewCell()
-                    }
-                } else {
-                    switch indexPath.section {
-                    case 0:
-                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
-                        cell.setupData(model: viewModel?.popularRestaurants[indexPath.row])
-                        return cell
-                    case 1:
-                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
-                        cell.setupData(model: viewModel?.restaurants[indexPath.row])
-                        return cell
-                    default:
-                        return UICollectionViewCell()
-                    }
+                switch indexPath.section {
+                case 0:
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "firstCell", for: indexPath) as? PopularRestaurantCell else { return UICollectionViewCell() }
+                    cell.hideSkeleton()
+                    cell.setupData(model: viewModel?.popularRestaurants[indexPath.item])
+                    return cell
+                case 1:
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "secondCell", for: indexPath) as? PopularRestaurantInfoCell else { return UICollectionViewCell() }
+                    cell.setupData(model: viewModel?.restaurants[indexPath.item])
+                    return cell
+                default:
+                    return UICollectionViewCell()
                 }
             }
         }
@@ -397,23 +361,16 @@ extension HomeBottomSheetViewController: SkeletonCollectionViewDataSource {
     func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> ReusableCellIdentifier {
         switch indexPath.section {
         case 0:
-            return "cell1"
+            return "firstCell"
         case 1:
-            return "cell2"
+            return "secondCell"
         default:
             return ""
         }
     }
     
     func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 5
-        case 1:
-            return 5
-        default:
-            return 0
-        }
+        return 3
     }
 }
 

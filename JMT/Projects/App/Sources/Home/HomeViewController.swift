@@ -100,7 +100,7 @@ class HomeViewController: UIViewController {
                         self.viewModel?.didUpdateGroupRestaurantsData?()
                     }
                 } catch {
-                    print(error)
+                    print("11111", error)
                 }
             }
         }
@@ -189,7 +189,7 @@ class HomeViewController: UIViewController {
                     }
                 }
             } catch {
-                print(error)
+                print("123123", error)
             }
         }
     }
@@ -199,20 +199,14 @@ class HomeViewController: UIViewController {
         
         viewModel?.didUpdateGroupName = { index in
             
-            Task {
-                do {
-                    self.viewModel?.didUpdateGroupRestaurantsData?()
-                    
-                    self.groupNameLabel.text = self.viewModel?.groupList[index].groupName ?? ""
-                    
-                    if let url = URL(string: self.viewModel?.groupList[index].groupProfileImageUrl ?? "")  {
-                        self.groupImageView.kf.setImage(with: url)
-                    } else {
-                        self.groupImageView.image = JMTengAsset.defaultProfileImage.image
-                    }
-                } catch {
-                    print(error)
-                }
+            self.viewModel?.didUpdateGroupRestaurantsData?()
+            
+            self.groupNameLabel.text = self.viewModel?.groupList[index].groupName ?? ""
+            
+            if let url = URL(string: self.viewModel?.groupList[index].groupProfileImageUrl ?? "")  {
+                self.groupImageView.kf.setImage(with: url)
+            } else {
+                self.groupImageView.image = JMTengAsset.defaultProfileImage.image
             }
         }
     }
@@ -441,7 +435,7 @@ extension HomeViewController {
         guard let vc =  storyboard.instantiateViewController(withIdentifier: "HomeBottomSheetViewController") as? HomeBottomSheetViewController else { return }
         
         vc.viewModel = self.viewModel
-        
+       
         restaurantListFpc = FloatingPanelController(delegate: self)
         restaurantListFpc.set(contentViewController: vc)
         restaurantListFpc.addPanel(toParent: self)

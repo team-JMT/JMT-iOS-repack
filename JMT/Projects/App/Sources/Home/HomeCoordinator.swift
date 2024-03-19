@@ -74,15 +74,13 @@ class DefaultHomeCoordinator: HomeCoordinator {
     
     func showSearchTabWithButton() {
         if let coordinator = parentCoordinator as? DefaultTabBarCoordinator {
-            coordinator.tabBarController.isHomeSearchButton = true
             coordinator.tabBarController.selectedIndex = 1
         }
     }
     
     func showGroupTab() {
-        if let coordinator = parentCoordinator as? DefaultTabBarCoordinator {
-            coordinator.tabBarController.selectedIndex = 2
-        }
+        let coordinator = parentCoordinator?.childCoordinators[2] as! DefaultGroupCoordinator
+        coordinator.showCreateGroupPage()
     }
     
     func setDetailRestaurantCoordinator() {

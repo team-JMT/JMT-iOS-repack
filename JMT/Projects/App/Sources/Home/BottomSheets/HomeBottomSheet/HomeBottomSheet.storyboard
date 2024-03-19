@@ -37,117 +37,82 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell1" id="22T-zz-9NS" customClass="PopularRestaurantCell" customModule="JMTeng" customModuleProvider="target">
-                                        <rect key="frame" x="40" y="0.0" width="315" height="350"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="firstCell" id="PGA-0G-FOQ" customClass="PopularRestaurantCell" customModule="JMTeng" customModuleProvider="target">
+                                        <rect key="frame" x="40" y="0.0" width="315" height="282"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Fmk-ke-UQj">
-                                            <rect key="frame" x="0.0" y="0.0" width="315" height="350"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gV6-Wo-NeM">
+                                            <rect key="frame" x="0.0" y="0.0" width="315" height="282"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aTf-2w-ZYw">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V9t-4t-Mdo">
                                                     <rect key="frame" x="0.0" y="0.0" width="315" height="197"/>
                                                     <color key="backgroundColor" name="gray100"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" secondItem="aTf-2w-ZYw" secondAttribute="height" multiplier="16:10" id="KI3-JS-Msk"/>
+                                                        <constraint firstAttribute="width" secondItem="V9t-4t-Mdo" secondAttribute="height" multiplier="16:10" id="WUZ-L8-jQs"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="33V-a2-69a">
+                                                    <rect key="frame" x="20" y="213" width="20" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="20" id="IsO-10-rvn"/>
+                                                        <constraint firstAttribute="height" constant="20" id="ngi-cr-72Z"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
-                                                            <real key="value" value="20"/>
+                                                            <real key="value" value="10"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XOc-e0-iYy">
-                                                    <rect key="frame" x="0.0" y="197" width="315" height="153"/>
-                                                    <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="27M-sx-GUh">
-                                                            <rect key="frame" x="20" y="16" width="275" height="121"/>
-                                                            <subviews>
-                                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="u4J-RB-TPT">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="111" height="20"/>
-                                                                    <subviews>
-                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="C63-U3-hUf">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
-                                                                            <color key="backgroundColor" name="gray200"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="width" constant="20" id="XDF-RH-tt1"/>
-                                                                                <constraint firstAttribute="height" constant="20" id="jNV-tN-9lH"/>
-                                                                            </constraints>
-                                                                        </imageView>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="권나무방구뽕뽕" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F7Q-JY-Sks">
-                                                                            <rect key="frame" x="26" y="0.0" width="85" height="20"/>
-                                                                            <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
-                                                                            <nil key="textColor"/>
-                                                                            <nil key="highlightedColor"/>
-                                                                        </label>
-                                                                    </subviews>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                                                        <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
-                                                                            <real key="value" value="5"/>
-                                                                        </userDefinedRuntimeAttribute>
-                                                                    </userDefinedRuntimeAttributes>
-                                                                </stackView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="수제버거 맛집 노원점" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D0c-I6-YzG">
-                                                                    <rect key="frame" x="0.0" y="31" width="132" height="90"/>
-                                                                    <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                                                        <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
-                                                                            <real key="value" value="0.0"/>
-                                                                        </userDefinedRuntimeAttribute>
-                                                                        <userDefinedRuntimeAttribute type="number" keyPath="skeletonLineSpacing">
-                                                                            <real key="value" value="0.0"/>
-                                                                        </userDefinedRuntimeAttribute>
-                                                                        <userDefinedRuntimeAttribute type="number" keyPath="linesCornerRadius">
-                                                                            <integer key="value" value="5"/>
-                                                                        </userDefinedRuntimeAttribute>
-                                                                    </userDefinedRuntimeAttributes>
-                                                                </label>
-                                                            </subviews>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                                            </userDefinedRuntimeAttributes>
-                                                        </stackView>
-                                                    </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                    <constraints>
-                                                        <constraint firstItem="27M-sx-GUh" firstAttribute="leading" secondItem="XOc-e0-iYy" secondAttribute="leading" constant="20" id="KjE-IT-E8W"/>
-                                                        <constraint firstItem="27M-sx-GUh" firstAttribute="top" secondItem="XOc-e0-iYy" secondAttribute="top" constant="16" id="LmH-Q9-hCB"/>
-                                                        <constraint firstAttribute="bottom" secondItem="27M-sx-GUh" secondAttribute="bottom" constant="16" id="MUh-BE-SIY"/>
-                                                        <constraint firstAttribute="trailing" secondItem="27M-sx-GUh" secondAttribute="trailing" constant="20" id="fGn-ai-pWW"/>
-                                                    </constraints>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123123" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EVs-FL-3wE">
+                                                    <rect key="frame" x="20" y="241.33333333333334" width="275" height="24.666666666666657"/>
+                                                    <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                                            <real key="value" value="8"/>
+                                                        </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
-                                                </view>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123123" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gla-fA-1f3">
+                                                    <rect key="frame" x="46" y="214.33333333333334" width="249" height="17.333333333333343"/>
+                                                    <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                                            <real key="value" value="8"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
                                             </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="XOc-e0-iYy" secondAttribute="bottom" id="0gQ-mL-EU6"/>
-                                                <constraint firstItem="XOc-e0-iYy" firstAttribute="leading" secondItem="Fmk-ke-UQj" secondAttribute="leading" id="5ma-bD-REq"/>
-                                                <constraint firstItem="aTf-2w-ZYw" firstAttribute="top" secondItem="Fmk-ke-UQj" secondAttribute="top" id="7LB-OT-deY"/>
-                                                <constraint firstAttribute="trailing" secondItem="XOc-e0-iYy" secondAttribute="trailing" id="P9Q-Sb-1R8"/>
-                                                <constraint firstItem="XOc-e0-iYy" firstAttribute="top" secondItem="aTf-2w-ZYw" secondAttribute="bottom" id="cwD-xK-z65"/>
-                                                <constraint firstItem="aTf-2w-ZYw" firstAttribute="leading" secondItem="Fmk-ke-UQj" secondAttribute="leading" id="mul-LM-TUN"/>
-                                                <constraint firstAttribute="trailing" secondItem="aTf-2w-ZYw" secondAttribute="trailing" id="x8e-OD-OQp"/>
+                                                <constraint firstItem="Gla-fA-1f3" firstAttribute="leading" secondItem="33V-a2-69a" secondAttribute="trailing" constant="6" id="1Gb-gZ-6vE"/>
+                                                <constraint firstAttribute="trailing" secondItem="EVs-FL-3wE" secondAttribute="trailing" constant="20" id="3wb-1j-X5g"/>
+                                                <constraint firstAttribute="bottom" secondItem="EVs-FL-3wE" secondAttribute="bottom" constant="16" id="47L-CX-CAF"/>
+                                                <constraint firstAttribute="trailing" secondItem="V9t-4t-Mdo" secondAttribute="trailing" id="9Kl-pL-NbH"/>
+                                                <constraint firstAttribute="trailing" secondItem="Gla-fA-1f3" secondAttribute="trailing" constant="20" id="Fp8-SS-Mfl"/>
+                                                <constraint firstItem="V9t-4t-Mdo" firstAttribute="leading" secondItem="gV6-Wo-NeM" secondAttribute="leading" id="I2x-Ca-vwf"/>
+                                                <constraint firstItem="EVs-FL-3wE" firstAttribute="top" secondItem="33V-a2-69a" secondAttribute="bottom" constant="8.5" id="PmX-5V-S9j"/>
+                                                <constraint firstItem="33V-a2-69a" firstAttribute="leading" secondItem="gV6-Wo-NeM" secondAttribute="leading" constant="20" id="Rko-uW-DWh"/>
+                                                <constraint firstItem="Gla-fA-1f3" firstAttribute="top" secondItem="V9t-4t-Mdo" secondAttribute="bottom" constant="17.329999999999998" id="bxQ-13-Tjv"/>
+                                                <constraint firstItem="33V-a2-69a" firstAttribute="top" secondItem="V9t-4t-Mdo" secondAttribute="bottom" constant="16" id="f4G-AL-2sO"/>
+                                                <constraint firstItem="EVs-FL-3wE" firstAttribute="leading" secondItem="gV6-Wo-NeM" secondAttribute="leading" constant="20" id="hzt-Bl-C9r"/>
+                                                <constraint firstItem="Gla-fA-1f3" firstAttribute="centerY" secondItem="33V-a2-69a" secondAttribute="centerY" id="i1O-xj-CYR"/>
+                                                <constraint firstItem="V9t-4t-Mdo" firstAttribute="top" secondItem="gV6-Wo-NeM" secondAttribute="top" id="pYb-mT-ebn"/>
                                             </constraints>
                                         </collectionViewCellContentView>
-                                        <size key="customSize" width="315" height="350"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                        </userDefinedRuntimeAttributes>
+                                        <size key="customSize" width="315" height="282"/>
                                         <connections>
-                                            <outlet property="restaurantImageView" destination="aTf-2w-ZYw" id="EnI-uz-7qy"/>
-                                            <outlet property="restaurantNameLabel" destination="D0c-I6-YzG" id="LUL-cw-0A6"/>
-                                            <outlet property="userInfoView" destination="XOc-e0-iYy" id="206-0s-iaf"/>
-                                            <outlet property="userNicknameLabel" destination="F7Q-JY-Sks" id="jmX-2y-jql"/>
-                                            <outlet property="userProfileImageView" destination="C63-U3-hUf" id="jRW-Xf-NEH"/>
+                                            <outlet property="restaurantImageView" destination="V9t-4t-Mdo" id="cbP-oT-EOM"/>
+                                            <outlet property="restaurantNameLabel" destination="EVs-FL-3wE" id="1QM-bQ-1kq"/>
+                                            <outlet property="userNicknameLabel" destination="Gla-fA-1f3" id="BHl-l7-VCl"/>
+                                            <outlet property="userProfileImageView" destination="33V-a2-69a" id="Esg-qv-baP"/>
                                         </connections>
                                     </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell2" id="yNf-pu-SIy" customClass="PopularRestaurantInfoCell" customModule="JMTeng" customModuleProvider="target">
-                                        <rect key="frame" x="40" y="360" width="315" height="492"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="secondCell" id="yNf-pu-SIy" customClass="PopularRestaurantInfoCell" customModule="JMTeng" customModuleProvider="target">
+                                        <rect key="frame" x="40" y="292" width="315" height="492"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="dQ9-83-Icy">
                                             <rect key="frame" x="0.0" y="0.0" width="315" height="492"/>
@@ -161,14 +126,13 @@
                                                         <constraint firstAttribute="width" constant="24" id="bGi-1N-s79"/>
                                                     </constraints>
                                                 </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pC9-dK-Evg">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pC9-dK-Evg">
                                                     <rect key="frame" x="0.0" y="36" width="315" height="197"/>
                                                     <color key="backgroundColor" name="gray100"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="pC9-dK-Evg" secondAttribute="height" multiplier="16:10" id="6ar-M7-5eB"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
                                                             <real key="value" value="20"/>
                                                         </userDefinedRuntimeAttribute>
@@ -179,18 +143,12 @@
                                                     <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="16"/>
                                                     <color key="textColor" name="gray900"/>
                                                     <nil key="highlightedColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="[필독] 버거 중독자만 모여라 일반인 강제 퇴출[필독] 버거 중독자만 모여라 일반인 강제 퇴출[필독] 버거 중독자만 모여라 일..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O1z-Dv-v0L">
                                                     <rect key="frame" x="0.0" y="276.33333333333331" width="315" height="183.66666666666669"/>
                                                     <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                                                     <color key="textColor" name="gray500"/>
                                                     <nil key="highlightedColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="16" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ELS-hv-m4W">
                                                     <rect key="frame" x="0.0" y="476" width="315" height="16"/>
@@ -219,9 +177,6 @@
                                                                     </subviews>
                                                                 </stackView>
                                                             </subviews>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                                            </userDefinedRuntimeAttributes>
                                                         </stackView>
                                                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S14-tl-Ttf">
                                                             <rect key="frame" x="0.0" y="0.0" width="315" height="60"/>
@@ -247,18 +202,12 @@
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                             </subviews>
-                                                                            <userDefinedRuntimeAttributes>
-                                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                                                            </userDefinedRuntimeAttributes>
                                                                         </stackView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="와 정말 맛있더군요 " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e9E-PY-rPL">
                                                                             <rect key="frame" x="0.0" y="28" width="283" height="0.0"/>
                                                                             <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                                                                             <color key="textColor" name="gray900"/>
                                                                             <nil key="highlightedColor"/>
-                                                                            <userDefinedRuntimeAttributes>
-                                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                                                            </userDefinedRuntimeAttributes>
                                                                         </label>
                                                                     </subviews>
                                                                 </stackView>
@@ -270,14 +219,8 @@
                                                                 <constraint firstAttribute="trailing" secondItem="ryp-mN-zD1" secondAttribute="trailing" constant="16" id="KTw-k6-lNg"/>
                                                                 <constraint firstItem="ryp-mN-zD1" firstAttribute="top" secondItem="S14-tl-Ttf" secondAttribute="top" constant="16" id="fpV-dJ-Iuj"/>
                                                             </constraints>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                                            </userDefinedRuntimeAttributes>
                                                         </view>
                                                     </subviews>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                                    </userDefinedRuntimeAttributes>
                                                 </stackView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="권나무방구뽕뽕" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YRK-Yq-hw2">
                                                     <rect key="frame" x="32" y="3.6666666666666661" width="85" height="17"/>
@@ -307,14 +250,8 @@
                                                 <constraint firstAttribute="trailing" secondItem="ELS-hv-m4W" secondAttribute="trailing" id="sMi-ap-Csq"/>
                                                 <constraint firstItem="K7d-C1-3j7" firstAttribute="top" secondItem="dQ9-83-Icy" secondAttribute="top" id="yfO-aV-XEF"/>
                                             </constraints>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                            </userDefinedRuntimeAttributes>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="315" height="492"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outlet property="introduceLabel" destination="O1z-Dv-v0L" id="qHz-KR-us3"/>
                                             <outlet property="restaurantImageView" destination="pC9-dK-Evg" id="rcD-ub-6ue"/>
@@ -328,7 +265,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="emptyDataCell" id="aP8-Gr-J6y" customClass="PopularEmptyCell" customModule="JMTeng" customModuleProvider="target">
-                                        <rect key="frame" x="40" y="862" width="315" height="204"/>
+                                        <rect key="frame" x="40" y="794" width="315" height="204"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="dkO-iH-Yfv">
                                             <rect key="frame" x="0.0" y="0.0" width="315" height="204"/>
@@ -353,9 +290,6 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                                            </userDefinedRuntimeAttributes>
                                                         </stackView>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wgN-gZ-PtL">
                                                             <rect key="frame" x="89.666666666666686" y="75" width="136" height="49"/>
@@ -389,7 +323,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PlaceholderCell" id="HIB-Tu-2qC" customClass="PlaceholderCollectionViewCell" customModule="JMTeng" customModuleProvider="target">
-                                        <rect key="frame" x="40" y="1076" width="315" height="470"/>
+                                        <rect key="frame" x="40" y="1008" width="315" height="470"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="F2M-8V-XqC">
                                             <rect key="frame" x="0.0" y="0.0" width="315" height="470"/>
@@ -464,9 +398,6 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="nw4-nG-SBN" secondAttribute="bottom" id="TTV-fW-BZw"/>
                             <constraint firstItem="nw4-nG-SBN" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="xDz-qH-d1x"/>
                         </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                        </userDefinedRuntimeAttributes>
                     </view>
                     <size key="freeformSize" width="395" height="2000"/>
                     <connections>

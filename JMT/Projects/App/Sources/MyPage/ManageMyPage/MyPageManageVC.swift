@@ -24,7 +24,7 @@ class MyPageManageVC: UIViewController {
         super.viewWillAppear(animated)
         
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        setCustomNavigationBarBackButton(isSearchVC: false)
+        setCustomNavigationBarBackButton(goToViewController: .popVC)
     }
     
     //네비게이션 스택 사라지기

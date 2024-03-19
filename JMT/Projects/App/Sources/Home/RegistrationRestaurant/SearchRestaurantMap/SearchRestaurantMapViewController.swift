@@ -10,6 +10,10 @@ import NMapsMap
 
 class SearchRestaurantMapViewController: UIViewController {
     
+    deinit {
+        print("SearchRestaurantMapViewController Deinit")
+    }
+    
     // MARK: - Properties
     var viewModel: SearchRestaurantMapViewModel?
     @IBOutlet weak var naverMapView: NMFNaverMapView!
@@ -35,7 +39,15 @@ class SearchRestaurantMapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
     }
     
     // MARK: - SetupBindings
@@ -66,7 +78,7 @@ class SearchRestaurantMapViewController: UIViewController {
     
     // MARK: - SetupUI
     func setupUI() {
-        setCustomNavigationBarBackButton(isSearchVC: false)
+        setCustomNavigationBarBackButton(goToViewController: .popVC)
         
         registeredRestaurantView.layer.cornerRadius = 8
         infoView.layer.cornerRadius = 8

@@ -8,6 +8,11 @@
 import UIKit
 
 class NicknameViewController: UIViewController, KeyboardEvent {
+    
+    deinit {
+        print("NicknameViewController Deinit")
+    }
+    
     var transformView: UIView { return self.view }
     
     var viewModel: NicknameViewModel?
@@ -36,13 +41,13 @@ class NicknameViewController: UIViewController, KeyboardEvent {
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-        setupKeyboardEvent { noti in
+        setupKeyboardEvent { [weak self] noti in
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
             
-            self.containerView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.cgRectValue.height)
+            self?.containerView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.cgRectValue.height)
             
-        } keyboardWillHide: { noti in
-            self.containerView.transform = .identity
+        } keyboardWillHide: { [weak self] noti in
+            self?.containerView.transform = .identity
         }
     }
     

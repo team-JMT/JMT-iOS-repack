@@ -24,7 +24,7 @@ class ConvertUserLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setCustomNavigationBarBackButton(isSearchVC: false)
+        setCustomNavigationBarBackButton(goToViewController: .popVC)
         
         placeNameLabel.text = viewModel?.locationData?.placeName ?? ""
         addressNameLabel.text = viewModel?.locationData?.addressName ?? ""

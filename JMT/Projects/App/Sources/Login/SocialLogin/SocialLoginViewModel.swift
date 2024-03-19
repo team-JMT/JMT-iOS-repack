@@ -28,14 +28,23 @@ class SocialLoginViewModel {
                 
                 SocialLoginAPI.googleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
-                    case .success(let actionStr):
-                        if let action = UserLoginAction(rawValue: actionStr) {
+                    case .success(let response):
+                        if let action = UserLoginAction(rawValue: response.userLoginAction) {
                             switch action {
                             case .SIGN_UP, .NICKNAME_PROCESS:
                                 self.coordinator?.showNicknameViewController()
                             case .PROFILE_IMAGE_PROCESS:
                                 self.coordinator?.showProfileViewController()
                             case .LOG_IN:
+                                
+                                DefaultKeychainService.shared.accessToken = DefaultKeychainService.shared.tempAccessToken
+                                DefaultKeychainService.shared.refreshToken = DefaultKeychainService.shared.tempRefreshToken
+                                DefaultKeychainService.shared.accessTokenExpiresIn = DefaultKeychainService.shared.tempAccessTokenExpiresIn
+                                
+                                DefaultKeychainService.shared.tempAccessToken = nil
+                                DefaultKeychainService.shared.tempRefreshToken = nil
+                                DefaultKeychainService.shared.tempAccessTokenExpiresIn = nil
+                                
                                 let appCoordinator = self.coordinator?.getTopCoordinator()
                                 appCoordinator?.showTabBarViewController()
                                 
@@ -61,14 +70,23 @@ class SocialLoginViewModel {
                 
                 SocialLoginAPI.appleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
-                    case .success(let actionStr):
-                        if let action = UserLoginAction(rawValue: actionStr) {
+                    case .success(let response):
+                        if let action = UserLoginAction(rawValue: response.userLoginAction) {
                             switch action {
                             case .SIGN_UP, .NICKNAME_PROCESS:
                                 self?.coordinator?.showNicknameViewController()
                             case .PROFILE_IMAGE_PROCESS:
                                 self?.coordinator?.showProfileViewController()
                             case .LOG_IN:
+                                
+                                DefaultKeychainService.shared.accessToken = DefaultKeychainService.shared.tempAccessToken
+                                DefaultKeychainService.shared.refreshToken = DefaultKeychainService.shared.tempRefreshToken
+                                DefaultKeychainService.shared.accessTokenExpiresIn = DefaultKeychainService.shared.tempAccessTokenExpiresIn
+                                
+                                DefaultKeychainService.shared.tempAccessToken = nil
+                                DefaultKeychainService.shared.tempRefreshToken = nil
+                                DefaultKeychainService.shared.tempAccessTokenExpiresIn = nil
+                                
                                 let appCoordinator = self?.coordinator?.getTopCoordinator()
                                 appCoordinator?.showTabBarViewController()
                             }
@@ -88,14 +106,19 @@ class SocialLoginViewModel {
     func testLogin() {
         SocialLoginAPI.testLogin { response in
             switch response {
-            case .success(let actionStr):
-                if let action = UserLoginAction(rawValue: actionStr) {
+            case .success(let response):
+                if let action = UserLoginAction(rawValue: response.userLoginAction) {
                     switch action {
                     case .SIGN_UP, .NICKNAME_PROCESS:
                         self.coordinator?.showNicknameViewController()
                     case .PROFILE_IMAGE_PROCESS:
                         self.coordinator?.showProfileViewController()
                     case .LOG_IN:
+                        
+                        DefaultKeychainService.shared.accessToken = response.refreshToken
+                        DefaultKeychainService.shared.refreshToken = response.refreshToken
+                        DefaultKeychainService.shared.accessTokenExpiresIn = response.accessTokenExpiresIn
+                        
                         let appCoordinator = self.coordinator?.getTopCoordinator()
                         appCoordinator?.showTabBarViewController()
                     }
