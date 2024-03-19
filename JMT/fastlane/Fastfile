@@ -34,6 +34,10 @@ increment_build_number(xcodeproj: "/Users/hoon/Desktop/JMT-Repack/JMT-iOS-repack
     build_app(workspace: "JMT-iOS.xcworkspace", scheme: "JMTeng")
 
     # Upload the app to TestFlight
-    upload_to_testflight
+    upload_to_testflight(
+  username: "jhlee909090@naver.com",
+  app_identifier: "com.JMT-iOSJMTengg"
+)
+
   end
 end
