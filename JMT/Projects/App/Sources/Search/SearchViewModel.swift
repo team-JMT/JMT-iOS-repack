@@ -18,8 +18,6 @@ class SearchViewModel {
     var restaurants = [SearchRestaurantsItems]()
     var groupList = [SearchGroupItems]()
     var outBoundrestaurants = [SearchRestaurantsOutBoundModel]()
-    
-    var didUpdateGroup: (() -> Void)?
 
     // 맛집 검색하기
     func fetchRestaurantsAsync(keyword: String) async throws {
@@ -40,7 +38,6 @@ class SearchViewModel {
     
     // 그룹 검색하기
     func fetchGroupsAsync(keyword: String) async throws {
-    
         do {
             groupList.removeAll()
             
