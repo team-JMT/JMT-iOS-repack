@@ -57,7 +57,7 @@ class DefaultGroupCoordinator: GroupCoordinator {
             
             if let groupWebViewController = self.navigationController?.viewControllers[0] as? GroupWebViewController {
                 groupWebViewController.groupId = nil
-                groupWebViewController.webViewUrlType = .base
+                groupWebViewController.webViewUrlType = .createGroup
                 groupWebViewController.loadWebPage()
             }
         }

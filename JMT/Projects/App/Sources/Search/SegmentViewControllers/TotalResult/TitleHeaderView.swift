@@ -21,18 +21,10 @@ class TitleHeaderView: UICollectionReusableView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         // 여기에 필요한 초기화 코드를 추가할 수 있습니다.
-
     }
     
       
     func setupTitle(title: String) {
         titleLabel.text = title
-        
-        if UserDefaultManager.selectedGroupId == nil {
-            arrowButton.isHidden = true
-        } else {
-            arrowButton.isHidden = false
-        }
     }
-        
 }
