@@ -32,6 +32,8 @@ class SecondSegmentViewController: UIViewController, UITableViewDelegate, UITabl
         layout()
         fetchReviews()
 
+        
+        
     }
     
     // DI를 통한 초기화
@@ -59,43 +61,45 @@ class SecondSegmentViewController: UIViewController, UITableViewDelegate, UITabl
     
     
     func fetchReviews() {
-            let url = "https://api.jmt-matzip.dev/api/v1/restaurant/my/review?page=0&size=20"
-            
-            guard let accessToken = keychainAccess.getToken("accessToken") else {
-                print("Access Token is not available")
-                return
-            }
-            
-            let headers: HTTPHeaders = [
-                "Authorization": "Bearer \(accessToken)",
-                "Content-Type": "application/json"
-            ]
-            
-            let parameters: [String: Any] = [
-                "userLocation": ["x": "127.0596", "y": "37.6633"],
-                "filter": ["categoryFilter": "string", "isCanDrinkLiquor": true]
-            ]
-            
-            AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseData { response in
-                switch response.result {
-                case .success(let data):
-                    do {
-                        let reviewResponse = try JSONDecoder().decode(ReviewResponse.self, from: data)
-                        // 여기서 받아온 데이터를 처리합니다.
-                        self.updateUI(with: reviewResponse.data.reviewList)
-                    } catch {
-                        print("Decoding error: \(error)")
-                    }
-                case .failure(let error):
-                    print("Request error: \(error)")
+        let url = "https://api.jmt-matzip.dev/api/v1/restaurant/my/review?page=0&size=20"
+        
+        guard let accessToken = keychainAccess.getToken("accessToken") else {
+            print("Access Token is not available")
+            return
+        }
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+        
+        let parameters: [String: Any] = [
+            "userLocation": ["x": "127.0596", "y": "37.6633"],
+            "filter": ["categoryFilter": "string", "isCanDrinkLiquor": true]
+        ]
+        
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseData { response in
+            switch response.result {
+            case .success(let data):
+                do {
+                    let reviewResponse = try JSONDecoder().decode(ReviewResponse.self, from: data)
+                    print("Successfully decoded response: \(reviewResponse)") // 네트워크 응답 확인
+                    self.updateUI(with: reviewResponse.data.reviewList)
+                } catch {
+                    print("Decoding error: \(error)") // 모델 디코딩 확인
                 }
+            case .failure(let error):
+                print("Request error: \(error)")
             }
         }
-    
+    }
+
     func updateUI(with reviews: [Review]) {
-            self.reviews = reviews
-            self.likedReply.reloadData()
-        }
+        self.reviews = reviews
+        print("Updating UI with reviews: \(reviews)") // UI 업데이트 확인
+        self.likedReply.reloadData()
+    }
+
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
