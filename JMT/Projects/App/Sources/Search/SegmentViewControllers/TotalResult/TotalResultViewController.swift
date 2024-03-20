@@ -294,6 +294,7 @@ extension TotalResultViewController: UICollectionViewDelegate {
             case 0:
                 viewModel?.coordinator?.showRestaurantDetailViewController()
             case 1:
+                
                 return
             case 2:
                 viewModel?.coordinator?.showRestaurantDetailViewController()

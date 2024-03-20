@@ -11,6 +11,7 @@ import SnapKit
 
 enum WebViewUrl {
     case base
+    case createGroup
     case detailGroup(id: Int)
     case none
 
@@ -18,6 +19,8 @@ enum WebViewUrl {
         switch self {
         case .base:
             return "https://jmt-frontend-ad7b8.web.app/"
+        case .createGroup:
+            return "https://jmt-frontend-ad7b8.web.app/group-create/name"
         case .detailGroup(let id):
             return "https://jmt-frontend-ad7b8.web.app/group-detail/\(id)/"
         case .none:
@@ -91,6 +94,19 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
         webView.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
         }
+        
+        self.webView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == #keyPath(WKWebView.url) {
+            guard let url = self.webView.url?.absoluteString else {
+                return
+            }
+            
+            print(url)
+            
+        }
     }
     
     func loadWebPage() {
@@ -98,6 +114,8 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
         switch webViewUrlType {
         case .base:
             url = WebViewUrl.base.urlString
+        case .createGroup:
+            url = WebViewUrl.createGroup.urlString
         case .detailGroup:
             url = WebViewUrl.detailGroup(id: groupId ?? 0).urlString
         case .none:
