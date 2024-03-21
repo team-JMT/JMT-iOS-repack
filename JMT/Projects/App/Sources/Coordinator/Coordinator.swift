@@ -11,7 +11,7 @@ enum CoordinatorType {
     case app, tabBar
     case socialLogin, nickname
     case profileImage, album, cropPhoto, profilePopup
-    case home, userLocation, convertUserLocation, homeBS, filterBS
+    case home, userLocation, convertUserLocation, homeBS, filterBS, createGroup
     case search, restaurantDetail, searchRestaurant, searchRestaurantMap, registrationRestaurantInfo, searchRestaurantMenuBS
     case group
     case mypage, detailMyPage, myPageManage, serviceTerms, serviceUse, changeNickname

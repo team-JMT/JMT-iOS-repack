@@ -22,7 +22,7 @@ class JoinBottonSheetViewController: UIViewController {
     
     @IBAction func didTabCreateGroupButton(_ sender: Any) {
         self.dismiss(animated: false)
-        viewModel?.coordinator?.showGroupTab()
+        viewModel?.coordinator?.showCreateGroupViewController()
     }
     
     @IBAction func didTabSearchGroupButton(_ sender: Any) {
