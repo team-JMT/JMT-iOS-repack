@@ -38,6 +38,7 @@ class UserLocationViewController: UIViewController {
         super.viewWillAppear(animated)
         
         self.navigationController?.isNavigationBarHidden = false
+        self.navigationController?.setupBarAppearance(alpha: 1)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -105,7 +106,6 @@ extension UserLocationViewController: UITableViewDelegate {
         if viewModel?.isSearch == false {
             addressTextField.becomeFirstResponder()
             addressTextField.text = viewModel?.recentLocations[indexPath.row] ?? ""
-//            viewModel?.didChangeTextField(keyword: addressTextField.text ?? "")
             viewModel?.handleTextChange(keyword: addressTextField.text ?? "")
             
         } else {
@@ -152,9 +152,6 @@ extension UserLocationViewController: UITableViewDataSourcePrefetching {
 }
 
 extension UserLocationViewController: UITextFieldDelegate {
-//    func textFieldDidChangeSelection(_ textField: UITextField) {
-//        viewModel?.didChangeTextField(keyword: textField.text ?? "")
-//    }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         viewModel?.isSearch = true
