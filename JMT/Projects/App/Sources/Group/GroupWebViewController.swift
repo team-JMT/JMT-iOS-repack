@@ -151,7 +151,7 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
         return nil
     }
     
-    func handleJSONDataBasedOnName(jsonString: String) {
+    private func handleJSONDataBasedOnName(jsonString: String) {
         if let dictionary = parseJSONStringToDictionary(jsonString: jsonString),
            let name = dictionary["name"] as? String {
             switch name {

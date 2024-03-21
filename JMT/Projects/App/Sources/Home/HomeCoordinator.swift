@@ -16,7 +16,9 @@ protocol HomeCoordinator: Coordinator {
     func showSearchRestaurantViewController()
     
     func showSearchTabWithButton()
-    func showGroupTab()
+
+    func setCreateGroupCoordinator()
+    func showCreateGroupViewController()
     
     func setDetailRestaurantCoordinator()
     func showDetailRestaurantViewController(id: Int)
@@ -78,9 +80,18 @@ class DefaultHomeCoordinator: HomeCoordinator {
         }
     }
     
-    func showGroupTab() {
-        let coordinator = parentCoordinator?.childCoordinators[2] as! DefaultGroupCoordinator
-        coordinator.showCreateGroupPage()
+    func setCreateGroupCoordinator() {
+        let coordinator = DefaultCreateGroupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showCreateGroupViewController() {
+        if getChildCoordinator(.createGroup) == nil {
+            setCreateGroupCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.createGroup) as! CreateGroupCoordinator
+        coordinator.start()
     }
     
     func setDetailRestaurantCoordinator() {
@@ -93,7 +104,7 @@ class DefaultHomeCoordinator: HomeCoordinator {
             setDetailRestaurantCoordinator()
         }
         
-        let coordinator = getChildCoordinator(.restaurantDetail) as! DefaultRestaurantDetailCoordinator
+        let coordinator = getChildCoordinator(.restaurantDetail) as! RestaurantDetailCoordinator
         coordinator.start(id: id)
     }
     
@@ -107,6 +118,8 @@ class DefaultHomeCoordinator: HomeCoordinator {
             childCoordinator = childCoordinators.first(where: { $0 is SearchRestaurantCoordinator })
         case .restaurantDetail:
             childCoordinator = childCoordinators.first(where: { $0 is RestaurantDetailCoordinator })
+        case .createGroup:
+            childCoordinator = childCoordinators.first(where: { $0 is CreateGroupCoordinator })
         default:
             break
         }
