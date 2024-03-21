@@ -13,7 +13,8 @@ struct RestaurantReviewModel {
     let userName: String
     let reviewContent: String
     let reviewImages: [String]
-    let reviewerImageUrl: String
+    let reviewerImageUrl: String?
+    let totalCount: Int
 }
 
 

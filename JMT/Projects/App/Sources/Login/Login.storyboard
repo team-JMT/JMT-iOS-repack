@@ -112,7 +112,11 @@
                                 </subviews>
                             </stackView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LoginLogo" translatesAutoresizingMaskIntoConstraints="NO" id="8M8-rY-Cpl">
-                                <rect key="frame" x="111.5" y="187" width="152" height="190"/>
+                                <rect key="frame" x="107.5" y="179.5" width="160" height="205"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="205" id="CbW-Sk-beF"/>
+                                    <constraint firstAttribute="width" constant="160" id="vzR-wM-yhq"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>

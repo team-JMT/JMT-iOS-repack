@@ -62,6 +62,8 @@ class HomeBottomSheetViewController: UIViewController {
             do {
                 try await viewModel?.fetchRecentRestaurantsAsync()
                 try await viewModel?.fetchGroupRestaurantsAsync()
+                try await viewModel?.fetchRestaurantsReviewsAsync()
+                
                 
                 DispatchQueue.main.async {
                     self.viewModel?.isLodingData = false
@@ -103,7 +105,6 @@ class HomeBottomSheetViewController: UIViewController {
            guard let self = self else { return nil }
         
            if self.viewModel?.isLodingData == true {
-               print("------------------------- 1")
                switch sectionIndex {
                case 0:
                    return self.createFirstColumnSection()
@@ -113,7 +114,6 @@ class HomeBottomSheetViewController: UIViewController {
                    return nil
                }
            } else {
-               print("------------------------- 2")
                let isPopularRestaurantsEmpty = self.viewModel?.popularRestaurants.isEmpty ?? true
                let isRestaurantsEmpty = self.viewModel?.restaurants.isEmpty ?? true
 

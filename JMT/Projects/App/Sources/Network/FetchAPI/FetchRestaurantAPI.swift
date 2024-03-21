@@ -10,20 +10,20 @@ import Alamofire
 
 struct FetchRestaurantAPI {
     
-    static func fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest) async throws -> [SearchMapRestaurantItems] {
+    static func fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest) async throws -> SearchMapRestaurantResponse {
         let response = try await AF.request(FetchRestaurantTarget.fetchSearchMapRestaurants(request), interceptor: DefaultRequestInterceptor())
             .validate(statusCode: 200..<300)
             .serializingDecodable(SearchMapRestaurantResponse.self)
             .value
-        return response.data.restaurants
+        return response
     }
 
-    static func fetchSearchRestaurantLocationsAsync(request: SearchRestaurantsLocationRequest) async throws -> [SearchRestaurantsLocationModel] {
+    static func fetchSearchRestaurantLocationsAsync(request: SearchRestaurantsLocationRequest) async throws -> SearchRestaurantsLocationResponse {
         let response = try await AF.request(FetchRestaurantTarget.fetchSearchRestaurantsLocation(request), interceptor: DefaultRequestInterceptor())
             .validate(statusCode: 200..<300)
             .serializingDecodable(SearchRestaurantsLocationResponse.self)
             .value
-        return response.toDomain
+        return response
     }
     
     static func checkRegistrationRestaurantAsync(request: CheckRegistrationRestaurantRequest) async throws -> CheckRegistrationRestaurantResponse {

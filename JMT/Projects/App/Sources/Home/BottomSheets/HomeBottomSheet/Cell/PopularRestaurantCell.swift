@@ -45,7 +45,7 @@ class PopularRestaurantCell: UICollectionViewCell {
         restaurantNameLabel.text = ""
     }
     
-    func setupData(model: SearchMapRestaurantItems?) {
+    func setupData(model: SearchMapRestaurantModel?) {
         
         if let model = model {
             if let url = URL(string: model.restaurantImageUrl ?? "") {

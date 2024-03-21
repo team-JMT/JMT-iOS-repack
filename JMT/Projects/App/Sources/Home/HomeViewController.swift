@@ -376,7 +376,7 @@ extension HomeViewController {
         
         if let markerRestaurants = viewModel?.markerRestaurants {
             for data in markerRestaurants {
-                let marker = NMFMarker(position: NMGLatLng(lat: data.y, lng: data.x))
+                let marker = NMFMarker(position: NMGLatLng(lat: data.x, lng: data.x))
                 let markerImage = UIImage(named: viewModel?.markerImage(category: data.category) ?? "") ?? UIImage()
                 marker.iconImage = NMFOverlayImage(image: markerImage)
                 marker.captionText = data.name

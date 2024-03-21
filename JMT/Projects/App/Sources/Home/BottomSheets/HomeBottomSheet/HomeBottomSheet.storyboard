@@ -258,6 +258,7 @@
                                             <outlet property="restaurantNameLabel" destination="DQL-ac-lEK" id="fqN-ud-Cvh"/>
                                             <outlet property="reviewCommentLabel" destination="e9E-PY-rPL" id="oja-xb-klQ"/>
                                             <outlet property="reviewContainerView" destination="S14-tl-Ttf" id="lAN-8y-jgi"/>
+                                            <outlet property="reviewCountLabel" destination="yWf-qU-iq1" id="jYa-Wv-V8z"/>
                                             <outlet property="reviewNicknameLabel" destination="9HU-dW-BKj" id="OYG-eY-vKQ"/>
                                             <outlet property="reviewUserProfileImageView" destination="o7J-CY-llN" id="wCe-48-8Ku"/>
                                             <outlet property="userNicknameLabel" destination="YRK-Yq-hw2" id="5t8-jq-dmQ"/>
@@ -330,13 +331,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="frr-Mj-LJk">
-                                                    <rect key="frame" x="0.0" y="100" width="315" height="270"/>
+                                                    <rect key="frame" x="0.0" y="124" width="315" height="222"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ResultEmptyImage" translatesAutoresizingMaskIntoConstraints="NO" id="Edu-Ie-A16">
                                                             <rect key="frame" x="107" y="0.0" width="101" height="100"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="관련된 맛집이 없어요" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3su-53-aRN">
-                                                            <rect key="frame" x="91.333333333333329" y="250.66666666666671" width="132.33333333333337" height="19.333333333333343"/>
+                                                            <rect key="frame" x="91.333333333333329" y="202.66666666666669" width="132.33333333333337" height="19.333333333333343"/>
                                                             <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
                                                             <color key="textColor" name="gray300"/>
                                                             <nil key="highlightedColor"/>
@@ -347,8 +348,8 @@
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="frr-Mj-LJk" secondAttribute="trailing" id="794-Gb-lyB"/>
                                                 <constraint firstItem="frr-Mj-LJk" firstAttribute="leading" secondItem="F2M-8V-XqC" secondAttribute="leading" id="S08-7a-IzW"/>
-                                                <constraint firstItem="frr-Mj-LJk" firstAttribute="top" secondItem="F2M-8V-XqC" secondAttribute="top" constant="100" id="VZi-tV-qm7"/>
-                                                <constraint firstAttribute="bottom" secondItem="frr-Mj-LJk" secondAttribute="bottom" constant="100" id="qUd-SC-XTp"/>
+                                                <constraint firstItem="frr-Mj-LJk" firstAttribute="top" secondItem="F2M-8V-XqC" secondAttribute="top" constant="124" id="VZi-tV-qm7"/>
+                                                <constraint firstAttribute="bottom" secondItem="frr-Mj-LJk" secondAttribute="bottom" constant="124" id="qUd-SC-XTp"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="315" height="470"/>

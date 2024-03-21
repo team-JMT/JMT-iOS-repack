@@ -88,11 +88,11 @@ class HomeViewModel {
     
     var groupList: [MyGroupData] = []
 
-    var popularRestaurants: [SearchMapRestaurantItems] = []
-    var restaurants: [SearchMapRestaurantItems] = []
-    var markerRestaurants: [SearchMapRestaurantItems] = []
+    var popularRestaurants: [SearchMapRestaurantModel] = []
+    var restaurants: [SearchMapRestaurantModel] = []
+    var markerRestaurants: [SearchMapRestaurantModel] = []
     
-    var reviews: [FindRestaurantReview] = []
+    var reviews: [FindRestaurantReviewData] = []
     var isFirstLodingData = true
     
     // MARK: - Initialization
@@ -152,7 +152,7 @@ extension HomeViewModel {
         
         do {
             let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
-            self.popularRestaurants.append(contentsOf: data)
+            self.popularRestaurants.append(contentsOf: data.toDomain)
         } catch {
             print(error)
             throw RestaurantError.fetchRecentRestaurantsAsyncError
@@ -190,7 +190,7 @@ extension HomeViewModel {
         
         do {
             let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
-            self.restaurants.append(contentsOf: data)
+            self.restaurants.append(contentsOf: data.toDomain)
         } catch {
             print(error)
             throw RestaurantError.fetchGroupRestaurantsAsyncError
@@ -212,15 +212,29 @@ extension HomeViewModel {
         
         do {
             let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
-            self.markerRestaurants.append(contentsOf: data)
+            self.markerRestaurants.append(contentsOf: data.toDomain)
         } catch {
             print(error)
             throw RestaurantError.fetchMapIncludedRestaurantsAsyncError
         }
     }
     
-    func fetchRestaurantsReviewsAsync() {
+    func fetchRestaurantsReviewsAsync() async throws {
+        var updatedRestaurants = [SearchMapRestaurantModel]()
         
+        for restaurant in restaurants {
+            let reviewData = try await FetchRestaurantAPI.fetchRestaurantReviewsAsync(request: RestaurantReviewRequest(recommendRestaurantId: restaurant.id)).toDomain
+            
+            // 리뷰 데이터를 할당하여 새로운 Restaurant 인스턴스 생성
+            var updatedRestaurant = restaurant
+            updatedRestaurant.reviews = reviewData
+            
+            // 업데이트된 레스토랑을 배열에 추가
+            updatedRestaurants.append(updatedRestaurant)
+        }
+        
+        // 완료된 후, 전체 배열을 업데이트
+        self.restaurants = updatedRestaurants
     }
     
     // MARK: - 위치 관련 메소드
