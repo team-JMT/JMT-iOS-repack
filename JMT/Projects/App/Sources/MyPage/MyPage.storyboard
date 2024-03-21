@@ -775,7 +775,7 @@
                                                     </constraints>
                                                 </view>
                                                 <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="MyPageRegisterResturantTableViewCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MyPageRegisterResturantTableViewCell" rowHeight="120" id="8R1-yN-5ex" customClass="MyPageRegisterResturantTableViewCell" customModule="JMTeng" customModuleProvider="target">
+                                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" restorationIdentifier="MyPageRegisterResturantTableViewCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MyPageRegisterResturantTableViewCell" rowHeight="120" id="8R1-yN-5ex" customClass="MyPageRegisterResturantTableViewCell" customModule="JMTeng" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="94" width="393" height="120"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8R1-yN-5ex" id="2I8-VC-tJm">
