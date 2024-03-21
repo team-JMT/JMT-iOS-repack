@@ -67,6 +67,8 @@ class PhotoKitViewController: UIViewController {
     
     func setupUI() {
         
+        selectedButton.layer.cornerRadius = 8
+        
         photoCountLabel.text = "사진 최대 \(photoKitConfig.library.maxNumberOfItems)장까지 등록 가능합니다"
         selectedButton.setTitle("선택하기 \(selectedPhotos.count)/\(photoKitConfig.library.maxNumberOfItems)", for: .normal)
         
