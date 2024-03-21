@@ -11,8 +11,17 @@ import Alamofire
 class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //따로 뷰모델을 만들지않고 참조만 하기
-   lazy var viewModel = MyPageViewModel()
-
+    lazy var viewModel = MyPageViewModel()
+    
+    private var keychainAccess: KeychainAccessible = DefaultKeychainAccessible()
+    
+    
+    //필터링용
+    var selectedDistance: String = "가까운순"
+    var selectedType: String = ""
+    var selectedAlcohol: Bool = false
+    
+    
     @IBOutlet weak var registerHeaderView: UIView!
     
     @IBOutlet weak var typeFilterView: UIView!
@@ -23,15 +32,13 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var nearFilterView: UIView!
     
     @IBOutlet weak var distanceLabel: UILabel!
-    
-    @IBOutlet weak var distanceButton: UIButton!
-    
     @IBOutlet weak var alcholLabel: UILabel!
-    @IBOutlet weak var typeBtn: UIButton!
     @IBOutlet weak var typeLabel: UILabel!
     
+    @IBOutlet weak var typeBtn: UIButton!
+    @IBOutlet weak var distanceButton: UIButton!
+
     @IBOutlet weak var alcholBtn: UIButton!
-    
     
     
     override func viewDidLoad() {
@@ -43,32 +50,75 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         layout()
         
         
-        viewModel = MyPageViewModel()
-        viewModel.onUserInfoLoaded = { [weak self] in
+        viewModel.onRestaurantsDataUpdated = { [weak self] in
             DispatchQueue.main.async {
                 self?.mainTable.reloadData()
             }
         }
+        
+        distanceButton.layer.zPosition = 1
+        self.view.bringSubviewToFront(distanceButton)
+
         viewModel.fetchUserInfo()
+
+        
+        setupMenus() // 이 함수를 viewDidLoad에 추가합니다.
+
+        // 탭 제스처 인식기를 추가하여 뷰를 탭했을 때 UIMenu를 표시하도록 설정
+        addTapGestureToView(distanceLabel, action: #selector(showDistanceMenuAction))
+        addTapGestureToView(typeLabel, action: #selector(showTypeMenuAction))
+        addTapGestureToView(alcholLabel, action: #selector(showAlcoholMenuAction))
     }
-    
-    
-    
+
+    // 뷰에 탭 제스처 인식기를 추가하는 메서드
+    private func addTapGestureToView(_ view: UIView, action: Selector) {
+        let tapGesture = UITapGestureRecognizer(target: self, action: action)
+        view.addGestureRecognizer(tapGesture)
+        view.isUserInteractionEnabled = true // 뷰의 사용자 인터랙션 활성화
+    }
     
     func getUserInfo() {
         UserInfoAPI.getLoginInfo { response in
             switch response {
             case .success(let info):
-               print(1)
+                print(1)
             case .failure(let error):
                 print("getUserInfo 실패!!", error)
-              //self.onFailure?()
+                //self.onFailure?()
             }
         }
     }
     
-        
-    
+    func setupMenus() {
+        // 거리 필터 메뉴 설정
+        let distanceActions = [
+            UIAction(title: "가까운순", handler: { [weak self] _ in self?.handleDistanceFilterChange("가까운순") }),
+            UIAction(title: "좋아요", handler: { [weak self] _ in self?.handleDistanceFilterChange("좋아요") }),
+            UIAction(title: "최신순", handler: { [weak self] _ in self?.handleDistanceFilterChange("최신순") })
+        ]
+        distanceButton.menu = UIMenu(title: "", children: distanceActions)
+        distanceButton.showsMenuAsPrimaryAction = true
+
+//        // 음식 종류 필터 메뉴 설정
+//        let typeActions = FoodType.allCases.map { foodType in
+//            UIAction(title: foodType.name, image: nil) { [weak self] _ in
+//                self?.selectedType = foodType.filter.rawValue
+//                self?.typeLabel.text = foodType.name
+//                self?.fetchRestaurants()
+//            }
+//        }
+//        typeBtn.menu = UIMenu(title: "", children: typeActions)
+//        typeBtn.showsMenuAsPrimaryAction = true
+
+        // 알코올 필터 메뉴 설정
+        let alcoholActions = [
+            UIAction(title: "주류가능", handler: { [weak self] _ in self?.handleAlcoholFilterChange(true) }),
+            UIAction(title: "주류불가능/모름", handler: { [weak self] _ in self?.handleAlcoholFilterChange(false) })
+        ]
+        alcholBtn.menu = UIMenu(title: "", children: alcoholActions)
+        alcholBtn.showsMenuAsPrimaryAction = true
+    }
+
     
     func layout() {
         nearFilterView.layer.cornerRadius = nearFilterView.frame.height / 2
@@ -81,129 +131,119 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         alcholrFilterView.clipsToBounds = true
     }
     
-    
+    func fetchRestaurants() {
+        print("Fetching restaurants with selectedType: \(selectedType), selectedAlcohol: \(selectedAlcohol)")
+        guard let accessToken = keychainAccess.getToken("accessToken") else {
+            print("Access Token is not available")
+            return
+        }
+
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+
+        let url = "https://api.jmt-matzip.dev/api/v1/restaurant/search?page=0&size=20"
+        var filterParameters: [String: Any] = [:]
+        if !selectedType.isEmpty {
+            filterParameters["categoryFilter"] = selectedType
+        }
+        filterParameters["isCanDrinkLiquor"] = selectedAlcohol
+        
+        let parameters: [String: Any] = [
+            "userLocation": ["x": "127.0596", "y": "37.6633"],
+            "filter": filterParameters
+        ]
+        
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: ResturantResponse.self) { [weak self] response in
+            guard let self = self else { return }
+            
+            switch response.result {
+            case .success(let responseData):
+                print("Successfully fetched restaurants data")
+                // 필터링 로직을 여기에 추가합니다. 예: responseData.data?.restaurants.filter { ... }
+                let filteredData = responseData.data?.restaurants?.filter { restaurant in
+                    // 필터 조건에 맞는 데이터만 반환합니다. 예시입니다.
+                    // return restaurant.category == self.selectedType && restaurant.canDrinkAlcohol == self.selectedAlcohol
+                    true // 실제 조건에 맞는 로직으로 대체해야 합니다.
+                } ?? []
+                self.viewModel.restaurantsData = filteredData
+                DispatchQueue.main.async {
+                    self.mainTable.reloadData() // 확실하게 메인 스레드에서 호출
+                }
+            case .failure(let error):
+                print("Error fetching restaurants data: \(error)")
+            }
+        }
+    }
+
+
     
     //가까운순 필터링
-//    @objc func showDistanceMenu() {
-//        let action1 = UIAction(title: "가까운순", image: nil, identifier: nil) { [weak self] action in
-//            print("가까운순 selected")
-//            self?.distanceLabel.text = "가까운순"
-//            self?.fetchRestaurants(){}
-//            
-//        }
-//        
-//        let action2 = UIAction(title: "좋아요", image: nil, identifier: nil) { action in
-//            print("좋아요 selected")
-//            self.distanceLabel.text = "좋아요"
-//            self.fetchRestaurants(){}
-//            
-//            
-//        }
-//        
-//        let action3 = UIAction(title: "최신순", image: nil, identifier: nil) { action in
-//            print("최신순 selected")
-//            
-//            self.distanceLabel.text = "최신순"
-//            self.fetchRestaurants(){}
-//            
-//            
-//        }
-//        
-//        let menu = UIMenu(image: nil, identifier: nil, children: [action1, action2, action3])
-//        
-//        distanceButton.menu = menu
-//        distanceButton.showsMenuAsPrimaryAction = true
-//        
-//    }
     
+    @objc func showDistanceMenuAction() {
+        let actions = [
+            UIAction(title: "가까운순", handler: { [weak self] _ in self?.handleDistanceFilterChange("가까운순") }),
+            UIAction(title: "좋아요", handler: { [weak self] _ in self?.handleDistanceFilterChange("좋아요") }),
+            UIAction(title: "최신순", handler: { [weak self] _ in self?.handleDistanceFilterChange("최신순") })
+        ]
+        distanceButton.menu = UIMenu(title: "", children: actions)
+        distanceButton.showsMenuAsPrimaryAction = true
+    }
     
-    //종류 필터링
-//    @objc func showTypeMenu() {
-//        let foodTypes: [FoodType] = [
-//            FoodType(filter: .KOREA),
-//            FoodType(filter: .JAPAN),
-//            FoodType(filter: .CHINA),
-//            FoodType(filter: .FOREIGN),
-//            FoodType(filter: .CAFE),
-//            FoodType(filter: .BAR),
-//            FoodType(filter: .ETC)
-//        ]
-//        print("Selected type: \(selectedType)")
-//        
-//        let actions = foodTypes.map { foodType -> UIAction in
-//            return UIAction(title: foodType.name, image: foodType.image, identifier: nil) { [weak self] action in
-//                print("\(foodType.filter.rawValue) selected")
-//                self?.typeLabel.text = foodType.name
-//                
-//                //필터링으로 나눈것 가져오기
-//                self?.selectedType = foodType.identifier
-//                
-//                // 필터링된 데이터를 다시 불러옵니다.
-//                self?.fetchRestaurants(){
-//                    DispatchQueue.main.async {
-//                        self?.registerResturantTV.reloadData()
-//                    }
-//                }
-//            }
-//            print(self.restaurants)
-//            
-//        }
-//        
-//        let menu = UIMenu(image: nil, identifier: nil, children: actions)
-//        
-//        typeBtn.menu = menu
-//        typeBtn.showsMenuAsPrimaryAction = true
-//    }
+    @objc func showTypeMenuAction() {
+        let foodTypes: [FoodType] = [
+            FoodType(filter: .KOREA),
+            FoodType(filter: .JAPAN),
+            FoodType(filter: .CHINA),
+            FoodType(filter: .FOREIGN),
+            FoodType(filter: .CAFE),
+            FoodType(filter: .BAR),
+            FoodType(filter: .ETC)
+        ]
+        
+        let actions = foodTypes.map { foodType in
+            UIAction(title: foodType.name, image: nil) { [weak self] _ in
+                self?.selectedType = foodType.filter.rawValue
+                self?.typeLabel.text = foodType.name
+                self?.fetchRestaurants()
+            }
+        }
+        
+        typeBtn.menu = UIMenu(title: "", children: actions)
+        typeBtn.showsMenuAsPrimaryAction = true
+    }
     
     
     
     
+    @objc func showAlcoholMenuAction() {
+        let actions = [
+            UIAction(title: "주류가능", handler: { [weak self] _ in self?.handleAlcoholFilterChange(true) }),
+            UIAction(title: "주류불가능/모름", handler: { [weak self] _ in self?.handleAlcoholFilterChange(false) })
+        ]
+        
+        alcholBtn.menu = UIMenu(title: "", children: actions)
+        alcholBtn.showsMenuAsPrimaryAction = true
+    }
     
+    func handleDistanceFilterChange(_ filter: String) {
+        selectedDistance = filter
+        distanceLabel.text = filter
+        fetchRestaurants()
+    }
     
-//    //주류여부 필터링
-//    @objc func showAlcoholMenu() {
-//        let action1 = UIAction(title: "주류가능", image: nil, identifier: nil) { [weak self] action in
-//            // Handle action here for Beer
-//            print("주류가능 selected")
-//            self?.alcholLabel.text = "주류가능"
-//            self?.fetchRestaurants() {
-//                DispatchQueue.main.async {
-//                    self?.registerResturantTV.reloadData()
-//                }
-//                self?.updateFilterViewSize()
-//                
-//            }
-//            
-//            
-//        }
-//        
-//        let action2 = UIAction(title: "주류불가능/모름", image: nil, identifier: nil) { [weak self] action in
-//            // Handle action here for Wine
-//            print("주류불가능/모름 selected")
-//            self?.alcholLabel.text = "주류불가능/모름"
-//            self?.fetchRestaurants() {
-//                DispatchQueue.main.async {
-//                    self?.mainTable.reloadData()
-//                }
-//                self?.updateFilterViewSize()
-//                
-//            }
-//            
-//            
-//        }
-//        
-//        
-//        
-//        let menu = UIMenu(image: nil, identifier: nil, children: [action1, action2])
-//        
-//        alcholBtn.menu = menu
-//        alcholBtn.showsMenuAsPrimaryAction = true
-//    }
+    func handleAlcoholFilterChange(_ canDrink: Bool) {
+        selectedAlcohol = canDrink
+        alcholLabel.text = canDrink ? "주류가능" : "주류불가능/모름"
+        fetchRestaurants()
+    }
     
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        
+        return viewModel.restaurantsData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -211,8 +251,10 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
             return UITableViewCell()
         }
         
-        cell.MyNickname?.text = viewModel.userInfo?.data?.nickname
-
+        let restaurant = viewModel.restaurantsData[indexPath.row]
+        cell.configure(with: restaurant)
+        
+        
         if let userInfo = viewModel.userInfo?.data {
             if let imageUrl = URL(string: userInfo.profileImg) {
                 AF.request(imageUrl).responseData { [weak cell] response in
@@ -230,5 +272,20 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         
         return cell
     }
-
+    
+    
+    @IBAction func didtapDistance(_ sender: Any) {
+            showDistanceMenuAction()
+        }
+    
+    
+    @IBAction func typeBtn(_ sender: Any) {
+        showTypeMenuAction()
+    }
+    
+    @IBAction func alcholBtn(_ sender: Any) {
+        showAlcoholMenuAction()
+    }
+    
 }
+

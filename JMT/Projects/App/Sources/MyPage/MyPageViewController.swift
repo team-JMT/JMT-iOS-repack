@@ -39,41 +39,28 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupSegmentedControl()
         setupFixedHeaderView()
         switchToViewController(at: MyPageSegment.selectedSegmentIndex)
-        
+
         viewModel.onUserInfoLoaded = { [weak self] in
             DispatchQueue.main.async {
                 self?.updateUI()
             }
         }
         viewModel.fetchUserInfo()
-        
-        // 맛집 정보가 업데이트될 때 호출될 클로저 설정
+        viewModel.fetchRestaurants() // 여기에서만 맛집 정보를 가져옵니다.
+
         viewModel.onTotalRestaurantsUpdated = { [weak self] in
             guard let self = self, let totalRestaurants = self.viewModel.totalRestaurants else { return }
             DispatchQueue.main.async {
-                self.registerResturant.text = "등록한 맛집 수: \(self.viewModel.numberOfRestaurants ?? 0)"
+                self.registerResturant.text = "\(totalRestaurants)"
             }
-            print("등록맛집개수 \(self.viewModel.numberOfRestaurants)")
-            
-            viewModel.onRestaurantsDataUpdated = { [weak self] in
-                DispatchQueue.main.async {
-                    print(1)
-                }
-                
-                
-                if let userId = self?.viewModel.userId {
-                    self?.viewModel.fetchRestaurants(userId: userId)
-                } else {
-                    print("UserId not available")
-                }
-                
-            }
+            print("등록맛집개수 \(totalRestaurants)")
         }
     }
+
     
     private func updateUI() {
         if let userInfo = viewModel.userInfo {

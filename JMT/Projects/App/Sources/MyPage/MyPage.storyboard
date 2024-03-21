@@ -575,7 +575,10 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="alcholrFilterView" destination="UXZ-xn-9Fn" id="fxi-bM-OGK"/>
                         <outlet property="likedReply" destination="sBQ-4V-ESn" id="Rj4-OY-0aX"/>
+                        <outlet property="nearfilterView" destination="8g7-ek-svC" id="Szc-Ka-8nZ"/>
+                        <outlet property="typeFilterView" destination="E3z-hn-ELI" id="Nmq-CI-hKc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uph-Wj-GDU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -640,34 +643,30 @@
                                                                                 <constraint firstAttribute="height" constant="10" id="uVc-iS-rOy"/>
                                                                             </constraints>
                                                                         </imageView>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A9I-Gk-PmZ">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="80" height="24"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="width" constant="80" id="c7D-cP-fEb"/>
-                                                                            </constraints>
-                                                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <state key="normal" title="Button"/>
-                                                                            <buttonConfiguration key="configuration" style="plain"/>
-                                                                        </button>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="가까운순" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZd-1J-rUU">
                                                                             <rect key="frame" x="11.999999999999996" y="6" width="41.666666666666657" height="13"/>
                                                                             <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
                                                                             <nil key="textColor"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
+                                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aha-mU-T4y">
+                                                                            <rect key="frame" x="-3" y="-5" width="75" height="35"/>
+                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                            <state key="normal" title="Button"/>
+                                                                            <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                                            <connections>
+                                                                                <action selector="didtapDistance:" destination="7Pg-Oa-rDb" eventType="touchUpInside" id="jPk-rZ-eBk"/>
+                                                                            </connections>
+                                                                        </button>
                                                                     </subviews>
                                                                     <color key="backgroundColor" name="gray100"/>
                                                                     <constraints>
                                                                         <constraint firstItem="dZd-1J-rUU" firstAttribute="leading" secondItem="xCL-cq-jIa" secondAttribute="leading" constant="12" id="0hu-3X-DWj"/>
-                                                                        <constraint firstItem="A9I-Gk-PmZ" firstAttribute="top" secondItem="xCL-cq-jIa" secondAttribute="top" id="4wg-f8-z2I"/>
-                                                                        <constraint firstItem="iLI-PG-RGw" firstAttribute="leading" secondItem="A9I-Gk-PmZ" secondAttribute="trailing" constant="-18" id="Kr5-2q-sIg"/>
                                                                         <constraint firstAttribute="width" constant="80" id="QkQ-To-QZI"/>
                                                                         <constraint firstItem="dZd-1J-rUU" firstAttribute="top" secondItem="xCL-cq-jIa" secondAttribute="top" constant="6" id="T7W-Dy-w1j"/>
-                                                                        <constraint firstItem="A9I-Gk-PmZ" firstAttribute="leading" secondItem="xCL-cq-jIa" secondAttribute="leading" id="TYv-iB-QW0"/>
                                                                         <constraint firstAttribute="bottom" secondItem="dZd-1J-rUU" secondAttribute="bottom" constant="5" id="YFP-zu-H7S"/>
                                                                         <constraint firstAttribute="height" constant="26" id="fWS-GP-UKO"/>
                                                                         <constraint firstItem="iLI-PG-RGw" firstAttribute="centerY" secondItem="dZd-1J-rUU" secondAttribute="centerY" id="i9i-Ye-nrC"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="A9I-Gk-PmZ" secondAttribute="bottom" id="uVz-rg-BwB"/>
                                                                         <constraint firstItem="iLI-PG-RGw" firstAttribute="leading" secondItem="xCL-cq-jIa" secondAttribute="leading" constant="62" id="vJx-cj-xiQ"/>
                                                                     </constraints>
                                                                 </view>
@@ -679,6 +678,9 @@
                                                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <state key="normal" title="Button"/>
                                                                             <buttonConfiguration key="configuration" style="plain"/>
+                                                                            <connections>
+                                                                                <action selector="typeBtn:" destination="7Pg-Oa-rDb" eventType="touchUpInside" id="dRQ-GT-aWs"/>
+                                                                            </connections>
                                                                         </button>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrowBottom" translatesAutoresizingMaskIntoConstraints="NO" id="ElU-Ri-V5X">
                                                                             <rect key="frame" x="44" y="7" width="10" height="10"/>
@@ -726,6 +728,9 @@
                                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <state key="normal" title="Button"/>
                                                                     <buttonConfiguration key="configuration" style="plain"/>
+                                                                    <connections>
+                                                                        <action selector="alcholBtn:" destination="7Pg-Oa-rDb" eventType="touchUpInside" id="Tha-Mo-Lk2"/>
+                                                                    </connections>
                                                                 </button>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrowBottom" translatesAutoresizingMaskIntoConstraints="NO" id="MdL-KN-22g">
                                                                     <rect key="frame" x="130" y="7" width="10" height="10"/>
@@ -760,6 +765,7 @@
                                                         </view>
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="bottom" secondItem="a4F-vQ-9z8" secondAttribute="bottom" constant="4" id="SUw-Ia-bj5"/>
                                                         <constraint firstAttribute="bottom" secondItem="B3M-xz-GIc" secondAttribute="bottom" constant="4" id="XyW-4S-iZW"/>
@@ -916,7 +922,7 @@
                         <outlet property="alcholBtn" destination="4hX-HD-apC" id="6mD-LP-oDi"/>
                         <outlet property="alcholLabel" destination="ezO-Lm-Gpl" id="qWb-we-8ij"/>
                         <outlet property="alcholrFilterView" destination="a4F-vQ-9z8" id="occ-kT-0TM"/>
-                        <outlet property="distanceButton" destination="A9I-Gk-PmZ" id="ld4-Ny-Oo6"/>
+                        <outlet property="distanceButton" destination="aha-mU-T4y" id="8wH-qR-Jo1"/>
                         <outlet property="distanceLabel" destination="dZd-1J-rUU" id="mi1-da-d6K"/>
                         <outlet property="mainTable" destination="fRQ-Cy-tR2" id="qde-sX-bH1"/>
                         <outlet property="nearFilterView" destination="xCL-cq-jIa" id="tKU-2l-GM1"/>

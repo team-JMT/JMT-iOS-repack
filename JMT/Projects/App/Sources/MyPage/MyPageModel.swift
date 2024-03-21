@@ -43,8 +43,9 @@ struct Restaurant: Codable {
     let id: Int?
     let name, placeURL, phone, address: String?
     let roadAddress: String?
-    let x, y: Int?
-    let restaurantImageURL, introduce, category, userNickName: String?
+    let x, y: Double?
+    let restaurantImageURL, introduce, category, userNickName, groupName: String?
+    let groupId : Int?
     let userProfileImageURL: String?
     let canDrinkLiquor: Bool?
     let differenceInDistance: String?
