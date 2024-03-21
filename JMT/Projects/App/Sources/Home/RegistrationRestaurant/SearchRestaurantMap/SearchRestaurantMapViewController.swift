@@ -97,15 +97,14 @@ class SearchRestaurantMapViewController: UIViewController {
         let lat = viewModel?.info?.y ?? 0.0
         let lon = viewModel?.info?.x ?? 0.0
         
+        let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lon))
+        let markerImage = JMTengAsset.mapPin.image
+        marker.iconImage = NMFOverlayImage(image: markerImage)
+        marker.mapView = naverMapView.mapView
+        
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
         cameraUpdate.animation = .easeIn
         self.naverMapView.mapView.moveCamera(cameraUpdate)
-        
-        let marker = NMFMarker()
-        marker.position = NMGLatLng(lat: lat, lng: lon)
-        
-        // 카테고리에 따라서 마커 이미지 변경
-        marker.mapView = naverMapView.mapView
     }
 }
 
