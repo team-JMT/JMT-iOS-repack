@@ -43,7 +43,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="중식" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IFm-08-kJR">
-                                        <rect key="frame" x="127.66666666666667" y="43.666666666666657" width="27.666666666666671" height="19.333333333333329"/>
+                                        <rect key="frame" x="127.66666666666666" y="43.666666666666657" width="28" height="19.333333333333329"/>
                                         <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
                                         <color key="textColor" name="gray900"/>
                                         <nil key="highlightedColor"/>
@@ -150,8 +150,11 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RlP-sL-sp3">
-                                        <rect key="frame" x="332" y="54" width="41" height="29"/>
+                                        <rect key="frame" x="332" y="50" width="41" height="33"/>
                                         <color key="backgroundColor" name="main500"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="33" id="ukC-Ze-cKq"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                                         <inset key="contentEdgeInsets" minX="8" minY="6" maxX="8" maxY="6"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -941,7 +944,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="AddReviewImage" width="32" height="32"/>
+        <image name="AddReviewImage" width="24" height="24"/>
         <image name="EmptyResult" width="161" height="110"/>
         <image name="ReviewXmark" width="16" height="16"/>
         <namedColor name="gray100">

@@ -218,7 +218,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         reviewTextView.textContainer.lineFragmentPadding = 0
         reviewTextView.alignTextVerticallyInContainer()
         
-        doneReviewButton.layer.cornerRadius = 8
+        doneReviewButton.layer.cornerRadius = 6
     }
     
     // MARK: - Actions
