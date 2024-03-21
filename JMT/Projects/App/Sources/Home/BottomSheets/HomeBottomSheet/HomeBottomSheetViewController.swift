@@ -83,6 +83,9 @@ class HomeBottomSheetViewController: UIViewController {
         moveTopButton.layer.cornerRadius = moveTopButton.frame.height / 2
         addButton.layer.cornerRadius = addButton.frame.height / 2
         
+        moveTopButton.addShadow()
+        addButton.addShadow()
+        
         // 리셋 버튼
         resetButton.layer.cornerRadius = 8
         resetButton.layer.borderColor = JMTengAsset.gray200.color.cgColor

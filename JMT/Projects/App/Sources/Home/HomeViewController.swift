@@ -229,6 +229,7 @@ class HomeViewController: UIViewController {
         locationButton.layer.shadowColor = JMTengAsset.gray200.color.cgColor
         locationButton.layer.shadowOpacity = 1
         locationButton.layer.shadowRadius = 5
+        locationButton.addShadow()
     }
     
     // 초기 UI 설정
