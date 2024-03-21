@@ -35,6 +35,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var topContainerViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var locationStackView: UIStackView!
+    @IBOutlet weak var refreshRestaurantButton: UIButton!
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
     
@@ -63,7 +64,7 @@ class HomeViewController: UIViewController {
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
-
+    
     
     func fetchData() {
         
@@ -224,6 +225,10 @@ class HomeViewController: UIViewController {
         naverMapView.showScaleBar = false
         naverMapView.showZoomControls = false
         naverMapView.mapView.positionMode = .direction
+        
+        locationButton.layer.shadowColor = JMTengAsset.gray200.color.cgColor
+        locationButton.layer.shadowOpacity = 1
+        locationButton.layer.shadowRadius = 5
     }
     
     // 초기 UI 설정
@@ -329,11 +334,11 @@ extension HomeViewController: FloatingPanelControllerDelegate {
             switch fpc.state {
             case .full:
                 fpc.setPanelStyle(radius: 0, isHidden: true)
-                locationStackView.isHidden = true
+//                locationStackView.isHidden = true
                 
             case .half:
                 fpc.setPanelStyle(radius: 24, isHidden: false)
-                locationStackView.isHidden = false
+//                locationStackView.isHidden = false
             default:
                 print("")
             }

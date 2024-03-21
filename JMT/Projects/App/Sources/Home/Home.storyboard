@@ -163,6 +163,7 @@
                         <outlet property="locationButtonBottom" destination="5TB-hz-1Ev" id="3gr-Z9-apu"/>
                         <outlet property="locationStackView" destination="jEB-fM-TdX" id="dU7-yG-9c6"/>
                         <outlet property="naverMapView" destination="Gz2-he-OL7" id="UmZ-u2-ujW"/>
+                        <outlet property="refreshRestaurantButton" destination="0Bf-jH-8UY" id="bsc-dJ-Hhv"/>
                         <outlet property="topContainerView" destination="srQ-dG-9DL" id="g7O-KE-kCD"/>
                         <outlet property="topContainerViewHeight" destination="8Bc-j9-5CX" id="rzl-9K-tvQ"/>
                         <outlet property="topDummyView" destination="dh8-u2-qgJ" id="GNw-Ry-rUm"/>
