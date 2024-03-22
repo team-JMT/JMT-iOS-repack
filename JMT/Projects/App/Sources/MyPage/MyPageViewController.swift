@@ -11,7 +11,8 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
 
 {
     //weak var coordinator: MyPageCoordinator?
-    var viewModel = MyPageViewModel()
+//    var viewModel = MyPageViewModel()
+    var viewModel: MyPageViewModel?
     var restaurants: [Restaurant] = []
     
     
@@ -39,21 +40,21 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupSegmentedControl()
         setupFixedHeaderView()
         switchToViewController(at: MyPageSegment.selectedSegmentIndex)
 
-        viewModel.onUserInfoLoaded = { [weak self] in
+        viewModel?.onUserInfoLoaded = { [weak self] in
             DispatchQueue.main.async {
                 self?.updateUI()
             }
         }
-        viewModel.fetchUserInfo()
-        viewModel.fetchRestaurants() // 여기에서만 맛집 정보를 가져옵니다.
+        viewModel?.fetchUserInfo()
+        viewModel?.fetchRestaurants() // 여기에서만 맛집 정보를 가져옵니다.
 
-        viewModel.onTotalRestaurantsUpdated = { [weak self] in
-            guard let self = self, let totalRestaurants = self.viewModel.totalRestaurants else { return }
+        viewModel?.onTotalRestaurantsUpdated = { [weak self] in
+            guard let self = self, let totalRestaurants = self.viewModel?.totalRestaurants else { return }
             DispatchQueue.main.async {
                 self.registerResturant.text = "\(totalRestaurants)"
             }
@@ -63,7 +64,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
 
     
     private func updateUI() {
-        if let userInfo = viewModel.userInfo {
+        if let userInfo = viewModel?.userInfo {
             NickNameLabel.text = userInfo.data?.nickname
             //fetchRestaurantInfo.text = userInfo.data?.email
             if let imageUrl = URL(string: userInfo.data?.profileImg ?? "") {
@@ -120,9 +121,18 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
         guard index >= 0 && index < viewControllerIdentifiers.count else { return }
         let identifier = viewControllerIdentifiers[index]
         if let newViewController = storyboard?.instantiateViewController(withIdentifier: identifier) {
+            
+            if let first = newViewController as? FirstSegmentViewController {
+                first.viewModel = self.viewModel
+            }
+            
+            if let second = newViewController as? SecondSegmentViewController {
+                second.viewModel = self.viewModel
+            }
+         
             // 이전 뷰 컨트롤러 제거
             removeCurrentViewController()
-            
+
             // 새 뷰 컨트롤러를 자식으로 추가
             addChild(newViewController)
             containerView.addSubview(newViewController.view)
@@ -157,7 +167,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     }
     
     @IBAction func DetailMyPage(_ sender: Any) {
-        viewModel.coordinator?.showDetailMyPageVieController()
+        viewModel?.coordinator?.showDetailMyPageVieController()
         
     }
     

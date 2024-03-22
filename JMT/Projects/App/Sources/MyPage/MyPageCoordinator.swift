@@ -17,6 +17,9 @@ protocol MyPageCoordinator: Coordinator {
     func setDetailMyPageCoordinator()
     func showDetailMyPageVieController()
     
+    func setRestaurantCoordinator()
+    func showRestaurantDetail(for restaurantId: Int)
+
 }
 
 class DefaultMyPageCoordinator: MyPageCoordinator {
@@ -36,10 +39,11 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
     func start() {
         let mypageViewController = MyPageViewController.instantiateFromStoryboard(storyboardName: "MyPage") as MyPageViewController
         
-        mypageViewController.viewModel.coordinator = self
+        mypageViewController.viewModel?.coordinator = self
         self.navigationController?.pushViewController(mypageViewController, animated: true)
     }
     
+
     
     func goToDetailView(for segmentIndex: Int) {
         //   goToSegmentViewController(for : segmentIndex)
@@ -69,13 +73,26 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
     }
     
     func showDetailMyPageVieController() {
-        if getChildCoordinator(.detailMyPage) == nil {
-            setDetailMyPageCoordinator()
+      
+        
+    }
+    
+  
+    
+    func setRestaurantCoordinator() {
+        let coordinator = DefaultRestaurantDetailCoordinator(navigationController: self.navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showRestaurantDetail(for restaurantId: Int) {
+        if getChildCoordinator(.restaurantDetail) == nil {
+            setRestaurantCoordinator()
         }
         
-        let coordinator = getChildCoordinator(.detailMyPage) as! DetailMyPageCoordinator
-        coordinator.start()
+        let coordinator = getChildCoordinator(.restaurantDetail) as! RestaurantDetailCoordinator
+        coordinator.start(id: restaurantId)
     }
+
     
     
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
@@ -84,6 +101,8 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
         switch type {
         case .detailMyPage:
             childCoordinator = childCoordinators.first(where:  { $0 is DetailMyPageCoordinator })
+        case .restaurantDetail:
+            childCoordinator = childCoordinators.first(where:  { $0 is RestaurantDetailCoordinator })
         default:
             break
         }

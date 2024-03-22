@@ -16,6 +16,7 @@ class SecondSegmentViewController: UIViewController, UITableViewDelegate, UITabl
     var imageNames: [String] = [] // 이미지 이름 배열을 저장할 프로퍼티 추가
     var reviews: [Review] = [] // 서버에서 받아온 리뷰 데이터를 저장할 배열
 
+    var viewModel: MyPageViewModel?
 
     @IBOutlet weak var likedReply: UITableView!
     

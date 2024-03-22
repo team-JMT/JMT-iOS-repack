@@ -71,7 +71,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupUI()
         setupBind()
         
@@ -84,6 +84,9 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
                 self.setupData()
                             
                 self.viewModel?.didCompletedRestaurant?()
+                
+                
+                print("------", viewModel)
                 
             } catch {
                 print(error)
@@ -107,7 +110,10 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
             setCustomNavigationBarBackButton(goToViewController: .popVC)
         } else if viewModel?.coordinator?.parentCoordinator is DefaultRegistrationRestaurantInfoCoordinator {
             setCustomNavigationBarBackButton(goToViewController: .popToRootVC)
-        } 
+        } else if viewModel?.coordinator?.parentCoordinator is DefaultMyPageCoordinator {
+            setCustomNavigationBarBackButton(goToViewController: .popVC)
+        }
+        
         
         setupKeyboardEvent { [weak self] noti in
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
