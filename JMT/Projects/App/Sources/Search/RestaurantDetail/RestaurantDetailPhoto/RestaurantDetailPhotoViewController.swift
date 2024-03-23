@@ -57,7 +57,7 @@ class RestaurantDetailPhotoViewController: UIViewController {
             
             // Header
             section.boundarySupplementaryItems = [
-                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(21)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
             ]
             
             // Background
@@ -84,7 +84,7 @@ class RestaurantDetailPhotoViewController: UIViewController {
             
             // Header
             section.boundarySupplementaryItems = [
-                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(21)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
             ]
             
             // Background
@@ -114,7 +114,8 @@ extension RestaurantDetailPhotoViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath)
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? RestaurantPhotoHeaderView else { return UICollectionReusableView() }
+            header.setupCountLabel(count: viewModel?.restaurantData?.reviewImageTotalCount ?? 0)
             return header
         default:
             return UICollectionReusableView()

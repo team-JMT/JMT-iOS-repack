@@ -160,7 +160,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         if viewModel?.locationManager.coordinate == nil {
             differenceInDistanceLabel.text = "알 수 없음"
         } else {
-            differenceInDistanceLabel.text = "위치에서 \(viewModel?.restaurantData?.differenceInDistance ?? "")m"
+            differenceInDistanceLabel.text = "위치에서 \((Int(viewModel?.restaurantData?.differenceInDistance ?? "") ?? 0).distanceWithUnit())"
         }
         
         categoryLabel.text = viewModel?.restaurantData?.category ?? ""
@@ -217,6 +217,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         reviewTextView.textContainerInset = .zero
         reviewTextView.textContainer.lineFragmentPadding = 0
         reviewTextView.alignTextVerticallyInContainer()
+        
         
         doneReviewButton.layer.cornerRadius = 6
     }

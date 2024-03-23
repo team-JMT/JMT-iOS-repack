@@ -15,9 +15,14 @@ class RestaurantDetailInfoViewController: UIViewController {
     
     private var oldContentOffset = CGPoint.zero
     
+    var currentPhotoPage: Int = 1
+    
     @IBOutlet weak var rootScrollView: UIScrollView!
     @IBOutlet weak var photoCollectionContainerView: UIView!
     @IBOutlet weak var photoCollectionView: UICollectionView!
+    
+    @IBOutlet weak var pageControl: UIPageControl!
+    @IBOutlet weak var photoCountLabel: UILabel!
     
     @IBOutlet weak var infoCollectionView: UICollectionView!
     @IBOutlet weak var infoCollectionViewHeight: NSLayoutConstraint!
@@ -42,6 +47,9 @@ class RestaurantDetailInfoViewController: UIViewController {
     func setupBind() {
         viewModel?.didCompletedRestaurant = {
             DispatchQueue.main.async {
+                
+                self.updatePhotoCount()
+                
                 self.photoCollectionView.reloadData()
                 self.infoCollectionView.reloadData()
                 
@@ -64,10 +72,26 @@ class RestaurantDetailInfoViewController: UIViewController {
     // MARK: - FetchData
     
     // MARK: - SetupData
+    func updatePhotoCount() {
+        photoCountLabel.text = "\(self.currentPhotoPage) / 10"
+        
+        // 페이지 컨트롤 설정
+        pageControl.numberOfPages = viewModel?.restaurantData?.pictures.count ?? 0
+        pageControl.currentPage = 0
+    }
     
     // MARK: - SetupUI
     func setupUI() {
         photoCollectionView.layer.cornerRadius = 8
+    }
+    
+    @IBAction func didTabPageControl(_ sender: Any) {
+        guard let pageControl = sender as? UIPageControl else { return }
+        
+        let indexPath = IndexPath(item: pageControl.currentPage, section: 0)
+        currentPhotoPage = pageControl.currentPage
+        photoCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        photoCountLabel.text = "\(self.currentPhotoPage + 1) / 10"
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -391,6 +415,15 @@ extension RestaurantDetailInfoViewController: UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         viewModel?.onScrollBeginDismissKeyboard?()
+    }
+        
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let visibleRect = CGRect(origin: photoCollectionView.contentOffset, size: photoCollectionView.bounds.size)
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+        if let visibleIndexPath = photoCollectionView.indexPathForItem(at: visiblePoint) {
+            photoCountLabel.text = "\(visibleIndexPath.row + 1) / 10"
+            pageControl.currentPage = visibleIndexPath.row
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
