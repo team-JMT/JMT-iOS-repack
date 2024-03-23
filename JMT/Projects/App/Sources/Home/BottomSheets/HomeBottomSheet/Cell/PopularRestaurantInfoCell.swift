@@ -11,6 +11,11 @@ import Kingfisher
 
 class PopularRestaurantInfoCell: UICollectionViewCell {
     
+    @IBOutlet weak var categoryView: UIView!
+    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var drinkLiquorView: UIView!
+    @IBOutlet weak var drinkLiquorLabel: UILabel!
+    
     @IBOutlet weak var userProfileImageView: UIImageView!
     @IBOutlet weak var userNicknameLabel: UILabel!
     
@@ -28,6 +33,9 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
         super.awakeFromNib()
         
         self.isSkeletonable = true
+        
+        categoryView.layer.cornerRadius = 4
+        drinkLiquorView.layer.cornerRadius = 4
         
         userProfileImageView.layer.cornerRadius = userProfileImageView.frame.height / 2
         restaurantImageView.layer.cornerRadius = 16
@@ -47,6 +55,8 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
         introduceLabel.text = nil
         reviewContainerView.isHidden = true
         reviewCountLabel.text = nil
+        categoryLabel.text = nil
+        drinkLiquorLabel.text = nil
     }
     
     func setupData(model: SearchMapRestaurantModel?) {
@@ -54,6 +64,9 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
             // 모델이 없는 경우의 처리
             return
         }
+        
+        categoryLabel.text = model.category
+        drinkLiquorLabel.text = model.canDrinkLiquor == true ? "주류 가능" : "주류 불가능"
         
         userNicknameLabel.text = model.userNickName ?? "이름 없음"
         loadImage(urlString: model.userProfileImageUrl, defaultImage: JMTengAsset.defaultProfileImage.image, imageView: userProfileImageView)

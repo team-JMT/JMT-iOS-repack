@@ -437,21 +437,6 @@
             </objects>
             <point key="canvasLocation" x="1207" y="286"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="uof-vg-XLQ">
-            <objects>
-                <viewController id="KHr-4Y-JEd" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="keF-Hd-YBf">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="ofA-pS-NMm"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="S1d-fY-TDf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2459" y="253"/>
-        </scene>
         <!--Restaurant Detail Review View Controller-->
         <scene sceneID="qqe-Xz-s8p">
             <objects>

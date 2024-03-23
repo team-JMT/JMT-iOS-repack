@@ -11,6 +11,11 @@ import Kingfisher
 
 class PopularRestaurantCell: UICollectionViewCell {
     
+    @IBOutlet weak var categoryView: UIView!
+    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var drinkLiquorView: UIView!
+    @IBOutlet weak var drinkLiquorLabel: UILabel!
+    
     @IBOutlet weak var restaurantImageView: UIImageView!
     @IBOutlet weak var userProfileImageView: UIImageView!
     
@@ -19,6 +24,9 @@ class PopularRestaurantCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        categoryView.layer.cornerRadius = 4
+        drinkLiquorView.layer.cornerRadius = 4
         
         isSkeletonable = true
         skeletonCornerRadius = 20
@@ -43,10 +51,12 @@ class PopularRestaurantCell: UICollectionViewCell {
         userProfileImageView.image = nil
         userNicknameLabel.text = ""
         restaurantNameLabel.text = ""
+        categoryLabel.text = ""
+        drinkLiquorLabel.text = ""
     }
     
     func setupData(model: SearchMapRestaurantModel?) {
-        
+       
         if let model = model {
             if let url = URL(string: model.restaurantImageUrl ?? "") {
                 restaurantImageView.kf.setImage(with: url)
@@ -60,6 +70,9 @@ class PopularRestaurantCell: UICollectionViewCell {
                 userProfileImageView.image = JMTengAsset.emptyResult.image
             }
 
+            categoryLabel.text = model.category
+            drinkLiquorLabel.text = model.canDrinkLiquor == true ? "주류 가능" : "주류 불가능"
+            
             userNicknameLabel.text = model.userNickName
             restaurantNameLabel.text = model.name
             

@@ -93,6 +93,7 @@ class HomeViewController: UIViewController {
                         // 현재 지도에 포함되어있는 맛집 데이터 가져오기
                         let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
                         try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+                        self.refreshMarkersInVisibleRegion()
                         
                         self.isHiddenJoinGroupUI = true
                         self.hasFetchedRestaurants = true
@@ -179,6 +180,7 @@ class HomeViewController: UIViewController {
                         // 현재 지도에 포함되어있는 맛집 데이터 가져오기
                         let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
                         try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+                        self.refreshMarkersInVisibleRegion()
                                         
                         // 그룹 정보
                         updateGroupInfoData()
@@ -286,20 +288,20 @@ class HomeViewController: UIViewController {
     
     // MARK: - Actions
     @IBAction func didTabRefreshButton(_ sender: Any) {
-        locationManager.startUpdateLocation()
-//        if LocationManager.shared.checkAuthorizationStatus() == false {
-//            self.showAccessDeniedAlert(type: .location)
-//        } else {
-//            Task {
-//                do {
-//                    let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
-//                    try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
-//                    self.refreshMarkersInVisibleRegion()
-//                } catch {
-//                    print(error)
-//                }
-//            }
-//        }
+    
+        if LocationManager.shared.checkAuthorizationStatus() == false {
+            self.showAccessDeniedAlert(type: .location)
+        } else {
+            Task {
+                do {
+                    let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
+                    try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+                    self.refreshMarkersInVisibleRegion()
+                } catch {
+                    print(error)
+                }
+            }
+        }
     }
     
     @IBAction func didTabChangeAddressButton(_ sender: Any) {
@@ -335,11 +337,8 @@ extension HomeViewController: FloatingPanelControllerDelegate {
             switch fpc.state {
             case .full:
                 fpc.setPanelStyle(radius: 0, isHidden: true)
-//                locationStackView.isHidden = true
-                
             case .half:
                 fpc.setPanelStyle(radius: 24, isHidden: false)
-//                locationStackView.isHidden = false
             default:
                 print("")
             }
@@ -382,7 +381,7 @@ extension HomeViewController {
         
         if let markerRestaurants = viewModel?.markerRestaurants {
             for data in markerRestaurants {
-                let marker = NMFMarker(position: NMGLatLng(lat: data.x, lng: data.x))
+                let marker = NMFMarker(position: NMGLatLng(lat: data.y, lng: data.x))
                 let markerImage = UIImage(named: viewModel?.markerImage(category: data.category) ?? "") ?? UIImage()
                 marker.iconImage = NMFOverlayImage(image: markerImage)
                 marker.captionText = data.name
@@ -390,10 +389,6 @@ extension HomeViewController {
                 markers.append(marker)
             }
         }
-    }
-    
-    func addMarkersInVisibleRegion() {
-        
     }
     
     func removeAllMarkers() {
