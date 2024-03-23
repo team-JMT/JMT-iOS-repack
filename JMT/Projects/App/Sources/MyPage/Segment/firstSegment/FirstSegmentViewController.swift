@@ -11,7 +11,9 @@ import Alamofire
 class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //따로 뷰모델을 만들지않고 참조만 하기
-    lazy var viewModel = MyPageViewModel()
+// var coordinator: MyPageCoordinator?
+    
+    var viewModel: MyPageViewModel?
     
     private var keychainAccess: KeychainAccessible = DefaultKeychainAccessible()
     
@@ -20,6 +22,8 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
     var selectedDistance: String = "가까운순"
     var selectedType: String = ""
     var selectedAlcohol: Bool = false
+    var restaurantID: Int?
+    
     
     
     @IBOutlet weak var registerHeaderView: UIView!
@@ -37,8 +41,9 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
     
     @IBOutlet weak var typeBtn: UIButton!
     @IBOutlet weak var distanceButton: UIButton!
-
+    
     @IBOutlet weak var alcholBtn: UIButton!
+    
     
     
     override func viewDidLoad() {
@@ -50,7 +55,7 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         layout()
         
         
-        viewModel.onRestaurantsDataUpdated = { [weak self] in
+        viewModel?.onRestaurantsDataUpdated = { [weak self] in
             DispatchQueue.main.async {
                 self?.mainTable.reloadData()
             }
@@ -58,18 +63,25 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         
         distanceButton.layer.zPosition = 1
         self.view.bringSubviewToFront(distanceButton)
-
-        viewModel.fetchUserInfo()
-
+        
+        viewModel?.fetchUserInfo()
+        
         
         setupMenus() // 이 함수를 viewDidLoad에 추가합니다.
-
+        
         // 탭 제스처 인식기를 추가하여 뷰를 탭했을 때 UIMenu를 표시하도록 설정
         addTapGestureToView(distanceLabel, action: #selector(showDistanceMenuAction))
         addTapGestureToView(typeLabel, action: #selector(showTypeMenuAction))
         addTapGestureToView(alcholLabel, action: #selector(showAlcoholMenuAction))
+        
+        
     }
-
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    
     // 뷰에 탭 제스처 인식기를 추가하는 메서드
     private func addTapGestureToView(_ view: UIView, action: Selector) {
         let tapGesture = UITapGestureRecognizer(target: self, action: action)
@@ -98,18 +110,7 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         ]
         distanceButton.menu = UIMenu(title: "", children: distanceActions)
         distanceButton.showsMenuAsPrimaryAction = true
-
-//        // 음식 종류 필터 메뉴 설정
-//        let typeActions = FoodType.allCases.map { foodType in
-//            UIAction(title: foodType.name, image: nil) { [weak self] _ in
-//                self?.selectedType = foodType.filter.rawValue
-//                self?.typeLabel.text = foodType.name
-//                self?.fetchRestaurants()
-//            }
-//        }
-//        typeBtn.menu = UIMenu(title: "", children: typeActions)
-//        typeBtn.showsMenuAsPrimaryAction = true
-
+        
         // 알코올 필터 메뉴 설정
         let alcoholActions = [
             UIAction(title: "주류가능", handler: { [weak self] _ in self?.handleAlcoholFilterChange(true) }),
@@ -118,7 +119,7 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         alcholBtn.menu = UIMenu(title: "", children: alcoholActions)
         alcholBtn.showsMenuAsPrimaryAction = true
     }
-
+    
     
     func layout() {
         nearFilterView.layer.cornerRadius = nearFilterView.frame.height / 2
@@ -137,12 +138,12 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
             print("Access Token is not available")
             return
         }
-
+        
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
             "Content-Type": "application/json"
         ]
-
+        
         let url = "https://api.jmt-matzip.dev/api/v1/restaurant/search?page=0&size=20"
         var filterParameters: [String: Any] = [:]
         if !selectedType.isEmpty {
@@ -167,7 +168,7 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
                     // return restaurant.category == self.selectedType && restaurant.canDrinkAlcohol == self.selectedAlcohol
                     true // 실제 조건에 맞는 로직으로 대체해야 합니다.
                 } ?? []
-                self.viewModel.restaurantsData = filteredData
+                self.viewModel?.restaurantsData = filteredData
                 DispatchQueue.main.async {
                     self.mainTable.reloadData() // 확실하게 메인 스레드에서 호출
                 }
@@ -176,8 +177,8 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
             }
         }
     }
-
-
+    
+    
     
     //가까운순 필터링
     
@@ -243,7 +244,7 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return viewModel.restaurantsData.count
+        return viewModel?.restaurantsData.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -251,11 +252,11 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
             return UITableViewCell()
         }
         
-        let restaurant = viewModel.restaurantsData[indexPath.row]
+        let restaurant = viewModel?.restaurantsData[indexPath.row]
         cell.configure(with: restaurant)
         
         
-        if let userInfo = viewModel.userInfo?.data {
+        if let userInfo = viewModel?.userInfo?.data {
             if let imageUrl = URL(string: userInfo.profileImg) {
                 AF.request(imageUrl).responseData { [weak cell] response in
                     switch response.result {
@@ -273,6 +274,28 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         return cell
     }
     
+    //맛집상세 넘기기
+    //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    //        let restaurant = viewModel.restaurantsData[indexPath.row]
+    //
+    //        let storyboard = UIStoryboard(name: "RestaurantDetail", bundle: nil)
+    //        if let detailViewController = storyboard.instantiateViewController(withIdentifier: "RestaurantDetailViewController") as? RestaurantDetailViewController {
+    //            detailViewController.restaurantID = restaurant.id
+    //            print(restaurant.id) // 이 부분을 수정
+    //            self.navigationController?.pushViewController(detailViewController, animated: true)
+    //        }
+    //    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        let restaurant = viewModel?.restaurantsData[indexPath.row]
+        if let restaurantId = restaurant?.id {
+            // coordinator를 통해 상세 화면으로 전환합니다.
+            viewModel?.coordinator?.showRestaurantDetail(for: restaurantId)
+        }
+    }
+
+
     
     @IBAction func didtapDistance(_ sender: Any) {
             showDistanceMenuAction()

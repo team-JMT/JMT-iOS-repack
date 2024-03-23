@@ -34,15 +34,15 @@ class MyPageRegisterResturantTableViewCell: UITableViewCell {
 
     }
     
-    
-    // 새로운 메소드 추가
-    func configure(with restaurant: Restaurant) {
-        resturantLabel.text = restaurant.name
-        grouplabel.text = restaurant.groupName
-        categoryLable.text = restaurant.category
-        MyNickname.text = restaurant.userNickName
+    func configure(with restaurant: Restaurant?) {
+        resturantLabel.text = restaurant?.name ?? ""
+        grouplabel.text = restaurant?.groupName ?? ""
+        categoryLable.text = restaurant?.category ?? ""
+        MyNickname.text = restaurant?.userNickName ?? ""
 
-        if let imageUrl = URL(string: restaurant.restaurantImageURL ?? "") {
+
+        // 식당 이미지 로드
+        if let imageUrlString = restaurant?.restaurantImageURL, let imageUrl = URL(string: imageUrlString) {
             AF.request(imageUrl).responseData { [weak self] response in
                 guard let self = self else { return }
                 if case .success(let data) = response.result {
@@ -51,9 +51,14 @@ class MyPageRegisterResturantTableViewCell: UITableViewCell {
                     }
                 }
             }
+        } else {
+            self.myResturantImage.image = UIImage(named: "dummyIcon")
+            print(1)
         }
 
-        if let userImageUrl = URL(string: restaurant.userProfileImageURL ?? "") {
+
+        // 사용자 프로필 이미지 로드
+        if let userImageUrlString = restaurant?.userProfileImageURL, let userImageUrl = URL(string: userImageUrlString) {
             AF.request(userImageUrl).responseData { [weak self] response in
                 guard let self = self else { return }
                 if case .success(let data) = response.result {

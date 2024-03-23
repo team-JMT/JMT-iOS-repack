@@ -18,9 +18,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
     
     var webViewBottomConstraint: Constraint?
     var keychainAccess: KeychainAccessible = DefaultKeychainAccessible()
-    
-<<<<<<< HEAD
-=======
+   
   override func viewWillAppear(_ animated: Bool) {
       super.viewWillAppear(animated)
       
@@ -28,15 +26,6 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
       setCustomNavigationBarBackButton(goToViewController: .popVC)
   }
 
->>>>>>> ea32156181f806bd467e587fc84a68ed5959a176
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        setCustomNavigationBarBackButton(isSearchVC: false)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupWebView()
@@ -57,10 +46,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         webView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
         }
-        
-<<<<<<< HEAD
-        loadInitialRequest()
-=======
+    
 //        if let url = URL(string: url ?? "") {
 //            var request = URLRequest(url: url)
 //            let accessToken = DefaultKeychainService.shared.accessToken ?? ""
@@ -73,7 +59,6 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
                     // webViewBottomConstraint를 사용하여 하단 제약을 설정
                     self.webViewBottomConstraint = make.bottom.equalToSuperview().constraint
                 }
->>>>>>> ea32156181f806bd467e587fc84a68ed5959a176
     }
     
     func loadInitialRequest() {

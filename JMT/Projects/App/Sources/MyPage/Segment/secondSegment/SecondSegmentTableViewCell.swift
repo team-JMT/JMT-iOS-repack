@@ -8,16 +8,19 @@
 import UIKit
 
 class SecondSegmentTableViewCell: UITableViewCell{
-
+    
     
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var Resturantexplanation: UILabel!
     @IBOutlet weak var mainCollection: UICollectionView!
     
+    @IBOutlet weak var groupId: UILabel!
     
+    @IBOutlet weak var mainImage: UIImageView!
+    @IBOutlet weak var resturantName: UILabel!
     private var imageViews: [UIImageView] = []
     var imageUrls: [String] = [] // 이미지 URL 배열
-
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,14 +38,19 @@ class SecondSegmentTableViewCell: UITableViewCell{
         self.mainCollection.reloadData()
     }
     
-    
-    
     func configure(with review: Review) {
         Resturantexplanation.text = review.reviewContent
+        resturantName.text = review.groupName
+        groupId.text = "\(review.groupId)"
         imageUrls = review.reviewImages
-        mainCollection.reloadData()
-    }
 
+        print("Configuring cell with review: \(review)") // 셀 구성 확인
+
+        mainCollection.reloadData()
+    
+
+    }
+    
 }
 
 
@@ -53,7 +61,7 @@ extension SecondSegmentTableViewCell: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageUrls.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "myPageReviewCollectionViewCell", for: indexPath) as? myPageReviewCollectionViewCell else {
             fatalError("Unable to dequeue myPageReviewCollectionViewCell")
@@ -63,9 +71,9 @@ extension SecondSegmentTableViewCell: UICollectionViewDelegate, UICollectionView
         return cell
     }
     
-        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-            return 2
-        }
-        
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 2
+    }
+    
     
 }
