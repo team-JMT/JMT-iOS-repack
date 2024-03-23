@@ -101,7 +101,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         self.tabBarController?.tabBar.isHidden = true
         
         self.navigationController?.setupBarAppearance(alpha: 1)
-        setCustomNavigationMoreButton()
+//        setCustomNavigationMoreButton()
         
         if viewModel?.coordinator?.parentCoordinator is DefaultHomeCoordinator {
             setCustomNavigationBarBackButton(goToViewController: .popVC)

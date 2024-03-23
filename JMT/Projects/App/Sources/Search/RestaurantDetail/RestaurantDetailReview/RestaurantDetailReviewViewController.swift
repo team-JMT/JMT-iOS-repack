@@ -82,6 +82,7 @@ extension RestaurantDetailReviewViewController: UICollectionViewDataSource {
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "reviewCell", for: indexPath) as? RestaurantReview2Cell else { return UICollectionViewCell() }
             cell.setupData(reviewData: viewModel?.restaurantData?.reviews[indexPath.row])
+            cell.photosUrl = viewModel?.restaurantData?.reviews[indexPath.row].reviewImages ?? []
             return cell
         }
     }

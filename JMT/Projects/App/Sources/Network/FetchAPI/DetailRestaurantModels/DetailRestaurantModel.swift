@@ -26,4 +26,5 @@ struct DetailRestaurantModel {
     let userProfileImageUrl: String
     let differenceInDistance: String
     var reviews: [RestaurantReviewModel]
+    var reviewImageTotalCount: Int
 }
