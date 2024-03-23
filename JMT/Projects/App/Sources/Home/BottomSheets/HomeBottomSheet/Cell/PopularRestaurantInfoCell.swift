@@ -33,6 +33,7 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
         super.awakeFromNib()
         
         self.isSkeletonable = true
+        skeletonCornerRadius = 10
         
         categoryView.layer.cornerRadius = 4
         drinkLiquorView.layer.cornerRadius = 4

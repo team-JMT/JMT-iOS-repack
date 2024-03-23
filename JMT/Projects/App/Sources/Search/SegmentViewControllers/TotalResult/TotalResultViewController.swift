@@ -285,24 +285,22 @@ extension TotalResultViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if viewModel?.isEmptyGroup == true {
-            if let groupId = viewModel?.groupList[indexPath.row].groupId {
-                viewModel?.coordinator?.showWebViewGroupDetilPage(groupId: groupId)
+        switch indexPath.section {
+        case 0:
+            if viewModel?.restaurants.isEmpty == false {
+                viewModel?.coordinator?.showRestaurantDetailViewController(id: viewModel?.restaurants[indexPath.row].id ?? 0)
             }
-        } else {
-            switch indexPath.section {
-            case 0:
-                viewModel?.coordinator?.showRestaurantDetailViewController()
-            case 1:
-                
-                return
-            case 2:
-                viewModel?.coordinator?.showRestaurantDetailViewController()
-            default:
-                return
+        case 1:
+            // 그룹 상세 페이지로 이동
+            if viewModel?.groupList.isEmpty == false {
+                viewModel?.coordinator?.showWebViewGroupDetilPage(groupId: viewModel?.groupList[indexPath.row].groupId ?? 0)
             }
+        case 2:
+            if viewModel?.restaurants.isEmpty == false {
+                viewModel?.coordinator?.showRestaurantDetailViewController(id: viewModel?.restaurants[indexPath.row].id ?? 0)
+            }
+        default:
+            return
         }
-        
-      
     }
 }

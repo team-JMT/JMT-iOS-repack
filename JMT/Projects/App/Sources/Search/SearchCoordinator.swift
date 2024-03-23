@@ -9,13 +9,12 @@ import UIKit
 
 protocol SearchCoordinator: Coordinator {
     func setRestaurantDetailCoordinator()
-    func showRestaurantDetailViewController()
+    func showRestaurantDetailViewController(id: Int)
     
     func setButtonPopupCoordinator()
     func showButtonPopupViewController()
     
     func showWebViewGroupDetilPage(groupId: Int)
-   
 }
 
 class DefaultSearchCoordinator: SearchCoordinator {
@@ -59,13 +58,13 @@ class DefaultSearchCoordinator: SearchCoordinator {
         childCoordinators.append(coordinator)
     }
     
-    func showRestaurantDetailViewController() {
+    func showRestaurantDetailViewController(id: Int) {
         if getChildCoordinator(.restaurantDetail) == nil {
             setRestaurantDetailCoordinator()
         }
         
         let coordinator = getChildCoordinator(.restaurantDetail) as! RestaurantDetailCoordinator
-        coordinator.start()
+        coordinator.start(id: id)
     }
     
     func setButtonPopupCoordinator() {
