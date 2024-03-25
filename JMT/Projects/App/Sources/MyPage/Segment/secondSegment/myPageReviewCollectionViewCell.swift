@@ -11,7 +11,6 @@ class myPageReviewCollectionViewCell: UICollectionViewCell  {
     
     @IBOutlet weak var myPageImageView: UIImageView!
     
-   // var imageNames: [String] = []
 
     override func awakeFromNib() {
         super.awakeFromNib()

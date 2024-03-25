@@ -34,7 +34,7 @@ class RestaurantDetailViewModel {
     var recommendRestaurantId: Int?
     var restaurantData: DetailRestaurantModel?
     var restaurantReviewImages: [String] = []
-    
+
     var currentSegIndex: Int = 0
     var reviewImages = [UIImage]()
     

@@ -131,10 +131,7 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
         }
     }
     
-    private func handleTokenRequest(str: String) {
-        let accessToken = DefaultKeychainService.shared.accessToken ?? ""
-        evaluateJavaScriptFunction(functionName: str, parameter: accessToken)
-    }
+  
     
     private func parseJSONStringToDictionary(jsonString: String) -> [String: Any]? {
         if let jsonData = jsonString.data(using: .utf8) {
@@ -158,8 +155,11 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
             case "token":
                 // 토큰 관련 처리
                 if let onSuccess = dictionary["onSuccess"] as? String {
-                    handleTokenRequest(str: onSuccess)
+                    handleToken(str: onSuccess)
                 }
+            case "share":
+                print(name)
+                
             case "navigation":
                 // 네비게이션 관련 처리
                 if let data = dictionary["data"] as? [String: Any], let isVisible = data["isVisible"] as? Bool {
@@ -202,7 +202,6 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
 
 extension GroupWebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        print(message.body)
         handleJSONDataBasedOnName(jsonString: message.body as? String ?? "")
     }
     
@@ -231,5 +230,38 @@ extension GroupWebViewController: WKNavigationDelegate {
 }
 
 extension GroupWebViewController: WKUIDelegate {
+    
+}
+
+// 핸들러 메소드
+extension GroupWebViewController {
+    
+    private func handleToken(str: String) {
+        let accessToken = DefaultKeychainService.shared.accessToken ?? ""
+        evaluateJavaScriptFunction(functionName: str, parameter: accessToken)
+    }
+  
+    private func handleNavigation() {
+        
+    }
+    
+    
+    private func handleNavigate() {
+        
+    }
+    
+    private func handleShare() {
+        guard let url = webView.url else {
+            print("No URL to share.")
+            return
+        }
+        
+        let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
+    }
+    
+    private func handleBack() {
+        
+    }
     
 }

@@ -31,49 +31,62 @@ struct MyPageDI: Assembly {
             c.viewModel = viewModel
         }
         
-        // MyPageManage
-        container.register(MyPageManageViewModel.self) { r in
-            let viewModel = MyPageManageViewModel()
-            return viewModel
-        }
+//        // MyPageManage
+//        container.register(MyPageManageViewModel.self) { r in
+//            let viewModel = MyPageManageViewModel()
+//            return viewModel
+//        }
+//        
+//        container.storyboardInitCompleted(MyPageManageVC.self) { r, c in
+//            let viewModel = r.resolve(MyPageManageViewModel.self)!
+//            c.viewModel = viewModel
+//        }
+//        
+//        //ServiceTermsVC
+//        container.register(ServiceTermsViewModel.self) { r in
+//            let viewModel = ServiceTermsViewModel()
+//            return viewModel
+//        }
+//        
+//        container.storyboardInitCompleted(ServiceTermsVC.self) { r, c in
+//            let viewModel = r.resolve(ServiceTermsViewModel.self)!
+//            c.viewModel = viewModel
+//        }
+//        
+//        //ServiceTermsVC
+//        container.register(ServiceUseViewModel.self) { r in
+//            let viewModel = ServiceUseViewModel()
+//            return viewModel
+//        }
+//        
+//        container.storyboardInitCompleted(ServiceUseVC.self) { r, c in
+//            let viewModel = r.resolve(ServiceUseViewModel.self)!
+//            c.viewModel = viewModel
+//        }
+//        
+//        //changeNickname
+//        container.register(MyPageChangeNickNameViewModel.self) { r in
+//            let viewModel = MyPageChangeNickNameViewModel()
+//            return viewModel
+//        }
+//        
+//        container.storyboardInitCompleted(ChangeNickNameVC.self) { r, c in
+//            let viewModel = r.resolve(MyPageChangeNickNameViewModel.self)!
+//            c.viewModel = viewModel
+//        }
         
-        container.storyboardInitCompleted(MyPageManageVC.self) { r, c in
-            let viewModel = r.resolve(MyPageManageViewModel.self)!
-            c.viewModel = viewModel
-        }
-        
-        //ServiceTermsVC
-        container.register(ServiceTermsViewModel.self) { r in
-            let viewModel = ServiceTermsViewModel()
-            return viewModel
-        }
-        
-        container.storyboardInitCompleted(ServiceTermsVC.self) { r, c in
-            let viewModel = r.resolve(ServiceTermsViewModel.self)!
-            c.viewModel = viewModel
-        }
-        
-        //ServiceTermsVC
-        container.register(ServiceUseViewModel.self) { r in
-            let viewModel = ServiceUseViewModel()
-            return viewModel
-        }
-        
-        container.storyboardInitCompleted(ServiceUseVC.self) { r, c in
-            let viewModel = r.resolve(ServiceUseViewModel.self)!
-            c.viewModel = viewModel
-        }
-        
-        //changeNickname
-        container.register(MyPageChangeNickNameViewModel.self) { r in
-            let viewModel = MyPageChangeNickNameViewModel()
-            return viewModel
-        }
-        
-        container.storyboardInitCompleted(ChangeNickNameVC.self) { r, c in
-            let viewModel = r.resolve(MyPageChangeNickNameViewModel.self)!
-            c.viewModel = viewModel
-        }
+        // FirstSegmentViewController에 대한 ViewModel 주입 설정
+//        container.register(MyPageViewModel.self) { r in
+//            let viewModel = MyPageViewModel()
+//            return viewModel
+//        }
+//        
+//        container.storyboardInitCompleted(FirstSegmentViewController.self) { r, c in
+//            let viewModel = r.resolve(MyPageViewModel.self)!
+//            c.viewModel = viewModel
+//        }
+//        
+    
         
     }
 }
