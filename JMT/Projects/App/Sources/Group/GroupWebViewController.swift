@@ -83,10 +83,13 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
         }
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
         removeKeyboardObserver()
     }
+    
+
     
     func setupWebView() {
         view.addSubview(webView)
@@ -160,35 +163,22 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
                 if let onSuccess = dictionary["onSuccess"] as? String {
                     handleToken(str: onSuccess)
                 }
-            case "share":
-                print(name)
-                
             case "navigation":
                 // 네비게이션 관련 처리
                 if let data = dictionary["data"] as? [String: Any], let isVisible = data["isVisible"] as? Bool {
-                    self.tabBarController?.tabBar.isHidden = isVisible
+                    handleNavigation(isVisible: isVisible)
                 }
             case "navigate":
                 if let data = dictionary["data"] as? [String: Any],
                     let route = data["route"] as? String,
                     let groupId = data["Id"] as? Int {
                     
-                    switch route {
-                    case "registRestaurant":
-                        UserDefaultManager.webViewSelectedGroupId = groupId
-                        viewModel?.coordinator?.showSearchRestaurantViewController()
-                    default:
-                        return
-                    }
-               }
+                    handleNavigate(route: route)
+                }
             case "back":
                 // 뒤로가기 관련 처리
                 if let data = dictionary["data"] as? [String: Any], let enable = data["enable"] as? Bool {
-                    if enable {
-                        self.setCustomNavigationBarBackButton(goToViewController: .popVC)
-                    } else {
-                        self.navigationItem.leftBarButtonItem = nil
-                    }
+                    handleBack(isEnable: enable)
                 }
             default:
                 // 알 수 없는 name 값 처리
@@ -213,7 +203,6 @@ extension GroupWebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         handleJSONDataBasedOnName(jsonString: message.body as? String ?? "")
     }
-    
 }
 
 extension GroupWebViewController: WKNavigationDelegate {
@@ -250,27 +239,27 @@ extension GroupWebViewController {
         evaluateJavaScriptFunction(functionName: str, parameter: accessToken)
     }
   
-    private func handleNavigation() {
-        
+    private func handleNavigation(isVisible: Bool) {
+        self.tabBarController?.tabBar.isHidden = isVisible
     }
     
     
-    private func handleNavigate() {
-        
-    }
-    
-    private func handleShare() {
-        guard let url = webView.url else {
-            print("No URL to share.")
+    private func handleNavigate(route: String) {
+        switch route {
+        case "registRestaurant":
+            UserDefaultManager.webViewSelectedGroupId = groupId
+            viewModel?.coordinator?.showSearchRestaurantViewController()
+        default:
             return
         }
-        
-        let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        present(activityViewController, animated: true, completion: nil)
     }
     
-    private func handleBack() {
-        
+    private func handleBack(isEnable: Bool) {
+        if isEnable {
+            self.setCustomNavigationBarBackButton(goToViewController: .popVC)
+        } else {
+            self.navigationItem.leftBarButtonItem = nil
+        }
     }
     
 }
