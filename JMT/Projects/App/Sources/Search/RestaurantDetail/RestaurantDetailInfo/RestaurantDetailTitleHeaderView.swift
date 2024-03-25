@@ -10,4 +10,6 @@ import UIKit
 class RestaurantDetailTitleHeaderView: UICollectionReusableView {
     
     @IBOutlet weak var titleLabel: UILabel!
+    
+    
 }

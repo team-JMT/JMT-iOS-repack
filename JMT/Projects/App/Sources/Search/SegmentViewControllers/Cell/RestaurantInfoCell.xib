@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -59,6 +60,25 @@
                         <color key="textColor" name="gray900"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rpx-C7-DAd">
+                        <rect key="frame" x="7.9999999999999964" y="8" width="57.666666666666657" height="20"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="카테고리" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XYe-8q-BpJ">
+                                <rect key="frame" x="8" y="0.0" width="41.666666666666664" height="20"/>
+                                <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
+                                <color key="textColor" name="gray700"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="XYe-8q-BpJ" secondAttribute="trailing" constant="8" id="8MD-CZ-rBs"/>
+                            <constraint firstItem="XYe-8q-BpJ" firstAttribute="top" secondItem="rpx-C7-DAd" secondAttribute="top" id="AcQ-xf-3JL"/>
+                            <constraint firstAttribute="bottom" secondItem="XYe-8q-BpJ" secondAttribute="bottom" id="FUq-IJ-mzK"/>
+                            <constraint firstAttribute="height" constant="20" id="qVE-0H-AMR"/>
+                            <constraint firstItem="XYe-8q-BpJ" firstAttribute="leading" secondItem="rpx-C7-DAd" secondAttribute="leading" constant="8" id="rYi-Rd-QON"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="2L4-Kg-Lbn" secondAttribute="trailing" constant="16" id="1rT-k7-gNj"/>
@@ -70,15 +90,19 @@
                     <constraint firstItem="pGO-Ph-8xL" firstAttribute="leading" secondItem="cK3-fj-ErI" secondAttribute="leading" id="HEk-jO-gsE"/>
                     <constraint firstItem="IJa-WP-Yh2" firstAttribute="centerY" secondItem="pGO-Ph-8xL" secondAttribute="centerY" id="L4K-3h-y3W"/>
                     <constraint firstAttribute="trailing" secondItem="Iy9-6H-6cB" secondAttribute="trailing" constant="16" id="P7k-A7-0Gf"/>
+                    <constraint firstItem="rpx-C7-DAd" firstAttribute="top" secondItem="cK3-fj-ErI" secondAttribute="top" constant="8" id="ZF6-IK-tbj"/>
                     <constraint firstItem="IJa-WP-Yh2" firstAttribute="leading" secondItem="pGO-Ph-8xL" secondAttribute="trailing" constant="16" id="fPv-8s-vtC"/>
                     <constraint firstAttribute="bottom" secondItem="pGO-Ph-8xL" secondAttribute="bottom" id="j3A-IM-hBs"/>
                     <constraint firstItem="pGO-Ph-8xL" firstAttribute="top" secondItem="cK3-fj-ErI" secondAttribute="top" id="tqU-a1-PRg"/>
                     <constraint firstItem="Iy9-6H-6cB" firstAttribute="leading" secondItem="Wa3-IN-EkJ" secondAttribute="trailing" constant="4" id="vrC-Ha-7yz"/>
                     <constraint firstItem="IJa-WP-Yh2" firstAttribute="top" secondItem="2L4-Kg-Lbn" secondAttribute="bottom" constant="10" id="xbB-PG-hio"/>
+                    <constraint firstItem="rpx-C7-DAd" firstAttribute="leading" secondItem="cK3-fj-ErI" secondAttribute="leading" constant="8" id="zBE-Ul-Dpy"/>
                 </constraints>
             </collectionViewCellContentView>
             <size key="customSize" width="340" height="128"/>
             <connections>
+                <outlet property="categoryLabel" destination="XYe-8q-BpJ" id="h5w-3v-FAK"/>
+                <outlet property="categoryView" destination="rpx-C7-DAd" id="CsW-QN-gjy"/>
                 <outlet property="groupNameLabel" destination="2L4-Kg-Lbn" id="l0d-fg-7Kl"/>
                 <outlet property="restaurantNameLabel" destination="IJa-WP-Yh2" id="TGL-rz-mqK"/>
                 <outlet property="restaurantProfileImageView" destination="pGO-Ph-8xL" id="7xx-MG-QLH"/>
@@ -98,5 +122,8 @@
         <namedColor name="gray900">
             <color red="0.086000002920627594" green="0.10199999809265137" blue="0.11400000005960464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

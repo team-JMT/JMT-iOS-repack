@@ -53,6 +53,7 @@ extension DetailRestaurantResponse {
             userNickName: data.userNickName ?? "",
             userProfileImageUrl: data.userProfileImageUrl ?? "",
             differenceInDistance: data.differenceInDistance,
-            reviews: [])
+            reviews: [],
+            reviewImageTotalCount: 0)
     }
 }

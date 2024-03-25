@@ -21,12 +21,8 @@ extension UINavigationController {
         navigationBar.standardAppearance = appearance
         navigationBar.compactAppearance = appearance
         navigationBar.scrollEdgeAppearance = appearance
-//        navigationBar.isTranslucent = false
-//        navigationBar.tintColor = .red
-//        navigationBar.prefersLargeTitles = true
-    }
-    
-    func updateBarAppearance(alpha: CGFloat) {
-        
+        //        navigationBar.isTranslucent = false
+        //        navigationBar.tintColor = .red
+        //        navigationBar.prefersLargeTitles = true
     }
 }

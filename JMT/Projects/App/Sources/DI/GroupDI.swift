@@ -15,10 +15,10 @@ struct GroupDI: Assembly {
             return viewModel
         }
         
-        container.storyboardInitCompleted(GroupViewController.self) { r, c in
-            let viewModel = r.resolve(GroupViewModel.self)!
-            c.viewModel = viewModel
-        }
+//        container.storyboardInitCompleted(GroupViewController.self) { r, c in
+//            let viewModel = r.resolve(GroupViewModel.self)!
+//            c.viewModel = viewModel
+//        }
         
         container.storyboardInitCompleted(GroupWebViewController.self) { r, c in
             let viewModel = r.resolve(GroupViewModel.self)!

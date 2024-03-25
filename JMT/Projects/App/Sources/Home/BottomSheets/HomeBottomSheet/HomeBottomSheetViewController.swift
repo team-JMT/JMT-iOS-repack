@@ -47,6 +47,8 @@ class HomeBottomSheetViewController: UIViewController {
         
         viewModel?.didUpdateGroupRestaurantsData = {
             
+            print("작업 새로고침")
+            
             DispatchQueue.main.async {
                 self.viewModel?.isLodingData = true
                 self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
@@ -62,6 +64,8 @@ class HomeBottomSheetViewController: UIViewController {
             do {
                 try await viewModel?.fetchRecentRestaurantsAsync()
                 try await viewModel?.fetchGroupRestaurantsAsync()
+                try await viewModel?.fetchRestaurantsReviewsAsync()
+                
                 
                 DispatchQueue.main.async {
                     self.viewModel?.isLodingData = false
@@ -80,6 +84,9 @@ class HomeBottomSheetViewController: UIViewController {
     func setupUI() {
         moveTopButton.layer.cornerRadius = moveTopButton.frame.height / 2
         addButton.layer.cornerRadius = addButton.frame.height / 2
+        
+        moveTopButton.addShadow()
+        addButton.addShadow()
         
         // 리셋 버튼
         resetButton.layer.cornerRadius = 8
@@ -103,7 +110,6 @@ class HomeBottomSheetViewController: UIViewController {
            guard let self = self else { return nil }
         
            if self.viewModel?.isLodingData == true {
-               print("------------------------- 1")
                switch sectionIndex {
                case 0:
                    return self.createFirstColumnSection()
@@ -113,7 +119,6 @@ class HomeBottomSheetViewController: UIViewController {
                    return nil
                }
            } else {
-               print("------------------------- 2")
                let isPopularRestaurantsEmpty = self.viewModel?.popularRestaurants.isEmpty ?? true
                let isRestaurantsEmpty = self.viewModel?.restaurants.isEmpty ?? true
 

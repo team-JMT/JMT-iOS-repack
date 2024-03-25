@@ -9,6 +9,4 @@ import Foundation
 
 class GroupViewModel {
     weak var coordinator: GroupCoordinator?
-    
-    let test = "홈"
 }

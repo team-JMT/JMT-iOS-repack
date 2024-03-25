@@ -9,13 +9,13 @@ import UIKit
 
 protocol SearchCoordinator: Coordinator {
     func setRestaurantDetailCoordinator()
-    func showRestaurantDetailViewController()
+    func showRestaurantDetailViewController(id: Int)
     
     func setButtonPopupCoordinator()
     func showButtonPopupViewController()
     
+    func showWebViewCreateGroupPage()
     func showWebViewGroupDetilPage(groupId: Int)
-   
 }
 
 class DefaultSearchCoordinator: SearchCoordinator {
@@ -59,13 +59,13 @@ class DefaultSearchCoordinator: SearchCoordinator {
         childCoordinators.append(coordinator)
     }
     
-    func showRestaurantDetailViewController() {
+    func showRestaurantDetailViewController(id: Int) {
         if getChildCoordinator(.restaurantDetail) == nil {
             setRestaurantDetailCoordinator()
         }
         
         let coordinator = getChildCoordinator(.restaurantDetail) as! RestaurantDetailCoordinator
-        coordinator.start()
+        coordinator.start(id: id)
     }
     
     func setButtonPopupCoordinator() {
@@ -82,6 +82,11 @@ class DefaultSearchCoordinator: SearchCoordinator {
         coordinator.start()
     }
     
+    func showWebViewCreateGroupPage() {
+        let coordinator = parentCoordinator?.childCoordinators[2] as! DefaultGroupCoordinator
+        coordinator.showCreateGroupPage()
+    }
+    
     func showWebViewGroupDetilPage(groupId: Int) {
         let coordinator = parentCoordinator?.childCoordinators[2] as! DefaultGroupCoordinator
         coordinator.showDetailGroupPage(groupId: groupId)
@@ -95,6 +100,8 @@ class DefaultSearchCoordinator: SearchCoordinator {
             childCoordinator = childCoordinators.first(where: { $0 is ButtonPopupCoordinator })
         case .restaurantDetail:
             childCoordinator = childCoordinators.first(where: { $0 is RestaurantDetailCoordinator })
+        case .createGroup:
+            childCoordinator = childCoordinators.first(where: { $0 is CreateGroupCoordinator })
         default:
             break
         }

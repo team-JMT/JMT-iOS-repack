@@ -23,6 +23,7 @@ class RegistrationRestaurantInfoViewModel {
     var drinkingComment: String = ""
     var tags = [String]()
     
+    var selectedGroupId: Int?
     var restaurantLocationId: Int?
     var recommendRestaurantId: Int?
     
@@ -74,14 +75,12 @@ class RegistrationRestaurantInfoViewModel {
     func registrationRestaurantAsync() async throws {
         
         do {
-            if let info = self.info {
+            if let info = self.info, let selectedGroupId = self.selectedGroupId {
                 
                 let categoryId = categoryData.firstIndex(where: {$0.1 == true }).map({Int($0)}) ?? 0
                 
                 let recommendMenu = tags.joined()
-                
-                let selectedGroupId = UserDefaultManager.selectedGroupId == nil ? 0 : UserDefaultManager.selectedGroupId
-                
+                            
                 let request = RegistrationRestaurantRequest(
                     name: info.placeName,
                     introduce: commentString,
@@ -90,10 +89,12 @@ class RegistrationRestaurantInfoViewModel {
                     goWellWithLiquor: drinkingComment,
                     recommendMenu: recommendMenu,
                     restaurantLocationId: self.restaurantLocationId ?? 0,
-                    groupId: selectedGroupId ?? 0)
+                    groupId: selectedGroupId)
  
                 let response = try await RegistrationRestaurantAPI.registrationRestaurantAsync(request: request, images: selectedImages)
                 recommendRestaurantId = response.data.recommendRestaurantId
+            } else {
+                print("registrationRestaurantAsync Error")
             }
         } catch {
             print(error)

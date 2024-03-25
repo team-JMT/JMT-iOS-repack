@@ -29,7 +29,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="NXt-qt-I5H">
                                 <rect key="frame" x="20" y="115" width="353" height="56"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="음식이나 식당명을 검색하세요" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="T2b-ry-T82">
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="음식이나 식당명을 검색하세요" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="T2b-ry-T82" customClass="SearchTextField" customModule="JMTeng" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="315" height="56"/>
                                         <color key="backgroundColor" name="gray100"/>
                                         <constraints>

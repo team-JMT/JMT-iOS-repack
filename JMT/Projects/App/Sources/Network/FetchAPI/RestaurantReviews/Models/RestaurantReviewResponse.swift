@@ -14,17 +14,17 @@ struct RestaurantReviewResponse: Decodable {
 }
 
 struct FindRestaurantReviewResponse: Decodable {
-    let reviewList: [FindRestaurantReview]
+    let reviewList: [FindRestaurantReviewData]
     let page: ReviewPageResponse
 }
 
-struct FindRestaurantReview: Decodable {
+struct FindRestaurantReviewData: Decodable {
     let reviewId: Int
     let recommendRestaurantId: Int
     let userName: String
     let reviewContent: String
     let reviewImages: [String]
-    let reviewerImageUrl: String
+    let reviewerImageUrl: String?
 }
 
 struct ReviewPageResponse: Decodable {
@@ -47,7 +47,8 @@ extension RestaurantReviewResponse {
                 userName: review.userName,
                 reviewContent: review.reviewContent,
                 reviewImages: review.reviewImages,
-                reviewerImageUrl: review.reviewerImageUrl)
+                reviewerImageUrl: review.reviewerImageUrl,
+                totalCount: data.page.totalElements)
         }
     }
 }

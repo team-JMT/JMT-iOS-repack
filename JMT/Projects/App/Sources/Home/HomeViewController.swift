@@ -35,6 +35,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var topContainerViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var locationStackView: UIStackView!
+    @IBOutlet weak var refreshRestaurantButton: UIButton!
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var locationButtonBottom: NSLayoutConstraint!
     
@@ -63,7 +64,7 @@ class HomeViewController: UIViewController {
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
-
+    
     
     func fetchData() {
         
@@ -92,6 +93,7 @@ class HomeViewController: UIViewController {
                         // 현재 지도에 포함되어있는 맛집 데이터 가져오기
                         let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
                         try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+                        self.refreshMarkersInVisibleRegion()
                         
                         self.isHiddenJoinGroupUI = true
                         self.hasFetchedRestaurants = true
@@ -178,6 +180,7 @@ class HomeViewController: UIViewController {
                         // 현재 지도에 포함되어있는 맛집 데이터 가져오기
                         let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
                         try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+                        self.refreshMarkersInVisibleRegion()
                                         
                         // 그룹 정보
                         updateGroupInfoData()
@@ -186,7 +189,7 @@ class HomeViewController: UIViewController {
                         
                         self.view.hideSkeleton()
                         viewModel?.didUpdateGroupRestaurantsData?()
-                    }
+                    } 
                 }
             } catch {
                 print("123123", error)
@@ -224,6 +227,11 @@ class HomeViewController: UIViewController {
         naverMapView.showScaleBar = false
         naverMapView.showZoomControls = false
         naverMapView.mapView.positionMode = .direction
+        
+        locationButton.layer.shadowColor = JMTengAsset.gray200.color.cgColor
+        locationButton.layer.shadowOpacity = 1
+        locationButton.layer.shadowRadius = 5
+        locationButton.addShadow()
     }
     
     // 초기 UI 설정
@@ -280,20 +288,20 @@ class HomeViewController: UIViewController {
     
     // MARK: - Actions
     @IBAction func didTabRefreshButton(_ sender: Any) {
-        locationManager.startUpdateLocation()
-//        if LocationManager.shared.checkAuthorizationStatus() == false {
-//            self.showAccessDeniedAlert(type: .location)
-//        } else {
-//            Task {
-//                do {
-//                    let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
-//                    try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
-//                    self.refreshMarkersInVisibleRegion()
-//                } catch {
-//                    print(error)
-//                }
-//            }
-//        }
+    
+        if LocationManager.shared.checkAuthorizationStatus() == false {
+            self.showAccessDeniedAlert(type: .location)
+        } else {
+            Task {
+                do {
+                    let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
+                    try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+                    self.refreshMarkersInVisibleRegion()
+                } catch {
+                    print(error)
+                }
+            }
+        }
     }
     
     @IBAction func didTabChangeAddressButton(_ sender: Any) {
@@ -325,21 +333,16 @@ class HomeViewController: UIViewController {
 // MARK: - FloatingPanelControllerDelegate
 extension HomeViewController: FloatingPanelControllerDelegate {
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
-//        switch fpc.state {
-//        case .full:
-////            fpc.setPanelStyle(radius: 0, isHidden: true)
-//            //            locationStackView.isHidden = true
-//
-//        case .half:
-////            fpc.setPanelStyle(radius: 24, isHidden: false)
-//            //            locationStackView.isHidden = false
-//            
-//            //        case .tip:
-//            //            locationStackView.isHidden = false
-//            
-//        default:
-//            print("")
-//        }
+        if fpc.restorationIdentifier == "restaurantListFpc" {
+            switch fpc.state {
+            case .full:
+                fpc.setPanelStyle(radius: 0, isHidden: true)
+            case .half:
+                fpc.setPanelStyle(radius: 24, isHidden: false)
+            default:
+                print("")
+            }
+        }
     }
     
     func floatingPanelDidMove(_ fpc: FloatingPanelController) {
@@ -388,10 +391,6 @@ extension HomeViewController {
         }
     }
     
-    func addMarkersInVisibleRegion() {
-        
-    }
-    
     func removeAllMarkers() {
         markers.forEach { $0.mapView = nil } // 각 마커를 지도에서 제거
         markers.removeAll() // 마커 배열 비우기
@@ -437,6 +436,7 @@ extension HomeViewController {
         vc.viewModel = self.viewModel
        
         restaurantListFpc = FloatingPanelController(delegate: self)
+        restaurantListFpc.restorationIdentifier = "restaurantListFpc"
         restaurantListFpc.set(contentViewController: vc)
         restaurantListFpc.addPanel(toParent: self)
         

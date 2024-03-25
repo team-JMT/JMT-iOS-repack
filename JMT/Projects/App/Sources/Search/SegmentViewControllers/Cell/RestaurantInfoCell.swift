@@ -14,21 +14,27 @@ class RestaurantInfoCell: UICollectionViewCell {
     @IBOutlet weak var groupNameLabel: UILabel!
     @IBOutlet weak var restaurantNameLabel: UILabel!
     
+    
+    @IBOutlet weak var categoryView: UIView!
+    @IBOutlet weak var categoryLabel: UILabel!
+    
     @IBOutlet weak var userProfileImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         restaurantProfileImageView.layer.cornerRadius = 8
         userProfileImageView.layer.cornerRadius = 10
-
+        categoryView.layer.cornerRadius = 4
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
         restaurantProfileImageView.image = nil
+        categoryLabel.text = nil
         groupNameLabel.text = nil
         restaurantNameLabel.text = nil
         userProfileImageView.image = nil
@@ -50,6 +56,7 @@ class RestaurantInfoCell: UICollectionViewCell {
                 userProfileImageView.image = JMTengAsset.defaultProfileImage.image
             }
             
+            categoryLabel.text = data.category
             groupNameLabel.text = data.groupName
             restaurantNameLabel.text = data.name
             userNameLabel.text = data.userNickName
@@ -58,8 +65,6 @@ class RestaurantInfoCell: UICollectionViewCell {
     
     func setupOutBoundrestaurantData(outBoundrestaurantData: SearchRestaurantsOutBoundModel?) {
         if let data = outBoundrestaurantData {
-            
-            print(data)
             
             if let restaurantImageUrl = URL(string: data.restaurantImageUrl ?? "") {
                 restaurantProfileImageView.kf.setImage(with: restaurantImageUrl)
@@ -73,6 +78,7 @@ class RestaurantInfoCell: UICollectionViewCell {
                 userProfileImageView.image = JMTengAsset.defaultProfileImage.image
             }
             
+            categoryLabel.text = data.category
             groupNameLabel.text = data.groupName
             restaurantNameLabel.text = data.name
             userNameLabel.text = data.userNickName

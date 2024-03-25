@@ -28,11 +28,6 @@ class DefaultGroupCoordinator: GroupCoordinator {
         self.parentCoordinator = parentCoordinator
     }
     
-//    func start() {
-//        let groupViewController = GroupViewController.instantiateFromStoryboard(storyboardName: "Group")
-//        self.navigationController?.pushViewController(groupViewController, animated: true)
-//    }
-    
     func start() {
         let groupWebViewController = GroupWebViewController.instantiateFromStoryboard(storyboardName: "Group") as GroupWebViewController
         groupWebViewController.viewModel?.coordinator = self
@@ -69,7 +64,6 @@ class DefaultGroupCoordinator: GroupCoordinator {
     }
     
     func showSearchRestaurantViewController() {
-        print("123123")
         if getChildCoordinator(.searchRestaurant) == nil {
             setSearchRestaurantCoordinator()
         }

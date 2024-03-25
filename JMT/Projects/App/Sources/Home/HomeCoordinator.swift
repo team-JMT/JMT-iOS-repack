@@ -59,6 +59,9 @@ class DefaultHomeCoordinator: HomeCoordinator {
         coordinator.enterPoint = endPoint
         coordinator.start()
     }
+    
+    
+    
   
     func setSearchRestaurantCoordinator() {
         let coordinator = DefaultSearchRestaurantCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
@@ -73,6 +76,10 @@ class DefaultHomeCoordinator: HomeCoordinator {
         let coordinator = getChildCoordinator(.searchRestaurant) as! SearchRestaurantCoordinator
         coordinator.start()
     }
+    
+    
+    
+    
     
     func showSearchTabWithButton() {
         if let coordinator = parentCoordinator as? DefaultTabBarCoordinator {

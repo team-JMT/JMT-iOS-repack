@@ -87,6 +87,8 @@ class RestaurantDetailViewModel {
             if let reviews = restaurantData?.reviews {
                 reviews.map({ review in
                     restaurantReviewImages.append(contentsOf: review.reviewImages)
+                    print(review.totalCount)
+                    self.restaurantData?.reviewImageTotalCount += review.reviewImages.count
                 })
             }
         } catch {

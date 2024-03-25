@@ -7,8 +7,13 @@
 
 import UIKit
 
+protocol SearchResultEmptyCellDelegate: AnyObject {
+    func didTabCreateGroupButton()
+}
+
 class SearchResultEmptyCell: UICollectionViewCell {
     
+    weak var delegate: SearchResultEmptyCellDelegate?
     @IBOutlet weak var commentLabel: UILabel!
     @IBOutlet weak var createGroupButton: UIButton!
     
@@ -28,5 +33,9 @@ class SearchResultEmptyCell: UICollectionViewCell {
     func setupCommentLabel(str: String, isHideButton: Bool) {
         commentLabel.text = str
         createGroupButton.isHidden = isHideButton
+    }
+    
+    @IBAction func didTabCreateGroupButton(_ sender: Any) {
+        delegate?.didTabCreateGroupButton()
     }
 }

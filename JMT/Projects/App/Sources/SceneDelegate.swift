@@ -67,14 +67,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func sceneDidBecomeActive(_ scene: UIScene) {
         
-//        if !UserDefaultManager.hasBeenLaunchedBeforeFlag {
-//            UserDefaultManager.hasBeenLaunchedBeforeFlag = true
-//            UserDefaultManager.defaults.synchronize()
-//        } else {
-//            if locationManager.checkAuthorizationStatus() == false {
-//                self.window?.rootViewController?.showAccessDeniedAlert(type: .location)
-//            }
-//        }
     }
     
     func sceneWillResignActive(_ scene: UIScene) { 

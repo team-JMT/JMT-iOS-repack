@@ -7,7 +7,7 @@
 
 import UIKit
 import SnapKit
-
+import Then
 
 class SearchRestaurantViewController: UIViewController {
 
@@ -83,12 +83,37 @@ class SearchRestaurantViewController: UIViewController {
     }
     
     func updateEmptyTableViewBackgroundView() {
-        let emptyView = UIView(frame: CGRect(x: 0, y: 0, width: searchRestaurantResultTableView.bounds.width, height: searchRestaurantResultTableView.bounds.height))
-        let emptyImageView = UIImageView(image: JMTengAsset.emptyRestaurant.image)
-        emptyImageView.contentMode = .scaleAspectFit
+        let emptyView = UIView().then {
+            $0.frame = CGRect(x: 0,
+                              y: 0,
+                              width: searchRestaurantResultTableView.bounds.width,
+                              height: searchRestaurantResultTableView.bounds.height)
+        }
+                               
+        let stackView = UIStackView().then {
+            $0.axis = .vertical
+            $0.alignment = .center
+            $0.distribution = .equalSpacing
+            $0.spacing = 16
+        }
         
-        emptyView.addSubview(emptyImageView)
-        emptyImageView.snp.makeConstraints { make in
+        let emptyImageView = UIImageView().then {
+            $0.image = JMTengAsset.resultEmptyImage.image
+            $0.contentMode = .scaleAspectFit
+        }
+        
+        let messageLabel = UILabel().then {
+            $0.font = UIFont.settingFont(.pretendardBold, size: 16)
+            $0.textColor = JMTengAsset.gray300.color
+            $0.numberOfLines = 2
+            $0.setAttributedText(str: "검색 결과가 없어요\n올바른 식당명인지 확인해주세요", lineHeightMultiple: 1.25, kern: -0.32, alignment: .center)
+        }
+        
+        stackView.addArrangedSubview(emptyImageView)
+        stackView.addArrangedSubview(messageLabel)
+        emptyView.addSubview(stackView)
+
+        stackView.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
         }
         

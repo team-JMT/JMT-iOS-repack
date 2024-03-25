@@ -13,8 +13,15 @@ class RestaurantReview2Cell: UICollectionViewCell {
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var reviewCommentLabel: UILabel!
     
+    @IBOutlet weak var reviewPhotoCollectionView: UICollectionView!
+    
+    var photosUrl: [String] = []
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        reviewPhotoCollectionView.delegate = self
+        reviewPhotoCollectionView.dataSource = self
         
         userProfileImageView.layer.cornerRadius = 10
         self.layer.cornerRadius = 8
@@ -36,5 +43,24 @@ class RestaurantReview2Cell: UICollectionViewCell {
         
         userNameLabel.text = reviewData?.userName ?? ""
         reviewCommentLabel.text = reviewData?.reviewContent ?? ""
+    }
+}
+
+extension RestaurantReview2Cell: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return photosUrl.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? RestaurantReview3Cell else { return UICollectionViewCell() }
+        cell.setupReviewPhoto(url: photosUrl[indexPath.row])
+        return cell
+    }
+    
+}
+
+extension RestaurantReview2Cell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 48, height: 48)
     }
 }

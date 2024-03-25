@@ -7,7 +7,13 @@
 
 import UIKit
 
+protocol TotalResultTitleHeaderViewDelegate: AnyObject {
+    func didTabArrowButton(title: String)
+}
+
 class TitleHeaderView: UICollectionReusableView {
+    
+    weak var delegate: TotalResultTitleHeaderViewDelegate?
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var arrowButton: UIButton!
@@ -26,5 +32,9 @@ class TitleHeaderView: UICollectionReusableView {
       
     func setupTitle(title: String) {
         titleLabel.text = title
+    }
+    
+    @IBAction func didTabArrowButton(_ sender: Any) {
+        delegate?.didTabArrowButton(title: titleLabel.text ?? "")
     }
 }

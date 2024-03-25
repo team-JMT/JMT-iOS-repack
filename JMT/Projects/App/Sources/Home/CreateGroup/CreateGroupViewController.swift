@@ -55,7 +55,7 @@ class CreateGroupViewController: UIViewController, KeyboardEvent {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        
+
         setupKeyboardEvent { [weak self] noti in
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
             

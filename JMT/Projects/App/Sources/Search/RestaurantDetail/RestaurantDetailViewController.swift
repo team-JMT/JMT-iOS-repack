@@ -71,7 +71,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupUI()
         setupBind()
         
@@ -84,9 +84,6 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
                 self.setupData()
                             
                 self.viewModel?.didCompletedRestaurant?()
-                
-                
-                print("------", viewModel)
                 
             } catch {
                 print(error)
@@ -104,16 +101,17 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         self.tabBarController?.tabBar.isHidden = true
         
         self.navigationController?.setupBarAppearance(alpha: 1)
-        setCustomNavigationMoreButton()
+//        setCustomNavigationMoreButton()
         
         if viewModel?.coordinator?.parentCoordinator is DefaultHomeCoordinator {
             setCustomNavigationBarBackButton(goToViewController: .popVC)
         } else if viewModel?.coordinator?.parentCoordinator is DefaultRegistrationRestaurantInfoCoordinator {
             setCustomNavigationBarBackButton(goToViewController: .popToRootVC)
+        } else if viewModel?.coordinator?.parentCoordinator is DefaultSearchCoordinator {
+            setCustomNavigationBarBackButton(goToViewController: .popVC)
         } else if viewModel?.coordinator?.parentCoordinator is DefaultMyPageCoordinator {
             setCustomNavigationBarBackButton(goToViewController: .popVC)
         }
-        
         
         setupKeyboardEvent { [weak self] noti in
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
@@ -166,7 +164,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         if viewModel?.locationManager.coordinate == nil {
             differenceInDistanceLabel.text = "알 수 없음"
         } else {
-            differenceInDistanceLabel.text = "위치에서 \(viewModel?.restaurantData?.differenceInDistance ?? "")m"
+            differenceInDistanceLabel.text = "위치에서 \((Int(viewModel?.restaurantData?.differenceInDistance ?? "") ?? 0).distanceWithUnit())"
         }
         
         categoryLabel.text = viewModel?.restaurantData?.category ?? ""
@@ -224,7 +222,8 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         reviewTextView.textContainer.lineFragmentPadding = 0
         reviewTextView.alignTextVerticallyInContainer()
         
-        doneReviewButton.layer.cornerRadius = 8
+        
+        doneReviewButton.layer.cornerRadius = 6
     }
     
     // MARK: - Actions
