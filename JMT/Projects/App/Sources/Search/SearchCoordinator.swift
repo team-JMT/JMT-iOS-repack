@@ -14,6 +14,7 @@ protocol SearchCoordinator: Coordinator {
     func setButtonPopupCoordinator()
     func showButtonPopupViewController()
     
+    func showWebViewCreateGroupPage()
     func showWebViewGroupDetilPage(groupId: Int)
 }
 
@@ -81,6 +82,11 @@ class DefaultSearchCoordinator: SearchCoordinator {
         coordinator.start()
     }
     
+    func showWebViewCreateGroupPage() {
+        let coordinator = parentCoordinator?.childCoordinators[2] as! DefaultGroupCoordinator
+        coordinator.showCreateGroupPage()
+    }
+    
     func showWebViewGroupDetilPage(groupId: Int) {
         let coordinator = parentCoordinator?.childCoordinators[2] as! DefaultGroupCoordinator
         coordinator.showDetailGroupPage(groupId: groupId)
@@ -94,6 +100,8 @@ class DefaultSearchCoordinator: SearchCoordinator {
             childCoordinator = childCoordinators.first(where: { $0 is ButtonPopupCoordinator })
         case .restaurantDetail:
             childCoordinator = childCoordinators.first(where: { $0 is RestaurantDetailCoordinator })
+        case .createGroup:
+            childCoordinator = childCoordinators.first(where: { $0 is CreateGroupCoordinator })
         default:
             break
         }

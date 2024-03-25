@@ -48,6 +48,9 @@
                                 <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="14"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="새로운 그룹 만들기"/>
+                                <connections>
+                                    <action selector="didTabCreateGroupButton:" destination="I5g-Ko-4nz" eventType="touchUpInside" id="d8Q-j5-9dR"/>
+                                </connections>
                             </button>
                         </subviews>
                     </stackView>

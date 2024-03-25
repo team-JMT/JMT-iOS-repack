@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,12 +21,6 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="원하는 맛집이 없으신가요?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nZR-tH-mZ4">
-                    <rect key="frame" x="0.0" y="8" width="460" height="17"/>
-                    <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
-                    <color key="textColor" name="gray800"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="다른 그룹에서도 둘러보세요." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w1u-p5-4VR">
                     <rect key="frame" x="0.0" y="92" width="460" height="17"/>
                     <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                     <color key="textColor" name="gray800"/>
@@ -35,13 +29,13 @@
             </subviews>
             <viewLayoutGuide key="safeArea" id="wyv-H5-GKi"/>
             <constraints>
-                <constraint firstItem="nZR-tH-mZ4" firstAttribute="top" secondItem="cJd-l1-Xri" secondAttribute="top" constant="8" id="2Kn-Ok-Iju"/>
-                <constraint firstItem="nZR-tH-mZ4" firstAttribute="leading" secondItem="cJd-l1-Xri" secondAttribute="leading" id="4Ws-3d-aZd"/>
-                <constraint firstAttribute="trailing" secondItem="nZR-tH-mZ4" secondAttribute="trailing" id="AVt-bZ-J4Y"/>
-                <constraint firstItem="wyv-H5-GKi" firstAttribute="bottom" secondItem="w1u-p5-4VR" secondAttribute="bottom" id="PgN-RN-Ovp"/>
-                <constraint firstItem="wyv-H5-GKi" firstAttribute="trailing" secondItem="w1u-p5-4VR" secondAttribute="trailing" id="doI-w5-j8Y"/>
-                <constraint firstItem="w1u-p5-4VR" firstAttribute="leading" secondItem="wyv-H5-GKi" secondAttribute="leading" id="rOg-4Z-5rz"/>
+                <constraint firstItem="nZR-tH-mZ4" firstAttribute="leading" secondItem="cJd-l1-Xri" secondAttribute="leading" id="98U-YL-npX"/>
+                <constraint firstItem="wyv-H5-GKi" firstAttribute="bottom" secondItem="nZR-tH-mZ4" secondAttribute="bottom" id="a9a-lx-5FH"/>
+                <constraint firstAttribute="trailing" secondItem="nZR-tH-mZ4" secondAttribute="trailing" id="ttR-Bd-CgC"/>
             </constraints>
+            <connections>
+                <outlet property="differentGroupHeaderTitleLabel" destination="nZR-tH-mZ4" id="HsS-I8-BMK"/>
+            </connections>
             <point key="canvasLocation" x="-93.129770992366403" y="20.070422535211268"/>
         </collectionReusableView>
     </objects>

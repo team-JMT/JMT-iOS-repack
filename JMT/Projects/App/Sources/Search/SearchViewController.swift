@@ -60,7 +60,16 @@ class SearchViewController: UIViewController {
     
     // MARK: - SetupBindings
     func setupBind() {
+        viewModel?.didUpdateSegIndex = { [weak self] index in
+            self?.segmentedController.selectedSegmentIndex = index
+    
+            let direction: UIPageViewController.NavigationDirection = self?.viewModel?.currentSegIndex ?? 0 <= index ? .forward : .reverse
 
+            if let pageVC = self?.pageViewController {
+                pageVC.setViewControllers([pageVC.vcArray[index]], direction: direction, animated: true)
+                self?.viewModel?.currentSegIndex = index
+            }
+        }
     }
     
     // MARK: - FetchData

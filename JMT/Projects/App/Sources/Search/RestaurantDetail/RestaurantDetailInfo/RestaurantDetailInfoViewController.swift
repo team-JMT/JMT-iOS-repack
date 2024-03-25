@@ -73,7 +73,7 @@ class RestaurantDetailInfoViewController: UIViewController {
     
     // MARK: - SetupData
     func updatePhotoCount() {
-        photoCountLabel.text = "\(self.currentPhotoPage) / 10"
+        photoCountLabel.text = "\(self.currentPhotoPage) / \(viewModel?.restaurantData?.pictures.count ?? 0)"
         
         // 페이지 컨트롤 설정
         pageControl.numberOfPages = viewModel?.restaurantData?.pictures.count ?? 0
@@ -91,7 +91,7 @@ class RestaurantDetailInfoViewController: UIViewController {
         let indexPath = IndexPath(item: pageControl.currentPage, section: 0)
         currentPhotoPage = pageControl.currentPage
         photoCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        photoCountLabel.text = "\(self.currentPhotoPage + 1) / 10"
+        photoCountLabel.text = "\(self.currentPhotoPage + 1) / \(viewModel?.restaurantData?.pictures.count ?? 0)"
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -421,7 +421,7 @@ extension RestaurantDetailInfoViewController: UIScrollViewDelegate {
         let visibleRect = CGRect(origin: photoCollectionView.contentOffset, size: photoCollectionView.bounds.size)
         let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
         if let visibleIndexPath = photoCollectionView.indexPathForItem(at: visiblePoint) {
-            photoCountLabel.text = "\(visibleIndexPath.row + 1) / 10"
+            photoCountLabel.text = "\(visibleIndexPath.row + 1) / \(viewModel?.restaurantData?.pictures.count ?? 0)"
             pageControl.currentPage = visibleIndexPath.row
         }
     }

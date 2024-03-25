@@ -16,7 +16,6 @@ class TotalResultViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    
         totalResultCollectionView.collectionViewLayout = createLayout()
         totalResultCollectionView.keyboardDismissMode = .onDrag
         
@@ -49,140 +48,106 @@ class TotalResultViewController: UIViewController {
             
             switch sectionIndex {
             case 0:
-                return self.createFirstColumnSection()
+                return self.createRestaurantInfoSection()
             case 1:
-                return self.createSecondColumnSection()
+                return self.createGroupInfoSection()
             case 2:
-                return self.createThirdColumnSection()
+                return self.createOutBoundrestaurantSection()
             default:
                 return nil
             }
         }
         
-        layout.register(CollectionBackgroundViewInset.self, forDecorationViewOfKind: "BackgroundViewInset")
+        layout.register(CollectionInset12BackgroundWhiteView.self, forDecorationViewOfKind: "InsetWhiteBackgroundView")
+        layout.register(CollectionBackgroundGrayView.self, forDecorationViewOfKind: "GrayBackgroundView")
+        
         return layout
     }
     
-    func createFirstColumnSection() -> NSCollectionLayoutSection {
-        if viewModel?.restaurants.isEmpty == true {
-            // Item
-            let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1),
-                heightDimension: .estimated(100)
-            )
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-          
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0), // .fractionalWidth(0.6675),
-                heightDimension: .estimated(100) // .fractionalHeight(0.4215)
-            )
-            
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+    func createRestaurantInfoSection() -> NSCollectionLayoutSection {
 
-            // Section
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 52, trailing: 20)
-            section.interGroupSpacing = CGFloat(12)
-            
-            // Header
-            section.boundarySupplementaryItems = [
-                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-            ]
-            
-            // Background
-            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
-            section.decorationItems = [sectionBackgroundDecoration]
-
-            return section
-        } else {
-            // Item
-            let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1),
-                heightDimension: .absolute(100)
-            )
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-          
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0), // .fractionalWidth(0.6675),
-                heightDimension: .absolute(100) // .fractionalHeight(0.4215)
-            )
-            
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-
-            // Section
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 52, trailing: 20)
-            section.interGroupSpacing = CGFloat(12)
-            
-            // Header
-            section.boundarySupplementaryItems = [
-                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-            ]
-            
-            // Background
-            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
-            section.decorationItems = [sectionBackgroundDecoration]
-
-            return section
-        }
-    }
-    
-    func createSecondColumnSection() -> NSCollectionLayoutSection {
-        // Item
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(80)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-      
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0), // .fractionalWidth(0.6675),
-            heightDimension: .estimated(80) // .fractionalHeight(0.4215)
-        )
-        
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-
-        // Section
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 52, trailing: 20)
-        section.interGroupSpacing = CGFloat(32)
-        
-        // Header
-        section.boundarySupplementaryItems = [
-            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-        ]
-        
-        // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
-        section.decorationItems = [sectionBackgroundDecoration]
-
-        return section
-    }
-    
-    func createThirdColumnSection() -> NSCollectionLayoutSection {
-        // Item
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(100)
         )
+        
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-      
+    
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0), // .fractionalWidth(0.6675),
-            heightDimension: .estimated(100) // .fractionalHeight(0.4215)
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(100)
         )
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-
-        // Section
+        
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 20, bottom: 24, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 32, trailing: 20)
         section.interGroupSpacing = CGFloat(12)
         
-        // Header
-        section.boundarySupplementaryItems = [
-            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(68)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-        ]
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(46))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        section.boundarySupplementaryItems = [header]
+        
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "InsetWhiteBackgroundView")
+        section.decorationItems = [sectionBackgroundDecoration]
+        
+        return section
+    }
+    
+    func createGroupInfoSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(80)
+        )
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+    
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(80)
+        )
+        
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 32, trailing: 20)
+        section.interGroupSpacing = CGFloat(12)
+        
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(46))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        section.boundarySupplementaryItems = [header]
+        
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "InsetWhiteBackgroundView")
+        section.decorationItems = [sectionBackgroundDecoration]
+        
+        return section
+    }
+    
+    func createOutBoundrestaurantSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(100)
+        )
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+    
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(100)
+        )
+        
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+        section.interGroupSpacing = CGFloat(12)
+        
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        section.boundarySupplementaryItems = [header]
+        
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundView")
+        section.decorationItems = [sectionBackgroundDecoration]
         
         return section
     }
@@ -235,6 +200,7 @@ extension TotalResultViewController: UICollectionViewDataSource {
         case 1:
             if viewModel?.groupList.isEmpty == true {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultEmptyCell", for: indexPath) as? SearchResultEmptyCell else { return UICollectionViewCell() }
+                cell.delegate = self
                 cell.setupCommentLabel(str: "아직 등록된 그룹이 없어요", isHideButton: false)
                 return cell
             } else {
@@ -245,6 +211,7 @@ extension TotalResultViewController: UICollectionViewDataSource {
         case 2:
             if viewModel?.outBoundrestaurants.isEmpty == true {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultEmptyCell", for: indexPath) as? SearchResultEmptyCell else { return UICollectionViewCell() }
+                cell.delegate = self
                 cell.setupCommentLabel(str: "다른 그룹에 등록된 맛집이 없어요", isHideButton: true)
                 return cell
             } else {
@@ -266,14 +233,16 @@ extension TotalResultViewController: UICollectionViewDelegate {
             switch indexPath.section {
             case 0:
                 let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "titleHeaderView", for: indexPath) as! TitleHeaderView
+                header.delegate = self
                 header.setupTitle(title: "맛집")
                 return header
             case 1:
                 let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "titleHeaderView", for: indexPath) as! TitleHeaderView
+                header.delegate = self
                 header.setupTitle(title: "그룹")
                 return header
             case 2:
-                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "DifferentGroupHeader", for: indexPath) as! DifferentGroupHeader
+                guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "DifferentGroupHeader", for: indexPath) as? DifferentGroupHeader else { return UICollectionReusableView() }
                 return header
             default:
                 return UICollectionReusableView()
@@ -296,11 +265,28 @@ extension TotalResultViewController: UICollectionViewDelegate {
                 viewModel?.coordinator?.showWebViewGroupDetilPage(groupId: viewModel?.groupList[indexPath.row].groupId ?? 0)
             }
         case 2:
-            if viewModel?.restaurants.isEmpty == false {
-                viewModel?.coordinator?.showRestaurantDetailViewController(id: viewModel?.restaurants[indexPath.row].id ?? 0)
+            if viewModel?.outBoundrestaurants.isEmpty == false {
+                viewModel?.coordinator?.showRestaurantDetailViewController(id: viewModel?.outBoundrestaurants[indexPath.row].id ?? 0)
             }
         default:
             return
         }
+    }
+}
+
+
+extension TotalResultViewController: TotalResultTitleHeaderViewDelegate {
+    func didTabArrowButton(title: String) {
+        if title == "맛집" {
+            viewModel?.didUpdateSegIndex?(1)
+        } else {
+            viewModel?.didUpdateSegIndex?(2)
+        }
+    }
+}
+
+extension TotalResultViewController: SearchResultEmptyCellDelegate {
+    func didTabCreateGroupButton() {
+        viewModel?.coordinator?.showWebViewCreateGroupPage()
     }
 }

@@ -41,106 +41,85 @@ class GroupResultViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
             switch sectionIndex {
             case 0:
-                return self.createFirstColumnSection()
+                return self.createGroupInfoSection()
             case 1:
-                return self.createThirdColumnSection()
+                return self.createNewGroupSection()
             default:
                 return nil
             }
         }
         
-        layout.register(CollectionBackgroundViewInset.self, forDecorationViewOfKind: "BackgroundViewInset")
+        layout.register(CollectionInset12BackgroundWhiteView.self, forDecorationViewOfKind: "InsetWhiteBackgroundView")
+        layout.register(CollectionBackgroundGrayView.self, forDecorationViewOfKind: "GrayBackgroundView")
+        layout.register(CollectionBackgroundWhiteView.self, forDecorationViewOfKind: "WhiteBackgroundView")
+        
         return layout
     }
     
-    func createFirstColumnSection() -> NSCollectionLayoutSection {
-        // Item
+    func createGroupInfoSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
+            widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(80)
         )
+        
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-      
+    
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0), // .fractionalWidth(0.6675),
-            heightDimension: .estimated(80) // .fractionalHeight(0.4215)
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(80)
         )
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-
-        // Section
+        
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 32, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 32, trailing: 20)
         section.interGroupSpacing = CGFloat(12)
         
-        // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
-        section.decorationItems = [sectionBackgroundDecoration]
-
+        if viewModel?.groupList.isEmpty == true {
+            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "WhiteBackgroundView")
+            section.decorationItems = [sectionBackgroundDecoration]
+        } else {
+            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "InsetWhiteBackgroundView")
+            section.decorationItems = [sectionBackgroundDecoration]
+        }
+        
         return section
     }
     
-//    func createSecondColumnSection() -> NSCollectionLayoutSection {
-//        // Item
-//        let itemSize = NSCollectionLayoutSize(
-//            widthDimension: .absolute(130),
-//            heightDimension: .absolute(207)
-//        )
-//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//      
-//        let groupSize = NSCollectionLayoutSize(
-//            widthDimension: .absolute(130), // .fractionalWidth(0.6675),
-//            heightDimension: .absolute(207) // .fractionalHeight(0.4215)
-//        )
-//        
-//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-//
-//        // Section
-//        let section = NSCollectionLayoutSection(group: group)
-//        section.contentInsets = NSDirectionalEdgeInsets(top: 17, leading: 20, bottom: 32, trailing: 20)
-//        section.orthogonalScrollingBehavior = .continuous
-//        section.interGroupSpacing = CGFloat(8)
-//        
-//        // Header
-//        section.boundarySupplementaryItems = [
-//            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(44)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-//        ]
-//        
-//        // Background
-//        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
-//        section.decorationItems = [sectionBackgroundDecoration]
-//
-//        return section
-//    }
-    
-    func createThirdColumnSection() -> NSCollectionLayoutSection {
-        // Item
+    func createNewGroupSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(83)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-      
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0), // .fractionalWidth(0.6675),
-            heightDimension: .absolute(83) // .fractionalHeight(0.4215)
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(83)
         )
         
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-        // Section
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+    
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(83)
+        )
+        
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 20, bottom: 20, trailing: 20)
+        section.interGroupSpacing = CGFloat(12)
+
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "GrayBackgroundView")
+        section.decorationItems = [sectionBackgroundDecoration]
         
         return section
     }
 }
 
 extension GroupResultViewController: UICollectionViewDataSource {
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return viewModel?.groupList.isEmpty == true ? 1 : 2
     }
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
         switch section {
         case 0:
             if viewModel?.groupList.isEmpty == true {
@@ -160,6 +139,7 @@ extension GroupResultViewController: UICollectionViewDataSource {
         case 0:
             if viewModel?.groupList.isEmpty == true {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultEmptyCell", for: indexPath) as? SearchResultEmptyCell else { return UICollectionViewCell() }
+                cell.delegate = self
                 cell.setupCommentLabel(str: "아직 등록된 그룹이 없어요", isHideButton: false)
                 return cell
             } else {
@@ -176,19 +156,21 @@ extension GroupResultViewController: UICollectionViewDataSource {
     }
 }
 
-//extension GroupResultViewController: UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        switch kind {
-//        case UICollectionView.elementKindSectionHeader:
-//            switch indexPath.section {
-//            case 1:
-//                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "ResultTitleHeaderView", for: indexPath) as! GroupResultTitleHeaderView
-//                return header
-//            default:
-//                return UICollectionReusableView()
-//            }
-//        default:
-//            return UICollectionReusableView()
-//        }
-//    }
-//}
+extension GroupResultViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            if viewModel?.restaurants.isEmpty == false {
+                viewModel?.coordinator?.showWebViewGroupDetilPage(groupId: viewModel?.groupList[indexPath.row].groupId ?? 0)
+            }
+        default:
+            return
+        }
+    }
+}
+
+extension GroupResultViewController: SearchResultEmptyCellDelegate {
+    func didTabCreateGroupButton() {
+        viewModel?.coordinator?.showWebViewCreateGroupPage()
+    }
+}

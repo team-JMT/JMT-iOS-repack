@@ -18,6 +18,8 @@ class SearchViewModel {
     var restaurants = [SearchRestaurantsItems]()
     var groupList = [SearchGroupItems]()
     var outBoundrestaurants = [SearchRestaurantsOutBoundModel]()
+    
+    var didUpdateSegIndex: ((Int) -> Void)?
 
     // 맛집 검색하기
     func fetchRestaurantsAsync(keyword: String) async throws {

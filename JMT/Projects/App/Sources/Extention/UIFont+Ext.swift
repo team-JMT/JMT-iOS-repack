@@ -28,7 +28,7 @@ extension UILabel {
     func setAttributedText(str: String, lineHeightMultiple: CGFloat, kern: CGFloat, alignment: NSTextAlignment) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = lineHeightMultiple
-        paragraphStyle.alignment = .center
+        paragraphStyle.alignment = alignment
         
         let attributes: [NSAttributedString.Key: Any] = [
             .paragraphStyle: paragraphStyle,
