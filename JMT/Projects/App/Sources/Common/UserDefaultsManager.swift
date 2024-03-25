@@ -14,6 +14,7 @@ struct UserDefaultManager {
         static let hasBeenLaunchedBeforeFlag = "hasBeenLaunchedBeforeFlag"
         static let isJoinGroup = "isJoinGroup"
         static let selectedGroupId = "selectedGroupId"
+        static let webViewSelectedGroupId = "webViewSelectedGroupId"
         static let recenLocationKeywords = "recenLocationKeywords"
         static let recentSearchRestaurantKeywords = "recentSearchRestaurantKeywords"
     }
@@ -43,6 +44,23 @@ struct UserDefaultManager {
                 defaults.set(newValue, forKey: Keys.selectedGroupId)
             } else {
                 defaults.removeObject(forKey: Keys.selectedGroupId)
+            }
+        }
+    }
+    
+    static var webViewSelectedGroupId: Int? {
+        get {
+            if let value = defaults.value(forKey: Keys.webViewSelectedGroupId) as? Int {
+                return value
+            } else {
+                return nil
+            }
+        }
+        set {
+            if let newValue = newValue {
+                defaults.set(newValue, forKey: Keys.webViewSelectedGroupId)
+            } else {
+                defaults.removeObject(forKey: Keys.webViewSelectedGroupId)
             }
         }
     }

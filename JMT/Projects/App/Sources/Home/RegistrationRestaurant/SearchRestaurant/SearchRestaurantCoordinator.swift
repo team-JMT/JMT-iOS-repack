@@ -30,9 +30,9 @@ class DefaultSearchRestaurantCoordinator: SearchRestaurantCoordinator {
     }
     
     func start() {
-        let searchRestaurantViewModel = SearchRestaurantViewController.instantiateFromStoryboard(storyboardName: "SearchRestaurant") as SearchRestaurantViewController
-        searchRestaurantViewModel.viewModel?.coordinator = self
-        self.navigationController?.pushViewController(searchRestaurantViewModel, animated: true)
+        let searchRestaurantViewController = SearchRestaurantViewController.instantiateFromStoryboard(storyboardName: "SearchRestaurant") as SearchRestaurantViewController
+        searchRestaurantViewController.viewModel?.coordinator = self
+        self.navigationController?.pushViewController(searchRestaurantViewController, animated: true)
     }
     
     func setSearchRestaurantMapCoordinator() {

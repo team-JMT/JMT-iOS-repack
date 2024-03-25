@@ -109,6 +109,8 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
             setCustomNavigationBarBackButton(goToViewController: .popToRootVC)
         } else if viewModel?.coordinator?.parentCoordinator is DefaultSearchCoordinator {
             setCustomNavigationBarBackButton(goToViewController: .popVC)
+        } else if viewModel?.coordinator?.parentCoordinator is DefaultMyPageCoordinator {
+            setCustomNavigationBarBackButton(goToViewController: .popVC)
         }
         
         setupKeyboardEvent { [weak self] noti in

@@ -47,6 +47,8 @@ class HomeBottomSheetViewController: UIViewController {
         
         viewModel?.didUpdateGroupRestaurantsData = {
             
+            print("작업 새로고침")
+            
             DispatchQueue.main.async {
                 self.viewModel?.isLodingData = true
                 self.bottomSheetCollectionView.showAnimatedGradientSkeleton()

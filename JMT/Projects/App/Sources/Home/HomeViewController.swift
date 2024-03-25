@@ -189,7 +189,7 @@ class HomeViewController: UIViewController {
                         
                         self.view.hideSkeleton()
                         viewModel?.didUpdateGroupRestaurantsData?()
-                    }
+                    } 
                 }
             } catch {
                 print("123123", error)

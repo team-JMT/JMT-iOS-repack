@@ -127,6 +127,7 @@
 //            
 //            decodeAndHandleMessage(messageData)
 //        }
+//        
 //        if message.name == "callbackHandler" {
 //            // 메시지 내용 파싱
 //            guard let messageBody = message.body as? String,

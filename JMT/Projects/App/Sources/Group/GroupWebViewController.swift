@@ -149,6 +149,9 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
     }
     
     private func handleJSONDataBasedOnName(jsonString: String) {
+        
+        print("123123", jsonString)
+        
         if let dictionary = parseJSONStringToDictionary(jsonString: jsonString),
            let name = dictionary["name"] as? String {
             switch name {
@@ -166,11 +169,17 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
                     self.tabBarController?.tabBar.isHidden = isVisible
                 }
             case "navigate":
-                
-                if let data = dictionary["data"] as? [String: Any], let groupId = data["groupId"] as? Int, let route = data["route"] as? String {
-                    print(groupId, route)
-                    print(viewModel?.coordinator)
-                    viewModel?.coordinator?.showSearchRestaurantViewController()
+                if let data = dictionary["data"] as? [String: Any],
+                    let route = data["route"] as? String,
+                    let groupId = data["Id"] as? Int {
+                    
+                    switch route {
+                    case "registRestaurant":
+                        UserDefaultManager.webViewSelectedGroupId = groupId
+                        viewModel?.coordinator?.showSearchRestaurantViewController()
+                    default:
+                        return
+                    }
                }
             case "back":
                 // 뒤로가기 관련 처리

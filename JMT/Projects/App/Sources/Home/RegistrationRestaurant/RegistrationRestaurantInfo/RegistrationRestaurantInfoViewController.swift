@@ -316,22 +316,37 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     }
     // MARK: - Actions
     @IBAction func didTabRegistrationButton(_ sender: Any) {
-        
+
+        if let _ = self.navigationController?.viewControllers.first as? HomeViewController {
+            viewModel?.selectedGroupId = UserDefaultManager.selectedGroupId
+        } else if let _ = self.navigationController?.viewControllers.first as? GroupWebViewController {
+            viewModel?.selectedGroupId = UserDefaultManager.webViewSelectedGroupId
+        } else {
+            print("Unknown ViewController")
+            return
+        }
+
         Task {
+            guard viewModel?.checkNotInfo() == true else {
+                viewModel?.coordinator?.showButtonPopupViewController()
+                return
+            }
+            
             do {
-                if viewModel?.checkNotInfo() == true {
-                    try await viewModel?.registrationRestaurantLocation()
-                    try await viewModel?.registrationRestaurantAsync()
-                    viewModel?.coordinator?.showDetailRestaurantViewController(id: viewModel?.recommendRestaurantId ?? 0)
-                } else {
-                    viewModel?.coordinator?.showButtonPopupViewController()
+                try await viewModel?.registrationRestaurantLocation()
+                try await viewModel?.registrationRestaurantAsync()
+                
+                if let vc = self.navigationController?.viewControllers.first as? HomeViewController {
+                    vc.viewModel?.didUpdateGroupRestaurantsData?()
                 }
+                
+                viewModel?.coordinator?.showDetailRestaurantViewController(id: viewModel?.recommendRestaurantId ?? 0)
             } catch {
-                print("123123123", error)
-                // 실패했을때
+                print("Error: \(error)")
+                // 실패했을때 처리
             }
         }
-    }   
+    }
     
     // MARK: - Helper Methods
     func updateSection(section: Int) {
