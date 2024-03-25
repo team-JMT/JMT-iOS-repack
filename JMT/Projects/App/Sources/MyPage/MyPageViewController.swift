@@ -10,8 +10,7 @@ import UIKit
 class MyPageViewController: UIViewController, UIScrollViewDelegate
 
 {
-    //weak var coordinator: MyPageCoordinator?
-//    var viewModel = MyPageViewModel()
+    
     var viewModel: MyPageViewModel?
     var restaurants: [Restaurant] = []
     
@@ -168,7 +167,7 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
     
     @IBAction func DetailMyPage(_ sender: Any) {
         viewModel?.coordinator?.showDetailMyPageVieController()
-        
+        print(1)
     }
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
