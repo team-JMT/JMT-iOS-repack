@@ -12,5 +12,5 @@ target 'JMTeng' do
   project 'Projects/App/JMTeng.xcodeproj'
   pod 'NMapsMap'
   pod 'GoogleSignIn'
-
+  pod 'Toast-Swift', '~> 5.1.0'
 end

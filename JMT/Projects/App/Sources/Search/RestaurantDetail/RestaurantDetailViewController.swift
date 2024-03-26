@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import Toast_Swift
 
 protocol RestaurantDetailViewControllerDelegate: AnyObject {
     var headerHeight: CGFloat { get }
@@ -252,6 +253,9 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
                 print(error)
             }
         }
+    }
+    @IBAction func didTabCopyAddressButton(_ sender: Any) {
+        view.makeToast("123123123123123123")
     }
     
     // MARK: - Helper Methods
