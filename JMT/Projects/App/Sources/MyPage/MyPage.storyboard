@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
@@ -24,28 +24,28 @@
             <objects>
                 <viewController storyboardIdentifier="MyPageViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7ra-iV-2jw" customClass="MyPageViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wpY-gE-9PZ">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jkv-FR-1iI">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1S5-wD-Dkx">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rst-sJ-uhC" userLabel="기준점">
-                                                <rect key="frame" x="76" y="0.0" width="240" height="128"/>
+                                                <rect key="frame" x="76" y="0.0" width="277" height="128"/>
                                                 <color key="backgroundColor" name="gray200"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="128" id="UfG-AR-8ge"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" id="4AI-in-a9M">
-                                                <rect key="frame" x="0.0" y="0.0" width="393" height="230"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="430" height="230"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <segmentedControl opaque="NO" contentMode="scaleToFill" restorationIdentifier="UnderlineSegmentedControl" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5oI-iI-LwA" customClass="UnderlineSegmentedControl" customModule="JMTeng" customModuleProvider="target">
-                                                        <rect key="frame" x="10" y="184" width="373" height="32"/>
+                                                        <rect key="frame" x="10" y="184" width="410" height="32"/>
                                                         <segments>
                                                             <segment title="등록한 맛집"/>
                                                             <segment title="나의후기"/>
@@ -55,14 +55,14 @@
                                                         </connections>
                                                     </segmentedControl>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="moR-bc-JK4">
-                                                        <rect key="frame" x="0.0" y="48" width="393" height="1"/>
+                                                        <rect key="frame" x="0.0" y="48" width="430" height="1"/>
                                                         <color key="backgroundColor" name="gray100"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="p5d-f7-XBi"/>
                                                         </constraints>
                                                     </view>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cJK-4J-UH2">
-                                                        <rect key="frame" x="349" y="12" width="24" height="24"/>
+                                                        <rect key="frame" x="386" y="12" width="24" height="24"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="24" id="23l-Gw-CSF"/>
                                                             <constraint firstAttribute="height" constant="24" id="QtS-2P-UZC"/>
@@ -124,14 +124,14 @@
                                                         </constraints>
                                                     </imageView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PAk-vv-8fD">
-                                                        <rect key="frame" x="0.0" y="215" width="393" height="1"/>
+                                                        <rect key="frame" x="0.0" y="215" width="430" height="1"/>
                                                         <color key="backgroundColor" name="gray100"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="Vmp-bB-Num"/>
                                                         </constraints>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MfN-Zz-Rw3">
-                                                        <rect key="frame" x="198" y="64" width="147" height="55"/>
+                                                        <rect key="frame" x="235" y="64" width="147" height="55"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="55" id="jbx-P7-vZP"/>
                                                             <constraint firstAttribute="width" constant="147" id="k1G-59-807"/>
@@ -175,7 +175,7 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </view>
                                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4tk-86-bdW">
-                                                <rect key="frame" x="0.0" y="216" width="393" height="636"/>
+                                                <rect key="frame" x="0.0" y="216" width="430" height="716"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </containerView>
                                         </subviews>
@@ -189,15 +189,22 @@
                                     </view>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="IxN-FP-muR" firstAttribute="trailing" secondItem="1S5-wD-Dkx" secondAttribute="trailing" id="3uM-v4-3Ha"/>
+                                    <constraint firstItem="1S5-wD-Dkx" firstAttribute="width" secondItem="Jkv-FR-1iI" secondAttribute="width" id="BH3-UO-rX2"/>
                                     <constraint firstItem="cyG-NB-b3l" firstAttribute="bottom" secondItem="1S5-wD-Dkx" secondAttribute="bottom" id="HPZ-13-M2l"/>
+                                    <constraint firstItem="IxN-FP-muR" firstAttribute="trailing" secondItem="1S5-wD-Dkx" secondAttribute="trailing" id="LDJ-Vh-N8c"/>
+                                    <constraint firstItem="IxN-FP-muR" firstAttribute="trailing" secondItem="1S5-wD-Dkx" secondAttribute="trailing" id="LVR-Vm-BXf"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="trailing" secondItem="cyG-NB-b3l" secondAttribute="trailing" id="OPB-xj-mkM"/>
+                                    <constraint firstItem="IxN-FP-muR" firstAttribute="trailing" secondItem="1S5-wD-Dkx" secondAttribute="trailing" id="PH2-xe-f4t"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="leading" secondItem="cyG-NB-b3l" secondAttribute="leading" id="Tu5-1U-h3H"/>
-                                    <constraint firstItem="1S5-wD-Dkx" firstAttribute="width" secondItem="Jkv-FR-1iI" secondAttribute="width" id="Ymj-dV-zGc"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="top" secondItem="Jkv-FR-1iI" secondAttribute="top" id="aA8-EI-QZ1"/>
+                                    <constraint firstItem="1S5-wD-Dkx" firstAttribute="height" secondItem="IxN-FP-muR" secondAttribute="height" id="amo-1l-cid"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="leading" secondItem="Jkv-FR-1iI" secondAttribute="leading" id="c0c-tc-gDl"/>
                                     <constraint firstAttribute="trailing" secondItem="1S5-wD-Dkx" secondAttribute="trailing" id="fuM-rx-jJO"/>
+                                    <constraint firstItem="IxN-FP-muR" firstAttribute="trailing" secondItem="1S5-wD-Dkx" secondAttribute="trailing" id="idv-xU-Njj"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="height" secondItem="Jkv-FR-1iI" secondAttribute="height" priority="250" id="vRW-h7-LEt"/>
                                     <constraint firstAttribute="bottom" secondItem="1S5-wD-Dkx" secondAttribute="bottom" id="xkH-KO-a4U"/>
+                                    <constraint firstItem="IxN-FP-muR" firstAttribute="trailing" secondItem="1S5-wD-Dkx" secondAttribute="trailing" id="yjJ-lz-Xta"/>
                                     <constraint firstItem="1S5-wD-Dkx" firstAttribute="top" secondItem="cyG-NB-b3l" secondAttribute="top" id="yn4-Gf-FKB"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="IxN-FP-muR"/>
@@ -230,20 +237,20 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Nf-uC-k4m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="340" y="-209"/>
+            <point key="canvasLocation" x="339.06976744186045" y="-209.22746781115882"/>
         </scene>
         <!--Second Segment View Controller-->
         <scene sceneID="Sfe-tS-9rX">
             <objects>
                 <viewController storyboardIdentifier="SecondSegmentViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="A1g-Fz-9OD" customClass="SecondSegmentViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cfx-Io-7dD">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="sBQ-4V-ESn">
-                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <rect key="frame" x="0.0" y="59" width="430" height="839"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="nSE-IE-JEp">
-                                    <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="430" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="c6z-2Z-47Z">
@@ -388,14 +395,14 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="SecondSegmentTableViewCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SecondSegmentTableViewCell" rowHeight="268" id="Afv-iU-TsF" customClass="SecondSegmentTableViewCell" customModule="JMTeng" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="94" width="393" height="268"/>
+                                        <rect key="frame" x="0.0" y="94" width="430" height="268"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Afv-iU-TsF" id="8kg-nS-2s6">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="268"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="430" height="268"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VBn-3E-yEv">
-                                                    <rect key="frame" x="20" y="16" width="353" height="210.66666666666666"/>
+                                                    <rect key="frame" x="20" y="16" width="390" height="210.66666666666666"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Zya-53-Qvh">
                                                             <rect key="frame" x="16" y="8" width="72" height="19"/>
@@ -422,7 +429,7 @@
                                                             </constraints>
                                                         </stackView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="레이블" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="8" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zGa-0p-NK5">
-                                                            <rect key="frame" x="16" y="111" width="321" height="83.666666666666686"/>
+                                                            <rect key="frame" x="16" y="111" width="358" height="83.666666666666686"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="83.670000000000002" id="gJQ-Bf-7ym"/>
                                                             </constraints>
@@ -589,7 +596,7 @@
             <objects>
                 <viewController storyboardIdentifier="MyPageTestViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="CFw-Pa-Nzn" customClass="MyPageTestViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jcX-aL-X1E">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Pg-pO-6XI">
@@ -625,6 +632,7 @@
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="fRQ-Cy-tR2">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="500"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="sectionIndexBackgroundColor" name="green500"/>
                                                 <view key="tableHeaderView" contentMode="scaleToFill" id="efF-H4-xrU">
                                                     <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -882,7 +890,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </tableView>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="fRQ-Cy-tR2" secondAttribute="trailing" id="5iY-GK-Tg6"/>
                                             <constraint firstItem="fRQ-Cy-tR2" firstAttribute="height" secondItem="aPR-7A-CIU" secondAttribute="height" id="9TM-VZ-fR1"/>
@@ -957,11 +965,17 @@
         <namedColor name="gray900">
             <color red="0.086000002920627594" green="0.10199999809265137" blue="0.11400000005960464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="green500">
+            <color red="0.23499999940395355" green="0.76899999380111694" blue="0.28600001335144043" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBrownColor">
             <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemTealColor">
+            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
