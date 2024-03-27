@@ -73,7 +73,13 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
     }
     
     func showDetailMyPageVieController() {
-      
+        if getChildCoordinator(.detailMyPage) == nil {
+                   setDetailMyPageCoordinator()
+               }
+               
+               let coordinator = getChildCoordinator(.detailMyPage) as! DetailMyPageCoordinator
+               coordinator.start()
+           
         
     }
     
