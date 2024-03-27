@@ -28,21 +28,21 @@ class MyPageViewModel {
         }
     }
     
-    var totalRestaurants: Int? {
-            didSet {
-                onTotalRestaurantsUpdated?()
-            }
-        }
+//    var totalRestaurants: Int? {
+//            didSet {
+//                onTotalRestaurantsUpdated?()
+//            }
+//        }
     
     var testRestaurantsData: [UserRestaurantItemsModel] = []
     var testTotalRestaurants: Int = 0
     var testReviews: [Review] = []
     
-    var restaurantsData: [Restaurant] = [] {
-           didSet {
-               self.onRestaurantsDataUpdated?()
-           }
-       }
+//    var restaurantsData: [Restaurant] = [] {
+//           didSet {
+//               self.onRestaurantsDataUpdated?()
+//           }
+//       }
     var onRestaurantsDataUpdated: (() -> Void)?
     var onUserInfoLoaded: (() -> Void)?
     var onTotalRestaurantsUpdated: (() -> Void)?

@@ -54,7 +54,6 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         
         layout()
         
-        
         viewModel?.onRestaurantsDataUpdated = { [weak self] in
             DispatchQueue.main.async {
                 self?.mainTable.reloadData()
@@ -132,49 +131,49 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         alcholrFilterView.clipsToBounds = true
     }
     
-    func fetchRestaurants() {
-        print("Fetching restaurants with selectedType: \(selectedType), selectedAlcohol: \(selectedAlcohol)")
-        guard let accessToken = keychainAccess.getToken("accessToken") else {
-            print("Access Token is not available")
-            return
-        }
-        
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(accessToken)",
-            "Content-Type": "application/json"
-        ]
-        
-        let url = "https://api.jmt-matzip.dev/api/v1/restaurant/search?page=0&size=20"
-        var filterParameters: [String: Any] = [:]
-        if !selectedType.isEmpty {
-            filterParameters["categoryFilter"] = selectedType
-        }
-        filterParameters["isCanDrinkLiquor"] = selectedAlcohol
-        
-        let parameters: [String: Any] = [
-            "userLocation": ["x": "", "y": ""],
-            "filter": filterParameters
-        ]
-        
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: ResturantResponse.self) { [weak self] response in
-            guard let self = self else { return }
-            
-            switch response.result {
-            case .success(let responseData):
-                print("Successfully fetched restaurants data")
-                let filteredData = responseData.data?.restaurants?.filter { restaurant in
-                   
-                    true
-                } ?? []
-                self.viewModel?.restaurantsData = filteredData
-                DispatchQueue.main.async {
-                    self.mainTable.reloadData()
-                }
-            case .failure(let error):
-                print("Error fetching restaurants data: \(error)")
-            }
-        }
-    }
+//    func fetchRestaurants() {
+//        print("Fetching restaurants with selectedType: \(selectedType), selectedAlcohol: \(selectedAlcohol)")
+//        guard let accessToken = keychainAccess.getToken("accessToken") else {
+//            print("Access Token is not available")
+//            return
+//        }
+//        
+//        let headers: HTTPHeaders = [
+//            "Authorization": "Bearer \(accessToken)",
+//            "Content-Type": "application/json"
+//        ]
+//        
+//        let url = "https://api.jmt-matzip.dev/api/v1/restaurant/search?page=0&size=20"
+//        var filterParameters: [String: Any] = [:]
+//        if !selectedType.isEmpty {
+//            filterParameters["categoryFilter"] = selectedType
+//        }
+//        filterParameters["isCanDrinkLiquor"] = selectedAlcohol
+//        
+//        let parameters: [String: Any] = [
+//            "userLocation": ["x": "", "y": ""],
+//            "filter": filterParameters
+//        ]
+//        
+//        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: ResturantResponse.self) { [weak self] response in
+//            guard let self = self else { return }
+//            
+//            switch response.result {
+//            case .success(let responseData):
+//                print("Successfully fetched restaurants data")
+//                let filteredData = responseData.data?.restaurants?.filter { restaurant in
+//                   
+//                    true
+//                } ?? []
+//                self.viewModel?.restaurantsData = filteredData
+//                DispatchQueue.main.async {
+//                    self.mainTable.reloadData()
+//                }
+//            case .failure(let error):
+//                print("Error fetching restaurants data: \(error)")
+//            }
+//        }
+//    }
     
     
     
@@ -205,7 +204,7 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
             UIAction(title: foodType.name, image: nil) { [weak self] _ in
                 self?.selectedType = foodType.filter.rawValue
                 self?.typeLabel.text = foodType.name
-                self?.fetchRestaurants()
+//                self?.fetchRestaurants()
             }
         }
         
@@ -229,20 +228,19 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
     func handleDistanceFilterChange(_ filter: String) {
         selectedDistance = filter
         distanceLabel.text = filter
-        fetchRestaurants()
+//        fetchRestaurants()
     }
     
     func handleAlcoholFilterChange(_ canDrink: Bool) {
         selectedAlcohol = canDrink
         alcholLabel.text = canDrink ? "주류가능" : "주류불가능/모름"
-        fetchRestaurants()
+//        fetchRestaurants()
     }
     
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel?.testRestaurantsData.count ?? 0
-//        return viewModel?.restaurantsData.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -252,48 +250,26 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         
         let target = viewModel?.testRestaurantsData[indexPath.row]
         cell.configureData(with: target)
-        
-//        let restaurant = viewModel?.restaurantsData[indexPath.row]
-//           print("Configuring cell for restaurant: \(restaurant?.name ?? "Unknown")")
-//           cell.configure(with: restaurant)
-           
-//        let restaurant = viewModel?.restaurantsData[indexPath.row]
-//        cell.configure(with: restaurant)
-//        
-//        
-//        if let userInfo = viewModel?.userInfo?.data {
-//            if let imageUrl = URL(string: userInfo.profileImg) {
-//                AF.request(imageUrl).responseData { [weak cell] response in
-//                    switch response.result {
-//                    case .success(let data):
-//                        DispatchQueue.main.async {
-//                            cell?.myPageImage?.image = UIImage(data: data)
-//                        }
-//                    case .failure(let error):
-//                        print(error)
-//                    }
-//                }
-//            }
-//        }
-        
+
         return cell
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        let restaurant = viewModel?.restaurantsData[indexPath.row]
+        
+        let restaurant = viewModel?.testRestaurantsData[indexPath.row]
+        
         if let restaurantId = restaurant?.id {
             // coordinator를 통해 상세 화면으로 전환합니다.
             viewModel?.coordinator?.showRestaurantDetail(for: restaurantId)
         }
     }
-
-
+    
+    
     
     @IBAction func didtapDistance(_ sender: Any) {
-            showDistanceMenuAction()
-        }
+        showDistanceMenuAction()
+    }
     
     
     @IBAction func typeBtn(_ sender: Any) {

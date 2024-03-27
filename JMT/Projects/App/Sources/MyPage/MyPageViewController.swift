@@ -54,13 +54,13 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
             self.fetchRestaurants()
         }
         
-        viewModel?.onTotalRestaurantsUpdated = { [weak self] in
-            guard let self = self, let totalRestaurants = self.viewModel?.totalRestaurants else { return }
-            DispatchQueue.main.async {
-                self.registerResturant.text = "\(totalRestaurants)"
-            }
-            print("등록맛집개수 \(totalRestaurants)")
-        }
+//        viewModel?.onTotalRestaurantsUpdated = { [weak self] in
+//            guard let self = self, let totalRestaurants = self.viewModel?.totalRestaurants else { return }
+//            DispatchQueue.main.async {
+//                self.registerResturant.text = "\(totalRestaurants)"
+//            }
+//            print("등록맛집개수 \(totalRestaurants)")
+//        }
     }
     
     func fetchRestaurants() {
