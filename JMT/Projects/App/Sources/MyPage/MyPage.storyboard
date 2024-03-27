@@ -846,10 +846,10 @@
                                                                     </subviews>
                                                                 </stackView>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1RW-pw-Cb7">
-                                                                    <rect key="frame" x="28" y="19" width="27" height="18"/>
+                                                                    <rect key="frame" x="18" y="17" width="37" height="20"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="양식" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="12w-Xz-rfq">
-                                                                            <rect key="frame" x="3" y="2.0000000000000009" width="21" height="14.333333333333336"/>
+                                                                            <rect key="frame" x="8" y="3.0000000000000009" width="21" height="14.333333333333336"/>
                                                                             <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
                                                                             <color key="textColor" name="gray700"/>
                                                                             <nil key="highlightedColor"/>
@@ -857,19 +857,19 @@
                                                                     </subviews>
                                                                     <color key="backgroundColor" name="gray100"/>
                                                                     <constraints>
-                                                                        <constraint firstItem="12w-Xz-rfq" firstAttribute="centerX" secondItem="1RW-pw-Cb7" secondAttribute="centerX" id="Izy-pb-VW9"/>
-                                                                        <constraint firstItem="12w-Xz-rfq" firstAttribute="centerY" secondItem="1RW-pw-Cb7" secondAttribute="centerY" id="bQd-LG-7E4"/>
-                                                                        <constraint firstAttribute="width" constant="27" id="cG9-UT-Ing"/>
-                                                                        <constraint firstAttribute="height" constant="18" id="hRn-ie-wCQ"/>
+                                                                        <constraint firstAttribute="height" constant="20" id="Jsg-Gq-4Gv"/>
+                                                                        <constraint firstItem="12w-Xz-rfq" firstAttribute="centerX" secondItem="1RW-pw-Cb7" secondAttribute="centerX" id="LMc-fD-uih"/>
+                                                                        <constraint firstAttribute="width" constant="37" id="mJv-RI-PNl"/>
+                                                                        <constraint firstItem="12w-Xz-rfq" firstAttribute="centerY" secondItem="1RW-pw-Cb7" secondAttribute="centerY" id="xZ2-mz-3PT"/>
                                                                     </constraints>
                                                                 </view>
                                                             </subviews>
                                                             <constraints>
+                                                                <constraint firstItem="1RW-pw-Cb7" firstAttribute="leading" secondItem="RoW-oF-ZPS" secondAttribute="leading" constant="8" id="7c4-i6-H2l"/>
                                                                 <constraint firstAttribute="bottom" secondItem="XOP-ff-E7i" secondAttribute="bottom" constant="11" id="C7X-So-hlU"/>
-                                                                <constraint firstItem="1RW-pw-Cb7" firstAttribute="leading" secondItem="2I8-VC-tJm" secondAttribute="leadingMargin" constant="8" id="IXQ-Nu-uXz"/>
                                                                 <constraint firstItem="XOP-ff-E7i" firstAttribute="leading" secondItem="2I8-VC-tJm" secondAttribute="leading" constant="10" id="VVy-pX-LGo"/>
+                                                                <constraint firstItem="1RW-pw-Cb7" firstAttribute="top" secondItem="RoW-oF-ZPS" secondAttribute="top" constant="8" id="du7-oG-EJY"/>
                                                                 <constraint firstItem="XOP-ff-E7i" firstAttribute="top" secondItem="2I8-VC-tJm" secondAttribute="top" constant="9" id="i5c-3b-rx9"/>
-                                                                <constraint firstItem="1RW-pw-Cb7" firstAttribute="top" secondItem="2I8-VC-tJm" secondAttribute="topMargin" constant="8" id="oPZ-Wd-OEg"/>
                                                             </constraints>
                                                         </tableViewCellContentView>
                                                         <connections>
@@ -972,10 +972,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBrownColor">
-            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
