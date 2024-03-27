@@ -17,6 +17,8 @@ enum FetchRestaurantTarget {
     
     case fetchSearchRestaurants(SearchRestaurantsRequest)
     case fetchRestaurantsOutBound(SearchRestaurantsOutBoundRequest)
+    
+    case fetcgUserRestaurants(UserRestaurantsRequest)
 }
 
 extension FetchRestaurantTarget: TargetType {
@@ -30,6 +32,8 @@ extension FetchRestaurantTarget: TargetType {
             
         case .fetchSearchRestaurants: return .post
         case .fetchRestaurantsOutBound: return .post
+            
+        case .fetcgUserRestaurants: return .post
         }
     }
     
@@ -44,6 +48,7 @@ extension FetchRestaurantTarget: TargetType {
         case .fetchSearchRestaurants: return "/restaurant/search"
         case .fetchRestaurantsOutBound: return "/restaurant/search/outbound"
        
+        case .fetcgUserRestaurants(let request): return "/restaurant/search/\(request.parameters.userId)"
         }
     }
     
@@ -57,6 +62,9 @@ extension FetchRestaurantTarget: TargetType {
             
         case .fetchSearchRestaurants(let request): return .body(request)
         case .fetchRestaurantsOutBound(let request): return .body(request)
+            
+        case .fetcgUserRestaurants(let request): return .queryAndBody(request.parameters, request.body)
+            
         }
     }
 }

@@ -49,16 +49,36 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
                 self?.updateUI()
             }
         }
-        viewModel?.fetchUserInfo()
-        viewModel?.fetchRestaurants() // 여기에서만 맛집 정보를 가져옵니다.
-
-        viewModel?.onTotalRestaurantsUpdated = { [weak self] in
-            guard let self = self, let totalRestaurants = self.viewModel?.totalRestaurants else { return }
-            DispatchQueue.main.async {
-                self.registerResturant.text = "\(totalRestaurants)"
-            }
-            print("등록맛집개수 \(totalRestaurants)")
+        
+        viewModel?.fetchUserInfo {
+            self.fetchRestaurants()
         }
+        
+//        viewModel?.onTotalRestaurantsUpdated = { [weak self] in
+//            guard let self = self, let totalRestaurants = self.viewModel?.totalRestaurants else { return }
+//            DispatchQueue.main.async {
+//                self.registerResturant.text = "\(totalRestaurants)"
+//            }
+//            print("등록맛집개수 \(totalRestaurants)")
+//        }
+    }
+    
+    func fetchRestaurants() {
+        viewModel?.locationManager.didUpdateLocations = { [weak self] in
+            guard let self = self else { return }
+            
+            Task {
+                do {
+                    try await self.viewModel?.fetchUserRestaurants()
+
+                    self.registerResturant.text = "\(self.viewModel?.testTotalRestaurants ?? 0)"
+                } catch {
+                    print(error)
+                }
+            }
+        }
+        
+        viewModel?.locationManager.startUpdateLocation()
     }
 
     
@@ -82,6 +102,8 @@ class MyPageViewController: UIViewController, UIScrollViewDelegate
             print(registerResturant)
         }
     }
+    
+    
     
     
     

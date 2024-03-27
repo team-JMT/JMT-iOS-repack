@@ -65,6 +65,14 @@ struct FetchRestaurantAPI {
             .value
         return response
     }
+    
+    static func fetchUserRestaurantsAsync(request: UserRestaurantsRequest) async throws -> UserRestaurantsResponse {
+        let response = try await AF.request(FetchRestaurantTarget.fetcgUserRestaurants(request), interceptor: DefaultRequestInterceptor())
+            .validate(statusCode: 200..<300)
+            .serializingDecodable(UserRestaurantsResponse.self)
+            .value
+        return response
+    }
 }
 
 
