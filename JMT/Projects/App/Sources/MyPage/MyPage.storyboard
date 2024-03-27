@@ -496,6 +496,9 @@
                                                                             <constraint firstAttribute="trailing" secondItem="Rda-0U-V3l" secondAttribute="trailing" id="mc5-Cz-Ju1"/>
                                                                         </constraints>
                                                                     </collectionViewCellContentView>
+                                                                    <connections>
+                                                                        <outlet property="myPageImageView" destination="Rda-0U-V3l" id="8nT-XN-Ib5"/>
+                                                                    </connections>
                                                                 </collectionViewCell>
                                                                 <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="rDm-aU-Ndl">
                                                                     <rect key="frame" x="58" y="0.0" width="48" height="48"/>

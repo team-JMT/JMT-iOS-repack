@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import Kingfisher
 
 class myPageReviewCollectionViewCell: UICollectionViewCell  {
     
     @IBOutlet weak var myPageImageView: UIImageView!
-    
 
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -19,11 +20,13 @@ class myPageReviewCollectionViewCell: UICollectionViewCell  {
     }
     
     func configure(imageName: String) {
-            myPageImageView.image = UIImage(named: imageName)
-            myPageImageView.contentMode = .scaleAspectFill
-            myPageImageView.clipsToBounds = true
+        if let url = URL(string: imageName) {
+            myPageImageView.kf.setImage(with: url)
         }
-    
+      
+        myPageImageView.contentMode = .scaleAspectFill
+        myPageImageView.clipsToBounds = true
+    }
 }
 
 

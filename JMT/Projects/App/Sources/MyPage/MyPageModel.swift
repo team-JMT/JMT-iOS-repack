@@ -49,4 +49,6 @@ struct Restaurant: Codable {
     let userProfileImageURL: String?
     let canDrinkLiquor: Bool?
     let differenceInDistance: String?
+    let pictures: [String]? 
+
 }

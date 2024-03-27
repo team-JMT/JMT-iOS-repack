@@ -64,7 +64,7 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         distanceButton.layer.zPosition = 1
         self.view.bringSubviewToFront(distanceButton)
         
-        viewModel?.fetchUserInfo()
+        viewModel?.fetchUserInfo { }
         
         
         setupMenus() // 이 함수를 viewDidLoad에 추가합니다.
@@ -152,7 +152,7 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
         filterParameters["isCanDrinkLiquor"] = selectedAlcohol
         
         let parameters: [String: Any] = [
-            "userLocation": ["x": "127.0596", "y": "37.6633"],
+            "userLocation": ["x": "", "y": ""],
             "filter": filterParameters
         ]
         
@@ -162,15 +162,13 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
             switch response.result {
             case .success(let responseData):
                 print("Successfully fetched restaurants data")
-                // 필터링 로직을 여기에 추가합니다. 예: responseData.data?.restaurants.filter { ... }
                 let filteredData = responseData.data?.restaurants?.filter { restaurant in
-                    // 필터 조건에 맞는 데이터만 반환합니다. 예시입니다.
-                    // return restaurant.category == self.selectedType && restaurant.canDrinkAlcohol == self.selectedAlcohol
-                    true // 실제 조건에 맞는 로직으로 대체해야 합니다.
+                   
+                    true
                 } ?? []
                 self.viewModel?.restaurantsData = filteredData
                 DispatchQueue.main.async {
-                    self.mainTable.reloadData() // 확실하게 메인 스레드에서 호출
+                    self.mainTable.reloadData()
                 }
             case .failure(let error):
                 print("Error fetching restaurants data: \(error)")
@@ -243,8 +241,8 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return viewModel?.restaurantsData.count ?? 0
+        return viewModel?.testRestaurantsData.count ?? 0
+//        return viewModel?.restaurantsData.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -252,39 +250,35 @@ class FirstSegmentViewController: UIViewController, UITableViewDelegate, UITable
             return UITableViewCell()
         }
         
-        let restaurant = viewModel?.restaurantsData[indexPath.row]
-        cell.configure(with: restaurant)
+        let target = viewModel?.testRestaurantsData[indexPath.row]
+        cell.configureData(with: target)
         
-        
-        if let userInfo = viewModel?.userInfo?.data {
-            if let imageUrl = URL(string: userInfo.profileImg) {
-                AF.request(imageUrl).responseData { [weak cell] response in
-                    switch response.result {
-                    case .success(let data):
-                        DispatchQueue.main.async {
-                            cell?.myPageImage?.image = UIImage(data: data)
-                        }
-                    case .failure(let error):
-                        print(error)
-                    }
-                }
-            }
-        }
+//        let restaurant = viewModel?.restaurantsData[indexPath.row]
+//           print("Configuring cell for restaurant: \(restaurant?.name ?? "Unknown")")
+//           cell.configure(with: restaurant)
+           
+//        let restaurant = viewModel?.restaurantsData[indexPath.row]
+//        cell.configure(with: restaurant)
+//        
+//        
+//        if let userInfo = viewModel?.userInfo?.data {
+//            if let imageUrl = URL(string: userInfo.profileImg) {
+//                AF.request(imageUrl).responseData { [weak cell] response in
+//                    switch response.result {
+//                    case .success(let data):
+//                        DispatchQueue.main.async {
+//                            cell?.myPageImage?.image = UIImage(data: data)
+//                        }
+//                    case .failure(let error):
+//                        print(error)
+//                    }
+//                }
+//            }
+//        }
         
         return cell
     }
     
-    //맛집상세 넘기기
-    //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    //        let restaurant = viewModel.restaurantsData[indexPath.row]
-    //
-    //        let storyboard = UIStoryboard(name: "RestaurantDetail", bundle: nil)
-    //        if let detailViewController = storyboard.instantiateViewController(withIdentifier: "RestaurantDetailViewController") as? RestaurantDetailViewController {
-    //            detailViewController.restaurantID = restaurant.id
-    //            print(restaurant.id) // 이 부분을 수정
-    //            self.navigationController?.pushViewController(detailViewController, animated: true)
-    //        }
-    //    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
