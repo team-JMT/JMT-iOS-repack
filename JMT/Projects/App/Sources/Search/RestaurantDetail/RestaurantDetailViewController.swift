@@ -254,9 +254,15 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
             }
         }
     }
+    
+    
     @IBAction func didTabCopyAddressButton(_ sender: Any) {
-        view.makeToast("123123123123123123")
+        showCustomToast(image: JMTengAsset.checkMark.image, message: "주소 복사가 완료 되었습니다.", position: .bottom)
     }
+    
+ 
+    
+    
     
     // MARK: - Helper Methods
     func changePage(to index: Int) {
