@@ -67,6 +67,7 @@ class HomeViewModel {
     // MARK: - Properties
     // 데이터와 관련된 프로퍼티들을 선언하는 부분입니다.
     weak var coordinator: HomeCoordinator?
+    var coordinate: CLLocationCoordinate2D?
     
     let sortList = ["가까운 순", "최신 순"]
     let categoryList = ["한식", "일식", "중식", "양식", "퓨전", "카페", "주점", "기타"]
@@ -238,11 +239,19 @@ extension HomeViewModel {
     }
     
     // MARK: - 위치 관련 메소드
-    func fetchCurrentAddressAsync() async throws -> String? {
+    func fetchCurrentAddressAsync(isConvertLocation: Bool) async throws -> String? {
         
-        let lon: String = String(LocationManager.shared.coordinate?.longitude ?? 0.0)
-        let lat: String = String(LocationManager.shared.coordinate?.latitude ?? 0.0)
-       
+        var lon = ""
+        var lat = ""
+        
+        if isConvertLocation {
+            lon = String(coordinate?.longitude ?? 0.0)
+            lat = String(coordinate?.latitude ?? 0.0)
+        } else {
+            lon = String(LocationManager.shared.coordinate?.longitude ?? 0.0)
+            lat = String(LocationManager.shared.coordinate?.latitude ?? 0.0)
+        }
+        
         let locationData = try await CurrentLocationAPI.fetchCurrentLoctionAsync(request: CurrentLocationRequest(coords: "\(lon),\(lat)"))
         
         do {

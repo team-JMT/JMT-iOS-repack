@@ -31,13 +31,14 @@ class ConvertUserLocationViewController: UIViewController {
         
         naverMapView.showZoomControls = false
         
+        let marker = NMFMarker(position: NMGLatLng(lat: viewModel?.locationData?.y ?? 0.0, lng: viewModel?.locationData?.x ?? 0.0))
+        let markerImage = JMTengAsset.mapPin.image
+        marker.iconImage = NMFOverlayImage(image: markerImage)
+        marker.mapView = naverMapView.mapView
+        
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: viewModel?.locationData?.y ?? 0.0, lng: viewModel?.locationData?.x ?? 0.0))
         cameraUpdate.animation = .easeIn
         naverMapView.mapView.moveCamera(cameraUpdate)
-        
-        let marker = NMFMarker()
-        marker.position = NMGLatLng(lat: viewModel?.locationData?.y ?? 0.0, lng: viewModel?.locationData?.x ?? 0.0)
-        marker.mapView = naverMapView.mapView
         
         setupUI()
     }

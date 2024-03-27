@@ -249,6 +249,8 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
                 viewModel?.reviewImages.removeAll()
                 reviewPhotoCollectionView.reloadData()
                 
+                showCustomToast(image: JMTengAsset.checkMark.image, message: "후기 등록이 완료되었어요!", padding: 117, position: .bottom)
+                
             } catch {
                 print(error)
             }
@@ -257,7 +259,8 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     
     
     @IBAction func didTabCopyAddressButton(_ sender: Any) {
-        showCustomToast(image: JMTengAsset.checkMark.image, message: "주소 복사가 완료 되었습니다.", position: .bottom)
+        UIPasteboard.general.string = addressLabel.text
+        showCustomToast(image: JMTengAsset.checkMark.image, message: "주소 복사가 완료되었어요!", padding: 117, position: .bottom)
     }
     
  

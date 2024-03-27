@@ -141,18 +141,28 @@ class HomeViewController: UIViewController {
     }
     
     func updateCurrentAddressData() async throws {
-        let address = try await viewModel?.fetchCurrentAddressAsync() ?? ""
+        let address = try await viewModel?.fetchCurrentAddressAsync(isConvertLocation: false) ?? ""
         locationButton.setTitle(address, for: .normal)
-        updateCamera()
+        updateCamera(isConvertLocation: false)
     }
     
     // 카메라 위치 업데이트
-    func updateCamera() {
-        let lat = LocationManager.shared.coordinate?.latitude ?? 0.0
-        let lon = LocationManager.shared.coordinate?.longitude ?? 0.0
+    func updateCamera(isConvertLocation: Bool) {
+        
+        var lat = 0.0
+        var lon = 0.0
+        
+        if isConvertLocation {
+            lat = viewModel?.coordinate?.latitude ?? 0.0
+            lon = viewModel?.coordinate?.longitude ?? 0.0
+        } else {
+            lat = LocationManager.shared.coordinate?.latitude ?? 0.0
+            lon = LocationManager.shared.coordinate?.longitude ?? 0.0
+        }
+       
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lon))
         cameraUpdate.animation = .easeIn
-        naverMapView.mapView.zoomLevel = 18.0
+        naverMapView.mapView.zoomLevel = 15.0 // 18.0
         self.naverMapView.mapView.moveCamera(cameraUpdate)
     }
     
@@ -211,6 +221,8 @@ class HomeViewController: UIViewController {
             } else {
                 self.groupImageView.image = JMTengAsset.defaultProfileImage.image
             }
+            
+            self.showCustomToast(image: JMTengAsset.checkMark.image, message: "나의 맛집 그룹을 변경했어요!", padding: 65 + 10, position: .top)
         }
     }
     
@@ -320,9 +332,16 @@ class HomeViewController: UIViewController {
     func updateSearchLocation() {
         Task {
             do {
-                updateCamera()
-                let address = try await viewModel?.fetchCurrentAddressAsync()
+                updateCamera(isConvertLocation: true)
+                let address = try await viewModel?.fetchCurrentAddressAsync(isConvertLocation: true)
+                
+                let visibleRegion = self.naverMapView.mapView.projection.latlngBounds(fromViewBounds: self.naverMapView.frame)
+                try await self.viewModel?.fetchMapIncludedRestaurantsAsync(withinBounds: visibleRegion)
+                self.refreshMarkersInVisibleRegion()
+                
                 self.locationButton.setTitle(address, for: .normal)
+                
+                showCustomToast(image: JMTengAsset.checkMark.image, message: "위치 변경이 완료되었어요!", padding: 65 + 10, position: .top)
             } catch {
                 print(error)
             }

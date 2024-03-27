@@ -138,7 +138,7 @@ extension UIViewController {
 
 extension UIViewController {
     
-    func showCustomToast(image: UIImage, message: String, position: ToastPosition) {
+    func showCustomToast(image: UIImage, message: String, padding: CGFloat, position: ToastPosition) {
         if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
             let keyWindow = scene.windows.first(where: { $0.isKeyWindow })
             
@@ -147,7 +147,7 @@ extension UIViewController {
                 toastView.toastImageView.image = image
                 toastView.toastLabel.text = message
                 
-                ToastManager.shared.style.verticalPadding = 110
+                ToastManager.shared.style.verticalPadding = padding
                 keyWindow?.rootViewController?.view.showToast(toastView, position: position)
             }
         }
