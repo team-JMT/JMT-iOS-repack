@@ -14,10 +14,12 @@ class MyPageViewModel {
     weak var coordinator: MyPageCoordinator?
     private let keychainAccess: KeychainAccessible
     
-    
+    let locationManager = LocationManager.shared   
     var userId: Int?
     var numberOfRestaurants: Int?
 
+    
+    
     
     
     var userInfo: MyPageUserLogin? {
@@ -26,17 +28,21 @@ class MyPageViewModel {
         }
     }
     
-    var totalRestaurants: Int? {
-            didSet {
-                onTotalRestaurantsUpdated?()
-            }
-        }
+//    var totalRestaurants: Int? {
+//            didSet {
+//                onTotalRestaurantsUpdated?()
+//            }
+//        }
     
-    var restaurantsData: [Restaurant] = [] {
-           didSet {
-               self.onRestaurantsDataUpdated?()
-           }
-       }
+    var testRestaurantsData: [UserRestaurantItemsModel] = []
+    var testTotalRestaurants: Int = 0
+    var testReviews: [Review] = []
+    
+//    var restaurantsData: [Restaurant] = [] {
+//           didSet {
+//               self.onRestaurantsDataUpdated?()
+//           }
+//       }
     var onRestaurantsDataUpdated: (() -> Void)?
     var onUserInfoLoaded: (() -> Void)?
     var onTotalRestaurantsUpdated: (() -> Void)?
@@ -64,7 +70,7 @@ class MyPageViewModel {
     }
     
     
-    func fetchUserInfo() {
+    func fetchUserInfo(completion: @escaping () -> ()) {
         print("Fetching user info...")
         guard let accessToken = keychainAccess.getToken("accessToken") else {
             print("Access Token is not available")
@@ -85,6 +91,8 @@ class MyPageViewModel {
                 if let userId = userInfo.data?.id {
                     self?.userId = userId
                     self?.fetchRestaurants()
+                    
+                    completion()
                 }
             case .failure(let error):
                 print("Error fetching user info: \(error)")
@@ -93,46 +101,47 @@ class MyPageViewModel {
     }
 
     func fetchRestaurants() {
-        print("Fetching restaurants for user ID: \(String(describing: userId))")
-
-        guard let accessToken = keychainAccess.getToken("accessToken") else {
-            print("Access Token is not available")
-            return
-        }
-
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(accessToken)",
-            "Content-Type": "application/json"
-        ]
-
-        let url = "https://api.jmt-matzip.dev/api/v1/restaurant/search?page=0&size=20"
         
-        // 사용자 위치와 필터 옵션을 포함하는 요청 본문
-        let parameters: [String: Any] = [
-            "userLocation": [
-                "x": "127.0596",
-                "y": "37.6633"
-            ],
-            "filter": [
-                "categoryFilter": "string",
-                "isCanDrinkLiquor": true
-            ]
-        ]
-
-        // Alamofire로 POST 요청 보내기
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: ResturantResponse.self) { response in
-            switch response.result {
-            case .success(let responseData):
-                print("Successfully fetched restaurants data: \(responseData)")
-                self.restaurantsData = responseData.data?.restaurants ?? []
-                self.totalRestaurants = responseData.data?.page?.totalElements // 올바른 접근 방식
-
-                self.onRestaurantsDataUpdated?() // 데이터 업데이트 이벤트 호출
-                
-            case .failure(let error):
-                print("Error fetching restaurants data: \(error)")
-            }
-        }
+//        print("Fetching restaurants for user ID: \(String(describing: userId))")
+//
+//        guard let accessToken = keychainAccess.getToken("accessToken") else {
+//            print("Access Token is not available")
+//            return
+//        }
+//
+//        let headers: HTTPHeaders = [
+//            "Authorization": "Bearer \(accessToken)",
+//            "Content-Type": "application/json"
+//        ]
+//
+//        let url = "https://api.jmt-matzip.dev/api/v1/restaurant/search?page=0&size=20"
+//        
+//        // 사용자 위치와 필터 옵션을 포함하는 요청 본문
+//        let parameters: [String: Any] = [
+//            "userLocation": [
+//                "x": "127.0596",
+//                "y": "37.6633"
+//            ],
+//            "filter": [
+//                "categoryFilter": "string",
+//                "isCanDrinkLiquor": true
+//            ]
+//        ]
+//
+//        // Alamofire로 POST 요청 보내기
+//        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: ResturantResponse.self) { response in
+//            switch response.result {
+//            case .success(let responseData):
+//                print("Successfully fetched restaurants data: \(responseData)")
+//                self.restaurantsData = responseData.data?.restaurants ?? []
+//                self.totalRestaurants = responseData.data?.page?.totalElements // 올바른 접근 방식
+//
+//                self.onRestaurantsDataUpdated?() // 데이터 업데이트 이벤트 호출
+//                
+//            case .failure(let error):
+//                print("Error fetching restaurants data: \(error)")
+//            }
+//        }
     }
 
     
@@ -197,9 +206,31 @@ class MyPageViewModel {
         print("ID Token saved: \(idToken)")
     }
     
-    
-    
-    
+    func fetchUserRestaurants() async throws {
+      
+        let response = try await FetchRestaurantAPI.fetchUserRestaurantsAsync(
+            request: UserRestaurantsRequest(
+                parameters: UserRestaurantsPageRequest(
+                    userId: userId ?? -1,
+                    page: 1,
+                    size: 20,
+                    sort: nil),
+                body: UserRestaurantsRequestBody(
+                    userLocation: UserRestaurantsLocation(
+                        x: String(locationManager.coordinate?.longitude ?? 0.0),
+                        y: String(locationManager.coordinate?.latitude ?? 0.0)),
+                    filter: UserRestaurantFilter(
+                        categoryFilter: nil,
+                        isCanDrinkLiquor: nil)
+                )))
+        
+        // 배열에 데이터 담기 
+        let data = response.toDomain
+        testRestaurantsData = data.items
+        testTotalRestaurants = data.totalCount
+        
+        onRestaurantsDataUpdated?()
+    }
 }
 
         
