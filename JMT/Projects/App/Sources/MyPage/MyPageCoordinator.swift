@@ -31,9 +31,10 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
     var finishDelegate: CoordinatorFinishDelegate?
     var type: CoordinatorType = .mypage
     
-    init(navigationController: UINavigationController?) {
+    init(navigationController: UINavigationController?, parentCoordinator: Coordinator) {
         
         self.navigationController = navigationController
+        self.parentCoordinator = parentCoordinator
     }
     
     func start() {
@@ -120,5 +121,15 @@ class DefaultMyPageCoordinator: MyPageCoordinator {
 extension DefaultMyPageCoordinator: CoordinatorFinishDelegate {
     func coordinatorDidFinish(childCoordinator: Coordinator) {
         self.childCoordinators = self.childCoordinators.filter{ $0.type != childCoordinator.type }
+    }
+}
+
+extension DefaultMyPageCoordinator: RestaurantsDataUpdatable {
+    func updateRestaurantsData() {
+        if let vc = self.navigationController?.viewControllers.first as? MyPageViewController {
+            Task {
+                try await vc.viewModel?.fetchUserRestaurants()
+            }
+        }
     }
 }

@@ -392,30 +392,18 @@ extension RestaurantDetailViewController: FloatingPanelControllerDelegate {
 
 extension RestaurantDetailViewController: ButtonPopupDelegate {
     func didTabDoneButton() {
-        
-        print("1231231")
-
-        if let vc = self.navigationController?.viewControllers.first as? HomeViewController {
-            vc.viewModel?.didUpdateGroupRestaurantsData?()
-            self.navigationController?.popViewController(animated: true)
-        } else if let vc = self.navigationController?.viewControllers.first as? MyPageViewController {
-            
+        Task {
+            do {
+                try await self.viewModel?.deleteRestaurant()
+                let rootCoordinator = viewModel?.coordinator?.getTopCoordinator()
+                rootCoordinator?.updateAllRestaurantsData()
+                
+                self.navigationController?.popViewController(animated: true)
+                self.showCustomToast(image: JMTengAsset.checkMark.image, message: "삭제가 완료되었어요!", padding: 117, position: .bottom)
+            } catch {
+                print(error)
+            }
         }
-        
-        
-        
-        
-        
-        
-//        Task {
-//            do {
-//                try await self.viewModel?.deleteRestaurant()
-//                self.showCustomToast(image: JMTengAsset.checkMark.image, message: "삭제가 완료되었어요!", padding: 117, position: .bottom)
-//                self.navigationController?.popViewController(animated: true)
-//            } catch {
-//                print(error)
-//            }
-//        }
     }
     
     func didTabCloseButton() { }

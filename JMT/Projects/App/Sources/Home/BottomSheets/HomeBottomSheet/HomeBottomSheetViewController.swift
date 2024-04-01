@@ -31,8 +31,7 @@ class HomeBottomSheetViewController: UIViewController {
         bottomSheetCollectionView.register(header1, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView1")
         let header2 = UINib(nibName: "HomeFilterHeaderView", bundle: nil)
         bottomSheetCollectionView.register(header2, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView2")
-        
-
+    
         self.bottomSheetCollectionView.collectionViewLayout = createLayout()
         self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
     
@@ -46,9 +45,6 @@ class HomeBottomSheetViewController: UIViewController {
     func setupBind() {
         
         viewModel?.didUpdateGroupRestaurantsData = {
-            
-            print("작업 새로고침")
-            
             DispatchQueue.main.async {
                 self.viewModel?.isLodingData = true
                 self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
@@ -457,7 +453,6 @@ extension HomeBottomSheetViewController {
         self.present(fpc, animated: true)
     }
 }
-
 
 
 

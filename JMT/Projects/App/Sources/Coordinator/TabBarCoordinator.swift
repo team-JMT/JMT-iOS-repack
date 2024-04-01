@@ -120,7 +120,7 @@ class DefaultTabBarCoordinator: TabBarCoordinator {
             childCoordinators.append(coordinator)
         case .mypage:
             print("------------ 4")
-            let coordinator = DefaultMyPageCoordinator(navigationController: tabNavigationController)
+            let coordinator = DefaultMyPageCoordinator(navigationController: tabNavigationController, parentCoordinator: self)
             coordinator.start()
             childCoordinators.append(coordinator)
         }
