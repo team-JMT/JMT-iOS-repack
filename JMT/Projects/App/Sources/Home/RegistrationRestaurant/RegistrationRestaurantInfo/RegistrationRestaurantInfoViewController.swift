@@ -537,4 +537,6 @@ extension RegistrationRestaurantInfoViewController: ButtonPopupDelegate {
     func didTabCloseButton() {
         viewModel?.checkNotInfo()
     }
+    
+    func didTabCancelButton() { }
 }

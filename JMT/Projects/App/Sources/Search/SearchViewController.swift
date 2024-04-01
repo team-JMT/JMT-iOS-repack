@@ -271,5 +271,7 @@ extension SearchViewController: ButtonPopupDelegate {
     }
     
     func didTabCloseButton() { }
+    
+    func didTabCancelButton() { }
 }
 

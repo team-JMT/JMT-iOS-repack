@@ -8,7 +8,7 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let project = Project.app(name: "JMTeng",
+let project = Project.app(name: "JMTengg",
                           dependencies: [.external(name: "Swinject"),
                                          .external(name: "SwinjectStoryboard"),
                                          .external(name: "Alamofire"),

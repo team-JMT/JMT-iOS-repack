@@ -45,6 +45,7 @@ class DefaultButtonPopupCoordinator: ButtonPopupCoordinator {
     func setupPopupType(vc: ButtonPopupViewController) {
         guard let topViewController = self.navigationController?.topViewController else { return }
         
+        print(topViewController)
         // 뷰 컨트롤러 분기처리
         switch topViewController {
         case is UserLocationViewController:
@@ -53,6 +54,8 @@ class DefaultButtonPopupCoordinator: ButtonPopupCoordinator {
             vc.popupType = .registrationRestaurant
         case is SearchViewController:
             vc.popupType = .searchRestaurant
+        case is RestaurantDetailViewController:
+            vc.popupType = .moreMenu
         default:
             return
         }

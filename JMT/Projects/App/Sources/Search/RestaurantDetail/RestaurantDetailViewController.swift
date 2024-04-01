@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 import Toast_Swift
+import FloatingPanel
 
 protocol RestaurantDetailViewControllerDelegate: AnyObject {
     var headerHeight: CGFloat { get }
@@ -27,6 +28,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     var viewModel: RestaurantDetailViewModel?
     
     var pageViewController: RestaurantDetailPageViewController?
+    var moreMenuFpc: FloatingPanelController!
     
     @IBOutlet weak var restaurantInfoView: UIView!
     @IBOutlet weak var restaurantInfoViewHeight: NSLayoutConstraint!
@@ -55,19 +57,6 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     
     @IBOutlet weak var addReviewPhotosButton: UIButton!
     @IBOutlet weak var doneReviewButton: UIButton!
-    
-    
-//    @IBOutlet weak var reviewImageView1: UIImageView!
-//    @IBOutlet weak var reviewImageView2: UIImageView!
-//    @IBOutlet weak var reviewImageView3: UIImageView!
-//    @IBOutlet weak var reviewImageView4: UIImageView!
-//    @IBOutlet weak var reviewImageView5: UIImageView!
-//    
-//    @IBOutlet weak var bottomContainerStackView: UIStackView!
-
-//    
-
-//    @IBOutlet weak var reviewTextViewHeightConstraint: NSLayoutConstraint!
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -102,7 +91,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         self.tabBarController?.tabBar.isHidden = true
         
         self.navigationController?.setupBarAppearance(alpha: 1)
-//        setCustomNavigationMoreButton()
+        setCustomNavigationMoreButton()
         
         if viewModel?.coordinator?.parentCoordinator is DefaultHomeCoordinator {
             setCustomNavigationBarBackButton(goToViewController: .popVC)
@@ -118,8 +107,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
             
             self?.reviewContainerView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.cgRectValue.height)
-         
-            
+        
         } keyboardWillHide: { [weak self] noti in
             self?.reviewContainerView.transform = .identity
         }
@@ -227,6 +215,23 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         doneReviewButton.layer.cornerRadius = 6
     }
     
+    func showMoreMenuBottomSheetViewController() {
+        
+        let storyboard = UIStoryboard(name: "RestaurantMoreMenu", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "RestaurantMoreMenuViewController") as? RestaurantMoreMenuViewController else { return }
+    
+        vc.viewModel = self.viewModel
+        
+        moreMenuFpc = FloatingPanelController(delegate: self)
+        moreMenuFpc.set(contentViewController: vc)
+        moreMenuFpc.layout = RestaurantMoreMenuBottomSheetFloatingPanelLayout()
+        moreMenuFpc.panGestureRecognizer.isEnabled = false
+        moreMenuFpc.backdropView.dismissalTapGestureRecognizer.isEnabled = true
+        moreMenuFpc.setPanelStyle(radius: 24, isHidden: true)
+        
+        self.present(moreMenuFpc, animated: true)
+    }
+    
     // MARK: - Actions
     @IBAction func didTabSegmentedController(_ sender: UISegmentedControl) {
         changePage(to: sender.selectedSegmentIndex)
@@ -262,10 +267,6 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         UIPasteboard.general.string = addressLabel.text
         showCustomToast(image: JMTengAsset.checkMark.image, message: "주소 복사가 완료되었어요!", padding: 117, position: .bottom)
     }
-    
- 
-    
-    
     
     // MARK: - Helper Methods
     func changePage(to index: Int) {
@@ -383,4 +384,41 @@ extension RestaurantDetailViewController: RestaurantDetailViewControllerDelegate
         let percentage = 1 - restaurantInfoViewHeight.constant / 200
         self.navigationController?.setupBarAppearance(alpha: percentage)
     }
+}
+
+extension RestaurantDetailViewController: FloatingPanelControllerDelegate {
+    
+}
+
+extension RestaurantDetailViewController: ButtonPopupDelegate {
+    func didTabDoneButton() {
+        
+        print("1231231")
+
+        if let vc = self.navigationController?.viewControllers.first as? HomeViewController {
+            vc.viewModel?.didUpdateGroupRestaurantsData?()
+            self.navigationController?.popViewController(animated: true)
+        } else if let vc = self.navigationController?.viewControllers.first as? MyPageViewController {
+            
+        }
+        
+        
+        
+        
+        
+        
+//        Task {
+//            do {
+//                try await self.viewModel?.deleteRestaurant()
+//                self.showCustomToast(image: JMTengAsset.checkMark.image, message: "삭제가 완료되었어요!", padding: 117, position: .bottom)
+//                self.navigationController?.popViewController(animated: true)
+//            } catch {
+//                print(error)
+//            }
+//        }
+    }
+    
+    func didTabCloseButton() { }
+    
+    func didTabCancelButton() { }
 }

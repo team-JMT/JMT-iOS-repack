@@ -185,4 +185,5 @@ extension UserLocationViewController: ButtonPopupDelegate {
     }
     
     func didTabCloseButton() { }
+    func didTabCancelButton() { }
 }

@@ -37,7 +37,6 @@ class SocialLoginViewController: UIViewController {
         guard viewModel?.isEnabled == true else { return }
         
         viewModel?.startGoogleLogin()
-//       viewModel?.testLogin()
     }
     
     @IBAction func didTabAppleLoginButton(_ sender: Any) {

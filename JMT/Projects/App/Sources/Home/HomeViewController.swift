@@ -134,7 +134,8 @@ class HomeViewController: UIViewController {
         let index = viewModel?.groupList.firstIndex(where: { $0.isSelected == true }) ?? 0
         groupNameLabel.text = viewModel?.groupList[index].groupName
         if let url = URL(string: viewModel?.groupList[index].groupProfileImageUrl ?? "") {
-            groupImageView.kf.setImage(with: url)
+            let retryStrategy = DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(3))
+            groupImageView.kf.setImage(with: url, options: [.retryStrategy(retryStrategy)])
         } else {
             groupImageView.image = JMTengAsset.defaultProfileImage.image
         }

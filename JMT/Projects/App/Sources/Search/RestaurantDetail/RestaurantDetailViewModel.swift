@@ -40,7 +40,6 @@ class RestaurantDetailViewModel {
     
     // MARK: - Initialization
     // 뷰모델 초기화와 관련된 로직을 담당하는 부분입니다.
-    
     // MARK: - Data Binding
     // 뷰와 뷰모델 간의 데이터 바인딩을 설정하는 부분입니다.
     var didCompletedRestaurant: (() -> Void)?
@@ -102,12 +101,15 @@ class RestaurantDetailViewModel {
     }
     
     func registrationReview(content: String) async throws {
-        let a = try await RegistrationRestaurantAPI.registrationReviewAsync(request: RegistrationReviewRequest(recommendRestaurantId: recommendRestaurantId ?? -1),
-                                                                            reviewContent: content, 
+        let response = try await RegistrationRestaurantAPI.registrationReviewAsync(request: RegistrationReviewRequest(recommendRestaurantId: recommendRestaurantId ?? -1),
+                                                                            reviewContent: content,
                                                                             images: reviewImages)
-        print("1231231", a.code)
     }
     
+    func deleteRestaurant() async throws {
+        let response = try await DeleteAPI.deleteRestaurantAsync(request: DeleteRestaurantRequest(id: recommendRestaurantId ?? -1))
+    }
+
     // MARK: - Utility Methods
     // 다양한 유틸리티 메소드들을 모아두는 부분입니다. 예를 들어, 날짜 포매팅이나 데이터 검증 등입니다.
     

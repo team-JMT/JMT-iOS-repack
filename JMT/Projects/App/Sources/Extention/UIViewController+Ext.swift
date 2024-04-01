@@ -32,7 +32,9 @@ extension UIViewController {
     }
     
     @objc private func editMenu() {
-        print("123123123123")
+        if let vc = self as? RestaurantDetailViewController {
+            vc.showMoreMenuBottomSheetViewController()
+        }
     }
     
     func setCustomNavigationBarBackButton(goToViewController: GoToViewControllerType) {

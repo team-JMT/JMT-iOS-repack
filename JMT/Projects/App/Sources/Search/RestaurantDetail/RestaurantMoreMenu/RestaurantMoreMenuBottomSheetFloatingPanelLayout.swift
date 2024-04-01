@@ -1,17 +1,14 @@
 //
-//  GroupListBottomSheetFloatingPanelLayout.swift
+//  RestaurantMoreMenuBottomSheetFloatingPanelLayout.swift
 //  JMTeng
 //
-//  Created by PKW on 2024/03/02.
+//  Created by PKW on 3/27/24.
 //
-
-import Foundation
 
 import Foundation
 import FloatingPanel
 
-
-class GroupListBottomSheetFloatingPanelLayout: FloatingPanelLayout {
+class RestaurantMoreMenuBottomSheetFloatingPanelLayout: FloatingPanelLayout {
     
     var position: FloatingPanelPosition {
         return .bottom
@@ -23,7 +20,7 @@ class GroupListBottomSheetFloatingPanelLayout: FloatingPanelLayout {
     
     var anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring] {
         return [
-            .half: FloatingPanelLayoutAnchor(fractionalInset: 0.5 , edge: .bottom, referenceGuide: .safeArea),
+            .half: FloatingPanelLayoutAnchor(absoluteInset: 290 , edge: .bottom, referenceGuide: .safeArea),
         ]
     }
     

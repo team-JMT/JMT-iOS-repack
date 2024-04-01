@@ -11,7 +11,11 @@ import UIKit
 protocol RestaurantDetailCoordinator: Coordinator {
     func showImagePicker()
     func start(id: Int)
+    
+    func setButtonPopupCoordinator()
+    func showButtonPopupViewController()
 }
+
 class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
     
     var parentCoordinator: Coordinator?
@@ -93,6 +97,32 @@ class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
             return restaurantDetailViewController.viewModel?.reviewImages.count ?? 0
         }
         return 0
+    }
+    
+    func setButtonPopupCoordinator() {
+        let coordinator = DefaultButtonPopupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showButtonPopupViewController() {
+        if getChildCoordinator(.buttonPopup) == nil {
+            setButtonPopupCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.buttonPopup) as! ButtonPopupCoordinator
+        coordinator.start()
+    }
+    
+    func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
+        var childCoordinator: Coordinator? = nil
+        
+        switch type {
+        case .buttonPopup:
+            childCoordinator = childCoordinators.first(where: { $0 is ButtonPopupCoordinator })
+        default:
+            break
+        }
+        return childCoordinator
     }
 }
 

@@ -29,7 +29,6 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="nw4-nG-SBN">
                                 <rect key="frame" x="0.0" y="83" width="395" height="1883"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Nwm-gQ-Ptd">
                                     <size key="itemSize" width="315" height="204"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -482,7 +481,7 @@
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="2Fx-3v-eXe" secondAttribute="bottom" constant="12" id="3Lf-Ga-Ht0"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="nw4-nG-SBN" secondAttribute="trailing" id="CRF-pn-PQN"/>
@@ -503,7 +502,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" ambiguous="YES" id="VCp-M2-j6p">
+                <view contentMode="scaleToFill" id="VCp-M2-j6p">
                     <rect key="frame" x="0.0" y="0.0" width="392" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>

@@ -60,10 +60,16 @@ class DefaultTabBarCoordinator: TabBarCoordinator {
     private func configureTabBarController(with tabViewControllers: [UIViewController]) {
         self.tabBarController.setViewControllers(tabViewControllers, animated: false)
         self.tabBarController.selectedIndex = TabBarPage.home.pageOrderNumber()
-        self.tabBarController.view.backgroundColor = .white
-        self.tabBarController.tabBar.backgroundColor = .white
         self.tabBarController.tabBar.tintColor = JMTengAsset.gray800.color
         self.tabBarController.tabBar.unselectedItemTintColor = JMTengAsset.gray200.color
+        
+        let appearance = UITabBarAppearance()
+        appearance.backgroundColor = UIColor.white // 원하는 색상으로 변경
+        tabBarController.tabBar.standardAppearance = appearance
+       
+        if #available(iOS 15.0, *) {
+            tabBarController.tabBar.scrollEdgeAppearance = appearance
+        }
         
         let lineView = UIView(frame: CGRect(x: 0, y: 0, width:  self.tabBarController.tabBar.frame.width, height: 1))
         lineView.backgroundColor = JMTengAsset.gray100.color // 선의 색상 설정
@@ -80,7 +86,6 @@ class DefaultTabBarCoordinator: TabBarCoordinator {
                 // 루트뷰 교체 후 작업 할 것
             }
         }
-        
     }
     
     private func configureTabBarItem(of page: TabBarPage) -> UITabBarItem {
