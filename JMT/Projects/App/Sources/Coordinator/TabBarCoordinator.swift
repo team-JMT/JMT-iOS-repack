@@ -104,29 +104,22 @@ class DefaultTabBarCoordinator: TabBarCoordinator {
     private func setTabBarCoordinator(of page: TabBarPage, to tabNavigationController: UINavigationController) {
         switch page {
         case .home:
-            print("------------ 1")
             let coordinator = DefaultHomeCoordinator(navigationController: tabNavigationController, parentCoordinator: self)
             coordinator.start()
             childCoordinators.append(coordinator)
         case .search:
-            print("------------ 2")
             let coordinator = DefaultSearchCoordinator(navigationController: tabNavigationController, parentCoordinator: self)
             coordinator.start()
             childCoordinators.append(coordinator)
         case .group:
-            print("------------ 3")
             let coordinator = DefaultGroupCoordinator(navigationController: tabNavigationController, parentCoordinator: self)
             coordinator.start()
             childCoordinators.append(coordinator)
         case .mypage:
-            print("------------ 4")
             let coordinator = DefaultMyPageCoordinator(navigationController: tabNavigationController, parentCoordinator: self)
             coordinator.start()
             childCoordinators.append(coordinator)
         }
-        
-        print(" ------- 탭바", tabBarController.viewControllers
-        )
     }
 }
 

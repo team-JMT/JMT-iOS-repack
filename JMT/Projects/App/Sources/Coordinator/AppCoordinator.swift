@@ -101,19 +101,15 @@ class DefaultAppCoordinator: AppCoordinator {
         default:
             break
         }
-    
         return childCoordinator
     }
-    
-    
+
     func updateAllRestaurantsData() {
         if let tab = childCoordinators.first {
             if let home = tab.childCoordinators[0] as? DefaultHomeCoordinator,
-                let myPage = tab.childCoordinators[3] as? DefaultMyPageCoordinator {
-        
-                     home.updateRestaurantsData()
-                     myPage.updateRestaurantsData()
-                
+               let myPage = tab.childCoordinators[3] as? DefaultMyPageCoordinator {
+                home.updateRestaurantsData()
+                myPage.updateRestaurantsData()
             }
         }
     }

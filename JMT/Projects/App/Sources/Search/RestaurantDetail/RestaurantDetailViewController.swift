@@ -402,6 +402,7 @@ extension RestaurantDetailViewController: ButtonPopupDelegate {
                 self.showCustomToast(image: JMTengAsset.checkMark.image, message: "삭제가 완료되었어요!", padding: 117, position: .bottom)
             } catch {
                 print(error)
+                self.showCustomToast(image: JMTengAsset.notCheckMark.image, message: "맛집을 삭제하지 못했어요!", padding: 117, position: .bottom)
             }
         }
     }

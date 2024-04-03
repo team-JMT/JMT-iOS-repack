@@ -38,9 +38,10 @@ extension RestaurantMoreMenuViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            print("1")
+            dismiss(animated: true) {
+                self.viewModel?.coordinator?.showDetailRestaurantViewController(id: self.viewModel?.recommendRestaurantId ?? 0)
+            }
         case 1:
-            print("2")
             dismiss(animated: true) {
                 self.viewModel?.coordinator?.showButtonPopupViewController()
             }
