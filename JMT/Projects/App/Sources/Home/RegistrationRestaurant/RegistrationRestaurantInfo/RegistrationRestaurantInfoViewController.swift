@@ -105,6 +105,8 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         removeKeyboardObserver()
+        
+        viewModel?.coordinator?.finish()
     }
     
     // MARK: - SetupBindings
@@ -164,18 +166,18 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
-       let layout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
+       let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
             switch sectionIndex {
             case 0:
-                return self.createPhotoColumnSection()
+                return self?.createPhotoColumnSection()
             case 1:
-                return self.createCommentColumnSection()
+                return self?.createCommentColumnSection()
             case 2:
-                return self.createdrinkingCheckColumnSection()
+                return self?.createdrinkingCheckColumnSection()
             case 3:
-                return self.createRecommendedMenuColumnSection()
+                return self?.createRecommendedMenuColumnSection()
             case 4:
-                return self.createTagColumnSection()
+                return self?.createTagColumnSection()
             default:
                 return nil
             }

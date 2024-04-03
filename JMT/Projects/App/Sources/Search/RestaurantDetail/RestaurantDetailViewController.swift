@@ -130,7 +130,6 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     func setupBind() {
         viewModel?.didUpdateReviewImage = { [weak self] in
             guard let self = self else { return }
-            
             self.reviewPhotoCollectionView.reloadData()
         }
         

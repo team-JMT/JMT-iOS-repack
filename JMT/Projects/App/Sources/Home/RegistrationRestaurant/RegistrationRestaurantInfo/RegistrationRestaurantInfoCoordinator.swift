@@ -36,7 +36,11 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
         self.finishDelegate = finishDelegate
     }
     
-    func start() { }
+    func start() { 
+        let registrationRestaurantInfoViewController = RegistrationRestaurantInfoViewController.instantiateFromStoryboard(storyboardName: "RegistrationRestaurantInfo") as RegistrationRestaurantInfoViewController
+        registrationRestaurantInfoViewController.viewModel?.coordinator = self
+        self.navigationController?.pushViewController(registrationRestaurantInfoViewController, animated: true)
+    }
     
     func start(info: SearchRestaurantsLocationModel?) {
         let registrationRestaurantInfoViewController = RegistrationRestaurantInfoViewController.instantiateFromStoryboard(storyboardName: "RegistrationRestaurantInfo") as RegistrationRestaurantInfoViewController
@@ -57,18 +61,18 @@ class DefaultRegistrationRestaurantInfoCoordinator: RegistrationRestaurantInfoCo
         let picker = PhotoKitNavigationController(configuration: config)
         picker.photosCount = handleSelectedPhotosCount()
         
-        picker.didFinishCompletion = { images in
+        picker.didFinishCompletion = { [weak self] images in
         
-            self.handleImagePickerResult(images, isDefault: false)
+            self?.handleImagePickerResult(images, isDefault: false)
             picker.dismiss(animated: true)
         }
         
-        photoService.requestAuthorization { result in
+        photoService.requestAuthorization { [weak self] result in
             switch result {
             case .success(let _):
-                self.navigationController?.present(picker, animated: true)
+                self?.navigationController?.present(picker, animated: true)
             case .failure(let _):
-                if let topViewController = self.navigationController?.topViewController {
+                if let topViewController = self?.navigationController?.topViewController {
                     topViewController.showAccessDeniedAlert(type: .photo)
                 }
             }

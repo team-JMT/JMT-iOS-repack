@@ -39,7 +39,7 @@ extension RestaurantMoreMenuViewController: UITableViewDelegate {
         switch indexPath.row {
         case 0:
             dismiss(animated: true) {
-                self.viewModel?.coordinator?.showDetailRestaurantViewController(id: self.viewModel?.recommendRestaurantId ?? 0)
+                self.viewModel?.coordinator?.showRegistrationRestaurantInfoViewController()
             }
         case 1:
             dismiss(animated: true) {
