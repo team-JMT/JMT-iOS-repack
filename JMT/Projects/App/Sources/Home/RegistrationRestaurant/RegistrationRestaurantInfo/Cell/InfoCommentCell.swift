@@ -30,6 +30,12 @@ class InfoCommentCell: UICollectionViewCell {
             collectionView.moveToScroll(section: section, row: 0, margin: 100)
         }
     }
+    
+    func setupEditData(str: String?) {
+        commentTextView.text = str
+        commentTextView.textColor = .black
+        commentCountLabel.text = "\(str?.count ?? 0)/\(100)"
+    }
 }
  
 extension InfoCommentCell: UITextViewDelegate {

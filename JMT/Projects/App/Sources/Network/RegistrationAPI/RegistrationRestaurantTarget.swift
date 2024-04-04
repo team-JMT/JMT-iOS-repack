@@ -12,6 +12,8 @@ enum RegistrationRestaurantTarget {
     case registrationRestaurantLocation(RegistrationRestaurantLocationRequest)
     case registrationRestaurant(RegistrationRestaurantRequest)
     case registrationReview(RegistrationReviewRequest)
+    
+    case editRestaurantInfo(EditRestaurantInfoRequest)
 }
 
 extension RegistrationRestaurantTarget: TargetType {
@@ -20,6 +22,8 @@ extension RegistrationRestaurantTarget: TargetType {
         case .registrationRestaurantLocation: return .post
         case .registrationRestaurant: return .post
         case .registrationReview: return .post
+            
+        case .editRestaurantInfo: return .put
         }
     }
     
@@ -28,6 +32,8 @@ extension RegistrationRestaurantTarget: TargetType {
         case .registrationRestaurantLocation: return "/restaurant/location"
         case .registrationRestaurant: return "/restaurant"
         case .registrationReview(let request): return "/restaurant/\(request.recommendRestaurantId)/review"
+            
+        case .editRestaurantInfo: return "/restaurant"
         }
     }
     
@@ -36,6 +42,8 @@ extension RegistrationRestaurantTarget: TargetType {
         case .registrationRestaurantLocation(let request): return .body(request)
         case .registrationRestaurant: return .body(nil)
         case .registrationReview(let request): return .qurey(request)
+        
+        case .editRestaurantInfo(let request): return .body(request)
         }
     }
 }

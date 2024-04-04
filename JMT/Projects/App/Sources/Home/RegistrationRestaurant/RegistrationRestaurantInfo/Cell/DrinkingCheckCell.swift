@@ -47,6 +47,7 @@ class DrinkingCheckCell: UICollectionViewCell {
                         commentTextField.isHidden = false
                     } else {
                         checkButtonContainerView.layer.borderColor = JMTengAsset.gray100.color.cgColor
+                        commentTextField.text = nil
                         commentTextField.isHidden = true
                     }
                 }
@@ -54,6 +55,13 @@ class DrinkingCheckCell: UICollectionViewCell {
         }
         
         delegate?.didTabCheckButton(isSelected: sender.isSelected)
+    }
+    
+    func setupEditData(str: String?) {
+        checkButton.isSelected = true
+        checkButtonContainerView.layer.borderColor = JMTengAsset.main500.color.cgColor
+        commentTextField.text = str
+        commentTextField.isHidden = false
     }
 }
 

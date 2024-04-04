@@ -25,6 +25,6 @@ class InfoTagCell: UICollectionViewCell {
     }
     
     func setupData(str: String) {
-        tagButton.setTitle(str, for: .normal)
+        tagButton.setTitle(str.trimmingCharacters(in: CharacterSet(charactersIn: "#")), for: .normal)
     }
 }

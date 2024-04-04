@@ -16,7 +16,7 @@ protocol RestaurantDetailCoordinator: Coordinator {
     func showButtonPopupViewController()
     
     func setRegistrationRestaurantInfoCoordinator()
-    func showRegistrationRestaurantInfoViewController()
+    func showRegistrationRestaurantInfoViewController(id: Int, data: DetailRestaurantModel?)
     
 }
 
@@ -122,13 +122,13 @@ class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
         childCoordinators.append(coordinator)
     }
     
-    func showRegistrationRestaurantInfoViewController() {
+    func showRegistrationRestaurantInfoViewController(id: Int, data: DetailRestaurantModel?) {
         if getChildCoordinator(.registrationRestaurantInfo) == nil {
             setRegistrationRestaurantInfoCoordinator()
         }
         
         let coordinator = getChildCoordinator(.registrationRestaurantInfo) as! RegistrationRestaurantInfoCoordinator
-        coordinator.start()
+        coordinator.showEditRegistrationRestaurantInfoViewController(id: id, data: data)
     }
     
     

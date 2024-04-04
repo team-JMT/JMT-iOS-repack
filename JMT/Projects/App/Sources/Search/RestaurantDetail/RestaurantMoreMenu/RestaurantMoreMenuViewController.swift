@@ -8,6 +8,10 @@
 import UIKit
 
 class RestaurantMoreMenuViewController: UIViewController {
+    
+    deinit {
+        print("RestaurantMoreMenuViewController Deinit")
+    }
 
     @IBOutlet weak var moreMenuTableView: UITableView!
     
@@ -39,7 +43,7 @@ extension RestaurantMoreMenuViewController: UITableViewDelegate {
         switch indexPath.row {
         case 0:
             dismiss(animated: true) {
-                self.viewModel?.coordinator?.showRegistrationRestaurantInfoViewController()
+                self.viewModel?.coordinator?.showRegistrationRestaurantInfoViewController(id: self.viewModel?.recommendRestaurantId ?? -1, data: self.viewModel?.restaurantData)
             }
         case 1:
             dismiss(animated: true) {

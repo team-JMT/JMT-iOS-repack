@@ -42,9 +42,15 @@ class RestaurantDetailViewModel {
     // 뷰모델 초기화와 관련된 로직을 담당하는 부분입니다.
     // MARK: - Data Binding
     // 뷰와 뷰모델 간의 데이터 바인딩을 설정하는 부분입니다.
-    var didCompletedRestaurant: (() -> Void)?
-    var didupdateReviewData: (() -> Void)?
-    var didUpdateReviewImage: (() -> Void)?
+//    var didCompletedRestaurant: (() -> Void)?
+//    var didupdateReviewData: (() -> Void)?
+    
+    var didUpdateRestaurantSeg: (() -> Void)?
+    var didUpdatePhotoSeg: (() -> Void)?
+    var didUpdateReviewSeg: (() -> Void)?
+    
+    var didUpdateSelectedReviewImage: (() -> Void)?
+    
     var didUpdateSeg: ((Int) -> Void)?
     var onScrollBeginDismissKeyboard: (() -> Void)?
     
@@ -86,7 +92,6 @@ class RestaurantDetailViewModel {
             if let reviews = restaurantData?.reviews {
                 reviews.map({ review in
                     restaurantReviewImages.append(contentsOf: review.reviewImages)
-                    print(review.totalCount)
                     self.restaurantData?.reviewImageTotalCount += review.reviewImages.count
                 })
             }
@@ -97,7 +102,7 @@ class RestaurantDetailViewModel {
     
     func updateReviewImages(images: [UIImage]) {
         reviewImages.append(contentsOf: images)
-        didUpdateReviewImage?()
+        didUpdateSelectedReviewImage?()
     }
     
     func registrationReview(content: String) async throws {

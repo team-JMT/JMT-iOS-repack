@@ -71,10 +71,9 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
                 try await viewModel?.fetchRestaurantData()
                 try await viewModel?.fetchRestaurantReviewData()
                 
-                self.setupData()
-                            
-                self.viewModel?.didCompletedRestaurant?()
+                viewModel?.didUpdateRestaurantSeg?()
                 
+                self.setupData()                
             } catch {
                 print(error)
             }
@@ -121,14 +120,13 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         self.tabBarController?.tabBar.isHidden = false
     
         removeKeyboardObserver()
-        viewModel?.coordinator?.parentCoordinator?.finish()
     }
     // MARK: - FetchData
    
     
     // MARK: - SetupBindings
     func setupBind() {
-        viewModel?.didUpdateReviewImage = { [weak self] in
+        viewModel?.didUpdateSelectedReviewImage = { [weak self] in
             guard let self = self else { return }
             self.reviewPhotoCollectionView.reloadData()
         }
@@ -245,7 +243,10 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
             do {
                 try await viewModel?.registrationReview(content: reviewTextView.text ?? "")
                 try await viewModel?.fetchRestaurantReviewData()
-                viewModel?.didupdateReviewData?()
+                
+                viewModel?.didUpdateRestaurantSeg?()
+                viewModel?.didUpdatePhotoSeg?()
+                viewModel?.didUpdateReviewSeg?()
                 
                 reviewTextView.text = "방문 후기를 작성해보세요!"
                 reviewTextView.textColor = UIColor.lightGray

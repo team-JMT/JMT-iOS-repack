@@ -19,7 +19,7 @@ struct RegistrationRestaurantAPI {
         return response
     }
     
-    static func registrationRestaurantAsync(request: RegistrationRestaurantRequest, images: [UIImage]) async throws -> RegistrationRestaurantResponse {
+    static func registrationRestaurantAsync(request: RegistrationRestaurantRequest, images: [UIImage?]) async throws -> RegistrationRestaurantResponse {
         
         let response = try await AF.upload(multipartFormData: { formData in
             formData.append(Data(request.name.utf8), withName: "name")
@@ -33,7 +33,7 @@ struct RegistrationRestaurantAPI {
             
             
             for (index, image) in images.enumerated() {
-                let resizeImage = image.resizeImage(widthSize: 300)
+                let resizeImage = image?.resizeImage(widthSize: 300)
                 let resultImage = resizeImage?.jpegData(compressionQuality: 0.5)
                
                 if let imageData = resultImage {
@@ -61,14 +61,19 @@ struct RegistrationRestaurantAPI {
                     formData.append(imageData, withName: "reviewImages", fileName: "\(index).jpg", mimeType: "image/jpeg")
                 }
             }
-            
-            print("--------", request, images)
-            
         }, with: RegistrationRestaurantTarget.registrationReview(request), interceptor: DefaultRequestInterceptor())
             .validate(statusCode: 200..<300)
             .serializingDecodable(RegistrationReviewResponse.self)
             .value
         
+        return response
+    }
+    
+    static func editRestaurantInfo(request: EditRestaurantInfoRequest) async throws -> EditRestaurantInfoResponse {
+        let response = try await AF.request(RegistrationRestaurantTarget.editRestaurantInfo(request), interceptor: DefaultRequestInterceptor())
+            .validate(statusCode: 200..<300)
+            .serializingDecodable(EditRestaurantInfoResponse.self)
+            .value
         return response
     }
 }
