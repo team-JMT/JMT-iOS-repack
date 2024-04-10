@@ -37,8 +37,6 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-        
         if viewModel?.isEdit == true {
             self.tabBarController?.tabBar.isHidden = true
             setupEditData()
@@ -106,9 +104,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        
+    
         removeKeyboardObserver()
     }
     

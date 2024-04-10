@@ -58,8 +58,7 @@ class SearchViewModel {
         do {
             outBoundrestaurants.removeAll()
             
-            let response = try await FetchRestaurantAPI.fetchSearchRestaurantsOutBoundAsync(request: SearchRestaurantsOutBoundRequest(keyword: keyword, currentGroupId: nil))
-//            outBoundrestaurants.append(contentsOf: response.toDomain)
+            let response = try await FetchRestaurantAPI.fetchSearchRestaurantsOutBoundAsync(request: SearchRestaurantsOutBoundRequest(keyword: keyword, currentGroupId: -1))
             outBoundrestaurants = response.toDomain
         } catch {
             print(error)

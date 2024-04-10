@@ -39,9 +39,9 @@ class RestaurantMoreMenuCell: UITableViewCell {
         case 1:
             menuImageView.image = JMTengAsset.moreMenuDeleteImage.image
             menuTitleLabel.text = "삭제하기"
-        case 2:
-            menuImageView.image = JMTengAsset.moreMenuShareImage.image
-            menuTitleLabel.text = "공유하기"
+//        case 2:
+//            menuImageView.image = JMTengAsset.moreMenuShareImage.image
+//            menuTitleLabel.text = "공유하기"
         default:
             return
         }

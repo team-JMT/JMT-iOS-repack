@@ -27,7 +27,7 @@ class RestaurantMoreMenuViewController: UIViewController {
 
 extension RestaurantMoreMenuViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -49,9 +49,8 @@ extension RestaurantMoreMenuViewController: UITableViewDelegate {
             dismiss(animated: true) {
                 self.viewModel?.coordinator?.showButtonPopupViewController()
             }
-          
-        case 2:
-            print("3")
+//        case 2:
+//            print("3")
         default:
             return
         }

@@ -10,6 +10,7 @@ import SnapKit
 import Kingfisher
 import Toast_Swift
 import FloatingPanel
+import Then
 
 protocol RestaurantDetailViewControllerDelegate: AnyObject {
     var headerHeight: CGFloat { get }
@@ -23,13 +24,6 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     }
     
     // MARK: - Properties
-    var transformView: UIView { return self.view }
-    
-    var viewModel: RestaurantDetailViewModel?
-    
-    var pageViewController: RestaurantDetailPageViewController?
-    var moreMenuFpc: FloatingPanelController!
-    
     @IBOutlet weak var restaurantInfoView: UIView!
     @IBOutlet weak var restaurantInfoViewHeight: NSLayoutConstraint!
     
@@ -57,6 +51,19 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     
     @IBOutlet weak var addReviewPhotosButton: UIButton!
     @IBOutlet weak var doneReviewButton: UIButton!
+    
+    var navigationTitleLabel = UILabel().then {
+        $0.alpha = 0
+        $0.textColor = .black
+        $0.textAlignment = .center
+    }
+    
+    var transformView: UIView { return self.view }
+    
+    var viewModel: RestaurantDetailViewModel?
+    
+    var pageViewController: RestaurantDetailPageViewController?
+    var moreMenuFpc: FloatingPanelController!
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -86,10 +93,9 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = true
-        
-        self.navigationController?.setupBarAppearance(alpha: 1)
+    
         setCustomNavigationMoreButton()
         
         if viewModel?.coordinator?.parentCoordinator is DefaultHomeCoordinator {
@@ -111,16 +117,13 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
             self?.reviewContainerView.transform = .identity
         }
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.tabBarController?.tabBar.isHidden = false
     
         removeKeyboardObserver()
     }
+
     // MARK: - FetchData
    
     
@@ -145,6 +148,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     
     // MARK: - SetupData
     func setupData() {
+        
         placeNameLabel.text = viewModel?.restaurantData?.name ?? ""
        
         if viewModel?.locationManager.coordinate == nil {
@@ -164,13 +168,14 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         
         userNicknameLabel.text = viewModel?.restaurantData?.userNickName ?? ""
         
-        self.navigationController?.setupBarAppearance(alpha: 0)
-        self.navigationItem.title = viewModel?.restaurantData?.name ?? ""
+        navigationTitleLabel.text = viewModel?.restaurantData?.name ?? ""
     }
     
     
     // MARK: - SetupUI
     func setupUI() {
+        
+        configNavigationTitleView()
     
         // 세그먼트 컨트롤러 설정
         let normalTextAttributes: [NSAttributedString.Key: Any] = [
@@ -208,8 +213,27 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         reviewTextView.textContainer.lineFragmentPadding = 0
         reviewTextView.alignTextVerticallyInContainer()
         
-        
         doneReviewButton.layer.cornerRadius = 6
+    }
+    
+    func configNavigationTitleView() {
+        let totalWidth = self.navigationController?.navigationBar.frame.width ?? 0
+        let leftItemWidth = self.navigationItem.leftBarButtonItem?.customView?.frame.width ?? 0
+        let rightItemWidth = self.navigationItem.rightBarButtonItem?.customView?.frame.width ?? 0
+        let availableWidth = totalWidth - leftItemWidth - rightItemWidth - 32 // 좌우 여백 고려
+        
+        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: availableWidth, height: 44))
+        titleView.backgroundColor = .clear
+        
+        navigationTitleLabel.frame = titleView.bounds
+        titleView.addSubview(navigationTitleLabel)
+        
+        navigationTitleLabel.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview()
+        }
+        
+        // 네비게이션 바에 titleView 설정
+        self.navigationItem.titleView = titleView
     }
     
     func showMoreMenuBottomSheetViewController() {
@@ -239,6 +263,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     }
     
     @IBAction func didTabAddReviewButton(_ sender: Any) {
+        
         Task {
             do {
                 try await viewModel?.registrationReview(content: reviewTextView.text ?? "")
@@ -255,6 +280,9 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
                 reviewPhotoCollectionView.reloadData()
                 
                 showCustomToast(image: JMTengAsset.checkMark.image, message: "후기 등록이 완료되었어요!", padding: 117, position: .bottom)
+                
+                let appCoordinator = viewModel?.coordinator?.getTopCoordinator()
+                appCoordinator?.updateAllRestaurantsData()
                 
             } catch {
                 print(error)
@@ -382,7 +410,8 @@ extension RestaurantDetailViewController: RestaurantDetailViewControllerDelegate
         }
   
         let percentage = 1 - restaurantInfoViewHeight.constant / 200
-        self.navigationController?.setupBarAppearance(alpha: percentage)
+        
+        navigationTitleLabel.alpha = percentage
     }
 }
 

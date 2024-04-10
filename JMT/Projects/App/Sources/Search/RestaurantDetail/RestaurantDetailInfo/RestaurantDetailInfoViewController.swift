@@ -48,6 +48,7 @@ class RestaurantDetailInfoViewController: UIViewController {
         
         viewModel?.didUpdateRestaurantSeg = { [weak self] in
 
+            print("---- didUpdateRestaurantSeg")
             guard let self = self else { return }
             
             DispatchQueue.main.async {

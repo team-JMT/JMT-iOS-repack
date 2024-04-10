@@ -8,21 +8,26 @@
 import UIKit
 
 class UserLocationViewController: UIViewController {
-
-    var viewModel: UserLocationViewModel?
     
+    // MARK: - Enum
+    
+    // MARK: - Properties
+//    @IBOutlet weak var customNavigationBar: CustomNavigationBar!
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var addressListTableView: UITableView!
     @IBOutlet weak var cancelButton: UIButton!
-    
     @IBOutlet weak var recentSearchView: UIView!
     
+    var viewModel: UserLocationViewModel?
+    
     var isFolded = false
-
+    
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         setupUI()
+        
         addressListTableView.keyboardDismissMode = .onDrag
         
         viewModel?.onSuccess = {
@@ -32,50 +37,41 @@ class UserLocationViewController: UIViewController {
         
         viewModel?.fetchRecentLocations()
     }
-
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.isNavigationBarHidden = false
-        self.navigationController?.setupBarAppearance(alpha: 1)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        self.navigationController?.isNavigationBarHidden = true
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
-    @IBAction func didTabTextFieldCancelButton(_ sender: Any) {
-        addressTextField.text = ""
-        addressTextField.resignFirstResponder()
-        finishSearch()
-    }
-    
-    @IBAction func recentLocationDeleteAll(_ sender: Any) {
-        viewModel?.coordinator?.showButtonPopupViewController()
-    }
-    
-    func finishSearch() {
-        viewModel?.isSearch = false
-        viewModel?.isEnd = false
-        viewModel?.isFetching = false
-        cancelButton.isHidden = true
-        recentSearchView.isHidden = false
-        addressListTableView.reloadData()
-    }
-    
-    func setupUI() {
-        setCustomNavigationBarBackButton(goToViewController: .popVC)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationItem.title = "위치 변경"
         
+        setCustomNavigationBarBackButton(goToViewController: .popVC)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    // MARK: - SetupBindings
+    
+    // MARK: - FetchData
+    
+    // MARK: - SetupData
+    
+    // MARK: - SetupUI
+    func setupUI() {
         cancelButton.isHidden = true
         
+//        setupNavigationBar()
+        setupTextField()
+    }
+    
+//    func setupNavigationBar() {
+//        customNavigationBar.setupTitle(title: "위치 변경")
+//    }
+    
+    func setupTextField() {
         // 텍스트 필드
         addressTextField.layer.cornerRadius = 8
         
@@ -95,9 +91,35 @@ class UserLocationViewController: UIViewController {
         addressTextField.leftView = leftView
         addressTextField.leftViewMode = .always // 항상 보이도록 설정
     }
+    
+    
+    // MARK: - Actions
+    @IBAction func didTabTextFieldCancelButton(_ sender: Any) {
+        addressTextField.text = ""
+        addressTextField.resignFirstResponder()
+        finishSearch()
+    }
+    
+    @IBAction func recentLocationDeleteAll(_ sender: Any) {
+        viewModel?.coordinator?.showButtonPopupViewController()
+    }
+    
+    // MARK: - Helper Methods
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func finishSearch() {
+        viewModel?.isSearch = false
+        viewModel?.isEnd = false
+        viewModel?.isFetching = false
+        cancelButton.isHidden = true
+        recentSearchView.isHidden = false
+        addressListTableView.reloadData()
+    }
 }
 
-
+// MARK: - TableView Delegate
 extension UserLocationViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -116,6 +138,7 @@ extension UserLocationViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - TableView DataSource
 extension UserLocationViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel?.isSearch == true ? viewModel?.resultLocations.count ?? 0 : viewModel?.recentLocations.count ?? 0
@@ -139,7 +162,7 @@ extension UserLocationViewController: UITableViewDataSource {
 extension UserLocationViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard viewModel?.isSearch == true else { return }
-       
+        
         if indexPaths.contains(where: isLoadingCell) {
             viewModel?.fetchSearchLocation(keyword: addressTextField.text ?? "")
         }
@@ -151,6 +174,11 @@ extension UserLocationViewController: UITableViewDataSourcePrefetching {
     }
 }
 
+// MARK: - CollectionView Delegate
+
+// MARK: - CollectionView DataSource
+
+// MARK: - Extention
 extension UserLocationViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -165,7 +193,7 @@ extension UserLocationViewController: UITextFieldDelegate {
             finishSearch()
         }
     }
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         viewModel?.resetSearchState()
         viewModel?.handleTextChange(keyword: textField.text ?? "")
@@ -187,3 +215,10 @@ extension UserLocationViewController: ButtonPopupDelegate {
     func didTabCloseButton() { }
     func didTabCancelButton() { }
 }
+
+
+
+
+
+
+

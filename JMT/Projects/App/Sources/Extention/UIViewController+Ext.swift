@@ -28,6 +28,7 @@ extension UIViewController {
     
     func setCustomNavigationMoreButton() {
         let moreButton = UIBarButtonItem(image: JMTengAsset.more.image, style: .plain, target: self, action: #selector(editMenu))
+        moreButton.tintColor = .black
         self.navigationItem.rightBarButtonItem = moreButton
     }
     

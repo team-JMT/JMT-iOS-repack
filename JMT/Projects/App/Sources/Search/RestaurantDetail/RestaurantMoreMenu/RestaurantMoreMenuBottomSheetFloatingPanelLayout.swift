@@ -20,7 +20,7 @@ class RestaurantMoreMenuBottomSheetFloatingPanelLayout: FloatingPanelLayout {
     
     var anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring] {
         return [
-            .half: FloatingPanelLayoutAnchor(absoluteInset: 290 , edge: .bottom, referenceGuide: .safeArea),
+            .half: FloatingPanelLayoutAnchor(absoluteInset: 212 , edge: .bottom, referenceGuide: .safeArea),
         ]
     }
     

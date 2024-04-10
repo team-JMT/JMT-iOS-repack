@@ -97,6 +97,8 @@ class RestaurantDetailPhotoViewController: UIViewController {
     
     func setupBind() {
         viewModel?.didUpdatePhotoSeg = { [weak self] in
+            
+            print("---- didUpdatePhotoSeg")
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.photoCollectionView.reloadData()
