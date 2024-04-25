@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SkeletonView
 
 class RestaurantDetailInfoViewController: UIViewController {
     
@@ -32,6 +33,8 @@ class RestaurantDetailInfoViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
+        setupBind()
+        
         infoCollectionView.collectionViewLayout = createLayout()
         rootScrollView.keyboardDismissMode = .onDrag
         
@@ -40,27 +43,32 @@ class RestaurantDetailInfoViewController: UIViewController {
         let restaurantDetailFooterView = UINib(nibName: "RestaurantDetailFooterView", bundle: nil)
         infoCollectionView.register(restaurantDetailFooterView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "RestaurantDetailFooterView")
     
-        setupBind()      
+        photoCollectionView.showAnimatedGradientSkeleton()
+        infoCollectionView.showAnimatedGradientSkeleton()
+        
+        DispatchQueue.main.async {
+            self.infoCollectionView.layoutIfNeeded()
+            self.infoCollectionViewHeight.constant = self.infoCollectionView.contentSize.height
+        }
     }
     
     // MARK: - SetupBindings
     func setupBind() {
-        viewModel?.didCompletedRestaurant = {
+        
+        viewModel?.didUpdateRestaurantSeg = { [weak self] in
+            
+            guard let self = self else { return }
+            
             DispatchQueue.main.async {
-                
                 self.updatePhotoCount()
                 
-                self.photoCollectionView.reloadData()
-                self.infoCollectionView.reloadData()
+                self.photoCollectionView.stopSkeletonAnimation()
+                self.photoCollectionView.hideSkeleton()
                 
-                self.infoCollectionView.layoutIfNeeded()
-                self.infoCollectionViewHeight.constant = self.infoCollectionView.contentSize.height
-            }
-        }
-        
-        viewModel?.didupdateReviewData = { [weak self] in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
+                self.infoCollectionView.stopSkeletonAnimation()
+                self.infoCollectionView.hideSkeleton()
+                
+                self.photoCollectionView.reloadData()
                 self.infoCollectionView.reloadData()
                 
                 self.infoCollectionView.layoutIfNeeded()
@@ -99,9 +107,9 @@ class RestaurantDetailInfoViewController: UIViewController {
         
             switch sectionIndex {
             case 0:
-                return self.createTag1ColumnSection()
+                return self.createTagColumnSection(bottomInset: 0, decorationItemKind: "BackgroundView")
             case 1:
-                return self.createTag2ColumnSection()
+                return self.createTagColumnSection(bottomInset: 36, decorationItemKind: "BackgroundViewInset")
             case 2:
                 return self.createReviewColumnSection()
             case 3:
@@ -115,41 +123,79 @@ class RestaurantDetailInfoViewController: UIViewController {
         layout.register(CollectionBackgroundViewInset.self, forDecorationViewOfKind: "BackgroundViewInset")
         return layout
     }
-    
-    func createTag1ColumnSection() -> NSCollectionLayoutSection {
-        
+
+    // 태그 섹션
+    func createTagColumnSection(bottomInset: CGFloat, decorationItemKind: String) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(1), heightDimension: .absolute(33))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: .fixed(0), top: .fixed(8), trailing: .fixed(8), bottom: .fixed(8))
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(33))
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(33))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
+
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
-        
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: bottomInset, trailing: 20)
+
         // Header
+        section.boundarySupplementaryItems = [
+            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        ]
+
+        // Background
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: decorationItemKind)
+        section.decorationItems = [sectionBackgroundDecoration]
+
+        return section
+    }
+  
+   // 리뷰 섹션
+    func createReviewColumnSection() -> NSCollectionLayoutSection? {
+        
+        if viewModel?.isLodingData == true {
+            createLoadingReviewSection()
+        } else {
+            if viewModel?.restaurantData?.reviews.count == 0 {
+               createEmptyReviewSection()
+            } else {
+               createReviewsSection()
+            }
+        }
+    }
+    
+    func createLoadingReviewSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 24, trailing: 20)
+        section.interGroupSpacing = 16
+        
         section.boundarySupplementaryItems = [
             NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         ]
         
         // Background
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundView")
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
         section.decorationItems = [sectionBackgroundDecoration]
         
         return section
     }
-    
-    func createTag2ColumnSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(1), heightDimension: .absolute(33))
+
+    // 리뷰가 없을 때의 섹션
+    func createEmptyReviewSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: .fixed(0), top: .fixed(8), trailing: .fixed(8), bottom: .fixed(8))
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(33))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
+        // Section
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 36, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 28, trailing: 20)
         
         // Header
         section.boundarySupplementaryItems = [
@@ -162,110 +208,99 @@ class RestaurantDetailInfoViewController: UIViewController {
         
         return section
     }
-    
-    func createReviewColumnSection() -> NSCollectionLayoutSection {
+
+    // 리뷰가 있을 때의 섹션
+    func createReviewsSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        if viewModel?.restaurantData?.reviews.count == 0 {
-            // Item
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-            
-            // Section
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 28, trailing: 20)
-            
-            // Header
-            section.boundarySupplementaryItems = [
-                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-            ]
-            
-            // Background
-            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
-            section.decorationItems = [sectionBackgroundDecoration]
-            
-            return section
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 24, trailing: 20)
+        section.interGroupSpacing = 16
+        
+        // Header
+        section.boundarySupplementaryItems = [
+            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top),
+            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(61)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+        ]
+        
+        // Background
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
+        section.decorationItems = [sectionBackgroundDecoration]
+        
+        return section
+    }
+    
+    
+    func createPhotosColumnSection() -> NSCollectionLayoutSection {
+        if viewModel?.isLodingData == true {
+            createPhotosSection()
         } else {
-            // Item
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-            
-            // Section
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 24, trailing: 20)
-            section.interGroupSpacing = 16
-            
-            // Header
-            section.boundarySupplementaryItems = [
-                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top),
-                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(61)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
-            ]
-            
-            // Background
-            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundViewInset")
-            section.decorationItems = [sectionBackgroundDecoration]
-            
-            return section
+            if viewModel?.restaurantReviewImages.count == 0 {
+                createEmptyReviewPhotoSection()
+            } else {
+                createPhotosSection()
+            }
         }
     }
     
-    func createPhotosColumnSection() -> NSCollectionLayoutSection {
-    
-        if viewModel?.restaurantReviewImages.count == 0 {
-            // Item
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-            
-            // Section
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 20, trailing: 20)
-            
-            // Header
-            section.boundarySupplementaryItems = [
-                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-            ]
-            
-            // Background
-            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundView")
-            section.decorationItems = [sectionBackgroundDecoration]
-            
-            return section
-        } else {
-            let fraction: CGFloat = 1 / 3
-                
-            // Item
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1))
-          
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
-            
-            // Group
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(fraction))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-          
-            // Section
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 41 + 56, trailing: 20)
+    // 리뷰가 없을 때의 섹션
+    func createEmptyReviewPhotoSection() -> NSCollectionLayoutSection {
+        // Item
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .estimated(1))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 20, trailing: 20)
+        
+        // Header
+        section.boundarySupplementaryItems = [
+            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        ]
+        
+        // Background
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundView")
+        section.decorationItems = [sectionBackgroundDecoration]
+        
+        return section
+    }
 
-            // Header
-            section.boundarySupplementaryItems = [
-                NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-            ]
-            
-            // Background
-            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundView")
-            section.decorationItems = [sectionBackgroundDecoration]
-            
-            return section
-        }
+    // 리뷰가 있을 때의 섹션
+    func createPhotosSection() -> NSCollectionLayoutSection {
+        let fraction: CGFloat = 1 / 3
+        
+        // Item
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+        
+        // Group
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(fraction))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 41 + 56, trailing: 20)
+        
+        // Header
+        section.boundarySupplementaryItems = [
+            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(41)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        ]
+        
+        // Background
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: "BackgroundView")
+        section.decorationItems = [sectionBackgroundDecoration]
+        
+        return section
     }
     
     // MARK: - Actions
@@ -285,21 +320,23 @@ class RestaurantDetailInfoViewController: UIViewController {
 
 extension RestaurantDetailInfoViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if collectionView.restorationIdentifier == "photoCollectionView" {
+        
+        if collectionView.tag == 0 {
             return 1
         } else {
             return 4
         }
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView.restorationIdentifier == "photoCollectionView" {
+        
+        if collectionView.tag == 0 {
             return viewModel?.restaurantData?.pictures.count ?? 0
-        } else if collectionView.restorationIdentifier == "test2" {
+        } else {
             switch section {
             case 0:
                 return viewModel?.restaurantData?.recommendMenu.count ?? 0 // 메뉴 개수
             case 1:
-                return viewModel?.restaurantData?.goWellWithLiquor == "" ? 0 : 1 // 술 개수
+                return 1
             case 2:
                 return viewModel?.restaurantData?.reviews.isEmpty == true ? 1 : viewModel?.restaurantData?.reviews.count ?? 0 >= 2 ? 2 : 1
             case 3:
@@ -307,13 +344,11 @@ extension RestaurantDetailInfoViewController: UICollectionViewDataSource {
             default:
                 return 0
             }
-        } else {
-            return 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView.restorationIdentifier == "photoCollectionView" {
+        if collectionView.tag == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "restaurantPhotoCell", for: indexPath) as? RestaurantPhotoCell else { return UICollectionViewCell() }
             cell.setupData(imageUrl: viewModel?.restaurantData?.pictures[indexPath.row] ?? "")
             return cell
@@ -321,11 +356,11 @@ extension RestaurantDetailInfoViewController: UICollectionViewDataSource {
             switch indexPath.section {
             case 0:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "InfoTagCell", for: indexPath) as? InfoTagCell else { return UICollectionViewCell() }
-                cell.setupData(str: viewModel?.restaurantData?.recommendMenu[indexPath.row] ?? "")
+                cell.setupTag1Data(str: viewModel?.restaurantData?.recommendMenu[indexPath.row] ?? "")
                 return cell
             case 1:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "InfoTagCell", for: indexPath) as? InfoTagCell else { return UICollectionViewCell() }
-                cell.setupData(str: viewModel?.restaurantData?.goWellWithLiquor ?? "")
+                cell.setupTag2Data(str: viewModel?.restaurantData?.goWellWithLiquor ?? "")
                 return cell
             case 2:
                 if viewModel?.restaurantData?.reviews.isEmpty == true {
@@ -350,15 +385,14 @@ extension RestaurantDetailInfoViewController: UICollectionViewDataSource {
             default:
                 return UICollectionViewCell()
             }
-            
         }
     }
 }
 
 extension RestaurantDetailInfoViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        if collectionView.restorationIdentifier == "photoCollectionView" {
+        
+        if collectionView.tag == 0 {
             return CGSize(width: self.view.frame.width - 40, height: self.view.frame.width - 40)
         } else {
             return CGSize(width: 100, height: 100)
@@ -454,4 +488,53 @@ extension RestaurantDetailInfoViewController: UIScrollViewDelegate {
     }
 }
 
-
+extension RestaurantDetailInfoViewController: SkeletonCollectionViewDataSource {
+    
+    func numSections(in collectionSkeletonView: UICollectionView) -> Int {
+        switch collectionSkeletonView.tag {
+        case 1:
+            return 4
+        default:
+            return 1
+        }
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch skeletonView.tag {
+        case 1:
+            switch section {
+            case 0,1:
+                return 3
+            case 2:
+                return 2
+            case 3:
+                return 9
+            default:
+                return 1
+            }
+        default:
+            return 1
+        }
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
+        
+        switch skeletonView.tag {
+        case 0:
+            return "restaurantPhotoCell"
+        case 1:
+            switch indexPath.section {
+            case 0,1:
+                return "InfoTagCell"
+            case 2:
+                return "reviewCell"
+            case 3:
+                return "reviewImageCell"
+            default:
+                return ""
+            }
+        default:
+            return ""
+        }
+    }
+}

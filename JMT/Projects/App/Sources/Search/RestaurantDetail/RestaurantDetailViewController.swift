@@ -8,6 +8,10 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import Toast_Swift
+import FloatingPanel
+import Then
+import SkeletonView
 
 protocol RestaurantDetailViewControllerDelegate: AnyObject {
     var headerHeight: CGFloat { get }
@@ -21,19 +25,16 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     }
     
     // MARK: - Properties
-    var transformView: UIView { return self.view }
-    
-    var viewModel: RestaurantDetailViewModel?
-    
-    var pageViewController: RestaurantDetailPageViewController?
-    
     @IBOutlet weak var restaurantInfoView: UIView!
     @IBOutlet weak var restaurantInfoViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var placeNameLabel: UILabel!
+    @IBOutlet weak var boundaryView: UIView!
     @IBOutlet weak var differenceInDistanceLabel: UILabel!
+    
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var copyAddressButton: UIButton!
     
     @IBOutlet weak var userProfileImageView: UIImageView!
     @IBOutlet weak var userNicknameLabel: UILabel!
@@ -55,18 +56,18 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     @IBOutlet weak var addReviewPhotosButton: UIButton!
     @IBOutlet weak var doneReviewButton: UIButton!
     
+    var navigationTitleLabel = UILabel().then {
+        $0.alpha = 0
+        $0.textColor = .black
+        $0.textAlignment = .center
+    }
     
-//    @IBOutlet weak var reviewImageView1: UIImageView!
-//    @IBOutlet weak var reviewImageView2: UIImageView!
-//    @IBOutlet weak var reviewImageView3: UIImageView!
-//    @IBOutlet weak var reviewImageView4: UIImageView!
-//    @IBOutlet weak var reviewImageView5: UIImageView!
-//    
-//    @IBOutlet weak var bottomContainerStackView: UIStackView!
-
-//    
-
-//    @IBOutlet weak var reviewTextViewHeightConstraint: NSLayoutConstraint!
+    var transformView: UIView { return self.view }
+    
+    var viewModel: RestaurantDetailViewModel?
+    
+    var pageViewController: RestaurantDetailPageViewController?
+    var moreMenuFpc: FloatingPanelController!
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -74,34 +75,18 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         
         setupUI()
         setupBind()
-        
-        Task {
-            do {
-                await viewModel?.fetchCurrentLocationAsync()
-                try await viewModel?.fetchRestaurantData()
-                try await viewModel?.fetchRestaurantReviewData()
-                
-                self.setupData()
-                            
-                self.viewModel?.didCompletedRestaurant?()
-                
-            } catch {
-                print(error)
-            }
-        }
-
         pageViewController?.pageViewDelegate = self
         pageViewController?.restaurantDetailDelegate = self
+        
+        fetchRestaurantData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.tabBarController?.tabBar.isHidden = true
-        
-        self.navigationController?.setupBarAppearance(alpha: 1)
-//        setCustomNavigationMoreButton()
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+    
+        setCustomNavigationMoreButton()
         
         if viewModel?.coordinator?.parentCoordinator is DefaultHomeCoordinator {
             setCustomNavigationBarBackButton(goToViewController: .popVC)
@@ -117,31 +102,50 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
             guard let keyboardFrame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
             
             self?.reviewContainerView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.cgRectValue.height)
-         
-            
+        
         } keyboardWillHide: { [weak self] noti in
             self?.reviewContainerView.transform = .identity
         }
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.tabBarController?.tabBar.isHidden = false
     
         removeKeyboardObserver()
-        viewModel?.coordinator?.parentCoordinator?.finish()
     }
+
     // MARK: - FetchData
-   
+    func fetchRestaurantData() {
+        
+        viewModel?.isLodingData = true
+        self.view.showAnimatedGradientSkeleton()
+       
+        Task {
+            do {
+                await viewModel?.fetchCurrentLocationAsync()
+                try await viewModel?.fetchDetailRestaurantData()
+                try await viewModel?.fetchRestaurantReviewData()
+                
+                viewModel?.isLodingData = false
+                
+                viewModel?.didUpdateRestaurantSeg?()
+                
+                DispatchQueue.main.async {
+                    self.view.stopSkeletonAnimation()
+                    self.view.hideSkeleton()
+                    self.configSkeletonUI(isHidden: false)
+                    self.setupData()
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
     
     // MARK: - SetupBindings
     func setupBind() {
-        viewModel?.didUpdateReviewImage = { [weak self] in
+        viewModel?.didUpdateSelectedReviewImage = { [weak self] in
             guard let self = self else { return }
-            
             self.reviewPhotoCollectionView.reloadData()
         }
         
@@ -159,6 +163,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     
     // MARK: - SetupData
     func setupData() {
+        
         placeNameLabel.text = viewModel?.restaurantData?.name ?? ""
        
         if viewModel?.locationManager.coordinate == nil {
@@ -178,13 +183,15 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         
         userNicknameLabel.text = viewModel?.restaurantData?.userNickName ?? ""
         
-        self.navigationController?.setupBarAppearance(alpha: 0)
-        self.navigationItem.title = viewModel?.restaurantData?.name ?? ""
+        navigationTitleLabel.text = viewModel?.restaurantData?.name ?? ""
     }
     
     
     // MARK: - SetupUI
     func setupUI() {
+        
+        configSkeletonUI(isHidden: true)
+        configNavigationTitleView()
     
         // 세그먼트 컨트롤러 설정
         let normalTextAttributes: [NSAttributedString.Key: Any] = [
@@ -214,7 +221,6 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         // 닉네임 이미지 성정
         userProfileImageView.layer.cornerRadius = 10
         
-        
         reviewTextView.text = "방문 후기를 작성해보세요!"
         reviewTextView.textColor = UIColor.lightGray
         
@@ -222,8 +228,52 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         reviewTextView.textContainer.lineFragmentPadding = 0
         reviewTextView.alignTextVerticallyInContainer()
         
-        
         doneReviewButton.layer.cornerRadius = 6
+    }
+    
+    func configSkeletonUI(isHidden: Bool) {
+        differenceInDistanceLabel.isHidden = isHidden
+        boundaryView.isHidden = isHidden
+        categoryLabel.isHidden = isHidden
+        addressLabel.isHidden = isHidden
+        copyAddressButton.isHidden = isHidden
+    }
+    
+    func configNavigationTitleView() {
+        let totalWidth = self.navigationController?.navigationBar.frame.width ?? 0
+        let leftItemWidth = self.navigationItem.leftBarButtonItem?.customView?.frame.width ?? 0
+        let rightItemWidth = self.navigationItem.rightBarButtonItem?.customView?.frame.width ?? 0
+        let availableWidth = totalWidth - leftItemWidth - rightItemWidth - 32 // 좌우 여백 고려
+        
+        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: availableWidth, height: 44))
+        titleView.backgroundColor = .clear
+        
+        navigationTitleLabel.frame = titleView.bounds
+        titleView.addSubview(navigationTitleLabel)
+        
+        navigationTitleLabel.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview()
+        }
+        
+        // 네비게이션 바에 titleView 설정
+        self.navigationItem.titleView = titleView
+    }
+    
+    func showMoreMenuBottomSheetViewController() {
+        
+        let storyboard = UIStoryboard(name: "RestaurantMoreMenu", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "RestaurantMoreMenuViewController") as? RestaurantMoreMenuViewController else { return }
+    
+        vc.viewModel = self.viewModel
+        
+        moreMenuFpc = FloatingPanelController(delegate: self)
+        moreMenuFpc.set(contentViewController: vc)
+        moreMenuFpc.layout = RestaurantMoreMenuBottomSheetFloatingPanelLayout()
+        moreMenuFpc.panGestureRecognizer.isEnabled = false
+        moreMenuFpc.backdropView.dismissalTapGestureRecognizer.isEnabled = true
+        moreMenuFpc.setPanelStyle(radius: 24, isHidden: true)
+        
+        self.present(moreMenuFpc, animated: true)
     }
     
     // MARK: - Actions
@@ -236,22 +286,49 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     }
     
     @IBAction func didTabAddReviewButton(_ sender: Any) {
+    
+        guard reviewTextView.text != "" && reviewTextView.text != "방문 후기를 작성해보세요!" else {
+            self.showCustomToast(image: JMTengAsset.notCheckMark.image, message: "리뷰를 작성해주세요!", padding: 117, position: .bottom)
+            return
+        }
+    
+        guard viewModel?.reviewImages.isEmpty != true else {
+            self.showCustomToast(image: JMTengAsset.notCheckMark.image, message: "리뷰 이미지를 추가해주세요!", padding: 117, position: .bottom)
+            return
+        }
+        
+        self.showLoadingIndicator()
+        
         Task {
             do {
                 try await viewModel?.registrationReview(content: reviewTextView.text ?? "")
-                try await viewModel?.fetchRestaurantReviewData()
-                viewModel?.didupdateReviewData?()
                 
-                reviewTextView.text = "방문 후기를 작성해보세요!"
-                reviewTextView.textColor = UIColor.lightGray
+                try await viewModel?.fetchRestaurantReviewData()
+                viewModel?.didUpdateRestaurantSeg?()
+                viewModel?.didUpdatePhotoSeg?()
+                viewModel?.didUpdateReviewSeg?()
                 
                 viewModel?.reviewImages.removeAll()
                 reviewPhotoCollectionView.reloadData()
                 
+                reviewTextView.text = "방문 후기를 작성해보세요!"
+                reviewTextView.textColor = UIColor.lightGray
+                
+                showCustomToast(image: JMTengAsset.checkMark.image, message: "후기 등록이 완료되었어요!", padding: 117, position: .bottom)
+                let appCoordinator = viewModel?.coordinator?.getTopCoordinator()
+                appCoordinator?.updateAllRestaurantsData()
             } catch {
-                print(error)
+                self.showCustomToast(image: JMTengAsset.notCheckMark.image, message: "리뷰를 등록하지 못했어요!", padding: 117, position: .bottom)
             }
+            
+            self.hideLoadingIndicator()
         }
+    }
+    
+    
+    @IBAction func didTabCopyAddressButton(_ sender: Any) {
+        UIPasteboard.general.string = addressLabel.text
+        showCustomToast(image: JMTengAsset.checkMark.image, message: "주소 복사가 완료되었어요!", padding: 117, position: .bottom)
     }
     
     // MARK: - Helper Methods
@@ -368,6 +445,33 @@ extension RestaurantDetailViewController: RestaurantDetailViewControllerDelegate
         }
   
         let percentage = 1 - restaurantInfoViewHeight.constant / 200
-        self.navigationController?.setupBarAppearance(alpha: percentage)
+        
+        navigationTitleLabel.alpha = percentage
     }
+}
+
+extension RestaurantDetailViewController: FloatingPanelControllerDelegate {
+    
+}
+
+extension RestaurantDetailViewController: ButtonPopupDelegate {
+    func didTabDoneButton() {
+        Task {
+            do {
+                try await self.viewModel?.deleteRestaurant()
+                let rootCoordinator = viewModel?.coordinator?.getTopCoordinator()
+                rootCoordinator?.updateAllRestaurantsData()
+                
+                self.navigationController?.popViewController(animated: true)
+                self.showCustomToast(image: JMTengAsset.checkMark.image, message: "삭제가 완료되었어요!", padding: 117, position: .bottom)
+            } catch {
+                print(error)
+                self.showCustomToast(image: JMTengAsset.notCheckMark.image, message: "맛집을 삭제하지 못했어요!", padding: 117, position: .bottom)
+            }
+        }
+    }
+    
+    func didTabCloseButton() { }
+    
+    func didTabCancelButton() { }
 }

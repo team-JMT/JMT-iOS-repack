@@ -37,15 +37,21 @@ class RestaurantDetailViewModel {
 
     var currentSegIndex: Int = 0
     var reviewImages = [UIImage]()
+    var isLodingData = true
     
     // MARK: - Initialization
     // 뷰모델 초기화와 관련된 로직을 담당하는 부분입니다.
-    
     // MARK: - Data Binding
     // 뷰와 뷰모델 간의 데이터 바인딩을 설정하는 부분입니다.
-    var didCompletedRestaurant: (() -> Void)?
-    var didupdateReviewData: (() -> Void)?
-    var didUpdateReviewImage: (() -> Void)?
+//    var didCompletedRestaurant: (() -> Void)?
+//    var didupdateReviewData: (() -> Void)?
+    
+    var didUpdateRestaurantSeg: (() -> Void)?
+    var didUpdatePhotoSeg: (() -> Void)?
+    var didUpdateReviewSeg: (() -> Void)?
+    
+    var didUpdateSelectedReviewImage: (() -> Void)?
+    
     var didUpdateSeg: ((Int) -> Void)?
     var onScrollBeginDismissKeyboard: (() -> Void)?
     
@@ -65,12 +71,12 @@ class RestaurantDetailViewModel {
     }
     
     // 맛집 정보 가져오기
-    func fetchRestaurantData() async throws {
+    func fetchDetailRestaurantData() async throws {
         do {
             let x = locationManager.coordinate?.longitude ?? 0.0
             let y = locationManager.coordinate?.latitude ?? 0.0
             
-            restaurantData = try await FetchRestaurantAPI.fetchDetailRestaurantAsync(request: DetailRestaurantRequest(recommendRestaurantId: recommendRestaurantId ?? 0, coordinator: DetailRestaurantCoordinate(x: "\(x)", y: "\(y)"))).toDomain
+            restaurantData = try await ReadRestaurantsAPI.fetchDetailRestaurantAsync(request: DetailRestaurantRequest(recommendRestaurantId: recommendRestaurantId ?? 0, coordinator: DetailRestaurantCoordinate(x: "\(x)", y: "\(y)"))).toDomain
         } catch {
             throw RestaurantError.fetchRestaurantDataError
         }
@@ -82,12 +88,12 @@ class RestaurantDetailViewModel {
         restaurantReviewImages.removeAll()
         
         do {
-            restaurantData?.reviews = try await FetchRestaurantAPI.fetchRestaurantReviewsAsync(request: RestaurantReviewRequest(recommendRestaurantId: recommendRestaurantId ?? 0)).toDomain
             
+            restaurantData?.reviews = try await ReadRestaurantsAPI.fetchRestaurantReviewsAsync(request: RestaurantReviewsRequest(recommendRestaurantId: recommendRestaurantId ?? 0)).toDomain
+    
             if let reviews = restaurantData?.reviews {
                 reviews.map({ review in
                     restaurantReviewImages.append(contentsOf: review.reviewImages)
-                    print(review.totalCount)
                     self.restaurantData?.reviewImageTotalCount += review.reviewImages.count
                 })
             }
@@ -96,18 +102,39 @@ class RestaurantDetailViewModel {
         }
     }
     
+    func updateRestaurantInfo(model: EditRestaurantModel) {
+        print("---", model)
+        restaurantData?.introduce = model.introduce
+        restaurantData?.category = model.category
+        restaurantData?.canDrinkLiquor = model.canDrinkLiquor
+        restaurantData?.goWellWithLiquor = model.goWellWithLiquor
+        restaurantData?.recommendMenu = model.recommendMenu.splitByHashTag()
+        
+    }
+    
     func updateReviewImages(images: [UIImage]) {
         reviewImages.append(contentsOf: images)
-        didUpdateReviewImage?()
+        didUpdateSelectedReviewImage?()
     }
     
     func registrationReview(content: String) async throws {
-        let a = try await RegistrationRestaurantAPI.registrationReviewAsync(request: RegistrationReviewRequest(recommendRestaurantId: recommendRestaurantId ?? -1),
-                                                                            reviewContent: content, 
-                                                                            images: reviewImages)
-        print("1231231", a.code)
+        do {
+            try await CreateRestaurantsAPI.createRestaurantReviewAsync(request: CreateRestaurantReviewRequest(recommendRestaurantId: recommendRestaurantId ?? -1),
+                                                                                reviewContent: content,
+                                                                                images: reviewImages)
+        } catch {
+            print(error)
+        }
     }
     
+    func deleteRestaurant() async throws {
+        do {
+            try await DeleteRestaurantsAPI.deleteRestaurantAsync(request: DeleteRestaurantRequest(id: recommendRestaurantId ?? -1))
+        } catch {
+            print(error)
+        }
+    }
+
     // MARK: - Utility Methods
     // 다양한 유틸리티 메소드들을 모아두는 부분입니다. 예를 들어, 날짜 포매팅이나 데이터 검증 등입니다.
     

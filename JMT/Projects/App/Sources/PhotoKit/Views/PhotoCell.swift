@@ -20,7 +20,7 @@ class PhotoCell: UICollectionViewCell {
     
         
         highlightedView.layer.borderWidth = 5.0
-        highlightedView.layer.borderColor = UIColor.main600?.cgColor
+        highlightedView.layer.borderColor = JMTengAsset.main600.color.cgColor
         orderView.layer.cornerRadius = 20 / 2
     }
     

@@ -31,8 +31,10 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+    
+        categoryView.isHidden = true
+        drinkLiquorView.isHidden = true
         
-        self.isSkeletonable = true
         skeletonCornerRadius = 10
         
         categoryView.layer.cornerRadius = 4
@@ -49,7 +51,10 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        userNicknameLabel.text = ""
+        categoryView.isHidden = true
+        drinkLiquorView.isHidden = true
+        
+        userNicknameLabel.text = nil
         userProfileImageView.image = nil
         restaurantImageView.image = nil
         restaurantNameLabel.text = nil
@@ -60,7 +65,7 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
         drinkLiquorLabel.text = nil
     }
     
-    func setupData(model: SearchMapRestaurantModel?) {
+    func setupData(model: RestaurantListModel?) {
         guard let model = model else {
             // 모델이 없는 경우의 처리
             return
@@ -85,6 +90,9 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
         } else {
             reviewCountLabel.text = "0"
         }
+        
+        categoryView.isHidden = false
+        drinkLiquorView.isHidden = false
     }
 
     // 이미지 로딩을 위한 공통 함수

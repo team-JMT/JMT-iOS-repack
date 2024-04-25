@@ -10,7 +10,7 @@ import UIKit
 
 extension String {
     func splitByHashTag() -> [String] {
-        let components = self.split(separator: "#")
-        return components.map(String.init).filter { !$0.isEmpty }
+        let components = self.split(separator: "#").map({"#" + $0}).filter({ !$0.isEmpty })
+        return components
     }
 }

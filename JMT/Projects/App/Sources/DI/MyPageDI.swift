@@ -74,19 +74,5 @@ struct MyPageDI: Assembly {
             let viewModel = r.resolve(MyPageChangeNickNameViewModel.self)!
             c.viewModel = viewModel
         }
-        
-        // FirstSegmentViewController에 대한 ViewModel 주입 설정
-//        container.register(MyPageViewModel.self) { r in
-//            let viewModel = MyPageViewModel()
-//            return viewModel
-//        }
-//        
-//        container.storyboardInitCompleted(FirstSegmentViewController.self) { r, c in
-//            let viewModel = r.resolve(MyPageViewModel.self)!
-//            c.viewModel = viewModel
-//        }
-//        
-    
-        
     }
 }

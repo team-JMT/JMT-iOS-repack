@@ -24,9 +24,8 @@ class SearchRestaurantMapViewModel {
     // MARK: - Data Fetching
     // 외부 소스나 모델로부터 데이터를 가져오는 메소드들을 모아두는 부분입니다.
     func checkRegistrationRestaurant() async -> Bool? {
-        
         do {
-            let response = try await FetchRestaurantAPI.checkRegistrationRestaurantAsync(request: CheckRegistrationRestaurantRequest(kakaoSubId: info?.id ?? ""))
+            let response = try await ReadRestaurantsAPI.checkRegistrationRestaurantAsync(request: CheckRegistrationRestaurantRequest(kakaoSubId: info?.id ?? ""))
             return response.data ?? false
         } catch {
             print(error)

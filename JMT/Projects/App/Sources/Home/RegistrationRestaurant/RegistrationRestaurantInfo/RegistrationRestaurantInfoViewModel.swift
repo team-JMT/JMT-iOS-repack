@@ -7,17 +7,25 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 class RegistrationRestaurantInfoViewModel {
+    
+    deinit {
+        print("RegistrationRestaurantInfoViewModel deinit")
+    }
     
     // MARK: - Properties
     // 데이터와 관련된 프로퍼티들을 선언하는 부분입니다.
     weak var coordinator: RegistrationRestaurantInfoCoordinator?
     var info: SearchRestaurantsLocationModel?
+    var editData: DetailRestaurantModel?
     
-    var categoryData: [(String, Bool, UIImage)] = []
+    var isEdit: Bool = false
+    
+    var categoryData: [(String, Bool, UIImage)] = Utils.getDefaultCategoryData()
     var isSelectedCategory = false
-    var selectedImages = [UIImage]()
+    var selectedImages = [UIImage?]()
     var commentString: String = ""
     var isDrinking = false
     var drinkingComment: String = ""
@@ -48,7 +56,7 @@ class RegistrationRestaurantInfoViewModel {
         
         do {
             if let info = self.info {
-                let request = RegistrationRestaurantLocationRequest(
+                let request = CreateRestaurantLocationRequest(
                     placeName: info.placeName,
                     distance: String(0),
                     placeUrl: info.placeUrl,
@@ -62,7 +70,7 @@ class RegistrationRestaurantInfoViewModel {
                     x: String(info.x),
                     y: String(info.y))
                 
-                let response = try await RegistrationRestaurantAPI.registrationRestaurantLocationAsync(request: request)
+                let response = try await CreateRestaurantsAPI.createRestaurantLocationAsync(request: request)
                 print(response)
                 restaurantLocationId = response.data
             }
@@ -81,7 +89,7 @@ class RegistrationRestaurantInfoViewModel {
                 
                 let recommendMenu = tags.joined()
                             
-                let request = RegistrationRestaurantRequest(
+                let request = CreateRestaurantRequest(
                     name: info.placeName,
                     introduce: commentString,
                     categoryId: categoryId + 1,
@@ -91,7 +99,7 @@ class RegistrationRestaurantInfoViewModel {
                     restaurantLocationId: self.restaurantLocationId ?? 0,
                     groupId: selectedGroupId)
  
-                let response = try await RegistrationRestaurantAPI.registrationRestaurantAsync(request: request, images: selectedImages)
+                let response = try await CreateRestaurantsAPI.createRestaurantAsync(request: request, images: selectedImages)
                 recommendRestaurantId = response.data.recommendRestaurantId
             } else {
                 print("registrationRestaurantAsync Error")
@@ -102,8 +110,90 @@ class RegistrationRestaurantInfoViewModel {
         }
     }
     
+    func updateEditRestaurantInfo() async throws {
+        let categoryId = categoryData.firstIndex(where: {$0.1 == true}) ?? 0
+        let request = EditRestaurantRequest(id: recommendRestaurantId ?? -1,
+                                                introduce: commentString,
+                                                categoryId: categoryId + 1,
+                                                canDrinkLiquor: isDrinking,
+                                                goWellWithLiquor: drinkingComment,
+                                                recommendMenu: tags.joined())
+        try await UpdateRestaurantsAPI.editRestaurant(request: request)
+    }
+    
     // MARK: - Utility Methods
     // 다양한 유틸리티 메소드들을 모아두는 부분입니다. 예를 들어, 날짜 포매팅이나 데이터 검증 등입니다.
+    
+    func setupEditData(completion: @escaping () -> ()) {
+        // 카테고리 데이터 설정
+        let categoryIndex = categoryData.firstIndex(where: { $0.0 == editData?.category})
+        updateSelectedCategory(row: categoryIndex ?? 0)
+        isSelectedCategory = true
+        
+        // 맛집 이미지 설정, 캐시에 있는 이미지 가져오기
+        let cache = ImageCache.default
+        let retryStrategy = DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(3))
+        let group = DispatchGroup()
+        
+        selectedImages = Array<UIImage?>(repeating: nil, count: editData?.pictures.count ?? 0)
+        
+        editData?.pictures.enumerated().forEach { (index, imageUrl) in
+            
+            if let url = URL(string: imageUrl) {
+                
+                group.enter()
+                
+                cache.retrieveImage(forKey: url.cacheKey, options: nil) { result in
+                    
+                    switch result {
+                    case .success(let value):
+                        if let image = value.image {
+                            print("이미지 가져오기 성공")
+                            self.selectedImages[index] = image
+                            group.leave()
+                            
+                        } else {
+                            print("이미지 가져오기 실패")
+                            KingfisherManager.shared.retrieveImage(with: url, options: [.retryStrategy(retryStrategy)]) { result in
+                                switch result {
+                                case .success(let value):
+                                    self.selectedImages[index] = value.image
+                                    group.leave()
+                                case .failure(_):
+                                    print("이미지 다운로드 실패 2")
+                                    group.leave()
+                                }
+                            }
+                        }
+                    case .failure(_):
+                        print("이미지 가져오기 실패 1")
+                        group.leave()
+                    }
+                }
+            } else {
+                print("이미지 URL 변환 실패")
+            }
+        }
+        
+        group.notify(queue: .main) {
+            // nil 값을 필터링하여 최종 이미지 배열을 얻습니다.
+            let filteredImages = self.selectedImages.compactMap { $0 }
+            print("모든 이미지 로딩 완료, 이미지 개수: \(filteredImages.count)")
+            completion()
+            // 이 시점에서 filteredImages를 사용하여 UI를 업데이트하거나 다른 작업을 수행할 수 있습니다.
+        }
+        
+        // 소개글
+        commentString = editData?.introduce ?? "(필수) 멤버들에게 맛집소개 한마디를 적어주세요"
+        
+        // 음주 여부
+        isDrinking = editData?.canDrinkLiquor ?? false
+        drinkingComment = editData?.canDrinkLiquor == true ? editData?.goWellWithLiquor ?? "" : ""
+        
+        // 태그 설정
+        tags =  editData?.recommendMenu ?? []
+    }
+    
     func updateSelectedCategory(row: Int) {
         for (index, _) in categoryData.enumerated() {
             if index == row {

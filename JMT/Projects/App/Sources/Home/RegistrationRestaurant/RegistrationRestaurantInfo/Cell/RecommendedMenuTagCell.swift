@@ -37,6 +37,6 @@ class RecommendedMenuTagCell: UICollectionViewCell {
     }
     
     func configData(text: String?) {
-        tagLabel.text = text ?? ""
+        tagLabel.text = text?.trimmingCharacters(in: CharacterSet(charactersIn: "#")) ?? ""
     }
 }

@@ -11,7 +11,15 @@ import UIKit
 protocol RestaurantDetailCoordinator: Coordinator {
     func showImagePicker()
     func start(id: Int)
+    
+    func setButtonPopupCoordinator()
+    func showButtonPopupViewController()
+    
+    func setRegistrationRestaurantInfoCoordinator()
+    func showRegistrationRestaurantInfoViewController(id: Int, data: DetailRestaurantModel?)
+    
 }
+
 class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
     
     var parentCoordinator: Coordinator?
@@ -94,11 +102,53 @@ class DefaultRestaurantDetailCoordinator: RestaurantDetailCoordinator {
         }
         return 0
     }
+    
+    func setButtonPopupCoordinator() {
+        let coordinator = DefaultButtonPopupCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showButtonPopupViewController() {
+        if getChildCoordinator(.buttonPopup) == nil {
+            setButtonPopupCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.buttonPopup) as! ButtonPopupCoordinator
+        coordinator.start()
+    }
+    
+    func setRegistrationRestaurantInfoCoordinator() {
+        let coordinator = DefaultRegistrationRestaurantInfoCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
+        childCoordinators.append(coordinator)
+    }
+    
+    func showRegistrationRestaurantInfoViewController(id: Int, data: DetailRestaurantModel?) {
+        if getChildCoordinator(.registrationRestaurantInfo) == nil {
+            setRegistrationRestaurantInfoCoordinator()
+        }
+        
+        let coordinator = getChildCoordinator(.registrationRestaurantInfo) as! RegistrationRestaurantInfoCoordinator
+        coordinator.showEditRegistrationRestaurantInfoViewController(id: id, data: data)
+    }
+    
+    
+    func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {
+        var childCoordinator: Coordinator? = nil
+        
+        switch type {
+        case .buttonPopup:
+            childCoordinator = childCoordinators.first(where: { $0 is ButtonPopupCoordinator })
+        case .registrationRestaurantInfo:
+            childCoordinator = childCoordinators.first(where: { $0 is RegistrationRestaurantInfoCoordinator })
+        default:
+            break
+        }
+        return childCoordinator
+    }
 }
 
 extension DefaultRestaurantDetailCoordinator: CoordinatorFinishDelegate {
     func coordinatorDidFinish(childCoordinator: Coordinator) {
-        print("DefaultRestaurantDetailCoordinator Finish")
         self.childCoordinators = self.childCoordinators.filter{ $0.type != childCoordinator.type }
     }
 }

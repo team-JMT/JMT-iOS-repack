@@ -60,9 +60,6 @@ class DefaultHomeCoordinator: HomeCoordinator {
         coordinator.start()
     }
     
-    
-    
-  
     func setSearchRestaurantCoordinator() {
         let coordinator = DefaultSearchRestaurantCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
         childCoordinators.append(coordinator)
@@ -76,10 +73,6 @@ class DefaultHomeCoordinator: HomeCoordinator {
         let coordinator = getChildCoordinator(.searchRestaurant) as! SearchRestaurantCoordinator
         coordinator.start()
     }
-    
-    
-    
-    
     
     func showSearchTabWithButton() {
         if let coordinator = parentCoordinator as? DefaultTabBarCoordinator {
@@ -139,5 +132,13 @@ class DefaultHomeCoordinator: HomeCoordinator {
 extension DefaultHomeCoordinator: CoordinatorFinishDelegate {
     func coordinatorDidFinish(childCoordinator: Coordinator) {
         self.childCoordinators = self.childCoordinators.filter{ $0.type != childCoordinator.type }
+    }
+}
+
+extension DefaultHomeCoordinator: RestaurantsDataUpdatable {
+    func updateRestaurantsData() {
+        if let vc = self.navigationController?.viewControllers.first as? HomeViewController {
+            vc.viewModel?.didUpdateGroupRestaurantsData?()
+        }
     }
 }

@@ -29,7 +29,7 @@ class SocialLoginViewController: UIViewController {
         appleLoginView.layer.cornerRadius = 10
         googleLoginView.layer.cornerRadius = 10
         
-        googleLoginView.layer.borderColor = UIColor.gray100?.cgColor
+        googleLoginView.layer.borderColor = JMTengAsset.gray100.color.cgColor
         googleLoginView.layer.borderWidth = 1.5
     }
     
@@ -37,7 +37,6 @@ class SocialLoginViewController: UIViewController {
         guard viewModel?.isEnabled == true else { return }
         
         viewModel?.startGoogleLogin()
-//       viewModel?.testLogin()
     }
     
     @IBAction func didTabAppleLoginButton(_ sender: Any) {

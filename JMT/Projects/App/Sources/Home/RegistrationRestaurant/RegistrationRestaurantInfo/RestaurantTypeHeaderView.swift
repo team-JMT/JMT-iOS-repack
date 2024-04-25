@@ -15,6 +15,7 @@ class RestaurantTypeHeaderView: UICollectionReusableView {
     
     // MARK: - Properties
     weak var delegate: RestaurantTypeHeaderViewDelegate?
+    
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var headerStackView: UIStackView!
     @IBOutlet weak var restaurantTypeImageView: UIImageView!

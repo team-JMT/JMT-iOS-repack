@@ -163,11 +163,11 @@ class GroupWebViewController: UIViewController, KeyboardEvent {
                 if let onSuccess = dictionary["onSuccess"] as? String {
                     handleToken(str: onSuccess)
                 }
-//            case "navigation":
-//                // 네비게이션 관련 처리
-//                if let data = dictionary["data"] as? [String: Any], let isVisible = data["isVisible"] as? Bool {
+            case "navigation":
+                // 네비게이션 관련 처리
+                if let data = dictionary["data"] as? [String: Any], let isVisible = data["isVisible"] as? Bool {
 //                    handleNavigation(isVisible: isVisible)
-//                }
+                }
             case "navigate":
                 if let data = dictionary["data"] as? [String: Any],
                     let route = data["route"] as? String,

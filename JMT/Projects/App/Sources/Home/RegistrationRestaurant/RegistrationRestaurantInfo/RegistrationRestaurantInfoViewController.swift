@@ -8,6 +8,7 @@
 import UIKit
 import FloatingPanel
 import SnapKit
+import Toast_Swift
 
 class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent {
     
@@ -31,13 +32,15 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         
         setupBindings()
         setupUI()
-        setupData()
+//        setupData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        if viewModel?.isEdit == true {
+            setupEditData()
+        }
         
         setupKeyboardEvent(keyboardWillShow: { [weak self] noti in
             
@@ -101,9 +104,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        
+    
         removeKeyboardObserver()
     }
     
@@ -132,15 +133,30 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         }
         
         viewModel?.didCompletedCheckInfo = { [weak self] type in
+            
+            let indexPath: IndexPath
+            
             switch type {
             case .category:
                 self?.settingInfoCollectionView.setContentOffset(CGPoint(x: 0, y: -(self?.settingInfoCollectionView.contentInset.top ?? 0.0)), animated: true)
             case .commentString:
                 self?.settingInfoCollectionView.moveToScroll(section: 1, row: 0, margin: 100)
+                indexPath = IndexPath(row: 0, section: 1)
+                if let cell = self?.settingInfoCollectionView.cellForItem(at: indexPath) as? InfoCommentCell {
+                    cell.commentTextView.becomeFirstResponder()
+                }
             case .drinkingComment:
                 self?.settingInfoCollectionView.moveToScroll(section: 2, row: 0, margin: 100)
+                indexPath = IndexPath(row: 0, section: 2)
+                if let cell = self?.settingInfoCollectionView.cellForItem(at: indexPath) as? DrinkingCheckCell {
+                    cell.commentTextField.becomeFirstResponder()
+                }
             case .tags:
                 self?.settingInfoCollectionView.moveToScroll(section: 3, row: 0, margin: 100)
+                indexPath = IndexPath(row: 0, section: 3)
+                if let cell = self?.settingInfoCollectionView.cellForItem(at: indexPath) as? RecommendedMenuCell {
+                    cell.tagTextField.becomeFirstResponder()
+                }
             }
         }
     }
@@ -153,6 +169,7 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     // MARK: - SetupUI
     func setupUI() {
         setCustomNavigationBarBackButton(goToViewController: .popVC)
+    
         self.navigationItem.title = viewModel?.info?.placeName ?? ""
         settingInfoCollectionView.collectionViewLayout = createLayout()
         settingInfoCollectionView.keyboardDismissMode = .onDrag
@@ -163,19 +180,27 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         registrationButton.layer.cornerRadius = 8
     }
     
+    func setupEditData() {
+        viewModel?.setupEditData {
+            DispatchQueue.main.async {
+                self.settingInfoCollectionView.reloadData()
+            }
+        }
+    }
+    
     func createLayout() -> UICollectionViewCompositionalLayout {
-       let layout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
+       let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
             switch sectionIndex {
             case 0:
-                return self.createPhotoColumnSection()
+                return self?.createPhotoColumnSection()
             case 1:
-                return self.createCommentColumnSection()
+                return self?.createCommentColumnSection()
             case 2:
-                return self.createdrinkingCheckColumnSection()
+                return self?.createdrinkingCheckColumnSection()
             case 3:
-                return self.createRecommendedMenuColumnSection()
+                return self?.createRecommendedMenuColumnSection()
             case 4:
-                return self.createTagColumnSection()
+                return self?.createTagColumnSection()
             default:
                 return nil
             }
@@ -316,7 +341,14 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
     }
     // MARK: - Actions
     @IBAction func didTabRegistrationButton(_ sender: Any) {
-
+        
+        guard viewModel?.checkNotInfo() == true else {
+            viewModel?.coordinator?.showButtonPopupViewController()
+            return
+        }
+        
+        self.showLoadingIndicator()
+        
         if let _ = self.navigationController?.viewControllers.first as? HomeViewController {
             viewModel?.selectedGroupId = UserDefaultManager.selectedGroupId
         } else if let _ = self.navigationController?.viewControllers.first as? GroupWebViewController {
@@ -325,25 +357,43 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
             print("Unknown ViewController")
             return
         }
-
+        
         Task {
-            guard viewModel?.checkNotInfo() == true else {
-                viewModel?.coordinator?.showButtonPopupViewController()
-                return
-            }
-            
             do {
-                try await viewModel?.registrationRestaurantLocation()
-                try await viewModel?.registrationRestaurantAsync()
+                if viewModel?.isEdit == true {
+                    try await viewModel?.updateEditRestaurantInfo()
+
+                    if let restaurantDetailVC = self.navigationController?.viewControllers.first(where: { $0 is RestaurantDetailViewController }) as? RestaurantDetailViewController {
+                        
+                        let model = EditRestaurantModel(id: viewModel?.recommendRestaurantId ?? -1,
+                                                            introduce: viewModel?.commentString ?? "",
+                                                            category: viewModel?.categoryData.first(where: { $0.1 == true })?.0 ?? "",
+                                                            canDrinkLiquor: viewModel?.isDrinking ?? false,
+                                                            goWellWithLiquor: viewModel?.drinkingComment ?? "",
+                                                            recommendMenu: (viewModel?.tags ?? []).joined())
+                        restaurantDetailVC.viewModel?.updateRestaurantInfo(model: model)
+                                            
+                        restaurantDetailVC.setupData()
+                        restaurantDetailVC.viewModel?.didUpdateRestaurantSeg?()
+                        
+                        self.hideLoadingIndicator()
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                } else {
+                    try await viewModel?.registrationRestaurantLocation()
+                    try await viewModel?.registrationRestaurantAsync()
+                    
+                    self.hideLoadingIndicator()
+                    viewModel?.coordinator?.showDetailRestaurantViewController(id: viewModel?.recommendRestaurantId ?? 0)
+                }
                 
                 if let vc = self.navigationController?.viewControllers.first as? HomeViewController {
                     vc.viewModel?.didUpdateGroupRestaurantsData?()
                 }
-                
-                viewModel?.coordinator?.showDetailRestaurantViewController(id: viewModel?.recommendRestaurantId ?? 0)
+               
             } catch {
-                print("Error: \(error)")
-                // 실패했을때 처리
+                self.hideLoadingIndicator()
+                self.showCustomToast(image: JMTengAsset.notCheckMark.image, message: "맛집을 등록하지 못했어요!", padding: 117, position: .bottom)
             }
         }
     }
@@ -461,10 +511,16 @@ extension RegistrationRestaurantInfoViewController: UICollectionViewDataSource {
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "commentCell", for: indexPath) as? InfoCommentCell else { return UICollectionViewCell() }
             cell.delegate = self
+            if viewModel?.isEdit == true {
+                cell.setupEditData(str: viewModel?.commentString)
+            }
             return cell
         case 2:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "drinkingCheckCell", for: indexPath) as? DrinkingCheckCell else { return UICollectionViewCell() }
             cell.delegate = self
+            if viewModel?.isEdit == true && viewModel?.editData?.canDrinkLiquor == true {
+                cell.setupEditData(str: viewModel?.editData?.goWellWithLiquor)
+            }
             return cell
         case 3:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "recommendedMenuCell", for: indexPath) as? RecommendedMenuCell else { return UICollectionViewCell() }
@@ -537,4 +593,6 @@ extension RegistrationRestaurantInfoViewController: ButtonPopupDelegate {
     func didTabCloseButton() {
         viewModel?.checkNotInfo()
     }
+    
+    func didTabCancelButton() { }
 }

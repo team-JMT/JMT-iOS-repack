@@ -31,6 +31,12 @@ class GroupResultViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleDataUpdate), name: .didUpdateGroup, object: nil)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: .didUpdateGroup, object: nil)
+    }
+    
     @objc func handleDataUpdate() {
         DispatchQueue.main.async {
             self.groupCollectionView.reloadData()

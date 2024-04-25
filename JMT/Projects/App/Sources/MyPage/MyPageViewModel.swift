@@ -34,7 +34,7 @@ class MyPageViewModel {
 //            }
 //        }
     
-    var testRestaurantsData: [UserRestaurantItemsModel] = []
+    var testRestaurantsData: [OtherUserRestaurantsModelItems] = []
     var testTotalRestaurants: Int = 0
     var testReviews: [Review] = []
     
@@ -208,18 +208,18 @@ class MyPageViewModel {
     
     func fetchUserRestaurants() async throws {
       
-        let response = try await FetchRestaurantAPI.fetchUserRestaurantsAsync(
-            request: UserRestaurantsRequest(
-                parameters: UserRestaurantsPageRequest(
+        let response = try await ReadRestaurantsAPI.fetchUserRestaurantsAsync(
+            request: OtherUserRestaurantsRequest(
+                parameters: OtherUserRestaurantsPageRequest(
                     userId: userId ?? -1,
                     page: 1,
                     size: 20,
                     sort: nil),
-                body: UserRestaurantsRequestBody(
-                    userLocation: UserRestaurantsLocation(
+                body: OtherUserRestaurantsRequestBody(
+                    userLocation: LocationRequest(
                         x: String(locationManager.coordinate?.longitude ?? 0.0),
                         y: String(locationManager.coordinate?.latitude ?? 0.0)),
-                    filter: UserRestaurantFilter(
+                    filter: FilterRequest(
                         categoryFilter: nil,
                         isCanDrinkLiquor: nil)
                 )))

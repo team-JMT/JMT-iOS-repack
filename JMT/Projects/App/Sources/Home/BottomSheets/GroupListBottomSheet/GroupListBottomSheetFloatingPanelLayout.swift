@@ -10,6 +10,7 @@ import Foundation
 import Foundation
 import FloatingPanel
 
+
 class GroupListBottomSheetFloatingPanelLayout: FloatingPanelLayout {
     
     var position: FloatingPanelPosition {

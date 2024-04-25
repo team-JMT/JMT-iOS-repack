@@ -35,7 +35,7 @@ class MyPageRegisterResturantTableViewCell: UITableViewCell {
         
     }
     
-    func configureData(with model: UserRestaurantItemsModel?) {
+    func configureData(with model: OtherUserRestaurantsModelItems?) {
         resturantLabel.text = model?.name ?? ""
         grouplabel.text = model?.groupName ?? ""
         categoryLable.text = model?.category ?? ""

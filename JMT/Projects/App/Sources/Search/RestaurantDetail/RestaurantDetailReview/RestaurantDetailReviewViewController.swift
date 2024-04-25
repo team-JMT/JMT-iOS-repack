@@ -58,7 +58,9 @@ class RestaurantDetailReviewViewController: UIViewController {
     }
     
     func setupBind() {
-        viewModel?.didupdateReviewData = { [weak self] in
+        viewModel?.didUpdateReviewSeg = { [weak self] in
+            
+            print("---- didUpdateReviewSeg")
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.reviewCollectionView.reloadData()

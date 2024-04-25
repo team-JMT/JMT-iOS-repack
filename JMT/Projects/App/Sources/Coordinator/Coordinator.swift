@@ -43,6 +43,7 @@ extension Coordinator {
         while let parent = coordinator.parentCoordinator {
             coordinator = parent
         }
+        print("cc", coordinator)
         return coordinator as! AppCoordinator
     }
 }

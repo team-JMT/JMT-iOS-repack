@@ -34,7 +34,7 @@ class RestaurantReview2Cell: UICollectionViewCell {
         userNameLabel.text = nil
     }
     
-    func setupData(reviewData: RestaurantReviewModel?) {
+    func setupData(reviewData: RestaurantReviewsModel?) {
         if let profileImageUrl = URL(string: reviewData?.reviewerImageUrl ?? "") {
             userProfileImageView.kf.setImage(with: profileImageUrl)
         } else {

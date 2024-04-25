@@ -7,6 +7,7 @@
 
 import UIKit
 import SwinjectStoryboard
+import Toast_Swift
 
 // 스토리보드
 extension UIViewController {
@@ -26,12 +27,15 @@ extension UIViewController {
     }
     
     func setCustomNavigationMoreButton() {
-        var moreButton = UIBarButtonItem(image: JMTengAsset.more.image, style: .plain, target: self, action: #selector(editMenu))
+        let moreButton = UIBarButtonItem(image: JMTengAsset.more.image, style: .plain, target: self, action: #selector(editMenu))
+        moreButton.tintColor = .black
         self.navigationItem.rightBarButtonItem = moreButton
     }
     
     @objc private func editMenu() {
-        print("123123123123")
+        if let vc = self as? RestaurantDetailViewController {
+            vc.showMoreMenuBottomSheetViewController()
+        }
     }
     
     func setCustomNavigationBarBackButton(goToViewController: GoToViewControllerType) {
@@ -135,5 +139,38 @@ extension UIViewController {
     }
 }
 
+extension UIViewController {
+    
+    func showCustomToast(image: UIImage, message: String, padding: CGFloat, position: ToastPosition) {
+        if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+            let keyWindow = scene.windows.first(where: { $0.isKeyWindow })
+            
+            if let toastView = UINib(nibName: "ToastView", bundle: nil).instantiate(withOwner: self, options: nil).first as? ToastView {
+                
+                toastView.toastImageView.image = image
+                toastView.toastLabel.text = message
+                
+                ToastManager.shared.style.verticalPadding = padding
+                keyWindow?.rootViewController?.view.showToast(toastView, position: position)
+            }
+        }
+    }
+}
 
+extension UIViewController {
+    func showLoadingIndicator() {
+        let loadingView = UIView(frame: self.view.bounds)
+        loadingView.backgroundColor = .clear
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.center = loadingView.center
+        loadingView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
+        view.addSubview(loadingView)
+    }
+    
+    func hideLoadingIndicator() {
+        view.subviews.last?.removeFromSuperview()
+    }
+}
 

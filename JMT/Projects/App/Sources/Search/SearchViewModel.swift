@@ -17,7 +17,7 @@ class SearchViewModel {
     
     var restaurants = [SearchRestaurantsItems]()
     var groupList = [SearchGroupItems]()
-    var outBoundrestaurants = [SearchRestaurantsOutBoundModel]()
+    var outBoundrestaurants = [OutBoundRestaurantsModel]()
     
     var didUpdateSegIndex: ((Int) -> Void)?
 
@@ -28,9 +28,10 @@ class SearchViewModel {
             
             let x = locationManager.coordinate?.longitude ?? 0.0
             let y = locationManager.coordinate?.latitude ?? 0.0
-            let response = try await FetchRestaurantAPI.fetchSearchRestaurantsAsync(request: SearchRestaurantsRequest(keyword: keyword, x: "\(x)", y: "\(y)"))
             
-//            restaurants.append(contentsOf: response.data.restaurants)
+            let response = try await ReadRestaurantsAPI.searchRestaurantsAsync(request: SearchRestaurantsRequest(keyword: keyword,
+                                                                                                             x: "\(x)",
+                                                                                                             y: "\(y)"))
             restaurants = response.data.restaurants
         } catch {
             print(error)
@@ -43,8 +44,7 @@ class SearchViewModel {
         do {
             groupList.removeAll()
             
-            let response = try await GroupAPI.fetchGroups(request: SearchGroupRequest(keyword: keyword))
-//            groupList.append(contentsOf: response.data.groupList)
+            let response = try await ReadGroupAPI.fetchGroups(request: SearchGroupRequest(keyword: keyword))
             groupList = response.data.groupList
         } catch {
             print(error)
@@ -58,8 +58,8 @@ class SearchViewModel {
         do {
             outBoundrestaurants.removeAll()
             
-            let response = try await FetchRestaurantAPI.fetchSearchRestaurantsOutBoundAsync(request: SearchRestaurantsOutBoundRequest(keyword: keyword, currentGroupId: nil))
-//            outBoundrestaurants.append(contentsOf: response.toDomain)
+            let response = try await ReadRestaurantsAPI.fetchOutBoundRestaurantsAsync(request: OutBoundRestaurantsRequest(keyword: keyword,
+                                                                                                                      currentGroupId: -1))
             outBoundrestaurants = response.toDomain
         } catch {
             print(error)
@@ -68,8 +68,6 @@ class SearchViewModel {
     }
 }
 
-
-// 35 36 37 38
 // 최근 검색 관련 메소드
 extension SearchViewModel {
     func fetchRecentSearchRestaurants() {

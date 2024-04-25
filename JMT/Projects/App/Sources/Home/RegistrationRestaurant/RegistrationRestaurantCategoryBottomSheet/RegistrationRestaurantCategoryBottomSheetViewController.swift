@@ -9,9 +9,13 @@ import UIKit
 import FloatingPanel
 
 class RegistrationRestaurantCategoryBottomSheetViewController: UIViewController {
+    
+    deinit {
+        print("RegistrationRestaurantCategoryBottomSheetViewController Deinit")
+    }
 
     // MARK: - Properties
-    var viewModel: RegistrationRestaurantInfoViewModel?
+    weak var viewModel: RegistrationRestaurantInfoViewModel?
     
     @IBOutlet weak var categoryTableView: UITableView!
     @IBOutlet var bottomContainerView: UIView!

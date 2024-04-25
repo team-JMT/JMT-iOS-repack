@@ -36,6 +36,12 @@ class TotalResultViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleDataUpdate), name: .didUpdateGroup, object: nil)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: .didUpdateGroup, object: nil)
+    }
+    
     @objc func handleDataUpdate() {
         DispatchQueue.main.async {
             self.totalResultCollectionView.reloadData()
@@ -216,7 +222,7 @@ extension TotalResultViewController: UICollectionViewDataSource {
                 return cell
             } else {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RestaurantInfoCell", for: indexPath) as? RestaurantInfoCell else { return UICollectionViewCell() }
-                cell.setupOutBoundrestaurantData(outBoundrestaurantData: viewModel?.outBoundrestaurants[indexPath.row])
+                cell.setupOutBoundrestaurantData(outBoundRestaurantData: viewModel?.outBoundrestaurants[indexPath.row])
                 
                 return cell
             }

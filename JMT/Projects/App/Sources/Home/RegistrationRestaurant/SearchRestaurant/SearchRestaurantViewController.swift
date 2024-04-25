@@ -35,14 +35,7 @@ class SearchRestaurantViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.tabBarController?.tabBar.isHidden = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.tabBarController?.tabBar.isHidden = false
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     // MARK: - SetupBindings
@@ -103,7 +96,7 @@ class SearchRestaurantViewController: UIViewController {
         }
         
         let messageLabel = UILabel().then {
-            $0.font = UIFont.settingFont(.pretendardBold, size: 16)
+            $0.font = JMTengFontFamily.Pretendard.bold.font(size: 16)
             $0.textColor = JMTengAsset.gray300.color
             $0.numberOfLines = 2
             $0.setAttributedText(str: "검색 결과가 없어요\n올바른 식당명인지 확인해주세요", lineHeightMultiple: 1.25, kern: -0.32, alignment: .center)
@@ -183,6 +176,7 @@ extension SearchRestaurantViewController: UITextFieldDelegate {
         
         viewModel?.isSearch = true
         fetchSearchRestaurantsData()
+        textField.resignFirstResponder()
         return true
     }
 

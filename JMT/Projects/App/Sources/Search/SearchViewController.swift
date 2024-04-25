@@ -46,12 +46,6 @@ class SearchViewController: UIViewController {
         super.viewWillAppear(animated)
         
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.navigationController?.setupBarAppearance(alpha: 1)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -271,5 +265,7 @@ extension SearchViewController: ButtonPopupDelegate {
     }
     
     func didTabCloseButton() { }
+    
+    func didTabCancelButton() { }
 }
 

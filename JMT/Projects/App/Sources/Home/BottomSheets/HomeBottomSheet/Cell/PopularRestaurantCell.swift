@@ -11,6 +11,7 @@ import Kingfisher
 
 class PopularRestaurantCell: UICollectionViewCell {
     
+    
     @IBOutlet weak var categoryView: UIView!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var drinkLiquorView: UIView!
@@ -24,13 +25,14 @@ class PopularRestaurantCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+
+        categoryView.isHidden = true
+        drinkLiquorView.isHidden = true
         
         categoryView.layer.cornerRadius = 4
         drinkLiquorView.layer.cornerRadius = 4
-        
-        isSkeletonable = true
+    
         skeletonCornerRadius = 20
-        
         userProfileImageView.layer.cornerRadius = userProfileImageView.frame.height / 2
         
         // 셀의 레이아웃이 결정된 후 그림자 속성 설정
@@ -47,6 +49,9 @@ class PopularRestaurantCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        categoryView.isHidden = true
+        drinkLiquorView.isHidden = true
+        
         restaurantImageView.image = nil
         userProfileImageView.image = nil
         userNicknameLabel.text = ""
@@ -55,7 +60,7 @@ class PopularRestaurantCell: UICollectionViewCell {
         drinkLiquorLabel.text = ""
     }
     
-    func setupData(model: SearchMapRestaurantModel?) {
+    func setupData(model: RestaurantListModel?) {
        
         if let model = model {
             if let url = URL(string: model.restaurantImageUrl ?? "") {
@@ -75,6 +80,9 @@ class PopularRestaurantCell: UICollectionViewCell {
             
             userNicknameLabel.text = model.userNickName
             restaurantNameLabel.text = model.name
+            
+            categoryView.isHidden = false
+            drinkLiquorView.isHidden = false
             
             
         } else {

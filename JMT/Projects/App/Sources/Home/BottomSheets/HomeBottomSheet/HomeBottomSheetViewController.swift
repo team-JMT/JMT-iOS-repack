@@ -27,57 +27,81 @@ class HomeBottomSheetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupBind()
+        setupUI()
+        
         let header1 = UINib(nibName: "HomeHeaderView", bundle: nil)
         bottomSheetCollectionView.register(header1, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView1")
         let header2 = UINib(nibName: "HomeFilterHeaderView", bundle: nil)
         bottomSheetCollectionView.register(header2, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView2")
         
-
-        self.bottomSheetCollectionView.collectionViewLayout = createLayout()
-        self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
-    
-        setupUI()
-    
-        setupBind()
+        bottomSheetCollectionView.showAnimatedGradientSkeleton()
+        self.bottomSheetCollectionView.collectionViewLayout = self.createLayout()
     }
 
+   
     
     // MARK: - SetupBindings
     func setupBind() {
         
         viewModel?.didUpdateGroupRestaurantsData = {
-            
-            print("작업 새로고침")
-            
+        
             DispatchQueue.main.async {
                 self.viewModel?.isLodingData = true
                 self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
-                self.fetchGroupRestaurantData()
+                self.fetchGroupRestaurantData2()
+//                self.fetchGroupRestaurantData()
             }
         }
     }
     
     // MARK: - SetupData
     // 선택한 그룹에 포함된 맛집 정보 가져오기
+    func fetchGroupRestaurantData2() {
+                
+        Task {
+            do {
+                
+                try await withThrowingTaskGroup(of: Void.self) { group in
+                    group.addTask {
+                        try await self.viewModel?.fetchRecentRestaurantsAsync()
+                    }
+                    
+                    group.addTask {
+                        try await self.viewModel?.fetchGroupRestaurantsAsync()
+                        try await self.viewModel?.fetchRestaurantsReviewsAsync()
+                    }
+                    
+                    try await group.waitForAll()
+                    
+                    DispatchQueue.main.async {
+                        self.viewModel?.isLodingData = false
+                        self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                        self.bottomSheetCollectionView.reloadData()
+                    }
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
     func fetchGroupRestaurantData() {
         Task {
             do {
-                try await viewModel?.fetchRecentRestaurantsAsync()
-                try await viewModel?.fetchGroupRestaurantsAsync()
-                try await viewModel?.fetchRestaurantsReviewsAsync()
-                
+                try await self.viewModel?.fetchRecentRestaurantsAsync()
+                try await self.viewModel?.fetchGroupRestaurantsAsync()
+                try await self.viewModel?.fetchRestaurantsReviewsAsync()
                 
                 DispatchQueue.main.async {
                     self.viewModel?.isLodingData = false
                     self.bottomSheetCollectionView.reloadData()
                     self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
                 }
-                
             } catch {
                 print(error)
             }
         }
-        
     }
     
     // MARK: - SetupUI
@@ -168,7 +192,7 @@ class HomeBottomSheetViewController: UIViewController {
     }
     
     func createSecondColumnSection() -> NSCollectionLayoutSection {
-        // Item
+        
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(1)
@@ -193,7 +217,6 @@ class HomeBottomSheetViewController: UIViewController {
         ]
 
         return section
-        
     }
     
     func createEmptyColumnSection() -> NSCollectionLayoutSection {
@@ -368,7 +391,7 @@ extension HomeBottomSheetViewController: SkeletonCollectionViewDataSource {
         case 0:
             return "firstCell"
         case 1:
-            return "secondCell"
+            return "skInfoView"
         default:
             return ""
         }
@@ -457,7 +480,6 @@ extension HomeBottomSheetViewController {
         self.present(fpc, animated: true)
     }
 }
-
 
 
 
