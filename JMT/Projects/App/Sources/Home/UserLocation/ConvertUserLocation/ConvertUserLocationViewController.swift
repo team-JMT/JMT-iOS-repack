@@ -23,8 +23,6 @@ class ConvertUserLocationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        setCustomNavigationBarBackButton(goToViewController: .popVC)
         
         placeNameLabel.text = viewModel?.locationData?.placeName ?? ""
         addressNameLabel.text = viewModel?.locationData?.addressName ?? ""
@@ -45,15 +43,11 @@ class ConvertUserLocationViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        self.navigationController?.isNavigationBarHidden = false
-        self.tabBarController?.tabBar.isHidden = true
-        
+    
         setCustomNavigationBarBackButton(goToViewController: .popVC)
     }
         
     @IBAction func didTabDoneButton(_ sender: Any) {
-        self.tabBarController?.tabBar.isHidden = false
         viewModel?.coordinator?.goToHomeViewController(lon: viewModel?.locationData?.y ?? 0.0, lat: viewModel?.locationData?.x ?? 0.0)
     }
     

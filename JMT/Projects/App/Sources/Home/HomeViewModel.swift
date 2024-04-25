@@ -66,8 +66,9 @@ class HomeViewModel {
     
     // MARK: - Properties
     // 데이터와 관련된 프로퍼티들을 선언하는 부분입니다.
+    let locationManager = LocationManager.shared
     weak var coordinator: HomeCoordinator?
-    var coordinate: CLLocationCoordinate2D?
+//    var coordinate: CLLocationCoordinate2D?
     
     let sortList = ["가까운 순", "최신 순"]
     let categoryList = ["한식", "일식", "중식", "양식", "퓨전", "카페", "주점", "기타"]
@@ -89,11 +90,11 @@ class HomeViewModel {
     
     var groupList: [MyGroupData] = []
 
-    var popularRestaurants: [SearchMapRestaurantModel] = []
-    var restaurants: [SearchMapRestaurantModel] = []
-    var markerRestaurants: [SearchMapRestaurantModel] = []
+    var popularRestaurants: [RestaurantListModel] = []
+    var restaurants: [RestaurantListModel] = []
+    var markerRestaurants: [RestaurantListModel] = []
     
-    var reviews: [FindRestaurantReviewData] = []
+    var reviews: [FindRestaurantReviewsData] = []
     var isFirstLodingData = true
     
     // MARK: - Initialization
@@ -101,38 +102,25 @@ class HomeViewModel {
     
     // MARK: - Data Binding
     // 뷰와 뷰모델 간의 데이터 바인딩을 설정하는 부분입니다.
-    
-   
- 
-    
+
     // MARK: - Utility Methods
     // 다양한 유틸리티 메소드들을 모아두는 부분입니다. 예를 들어, 날짜 포매팅이나 데이터 검증 등입니다.
     
     // MARK: - Error Handling
     // 에러 처리와 관련된 로직을 담당하는 부분입니다.
-
-   
     var didUpdateGroupRestaurantsData: (() -> Void)?
     
-//    // 위치 관련
-//    var didUpdateCurrentAddress: ((String) -> Void)?
     var displayAlertHandler: (() -> Void)?
-//    
-//    // 소속 그룹 관련
-//    var didCompletedCheckJoinGroup: (() -> Void)?
+
+    // 소속 그룹 관련
     var didUpdateGroupName: ((Int) -> Void)?
-//    
-//    // 맛집 리스트 관련
+    
+    // 맛집 리스트 관련
     var didUpdateSkeletonView: (() -> Void)?
     var didUpdateBottomSheetTableView: (() -> Void)?
-//    var didUpdateSortTypeButton: (() -> Void)?
 
     // 필터 관련
-//    var didUpdateFilterRestaurants: (() -> Void)?
     var didUpdateFilterTableView: (() -> Void)?
-
-//    // 지도 관련
-//    var didUpdateMapMarker: (() -> Void)?
 }
 
 // MARK: - Data Fetching
@@ -143,16 +131,16 @@ extension HomeViewModel {
         
         popularRestaurants.removeAll()
         
-        let parameters = SearchMapRestaurantPageRequest(page: 1, size: 5, sort: "id,desc")
-        let body = SearchMapRestaurantRequestBody(
-            userLocation: nil,
-            startLocation: nil,
-            endLocation: nil,
-            filter: nil,
-            groupId: currentGroupId ?? -1) // 그룹 아이디 변경해야함
-        
+        let parameters = PageRequest(page: 1, size: 10, sort: "id,desc")
+        let body = RestaurantListRequestBody(userLocation: nil,
+                                             startLocation: nil,
+                                             endLocation: nil,
+                                             filter: nil,
+                                             groupId: currentGroupId ?? -1)
+    
         do {
-            let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
+            let data = try await ReadRestaurantsAPI.fetchRestaurantListAsync(request: RestaurantListRequest(parameters: parameters,
+                                                                                                              body: body))
             self.popularRestaurants.append(contentsOf: data.toDomain)
         } catch {
             print(error)
@@ -164,33 +152,34 @@ extension HomeViewModel {
     func fetchGroupRestaurantsAsync() async throws {
     
         restaurants.removeAll()
-        
-        var parameters: SearchMapRestaurantPageRequest!
-        var body: SearchMapRestaurantRequestBody!
        
+        var parameters: PageRequest
+        var body: RestaurantListRequestBody
+        
         let categoryFilter = selectedCategoryIndex == nil ? nil : selectedCategoryIndex
         let isCanDrinkLiquor = selectedDrinkingIndex == nil ? nil : (selectedDrinkingIndex == 0 ? true : false)
         
         if selectedSortIndex == 0 {
-            parameters =  SearchMapRestaurantPageRequest(page: 1, size: 20, sort: nil)
-            body = SearchMapRestaurantRequestBody(
-                userLocation: SearchMapRestaurantLocation(x: "\(LocationManager.shared.coordinate?.longitude ?? 0.0)", y: "\(LocationManager.shared.coordinate?.latitude ?? 0.0)"),
-                startLocation: nil,
-                endLocation: nil,
-                filter: SearchMapRestaurantFilter(categoryFilter: categoryFilter == nil ? nil : SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
-                groupId: currentGroupId ?? -1)
+            parameters = PageRequest(page: 1, size: 20, sort: nil)
+            body = RestaurantListRequestBody(userLocation: LocationRequest(x: "\(LocationManager.shared.coordinate?.longitude ?? 0.0)",
+                                                                           y: "\(LocationManager.shared.coordinate?.latitude ?? 0.0)"),
+                                             startLocation: nil,
+                                             endLocation: nil,
+                                             filter: FilterRequest(categoryFilter: categoryFilter == nil ? nil : SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode,
+                                                                   isCanDrinkLiquor: isCanDrinkLiquor),
+                                             groupId: currentGroupId ?? -1)
         } else {
-            parameters = SearchMapRestaurantPageRequest(page: 1, size: 20, sort: "id,desc")
-            body = SearchMapRestaurantRequestBody(
-                userLocation: nil,
-                startLocation: nil,
-                endLocation: nil,
-                filter: SearchMapRestaurantFilter(categoryFilter: categoryFilter == nil ? nil : SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode, isCanDrinkLiquor: isCanDrinkLiquor),
-                groupId: currentGroupId ?? -1)
+            parameters = PageRequest(page: 1, size: 20, sort: "id,desc")
+            body = RestaurantListRequestBody(userLocation: nil,
+                                             startLocation: nil,
+                                             endLocation: nil,
+                                             filter: FilterRequest(categoryFilter: categoryFilter == nil ? nil : SortCategoryType(rawValue: categoryFilter ?? 0)?.countryCode,
+                                                                   isCanDrinkLiquor: isCanDrinkLiquor),
+                                             groupId: currentGroupId ?? -1)
         }
         
         do {
-            let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
+            let data = try await ReadRestaurantsAPI.fetchRestaurantListAsync(request: RestaurantListRequest(parameters: parameters, body: body))
             self.restaurants.append(contentsOf: data.toDomain)
         } catch {
             print(error)
@@ -203,16 +192,18 @@ extension HomeViewModel {
         
         markerRestaurants.removeAll()
         
-        let parameters = SearchMapRestaurantPageRequest(page: 1, size: 20, sort: nil)
-        let body = SearchMapRestaurantRequestBody(
-            userLocation: SearchMapRestaurantLocation(x: "\(LocationManager.shared.coordinate?.longitude ?? 0.0)", y: "\(LocationManager.shared.coordinate?.latitude ?? 0.0)"),
-            startLocation: SearchMapRestaurantLocation(x: "\(bounds.southWestLng)", y: "\(bounds.southWestLat)"),
-            endLocation: SearchMapRestaurantLocation(x: "\(bounds.northEastLng)", y: "\(bounds.northEastLat)"),
-            filter: nil,
-            groupId: currentGroupId ?? -1)
-        
+        let parameters = PageRequest(page: 1, size: 20, sort: nil)
+        let body = RestaurantListRequestBody(userLocation: LocationRequest(x: "\(LocationManager.shared.coordinate?.longitude ?? 0.0)",
+                                                                           y: "\(LocationManager.shared.coordinate?.latitude ?? 0.0)"),
+                                             startLocation: LocationRequest(x: "\(bounds.southWestLng)",
+                                                                            y: "\(bounds.southWestLat)"),
+                                             endLocation: LocationRequest(x: "\(bounds.northEastLng)",
+                                                                          y: "\(bounds.northEastLat)"),
+                                             filter: FilterRequest(categoryFilter: nil, isCanDrinkLiquor: nil),
+                                             groupId: currentGroupId ?? -1)
+    
         do {
-            let data = try await FetchRestaurantAPI.fetchSearchMapRestaurantsAsync(request: SearchMapRestaurantRequest(parameters: parameters, body: body))
+            let data = try await ReadRestaurantsAPI.fetchRestaurantListAsync(request: RestaurantListRequest(parameters: parameters, body: body))
             self.markerRestaurants.append(contentsOf: data.toDomain)
         } catch {
             print(error)
@@ -221,10 +212,10 @@ extension HomeViewModel {
     }
     
     func fetchRestaurantsReviewsAsync() async throws {
-        var updatedRestaurants = [SearchMapRestaurantModel]()
+        var updatedRestaurants = [RestaurantListModel]()
         
         for restaurant in restaurants {
-            let reviewData = try await FetchRestaurantAPI.fetchRestaurantReviewsAsync(request: RestaurantReviewRequest(recommendRestaurantId: restaurant.id)).toDomain
+            let reviewData = try await ReadRestaurantsAPI.fetchRestaurantReviewsAsync(request: RestaurantReviewsRequest(recommendRestaurantId: restaurant.id)).toDomain
             
             // 리뷰 데이터를 할당하여 새로운 Restaurant 인스턴스 생성
             var updatedRestaurant = restaurant
@@ -239,27 +230,16 @@ extension HomeViewModel {
     }
     
     // MARK: - 위치 관련 메소드
-    func fetchCurrentAddressAsync(isConvertLocation: Bool) async throws -> String? {
-        
-        var lon = ""
-        var lat = ""
-        
-        if isConvertLocation {
-            lon = String(coordinate?.longitude ?? 0.0)
-            lat = String(coordinate?.latitude ?? 0.0)
-        } else {
-            lon = String(LocationManager.shared.coordinate?.longitude ?? 0.0)
-            lat = String(LocationManager.shared.coordinate?.latitude ?? 0.0)
-        }
-        
-        let locationData = try await CurrentLocationAPI.fetchCurrentLoctionAsync(request: CurrentLocationRequest(coords: "\(lon),\(lat)"))
+    func fetchCurrentAddressAsync() async throws -> String? {
+        let lon = String(locationManager.coordinate?.longitude ?? 0.0)
+        let lat = String(locationManager.coordinate?.latitude ?? 0.0)
         
         do {
+            let locationData = try await LocationAPI.fetchCurrentLoctionAsync(request: CurrentLocationRequest(coords: "\(lon),\(lat)")).toDomain
             return locationData.address
         } catch {
             throw RestaurantError.fetchCurrentAddressAsyncError
         }
-        
     }
     
     // MARK: - 지도 관련 메소드
@@ -338,7 +318,7 @@ extension HomeViewModel {
     // MARK: - 그룹 관련 메소드
     func fetchJoinGroup() async throws {
         do {
-            groupList = try await GroupAPI.fetchMyGroupAsync().data
+            groupList = try await ReadGroupAPI.fetchMyGroupAsync().data
             
             if groupList.isEmpty == false {
                 let index = groupList.firstIndex(where: { $0.isSelected == true }) ?? 0
@@ -349,14 +329,13 @@ extension HomeViewModel {
                 UserDefaultManager.selectedGroupId = nil
             }
         } catch {
-            print(error)
             throw RestaurantError.fetchJoinGroupError
         }
     }
     
     func updateSelectedGroup(id: Int) async throws {
         do {
-            try await GroupAPI.updateSelectedGroupAsync(request: SelectedGroupRequest(groupId: id))
+            try await UpdateGroupAPI.updateSelectedGroupAsync(request: SelectedGroupRequest(groupId: id))
             
             for (index, group) in groupList.enumerated() {
                 if group.groupId == id {

@@ -56,7 +56,7 @@ class RegistrationRestaurantInfoViewModel {
         
         do {
             if let info = self.info {
-                let request = RegistrationRestaurantLocationRequest(
+                let request = CreateRestaurantLocationRequest(
                     placeName: info.placeName,
                     distance: String(0),
                     placeUrl: info.placeUrl,
@@ -70,7 +70,7 @@ class RegistrationRestaurantInfoViewModel {
                     x: String(info.x),
                     y: String(info.y))
                 
-                let response = try await RegistrationRestaurantAPI.registrationRestaurantLocationAsync(request: request)
+                let response = try await CreateRestaurantsAPI.createRestaurantLocationAsync(request: request)
                 print(response)
                 restaurantLocationId = response.data
             }
@@ -89,7 +89,7 @@ class RegistrationRestaurantInfoViewModel {
                 
                 let recommendMenu = tags.joined()
                             
-                let request = RegistrationRestaurantRequest(
+                let request = CreateRestaurantRequest(
                     name: info.placeName,
                     introduce: commentString,
                     categoryId: categoryId + 1,
@@ -99,7 +99,7 @@ class RegistrationRestaurantInfoViewModel {
                     restaurantLocationId: self.restaurantLocationId ?? 0,
                     groupId: selectedGroupId)
  
-                let response = try await RegistrationRestaurantAPI.registrationRestaurantAsync(request: request, images: selectedImages)
+                let response = try await CreateRestaurantsAPI.createRestaurantAsync(request: request, images: selectedImages)
                 recommendRestaurantId = response.data.recommendRestaurantId
             } else {
                 print("registrationRestaurantAsync Error")
@@ -110,21 +110,15 @@ class RegistrationRestaurantInfoViewModel {
         }
     }
     
-    func editRestaurantInfo() async throws {
-        
+    func updateEditRestaurantInfo() async throws {
         let categoryId = categoryData.firstIndex(where: {$0.1 == true}) ?? 0
-        let request = EditRestaurantInfoRequest(id: recommendRestaurantId ?? -1,
+        let request = EditRestaurantRequest(id: recommendRestaurantId ?? -1,
                                                 introduce: commentString,
                                                 categoryId: categoryId + 1,
                                                 canDrinkLiquor: isDrinking,
                                                 goWellWithLiquor: drinkingComment,
                                                 recommendMenu: tags.joined())
-        
-        print("----", request)
-
-        
-        let response = try await RegistrationRestaurantAPI.editRestaurantInfo(request: request)
-       
+        try await UpdateRestaurantsAPI.editRestaurant(request: request)
     }
     
     // MARK: - Utility Methods
@@ -194,6 +188,7 @@ class RegistrationRestaurantInfoViewModel {
         
         // 음주 여부
         isDrinking = editData?.canDrinkLiquor ?? false
+        drinkingComment = editData?.canDrinkLiquor == true ? editData?.goWellWithLiquor ?? "" : ""
         
         // 태그 설정
         tags =  editData?.recommendMenu ?? []

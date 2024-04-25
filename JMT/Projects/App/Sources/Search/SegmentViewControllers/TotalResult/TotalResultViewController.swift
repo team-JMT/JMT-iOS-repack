@@ -222,7 +222,7 @@ extension TotalResultViewController: UICollectionViewDataSource {
                 return cell
             } else {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RestaurantInfoCell", for: indexPath) as? RestaurantInfoCell else { return UICollectionViewCell() }
-                cell.setupOutBoundrestaurantData(outBoundrestaurantData: viewModel?.outBoundrestaurants[indexPath.row])
+                cell.setupOutBoundrestaurantData(outBoundRestaurantData: viewModel?.outBoundrestaurants[indexPath.row])
                 
                 return cell
             }

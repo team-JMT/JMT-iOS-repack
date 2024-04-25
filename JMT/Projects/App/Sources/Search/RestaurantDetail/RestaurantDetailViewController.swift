@@ -11,6 +11,7 @@ import Kingfisher
 import Toast_Swift
 import FloatingPanel
 import Then
+import SkeletonView
 
 protocol RestaurantDetailViewControllerDelegate: AnyObject {
     var headerHeight: CGFloat { get }
@@ -28,9 +29,12 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     @IBOutlet weak var restaurantInfoViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var placeNameLabel: UILabel!
+    @IBOutlet weak var boundaryView: UIView!
     @IBOutlet weak var differenceInDistanceLabel: UILabel!
+    
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var copyAddressButton: UIButton!
     
     @IBOutlet weak var userProfileImageView: UIImageView!
     @IBOutlet weak var userNicknameLabel: UILabel!
@@ -71,30 +75,16 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         
         setupUI()
         setupBind()
-        
-        Task {
-            do {
-                await viewModel?.fetchCurrentLocationAsync()
-                try await viewModel?.fetchRestaurantData()
-                try await viewModel?.fetchRestaurantReviewData()
-                
-                viewModel?.didUpdateRestaurantSeg?()
-                
-                self.setupData()                
-            } catch {
-                print(error)
-            }
-        }
-
         pageViewController?.pageViewDelegate = self
         pageViewController?.restaurantDetailDelegate = self
+        
+        fetchRestaurantData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.tabBarController?.tabBar.isHidden = true
     
         setCustomNavigationMoreButton()
         
@@ -125,7 +115,32 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     }
 
     // MARK: - FetchData
-   
+    func fetchRestaurantData() {
+        
+        viewModel?.isLodingData = true
+        self.view.showAnimatedGradientSkeleton()
+       
+        Task {
+            do {
+                await viewModel?.fetchCurrentLocationAsync()
+                try await viewModel?.fetchDetailRestaurantData()
+                try await viewModel?.fetchRestaurantReviewData()
+                
+                viewModel?.isLodingData = false
+                
+                viewModel?.didUpdateRestaurantSeg?()
+                
+                DispatchQueue.main.async {
+                    self.view.stopSkeletonAnimation()
+                    self.view.hideSkeleton()
+                    self.configSkeletonUI(isHidden: false)
+                    self.setupData()
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
     
     // MARK: - SetupBindings
     func setupBind() {
@@ -175,6 +190,7 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     // MARK: - SetupUI
     func setupUI() {
         
+        configSkeletonUI(isHidden: true)
         configNavigationTitleView()
     
         // 세그먼트 컨트롤러 설정
@@ -205,7 +221,6 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         // 닉네임 이미지 성정
         userProfileImageView.layer.cornerRadius = 10
         
-        
         reviewTextView.text = "방문 후기를 작성해보세요!"
         reviewTextView.textColor = UIColor.lightGray
         
@@ -214,6 +229,14 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         reviewTextView.alignTextVerticallyInContainer()
         
         doneReviewButton.layer.cornerRadius = 6
+    }
+    
+    func configSkeletonUI(isHidden: Bool) {
+        differenceInDistanceLabel.isHidden = isHidden
+        boundaryView.isHidden = isHidden
+        categoryLabel.isHidden = isHidden
+        addressLabel.isHidden = isHidden
+        copyAddressButton.isHidden = isHidden
     }
     
     func configNavigationTitleView() {
@@ -263,30 +286,42 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
     }
     
     @IBAction func didTabAddReviewButton(_ sender: Any) {
+    
+        guard reviewTextView.text != "" && reviewTextView.text != "방문 후기를 작성해보세요!" else {
+            self.showCustomToast(image: JMTengAsset.notCheckMark.image, message: "리뷰를 작성해주세요!", padding: 117, position: .bottom)
+            return
+        }
+    
+        guard viewModel?.reviewImages.isEmpty != true else {
+            self.showCustomToast(image: JMTengAsset.notCheckMark.image, message: "리뷰 이미지를 추가해주세요!", padding: 117, position: .bottom)
+            return
+        }
+        
+        self.showLoadingIndicator()
         
         Task {
             do {
                 try await viewModel?.registrationReview(content: reviewTextView.text ?? "")
-                try await viewModel?.fetchRestaurantReviewData()
                 
+                try await viewModel?.fetchRestaurantReviewData()
                 viewModel?.didUpdateRestaurantSeg?()
                 viewModel?.didUpdatePhotoSeg?()
                 viewModel?.didUpdateReviewSeg?()
                 
-                reviewTextView.text = "방문 후기를 작성해보세요!"
-                reviewTextView.textColor = UIColor.lightGray
-                
                 viewModel?.reviewImages.removeAll()
                 reviewPhotoCollectionView.reloadData()
                 
-                showCustomToast(image: JMTengAsset.checkMark.image, message: "후기 등록이 완료되었어요!", padding: 117, position: .bottom)
+                reviewTextView.text = "방문 후기를 작성해보세요!"
+                reviewTextView.textColor = UIColor.lightGray
                 
+                showCustomToast(image: JMTengAsset.checkMark.image, message: "후기 등록이 완료되었어요!", padding: 117, position: .bottom)
                 let appCoordinator = viewModel?.coordinator?.getTopCoordinator()
                 appCoordinator?.updateAllRestaurantsData()
-                
             } catch {
-                print(error)
+                self.showCustomToast(image: JMTengAsset.notCheckMark.image, message: "리뷰를 등록하지 못했어요!", padding: 117, position: .bottom)
             }
+            
+            self.hideLoadingIndicator()
         }
     }
     

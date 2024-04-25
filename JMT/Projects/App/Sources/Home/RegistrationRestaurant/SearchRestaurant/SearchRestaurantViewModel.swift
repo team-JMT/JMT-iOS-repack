@@ -40,11 +40,10 @@ class SearchRestaurantViewModel {
             let x = locationManager.coordinate?.longitude ?? 0.0
             let y = locationManager.coordinate?.latitude ?? 0.0
             
-            let newRestaurants = try await FetchRestaurantAPI.fetchSearchRestaurantLocationsAsync(request: SearchRestaurantsLocationRequest(query: keyword,
-                                                                                                                                    page: currentPage,
-                                                                                                                                    x: "\(x)",
-                                                                                                                                            y: "\(y)")).toDomain
-            
+            let newRestaurants = try await ReadRestaurantsAPI.searchRestaurantLocationsAsync(request: SearchRestaurantsLocationRequest(query: keyword,
+                                                                                                                                   page: currentPage,
+                                                                                                                                   x: "\(x)",
+                                                                                                                                   y: "\(y)")).toDomain
             let startIndex = restaurantsInfo.count
             let endIndex = startIndex + newRestaurants.count
             let indexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }

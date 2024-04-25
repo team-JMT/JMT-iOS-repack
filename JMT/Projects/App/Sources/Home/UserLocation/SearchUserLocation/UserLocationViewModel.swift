@@ -15,36 +15,19 @@ class UserLocationViewModel {
     
     var enterPoint = 0
     
+    var fetchTask: Task<Void, Never>?
+    
     var isSearch = false
     
+    var isDataLoading = false
     var currentPage = 1
-    var isFetching = false
-    var isEnd = false
+    var hasMoreData = true
     
     var onSuccess: (() -> Void)?
 }
 
 // 검색 관련 메소드
 extension UserLocationViewModel {
-    
-//    func didChangeTextField(keyword: String) {
-//        resetSearchState()
-//
-//        workItem?.cancel()
-//
-//        workItem = DispatchWorkItem { [weak self] in
-//            guard let self = self, !keyword.isEmpty else {
-//                self?.onSuccess?()
-//                return
-//            }
-//
-//            self.handleTextChange(keyword: keyword)
-//        }
-//
-//        if let workItem = workItem {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
-//        }
-//    }
     
     func handleTextChange(keyword: String) {
         fetchSearchLocation(keyword: keyword)
@@ -53,28 +36,52 @@ extension UserLocationViewModel {
     }
     
     func fetchSearchLocation(keyword: String) {
-        guard !isFetching && !isEnd else { return }
         
-        isFetching = true
+        let fetchPage = currentPage
+        guard !isDataLoading else { return }
+        isDataLoading = true
         
-        SearchLocationAPI.getSearchLocations(request: SearchLocationRequest(query: keyword, page: currentPage)) { [weak self] response in
-            guard let self = self else { return }
-            self.isFetching = false
-            
-            switch response {
-            case .success(let locations):
-                self.resultLocations.append(contentsOf: locations)
-                self.isEnd = locations.isEmpty
-            case .failure(let failure):
-                self.isEnd = true
+        fetchTask = Task {
+            do {
+                let newData = try await LocationAPI.getSearchLocations(request: SearchLocationRequest(query: keyword, page: currentPage)).toDomain
+                
+                DispatchQueue.main.async {
+                    if fetchPage == self.currentPage { // 현재 페이지가 요청 페이지와 일치할 때만 업데이트
+                        
+                        if let lastNewItem = newData.last, self.resultLocations.contains(where: { $0.placeName == lastNewItem.placeName} ) {
+                            self.hasMoreData = false
+                        } else {
+                            self.resultLocations.append(contentsOf: newData)
+                            self.currentPage += 1
+                        }
+                    }
+                    
+                    self.isDataLoading = false
+                    self.fetchTask = nil
+                    self.onSuccess?()
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    print(error)
+                    self.isDataLoading = false
+                    self.fetchTask = nil
+                    self.onSuccess?()
+                }
             }
-            self.onSuccess?()
         }
     }
     
+    func cancelFetch() {
+        if let task = fetchTask {
+            task.cancel()
+            fetchTask = nil
+            isDataLoading = false
+        }
+    }
+
     func resetSearchState() {
         currentPage = 1
-        isEnd = false
+        hasMoreData = false
         resultLocations.removeAll()
     }
 }

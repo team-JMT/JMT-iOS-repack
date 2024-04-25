@@ -22,7 +22,7 @@
         <!--Restaurant Detail View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="RestaurantDetailViewController" id="Y6W-OH-hqX" customClass="RestaurantDetailViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RestaurantDetailViewController" hidesBottomBarWhenPushed="YES" id="Y6W-OH-hqX" customClass="RestaurantDetailViewController" customModule="JMTeng" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -31,48 +31,61 @@
                                 <rect key="frame" x="20" y="103" width="353" height="200"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="음식점" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="evr-uu-Zl1">
-                                        <rect key="frame" x="0.0" y="16.333333333333329" width="353" height="24"/>
+                                        <rect key="frame" x="0.0" y="6.3333333333333286" width="353" height="24"/>
                                         <fontDescription key="fontDescription" name="Pretendard-Bold" family="Pretendard" pointSize="20"/>
                                         <color key="textColor" name="gray900"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="lastLineFillPercent">
+                                                <integer key="value" value="30"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="linesCornerRadius">
+                                                <integer key="value" value="4"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="useFontLineHeight" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="위치에서 0m" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2fO-mI-9vN">
-                                        <rect key="frame" x="0.0" y="44.333333333333343" width="83" height="18.666666666666671"/>
-                                        <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
-                                        <color key="textColor" name="gray900"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="카테고리" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IFm-08-kJR">
-                                        <rect key="frame" x="108" y="44.333333333333343" width="56" height="18.666666666666671"/>
-                                        <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
-                                        <color key="textColor" name="gray900"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z5M-ra-DOc">
-                                        <rect key="frame" x="95" y="47.666666666666657" width="1" height="12"/>
-                                        <color key="backgroundColor" name="gray200"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3J-c8-ynr">
+                                        <rect key="frame" x="0.0" y="57" width="230" height="27"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="주소                                           " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rTT-bT-BxB">
+                                                <rect key="frame" x="0.0" y="0.0" width="172" height="27"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
+                                                <color key="textColor" name="gray700"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="linesCornerRadius">
+                                                        <integer key="value" value="4"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qAe-gP-caK">
+                                                <rect key="frame" x="188" y="0.0" width="42" height="27"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="주소복사">
+                                                    <color key="titleColor" name="main300"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTabCopyAddressButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="h1H-z2-YpV"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="1" id="GPR-Sd-F7a"/>
-                                            <constraint firstAttribute="height" constant="12" id="ZO5-8k-2G6"/>
+                                            <constraint firstItem="rTT-bT-BxB" firstAttribute="top" secondItem="z3J-c8-ynr" secondAttribute="top" id="BEE-Fe-ADo"/>
+                                            <constraint firstAttribute="bottom" secondItem="rTT-bT-BxB" secondAttribute="bottom" id="DF4-mF-XBL"/>
+                                            <constraint firstAttribute="bottom" secondItem="qAe-gP-caK" secondAttribute="bottom" id="OEl-gk-Tve"/>
+                                            <constraint firstItem="rTT-bT-BxB" firstAttribute="leading" secondItem="z3J-c8-ynr" secondAttribute="leading" id="fsP-ye-vOj"/>
+                                            <constraint firstItem="qAe-gP-caK" firstAttribute="top" secondItem="z3J-c8-ynr" secondAttribute="top" id="k1O-Gn-Ppr"/>
+                                            <constraint firstItem="qAe-gP-caK" firstAttribute="leading" secondItem="rTT-bT-BxB" secondAttribute="trailing" constant="16" id="k4s-V8-OFe"/>
+                                            <constraint firstAttribute="trailing" secondItem="qAe-gP-caK" secondAttribute="trailing" id="zhC-e7-taq"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qAe-gP-caK">
-                                        <rect key="frame" x="40.333333333333336" y="62" width="42.000000000000007" height="27"/>
-                                        <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="주소복사">
-                                            <color key="titleColor" name="main300"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="didTabCopyAddressButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="h1H-z2-YpV"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="주소" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rTT-bT-BxB">
-                                        <rect key="frame" x="0.0" y="67" width="24.333333333333332" height="17"/>
-                                        <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
-                                        <color key="textColor" name="gray700"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PGO-Aq-SGr">
                                         <rect key="frame" x="0.0" y="100" width="20" height="20"/>
                                         <color key="backgroundColor" name="gray200"/>
@@ -80,12 +93,25 @@
                                             <constraint firstAttribute="width" constant="20" id="5pB-Uz-F46"/>
                                             <constraint firstAttribute="height" constant="20" id="vuV-6p-voq"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                                <real key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="닉네임" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nZK-zE-gn3">
-                                        <rect key="frame" x="24" y="101.66666666666666" width="37" height="17"/>
+                                        <rect key="frame" x="24" y="101.66666666666666" width="329" height="17"/>
                                         <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                                         <color key="textColor" name="gray900"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="useFontLineHeight" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="lastLineFillPercent">
+                                                <integer key="value" value="30"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="VhC-JM-RwR">
                                         <rect key="frame" x="0.0" y="136" width="353" height="49"/>
@@ -102,30 +128,84 @@
                                             <action selector="didTabSegmentedController:" destination="Y6W-OH-hqX" eventType="valueChanged" id="KaK-jm-Yys"/>
                                         </connections>
                                     </segmentedControl>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cY5-yd-DnD">
+                                        <rect key="frame" x="0.0" y="34.333333333333343" width="164" height="18.666666666666671"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="위치에서 0m" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2fO-mI-9vN">
+                                                <rect key="frame" x="0.0" y="0.0" width="83" height="18.666666666666668"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
+                                                <color key="textColor" name="gray900"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="linesCornerRadius">
+                                                        <integer key="value" value="4"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="lastLineFillPercent">
+                                                        <integer key="value" value="100"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z5M-ra-DOc">
+                                                <rect key="frame" x="95" y="3.3333333333333144" width="1" height="12"/>
+                                                <color key="backgroundColor" name="gray200"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="1" id="GPR-Sd-F7a"/>
+                                                    <constraint firstAttribute="height" constant="12" id="ZO5-8k-2G6"/>
+                                                </constraints>
+                                            </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="카테고리" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IFm-08-kJR">
+                                                <rect key="frame" x="108" y="0.0" width="56" height="18.666666666666668"/>
+                                                <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="16"/>
+                                                <color key="textColor" name="gray900"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="linesCornerRadius">
+                                                        <integer key="value" value="4"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="lastLineFillPercent">
+                                                        <integer key="value" value="100"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="z5M-ra-DOc" firstAttribute="centerY" secondItem="2fO-mI-9vN" secondAttribute="centerY" id="1Ni-2L-xKS"/>
+                                            <constraint firstAttribute="bottom" secondItem="2fO-mI-9vN" secondAttribute="bottom" id="3bO-Un-OUx"/>
+                                            <constraint firstItem="z5M-ra-DOc" firstAttribute="leading" secondItem="2fO-mI-9vN" secondAttribute="trailing" constant="12" id="8ku-NR-UTa"/>
+                                            <constraint firstItem="IFm-08-kJR" firstAttribute="centerY" secondItem="2fO-mI-9vN" secondAttribute="centerY" id="DjK-jC-Hz8"/>
+                                            <constraint firstAttribute="trailing" secondItem="IFm-08-kJR" secondAttribute="trailing" id="Sut-iP-Wao"/>
+                                            <constraint firstItem="2fO-mI-9vN" firstAttribute="top" secondItem="cY5-yd-DnD" secondAttribute="top" id="SzC-ye-uyk"/>
+                                            <constraint firstItem="IFm-08-kJR" firstAttribute="leading" secondItem="z5M-ra-DOc" secondAttribute="trailing" constant="12" id="fRV-W6-wF6"/>
+                                            <constraint firstItem="2fO-mI-9vN" firstAttribute="leading" secondItem="cY5-yd-DnD" secondAttribute="leading" id="hTj-w9-nV1"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="evr-uu-Zl1" secondAttribute="trailing" id="09h-NO-YgG"/>
                                     <constraint firstAttribute="height" constant="200" id="27m-eD-XAV"/>
                                     <constraint firstItem="nZK-zE-gn3" firstAttribute="leading" secondItem="PGO-Aq-SGr" secondAttribute="trailing" constant="4" id="4ea-91-2V7"/>
-                                    <constraint firstItem="IFm-08-kJR" firstAttribute="leading" secondItem="z5M-ra-DOc" secondAttribute="trailing" constant="12" id="7T7-52-IZh"/>
+                                    <constraint firstItem="PGO-Aq-SGr" firstAttribute="top" secondItem="z3J-c8-ynr" secondAttribute="bottom" constant="16" id="4tH-mP-qZI"/>
                                     <constraint firstItem="VhC-JM-RwR" firstAttribute="leading" secondItem="c94-4N-KcQ" secondAttribute="leading" id="EZ9-HG-xWn"/>
                                     <constraint firstItem="nZK-zE-gn3" firstAttribute="centerY" secondItem="PGO-Aq-SGr" secondAttribute="centerY" id="Hx7-CF-SzU"/>
-                                    <constraint firstItem="rTT-bT-BxB" firstAttribute="top" secondItem="2fO-mI-9vN" secondAttribute="bottom" constant="4" id="IG5-DR-gQ0"/>
                                     <constraint firstItem="PGO-Aq-SGr" firstAttribute="leading" secondItem="c94-4N-KcQ" secondAttribute="leading" id="JGM-T6-8Yt"/>
-                                    <constraint firstItem="2fO-mI-9vN" firstAttribute="top" secondItem="evr-uu-Zl1" secondAttribute="bottom" constant="4" id="L29-NF-lvg"/>
-                                    <constraint firstItem="rTT-bT-BxB" firstAttribute="leading" secondItem="c94-4N-KcQ" secondAttribute="leading" id="NqP-2R-2u6"/>
-                                    <constraint firstItem="qAe-gP-caK" firstAttribute="leading" secondItem="rTT-bT-BxB" secondAttribute="trailing" constant="16" id="Q30-aa-uj3"/>
-                                    <constraint firstItem="IFm-08-kJR" firstAttribute="centerY" secondItem="2fO-mI-9vN" secondAttribute="centerY" id="UGF-uC-rDP"/>
+                                    <constraint firstItem="cY5-yd-DnD" firstAttribute="top" secondItem="evr-uu-Zl1" secondAttribute="bottom" constant="4" id="K3Q-xh-4gd"/>
+                                    <constraint firstItem="cY5-yd-DnD" firstAttribute="leading" secondItem="c94-4N-KcQ" secondAttribute="leading" id="RRl-oy-ROg"/>
+                                    <constraint firstItem="z3J-c8-ynr" firstAttribute="top" secondItem="cY5-yd-DnD" secondAttribute="bottom" constant="4" id="VtV-xI-6ss"/>
+                                    <constraint firstAttribute="trailing" secondItem="nZK-zE-gn3" secondAttribute="trailing" id="ZP9-qJ-vbA"/>
                                     <constraint firstItem="evr-uu-Zl1" firstAttribute="leading" secondItem="c94-4N-KcQ" secondAttribute="leading" id="ZRh-6Q-gN4"/>
-                                    <constraint firstItem="z5M-ra-DOc" firstAttribute="leading" secondItem="2fO-mI-9vN" secondAttribute="trailing" constant="12" id="bvQ-oj-Z2S"/>
+                                    <constraint firstItem="z3J-c8-ynr" firstAttribute="leading" secondItem="c94-4N-KcQ" secondAttribute="leading" id="asB-ol-aQH"/>
                                     <constraint firstAttribute="trailing" secondItem="VhC-JM-RwR" secondAttribute="trailing" id="cRB-2G-piw"/>
-                                    <constraint firstItem="2fO-mI-9vN" firstAttribute="leading" secondItem="c94-4N-KcQ" secondAttribute="leading" id="dBD-Hp-iRQ"/>
                                     <constraint firstAttribute="bottom" secondItem="VhC-JM-RwR" secondAttribute="bottom" constant="16" id="ex2-u5-csN"/>
-                                    <constraint firstItem="qAe-gP-caK" firstAttribute="centerY" secondItem="rTT-bT-BxB" secondAttribute="centerY" id="qaS-xT-5Bp"/>
-                                    <constraint firstItem="z5M-ra-DOc" firstAttribute="centerY" secondItem="2fO-mI-9vN" secondAttribute="centerY" id="wUg-yp-t5y"/>
-                                    <constraint firstItem="PGO-Aq-SGr" firstAttribute="top" secondItem="rTT-bT-BxB" secondAttribute="bottom" constant="16" id="xqM-ZI-ymD"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cY5-yd-DnD" secondAttribute="trailing" id="oEb-zF-UVw"/>
                                     <constraint firstItem="VhC-JM-RwR" firstAttribute="top" secondItem="PGO-Aq-SGr" secondAttribute="bottom" constant="16" id="zlI-8h-sZ2"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TW5-mT-cgE">
                                 <rect key="frame" x="0.0" y="745" width="393" height="107"/>
@@ -275,12 +355,17 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="c94-4N-KcQ" secondAttribute="trailing" constant="20" id="nOM-Bh-mAj"/>
                             <constraint firstItem="c94-4N-KcQ" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="pLi-lh-KdE"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                        </userDefinedRuntimeAttributes>
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="addReviewPhotosButton" destination="IXb-5o-ZhT" id="LmF-pe-BZQ"/>
                         <outlet property="addressLabel" destination="rTT-bT-BxB" id="4hx-eY-U6z"/>
+                        <outlet property="boundaryView" destination="z5M-ra-DOc" id="ZOT-W8-fOh"/>
                         <outlet property="categoryLabel" destination="IFm-08-kJR" id="pqc-9n-rIA"/>
+                        <outlet property="copyAddressButton" destination="qAe-gP-caK" id="IAi-bY-Stj"/>
                         <outlet property="differenceInDistanceLabel" destination="2fO-mI-9vN" id="Mhu-nF-3eq"/>
                         <outlet property="doneReviewButton" destination="RlP-sL-sp3" id="eI3-aX-V09"/>
                         <outlet property="pageContainerView" destination="L4o-t0-J3y" id="tY2-iK-O5h"/>
@@ -319,7 +404,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="xd8-9a-sqy" customClass="AutoSizingCollectionView" customModule="JMTeng" customModuleProvider="target">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="xd8-9a-sqy">
                                 <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="4" minimumInteritemSpacing="0.0" id="8m0-FV-LdO">
@@ -448,7 +533,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="x1q-dB-3xZ" customClass="AutoSizingCollectionView" customModule="JMTeng" customModuleProvider="target">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="x1q-dB-3xZ">
                                 <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="h7G-MN-EfO">
@@ -695,11 +780,17 @@
                                                                         <constraint firstItem="arg-EZ-rnM" firstAttribute="leading" secondItem="zgw-pu-zkp" secondAttribute="leading" id="xVI-7n-lgw"/>
                                                                     </constraints>
                                                                 </collectionViewCellContentView>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
                                                                 <connections>
                                                                     <outlet property="restaurantImageView" destination="arg-EZ-rnM" id="lQ5-XK-b7C"/>
                                                                 </connections>
                                                             </collectionViewCell>
                                                         </cells>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <outlet property="dataSource" destination="u8E-qw-HgO" id="FfN-yW-Lcq"/>
                                                             <outlet property="delegate" destination="u8E-qw-HgO" id="RYb-bZ-KgF"/>
@@ -732,11 +823,14 @@
                                                     <constraint firstItem="TOF-Pd-aNX" firstAttribute="top" secondItem="zZl-Ek-YRf" secondAttribute="top" id="tbm-vW-zPW"/>
                                                     <constraint firstAttribute="trailing" secondItem="Rrr-hv-Ont" secondAttribute="trailing" constant="20" id="zGc-fl-41t"/>
                                                 </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="528-es-yvg">
                                                 <rect key="frame" x="0.0" y="352" width="391" height="500"/>
                                                 <subviews>
-                                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" restorationIdentifier="test2" scrollEnabled="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Af8-rF-wsq" customClass="AutoSizingCollectionView" customModule="JMTeng" customModuleProvider="target">
+                                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" restorationIdentifier="test2" scrollEnabled="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Af8-rF-wsq">
                                                         <rect key="frame" x="0.0" y="0.0" width="391" height="500"/>
                                                         <color key="backgroundColor" name="gray100"/>
                                                         <constraints>
@@ -761,7 +855,7 @@
                                                                             <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                                                                             <inset key="contentEdgeInsets" minX="16" minY="6" maxX="16" maxY="6"/>
                                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                            <state key="normal">
+                                                                            <state key="normal" title="태그">
                                                                                 <color key="titleColor" name="gray900"/>
                                                                             </state>
                                                                         </button>
@@ -773,6 +867,12 @@
                                                                         <constraint firstAttribute="bottom" secondItem="of0-TK-7mx" secondAttribute="bottom" id="xaT-xY-8he"/>
                                                                     </constraints>
                                                                 </collectionViewCellContentView>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                                                        <real key="value" value="4"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
                                                                 <connections>
                                                                     <outlet property="tagButton" destination="of0-TK-7mx" id="bnC-wc-Bf2"/>
                                                                 </connections>
@@ -819,6 +919,9 @@
                                                                 </collectionViewCellContentView>
                                                                 <color key="backgroundColor" name="gray100"/>
                                                                 <size key="customSize" width="213" height="207"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
                                                                 <connections>
                                                                     <outlet property="reviewCommentLabel" destination="2yK-3U-wTR" id="xQe-fo-YdO"/>
                                                                     <outlet property="userNameLabel" destination="IsO-KI-MgD" id="zem-Y5-y5U"/>
@@ -844,6 +947,9 @@
                                                                         <constraint firstAttribute="bottom" secondItem="MVJ-sj-N5R" secondAttribute="bottom" id="gn4-Ux-B9j"/>
                                                                     </constraints>
                                                                 </collectionViewCellContentView>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
                                                                 <connections>
                                                                     <outlet property="reviewImageView" destination="MVJ-sj-N5R" id="zJ2-OB-DQr"/>
                                                                 </connections>
@@ -879,11 +985,17 @@
                                                                     </constraints>
                                                                 </collectionViewCellContentView>
                                                                 <size key="customSize" width="294" height="266"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
                                                                 <connections>
                                                                     <outlet property="commentLabel" destination="0fV-MG-6YW" id="QKT-2r-iQr"/>
                                                                 </connections>
                                                             </collectionViewCell>
                                                         </cells>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <outlet property="dataSource" destination="u8E-qw-HgO" id="aVu-14-i4d"/>
                                                             <outlet property="delegate" destination="u8E-qw-HgO" id="wrd-sG-PQ5"/>

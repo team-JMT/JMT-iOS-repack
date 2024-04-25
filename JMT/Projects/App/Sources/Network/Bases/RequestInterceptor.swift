@@ -25,12 +25,12 @@ class DefaultRequestInterceptor: RequestInterceptor {
         } else {
             accessToken = DefaultKeychainService.shared.accessToken ?? ""
         }
+        
+//        print("---", accessToken)
        
         var resultUrlRequest = urlRequest
         resultUrlRequest.headers.add(.authorization(bearerToken: accessToken))
-        
-        print(resultUrlRequest.headers)
-        
+
         completion(.success(resultUrlRequest))
     }
     
@@ -61,7 +61,6 @@ class DefaultRequestInterceptor: RequestInterceptor {
                     DefaultKeychainService.shared.accessTokenExpiresIn = response.accessTokenExpiresIn
                 }
         
-                
                 completion(.retry)
             case .failure(let error):
                 print("retry - RefreshTokenAPI.refreshToken 실패", error)

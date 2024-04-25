@@ -24,7 +24,15 @@ class InfoTagCell: UICollectionViewCell {
         tagButton.setTitle("", for: .normal)
     }
     
-    func setupData(str: String) {
+    func setupTag1Data(str: String) {
         tagButton.setTitle(str.trimmingCharacters(in: CharacterSet(charactersIn: "#")), for: .normal)
+    }
+    
+    func setupTag2Data(str: String) {
+        if str == "" {
+            tagButton.setTitle("없음", for: .normal)
+        } else {
+            tagButton.setTitle(str, for: .normal)
+        }
     }
 }

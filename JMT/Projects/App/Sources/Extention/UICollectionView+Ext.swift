@@ -38,7 +38,7 @@ extension UICollectionView {
         }
         
         let commentLabel = UILabel().then {
-            $0.font = UIFont.settingFont(.pretendardBold, size: 16)
+            $0.font = JMTengFontFamily.Pretendard.bold.font(size: 16)
             $0.textColor = JMTengAsset.gray300.color
             $0.numberOfLines = 0
 

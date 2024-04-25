@@ -19,8 +19,7 @@ class DrinkingCheckCell: UICollectionViewCell {
     @IBOutlet weak var commentTextField: UITextField!
     
     weak var delegate: DrinkingCheckCellDelegate?
-   
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -83,4 +82,6 @@ extension DrinkingCheckCell: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         delegate?.updateDrinkingComment(text: textField.text ?? "")
     }
+    
+    
 }

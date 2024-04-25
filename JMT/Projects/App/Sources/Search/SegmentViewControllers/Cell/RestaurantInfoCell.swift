@@ -63,8 +63,8 @@ class RestaurantInfoCell: UICollectionViewCell {
         }
     }
     
-    func setupOutBoundrestaurantData(outBoundrestaurantData: SearchRestaurantsOutBoundModel?) {
-        if let data = outBoundrestaurantData {
+    func setupOutBoundrestaurantData(outBoundRestaurantData: OutBoundRestaurantsModel?) {
+        if let data = outBoundRestaurantData {
             
             if let restaurantImageUrl = URL(string: data.restaurantImageUrl ?? "") {
                 restaurantProfileImageView.kf.setImage(with: restaurantImageUrl)

@@ -60,9 +60,6 @@ class DefaultHomeCoordinator: HomeCoordinator {
         coordinator.start()
     }
     
-    
-    
-  
     func setSearchRestaurantCoordinator() {
         let coordinator = DefaultSearchRestaurantCoordinator(navigationController: navigationController, parentCoordinator: self, finishDelegate: self)
         childCoordinators.append(coordinator)

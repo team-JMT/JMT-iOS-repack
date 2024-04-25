@@ -157,3 +157,20 @@ extension UIViewController {
     }
 }
 
+extension UIViewController {
+    func showLoadingIndicator() {
+        let loadingView = UIView(frame: self.view.bounds)
+        loadingView.backgroundColor = .clear
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.center = loadingView.center
+        loadingView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
+        view.addSubview(loadingView)
+    }
+    
+    func hideLoadingIndicator() {
+        view.subviews.last?.removeFromSuperview()
+    }
+}
+

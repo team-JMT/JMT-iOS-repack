@@ -12,7 +12,6 @@ class UserLocationViewController: UIViewController {
     // MARK: - Enum
     
     // MARK: - Properties
-//    @IBOutlet weak var customNavigationBar: CustomNavigationBar!
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var addressListTableView: UITableView!
     @IBOutlet weak var cancelButton: UIButton!
@@ -47,12 +46,6 @@ class UserLocationViewController: UIViewController {
         setCustomNavigationBarBackButton(goToViewController: .popVC)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.tabBarController?.tabBar.isHidden = false
-    }
-    
     // MARK: - SetupBindings
     
     // MARK: - FetchData
@@ -62,14 +55,8 @@ class UserLocationViewController: UIViewController {
     // MARK: - SetupUI
     func setupUI() {
         cancelButton.isHidden = true
-        
-//        setupNavigationBar()
         setupTextField()
     }
-    
-//    func setupNavigationBar() {
-//        customNavigationBar.setupTitle(title: "위치 변경")
-//    }
     
     func setupTextField() {
         // 텍스트 필드
@@ -111,8 +98,8 @@ class UserLocationViewController: UIViewController {
     
     func finishSearch() {
         viewModel?.isSearch = false
-        viewModel?.isEnd = false
-        viewModel?.isFetching = false
+        viewModel?.isDataLoading = false
+        viewModel?.hasMoreData = false
         cancelButton.isHidden = true
         recentSearchView.isHidden = false
         addressListTableView.reloadData()
@@ -161,16 +148,25 @@ extension UserLocationViewController: UITableViewDataSource {
 
 extension UserLocationViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        guard viewModel?.isSearch == true else { return }
+        guard let viewModel = viewModel,
+              viewModel.isSearch,
+              viewModel.hasMoreData,
+              !viewModel.isDataLoading else { return }
         
         if indexPaths.contains(where: isLoadingCell) {
-            viewModel?.fetchSearchLocation(keyword: addressTextField.text ?? "")
+            viewModel.fetchSearchLocation(keyword: addressTextField.text ?? "")
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        for _ in indexPaths {
+            viewModel?.cancelFetch()
         }
     }
     
     // 지정된 인덱스 패스가 로딩 셀인지 확인하는 메소드
-    func isLoadingCell(for indexPath: IndexPath) -> Bool {
-        return indexPath.row >= (viewModel?.resultLocations.count ?? 0) - 1
+    private func isLoadingCell(for indexPath: IndexPath) -> Bool {
+        return indexPath.row >= (viewModel?.resultLocations.count ?? 0) - 2
     }
 }
 

@@ -8,6 +8,7 @@
 import UIKit
 import FloatingPanel
 import SnapKit
+import Toast_Swift
 
 class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent {
     
@@ -38,7 +39,6 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         super.viewWillAppear(animated)
         
         if viewModel?.isEdit == true {
-            self.tabBarController?.tabBar.isHidden = true
             setupEditData()
         }
         
@@ -347,6 +347,8 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
             return
         }
         
+        self.showLoadingIndicator()
+        
         if let _ = self.navigationController?.viewControllers.first as? HomeViewController {
             viewModel?.selectedGroupId = UserDefaultManager.selectedGroupId
         } else if let _ = self.navigationController?.viewControllers.first as? GroupWebViewController {
@@ -359,27 +361,39 @@ class RegistrationRestaurantInfoViewController: UIViewController, KeyboardEvent 
         Task {
             do {
                 if viewModel?.isEdit == true {
-                    try await viewModel?.editRestaurantInfo()
+                    try await viewModel?.updateEditRestaurantInfo()
 
                     if let restaurantDetailVC = self.navigationController?.viewControllers.first(where: { $0 is RestaurantDetailViewController }) as? RestaurantDetailViewController {
-                        try await restaurantDetailVC.viewModel?.fetchRestaurantData()
+                        
+                        let model = EditRestaurantModel(id: viewModel?.recommendRestaurantId ?? -1,
+                                                            introduce: viewModel?.commentString ?? "",
+                                                            category: viewModel?.categoryData.first(where: { $0.1 == true })?.0 ?? "",
+                                                            canDrinkLiquor: viewModel?.isDrinking ?? false,
+                                                            goWellWithLiquor: viewModel?.drinkingComment ?? "",
+                                                            recommendMenu: (viewModel?.tags ?? []).joined())
+                        restaurantDetailVC.viewModel?.updateRestaurantInfo(model: model)
+                                            
                         restaurantDetailVC.setupData()
                         restaurantDetailVC.viewModel?.didUpdateRestaurantSeg?()
                         
+                        self.hideLoadingIndicator()
                         self.navigationController?.popViewController(animated: true)
                     }
                 } else {
                     try await viewModel?.registrationRestaurantLocation()
                     try await viewModel?.registrationRestaurantAsync()
                     
+                    self.hideLoadingIndicator()
                     viewModel?.coordinator?.showDetailRestaurantViewController(id: viewModel?.recommendRestaurantId ?? 0)
                 }
                 
                 if let vc = self.navigationController?.viewControllers.first as? HomeViewController {
                     vc.viewModel?.didUpdateGroupRestaurantsData?()
                 }
+               
             } catch {
-                print(error)
+                self.hideLoadingIndicator()
+                self.showCustomToast(image: JMTengAsset.notCheckMark.image, message: "맛집을 등록하지 못했어요!", padding: 117, position: .bottom)
             }
         }
     }
