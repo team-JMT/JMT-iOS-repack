@@ -47,8 +47,8 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.showAnimatedGradientSkeleton()
         setupUI()
+        self.view.showAnimatedGradientSkeleton()
         setupBind()
         setupRestaurantBottomSheetUI()
         
@@ -93,7 +93,6 @@ class HomeViewController: UIViewController {
                             self.hasFetchedRestaurants = false
                             
                         } else {
-                            
                             self.viewModel?.didUpdateGroupRestaurantsData?()
                             
                             // 가입된 그룹 데이터르 UI 업데이트
@@ -191,13 +190,17 @@ class HomeViewController: UIViewController {
             groupImageView.image = JMTengAsset.defaultProfileImage.image
         }
     }
-    
 
-    
     // 홈탭으로 돌아왔을때 그룹 정보 확인
     func updateViewBasedOnGroupStatus() {
+        
         Task {
             do {
+                self.view.showAnimatedGradientSkeleton()
+                
+                self.viewModel?.isLodingData = true
+                self.restaurantListFpc.contentViewController?.view.showAnimatedGradientSkeleton()
+
                 // 그룹 정보 가져오기
                 try await viewModel?.fetchJoinGroup()
                 
@@ -223,10 +226,15 @@ class HomeViewController: UIViewController {
                         
                         // 현재 지도에 포함되어있는 맛집 데이터 가져오기
                         self.fetchRestaurantsInVisibleRegion()
-                        
-                        self.view.hideSkeleton()
                         viewModel?.didUpdateGroupRestaurantsData?()
-                    } 
+                    } else {
+                        
+                        updateGroupInfoData()
+                        self.fetchRestaurantsInVisibleRegion()
+                        viewModel?.didUpdateGroupRestaurantsData?()
+                    }
+                    
+                    self.view.hideSkeleton()
                 }
             } catch {
                 print("123123", error)
@@ -238,7 +246,6 @@ class HomeViewController: UIViewController {
     func setupBind() {
         
         viewModel?.didUpdateGroupName = { index in
-            
             self.viewModel?.didUpdateGroupRestaurantsData?()
             
             self.groupNameLabel.text = self.viewModel?.groupList[index].groupName ?? ""

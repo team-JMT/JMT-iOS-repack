@@ -53,6 +53,8 @@ extension LocationManager: CLLocationManagerDelegate {
         isUpdatingLocation = true
         coordinate = location.coordinate
         
+        print("----",coordinate)
+        
         // 위치 데이터 처리
         didUpdateLocations?()
         stopUpdatingLocation()

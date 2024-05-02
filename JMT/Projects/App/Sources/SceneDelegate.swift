@@ -36,8 +36,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.makeKeyAndVisible()
         
         configNavigationBar()
-      
-        NMFAuthManager.shared().clientId = "4mc8nybxwl"
         
         appCoordinator = DefaultAppCoordinator(navigationController: navigationController)
         

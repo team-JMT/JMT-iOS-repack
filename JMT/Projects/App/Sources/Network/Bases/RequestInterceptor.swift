@@ -26,7 +26,8 @@ class DefaultRequestInterceptor: RequestInterceptor {
             accessToken = DefaultKeychainService.shared.accessToken ?? ""
         }
         
-//        print("---", accessToken)
+        print("---", accessToken)
+        
        
         var resultUrlRequest = urlRequest
         resultUrlRequest.headers.add(.authorization(bearerToken: accessToken))

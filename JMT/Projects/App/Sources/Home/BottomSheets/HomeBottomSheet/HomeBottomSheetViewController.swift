@@ -35,17 +35,14 @@ class HomeBottomSheetViewController: UIViewController {
         let header2 = UINib(nibName: "HomeFilterHeaderView", bundle: nil)
         bottomSheetCollectionView.register(header2, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView2")
         
-        bottomSheetCollectionView.showAnimatedGradientSkeleton()
+        self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
         self.bottomSheetCollectionView.collectionViewLayout = self.createLayout()
     }
 
-   
-    
     // MARK: - SetupBindings
     func setupBind() {
         
         viewModel?.didUpdateGroupRestaurantsData = {
-        
             DispatchQueue.main.async {
                 self.viewModel?.isLodingData = true
                 self.bottomSheetCollectionView.showAnimatedGradientSkeleton()
@@ -61,7 +58,6 @@ class HomeBottomSheetViewController: UIViewController {
                 
         Task {
             do {
-                
                 try await withThrowingTaskGroup(of: Void.self) { group in
                     group.addTask {
                         try await self.viewModel?.fetchRecentRestaurantsAsync()
@@ -69,6 +65,9 @@ class HomeBottomSheetViewController: UIViewController {
                     
                     group.addTask {
                         try await self.viewModel?.fetchGroupRestaurantsAsync()
+                    }
+                    
+                    group.addTask {
                         try await self.viewModel?.fetchRestaurantsReviewsAsync()
                     }
                     
@@ -86,23 +85,23 @@ class HomeBottomSheetViewController: UIViewController {
         }
     }
     
-    func fetchGroupRestaurantData() {
-        Task {
-            do {
-                try await self.viewModel?.fetchRecentRestaurantsAsync()
-                try await self.viewModel?.fetchGroupRestaurantsAsync()
-                try await self.viewModel?.fetchRestaurantsReviewsAsync()
-                
-                DispatchQueue.main.async {
-                    self.viewModel?.isLodingData = false
-                    self.bottomSheetCollectionView.reloadData()
-                    self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
-                }
-            } catch {
-                print(error)
-            }
-        }
-    }
+//    func fetchGroupRestaurantData() {
+//        Task {
+//            do {
+//                try await self.viewModel?.fetchRecentRestaurantsAsync()
+//                try await self.viewModel?.fetchGroupRestaurantsAsync()
+//                try await self.viewModel?.fetchRestaurantsReviewsAsync()
+//                
+//                DispatchQueue.main.async {
+//                    self.viewModel?.isLodingData = false
+//                    self.bottomSheetCollectionView.reloadData()
+//                    self.bottomSheetCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+//                }
+//            } catch {
+//                print(error)
+//            }
+//        }
+//    }
     
     // MARK: - SetupUI
     func setupUI() {
@@ -302,13 +301,13 @@ extension HomeBottomSheetViewController: UICollectionViewDelegate {
             guard viewModel?.popularRestaurants.isEmpty == false else { return }
             
             if let info = viewModel?.popularRestaurants[indexPath.row] {
-                viewModel?.coordinator?.showDetailRestaurantViewController(id: viewModel?.popularRestaurants[indexPath.row].id ?? 0)
+                viewModel?.coordinator?.showDetailRestaurantViewController(id: info.id) // viewModel?.popularRestaurants[indexPath.row].id ?? 0
             }
         case 1:
             guard viewModel?.restaurants.isEmpty == false else { return }
             
             if let info = viewModel?.restaurants[indexPath.row] {
-                viewModel?.coordinator?.showDetailRestaurantViewController(id: viewModel?.restaurants[indexPath.row].id ?? 0)
+                viewModel?.coordinator?.showDetailRestaurantViewController(id: info.id) //viewModel?.restaurants[indexPath.row].id ?? 0
             }
         default:
             return
@@ -379,6 +378,31 @@ extension HomeBottomSheetViewController: UICollectionViewDataSource {
     }
 }
 
+extension HomeBottomSheetViewController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+    
+        if indexPaths.contains(where: isLoadingCell) && viewModel?.isFetching == false && viewModel?.hasLoadedInitialData == true {
+            
+            Task {
+                try await viewModel?.fetchGroupRestaurantsAsync()
+                
+                let newIndices = ((viewModel?.previousCount ?? 0)..<(viewModel?.restaurants.count ?? 0)).map { IndexPath(item: $0, section: 1) }
+    
+                DispatchQueue.main.async {
+                    self.bottomSheetCollectionView.performBatchUpdates {
+                        self.bottomSheetCollectionView.insertItems(at: newIndices)
+                    }
+                }
+            }
+        }
+    }
+ 
+    private func isLoadingCell(for indexPath: IndexPath) -> Bool {
+        guard indexPath.section == 1 else { return false }
+        return indexPath.row >= (viewModel?.restaurants.count ?? 0) - 2
+    }
+}
+
 // MARK: - SkeletonCollectionView DataSource
 extension HomeBottomSheetViewController: SkeletonCollectionViewDataSource {
     
@@ -389,9 +413,9 @@ extension HomeBottomSheetViewController: SkeletonCollectionViewDataSource {
     func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> ReusableCellIdentifier {
         switch indexPath.section {
         case 0:
-            return "firstCell"
+            return "firstSkInfoView"
         case 1:
-            return "skInfoView"
+            return "secondSkInfoView"
         default:
             return ""
         }

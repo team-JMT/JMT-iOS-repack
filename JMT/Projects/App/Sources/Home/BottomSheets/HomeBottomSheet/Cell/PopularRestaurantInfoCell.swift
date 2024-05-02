@@ -56,6 +56,7 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
         
         userNicknameLabel.text = nil
         userProfileImageView.image = nil
+        userProfileImageView.backgroundColor = .clear
         restaurantImageView.image = nil
         restaurantNameLabel.text = nil
         introduceLabel.text = nil
@@ -66,24 +67,25 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
     }
     
     func setupData(model: RestaurantListModel?) {
-        guard let model = model else {
-            // 모델이 없는 경우의 처리
-            return
-        }
+        
+        guard let model = model 
+        else { return }
         
         categoryLabel.text = model.category
         drinkLiquorLabel.text = model.canDrinkLiquor == true ? "주류 가능" : "주류 불가능"
         
         userNicknameLabel.text = model.userNickName ?? "이름 없음"
-        loadImage(urlString: model.userProfileImageUrl, defaultImage: JMTengAsset.defaultProfileImage.image, imageView: userProfileImageView)
-        loadImage(urlString: model.restaurantImageUrl, defaultImage: JMTengAsset.emptyResult.image, imageView: restaurantImageView)
-
+        userProfileImageView.loadImage(urlString: model.userProfileImageUrl ?? "defaultImg", defaultImage: JMTengAsset.defaultProfileImage.image)
+        
+        restaurantImageView.loadImage(urlString: model.restaurantImageUrl ?? "defaultImg", defaultImage: JMTengAsset.emptyResult.image)
         restaurantNameLabel.text = model.name
         introduceLabel.text = model.introduce
 
         reviewContainerView.isHidden = model.reviews.isEmpty
+        
         if let review = model.reviews.first {
-            loadImage(urlString: review.reviewerImageUrl, defaultImage: JMTengAsset.defaultProfileImage.image, imageView: reviewUserProfileImageView)
+            reviewUserProfileImageView.loadImage(urlString: review.reviewerImageUrl ?? "defaultImg", defaultImage: JMTengAsset.defaultProfileImage.image)
+            
             reviewNicknameLabel.text = review.userName
             reviewCommentLabel.text = review.reviewContent
             reviewCountLabel.text = "\(review.totalCount)"
@@ -93,14 +95,5 @@ class PopularRestaurantInfoCell: UICollectionViewCell {
         
         categoryView.isHidden = false
         drinkLiquorView.isHidden = false
-    }
-
-    // 이미지 로딩을 위한 공통 함수
-    private func loadImage(urlString: String?, defaultImage: UIImage, imageView: UIImageView) {
-        if let urlString = urlString, !urlString.isEmpty, let url = URL(string: urlString) {
-            imageView.kf.setImage(with: url)
-        } else {
-            imageView.image = defaultImage
-        }
     }
 }

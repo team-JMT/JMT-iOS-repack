@@ -12,6 +12,7 @@ protocol GroupCoordinator: Coordinator {
     func showCreateGroupPage()
     func setSearchRestaurantCoordinator()
     func showSearchRestaurantViewController()
+    func goToHomeViewController()
     
 }
 
@@ -70,6 +71,13 @@ class DefaultGroupCoordinator: GroupCoordinator {
         
         let coordinator = getChildCoordinator(.searchRestaurant) as! SearchRestaurantCoordinator
         coordinator.start()
+    }
+    
+    func goToHomeViewController() {
+        if let homeViewController = parentCoordinator?.childCoordinators[0].navigationController?.viewControllers[0] as? HomeViewController {
+            self.navigationController?.tabBarController?.selectedIndex = 0
+            homeViewController.updateViewBasedOnGroupStatus()
+        }
     }
     
     func getChildCoordinator(_ type: CoordinatorType) -> Coordinator? {

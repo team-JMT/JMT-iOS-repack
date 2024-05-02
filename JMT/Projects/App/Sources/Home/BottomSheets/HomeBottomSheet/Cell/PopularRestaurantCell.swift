@@ -11,7 +11,6 @@ import Kingfisher
 
 class PopularRestaurantCell: UICollectionViewCell {
     
-    
     @IBOutlet weak var categoryView: UIView!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var drinkLiquorView: UIView!
@@ -25,14 +24,10 @@ class PopularRestaurantCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-
-        categoryView.isHidden = true
-        drinkLiquorView.isHidden = true
         
         categoryView.layer.cornerRadius = 4
         drinkLiquorView.layer.cornerRadius = 4
-    
-        skeletonCornerRadius = 20
+
         userProfileImageView.layer.cornerRadius = userProfileImageView.frame.height / 2
         
         // 셀의 레이아웃이 결정된 후 그림자 속성 설정
@@ -61,37 +56,49 @@ class PopularRestaurantCell: UICollectionViewCell {
     }
     
     func setupData(model: RestaurantListModel?) {
+        guard let model = model
+        else { return }
+        
+        categoryLabel.text = model.category
+        drinkLiquorLabel.text = model.canDrinkLiquor == true ? "주류 가능" : "주류 불가능"
+        
+        restaurantImageView.loadImage(urlString: model.restaurantImageUrl ?? "defaultImg", defaultImage: JMTengAsset.emptyResult.image)
+    
+        userNicknameLabel.text = model.userNickName
+        restaurantNameLabel.text = model.name
+        
+        userProfileImageView.loadImage(urlString: model.userProfileImageUrl ?? "defaultImg", defaultImage: JMTengAsset.defaultProfileImage.image)
+        
+        categoryView.isHidden = false
+        drinkLiquorView.isHidden = false
+        
        
-        if let model = model {
-            if let url = URL(string: model.restaurantImageUrl ?? "") {
-                restaurantImageView.kf.setImage(with: url)
-            } else {
-                restaurantImageView.image = JMTengAsset.emptyResult.image
-            }
-            
-            if let url = URL(string: model.userProfileImageUrl ?? "") {
-                userProfileImageView.kf.setImage(with: url)
-            } else {
-                userProfileImageView.image = JMTengAsset.emptyResult.image
-            }
-
-            categoryLabel.text = model.category
-            drinkLiquorLabel.text = model.canDrinkLiquor == true ? "주류 가능" : "주류 불가능"
-            
-            userNicknameLabel.text = model.userNickName
-            restaurantNameLabel.text = model.name
-            
-            categoryView.isHidden = false
-            drinkLiquorView.isHidden = false
-            
-            
-        } else {
-            // 모델이 nil일 때 기본 이미지와 텍스트로 초기화
-            restaurantImageView.image = nil // 또는 다른 기본 이미지
-            userProfileImageView.image = nil // 또는 다른 기본 이미지
-            userNicknameLabel.text = ""
-            restaurantNameLabel.text = ""
-        }
+//        if let model = model {
+//            if let url = URL(string: model.restaurantImageUrl ?? "") {
+//                restaurantImageView.kf.setImage(with: url)
+//            } else {
+//                restaurantImageView.image = JMTengAsset.emptyResult.image
+//            }
+//            
+//            if let url = URL(string: model.userProfileImageUrl ?? "") {
+//                userProfileImageView.kf.setImage(with: url)
+//            } else {
+//                userProfileImageView.image = JMTengAsset.emptyResult.image
+//            }
+//
+//           
+//        
+//            
+//          
+//            
+//            
+//        } else {
+//            // 모델이 nil일 때 기본 이미지와 텍스트로 초기화
+//            restaurantImageView.image = nil // 또는 다른 기본 이미지
+//            userProfileImageView.image = nil // 또는 다른 기본 이미지
+//            userNicknameLabel.text = ""
+//            restaurantNameLabel.text = ""
+//        }
     }
 }
 

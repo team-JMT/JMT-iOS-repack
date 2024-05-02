@@ -9,4 +9,6 @@ import Foundation
 
 class GroupViewModel {
     weak var coordinator: GroupCoordinator?
+    
+    
 }

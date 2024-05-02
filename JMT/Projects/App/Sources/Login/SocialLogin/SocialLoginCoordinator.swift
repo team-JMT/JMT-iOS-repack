@@ -103,8 +103,10 @@ class DefaultSocialLoginCoordinator: NSObject, SocialLoginCoordinator {
     }
     
     func showGoogleLoginViewController(completion: @escaping (Result<String, NetworkError>) -> ()) {
+    
         GIDSignIn.sharedInstance.signIn(withPresenting: navigationController!) { [weak self] signInResult, error in
-      
+            guard let self = self else { return }
+            
             if let error = error {
                 completion(.failure(.googleLoginError))
                 return
@@ -112,12 +114,11 @@ class DefaultSocialLoginCoordinator: NSObject, SocialLoginCoordinator {
             
             guard let idToken = signInResult?.user.idToken?.tokenString else {
                 completion(.failure(.idTokenError))
-                print(1)
+               
                 return
             }
             
             completion(.success(idToken))
-            print(idToken)
         }
     }
     

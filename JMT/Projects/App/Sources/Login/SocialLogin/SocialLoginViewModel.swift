@@ -26,6 +26,8 @@ class SocialLoginViewModel {
             switch result {
             case .success(let idToken):
                 
+                self.coordinator?.navigationController?.showLoadingIndicator()
+                
                 SocialLoginAPI.googleLogin(request: SocialLoginRequest(token: idToken)) { result in
                     switch result {
                     case .success(let response):
@@ -50,6 +52,9 @@ class SocialLoginViewModel {
                                 
                             }
                         }
+                        
+                        self.coordinator?.navigationController?.hideLoadingIndicator()
+                        
                     case .failure(let error):
                         print("startGoogleLogin - SocialLoginAPI.googleLogin 실패!!", error)
                     }

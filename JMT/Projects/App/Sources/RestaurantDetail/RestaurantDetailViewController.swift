@@ -175,11 +175,13 @@ class RestaurantDetailViewController: UIViewController, KeyboardEvent {
         categoryLabel.text = viewModel?.restaurantData?.category ?? ""
         addressLabel.text = viewModel?.restaurantData?.address ?? ""
         
-        if let imageUrl = URL(string: viewModel?.restaurantData?.userProfileImageUrl ?? "") {
-            userProfileImageView.kf.setImage(with: imageUrl)
-        } else {
-            userProfileImageView.image = JMTengAsset.defaultProfileImage.image
-        }
+        userProfileImageView.loadImage(urlString: viewModel?.restaurantData?.userProfileImageUrl ?? "defaultImg", defaultImage: JMTengAsset.defaultProfileImage.image)
+        
+//        if let imageUrl = URL(string: viewModel?.restaurantData?.userProfileImageUrl ?? "") {
+//            userProfileImageView.kf.setImage(with: imageUrl)
+//        } else {
+//            userProfileImageView.image = JMTengAsset.defaultProfileImage.image
+//        }
         
         userNicknameLabel.text = viewModel?.restaurantData?.userNickName ?? ""
         
@@ -450,9 +452,7 @@ extension RestaurantDetailViewController: RestaurantDetailViewControllerDelegate
     }
 }
 
-extension RestaurantDetailViewController: FloatingPanelControllerDelegate {
-    
-}
+extension RestaurantDetailViewController: FloatingPanelControllerDelegate { }
 
 extension RestaurantDetailViewController: ButtonPopupDelegate {
     func didTabDoneButton() {

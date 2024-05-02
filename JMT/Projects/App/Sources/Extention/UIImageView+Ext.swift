@@ -35,4 +35,13 @@ extension UIImageView {
             }
         }
     }
+    
+    // 이미지 로딩을 위한 공통 함수
+    func loadImage(urlString: String?, defaultImage: UIImage) {
+        if let urlString = urlString, !urlString.contains("defaultImg"), let url = URL(string: urlString) {
+            self.kf.setImage(with: url)
+        } else {
+            self.image = defaultImage
+        }
+    }
 }
